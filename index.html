@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《光电子器件》全考点三刷通关系统 | 自动错题本 & 现实草稿纸辅助计算</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 顶部导航与全局三刷进度栏 -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand-area">
+        <div class="brand-logo">光</div>
+        <div class="brand-title">
+          <h1>《光电子器件》全考点三刷通关系统</h1>
+          <p>100% 覆盖考纲 Word 重点 + 9 页手写笔记扫描件 | 自动整理错题 · 现实草稿纸辅助计算</p>
+        </div>
+      </div>
+
+      <!-- 核心功能视图切换 -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="practice" onclick="switchTab('practice')">
+          🎯 全考点三刷题库
+        </button>
+        <button class="nav-tab" data-tab="calc-bench" onclick="switchTab('calc-bench')">
+          📐 草稿纸计算题工作台
+        </button>
+        <button class="nav-tab" data-tab="wrong-book" onclick="switchTab('wrong-book')">
+          📕 自动错题本
+          <span class="badge-pill badge-danger" id="wrong-count-badge">0</span>
+        </button>
+        <button class="nav-tab" data-tab="notes-gallery" onclick="switchTab('notes-gallery')">
+          📖 9页手写笔记原图
+        </button>
+      </nav>
+
+      <!-- 三刷进度统计 -->
+      <div class="global-stats">
+        <div class="stat-chip pass1">一刷：<strong id="stat-pass1">0/25</strong></div>
+        <div class="stat-chip pass2">二刷：<strong id="stat-pass2">0/25</strong></div>
+        <div class="stat-chip pass3">三刷通关：<strong id="stat-pass3">0/25</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体三栏式布局 -->
+  <main class="app-container">
+    <!-- 左侧栏：三刷总览、刷次筛选、题型筛选与第1~7章目录 -->
+    <aside class="left-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">📊 全考点三刷完成度</div>
+        <div class="mastery-overview-card">
+          <div class="progress-row">
+            <div class="progress-label">
+              <span style="color:var(--pass1-color);">① 一刷（概念选择辨析）</span>
+              <span id="pct-pass1">0/25</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-pass1" id="bar-pass1" style="width:0%;"></div>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-label">
+              <span style="color:var(--pass2-color);">② 二刷（核心词挖空填空）</span>
+              <span id="pct-pass2">0/25</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-pass2" id="bar-pass2" style="width:0%;"></div>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-label">
+              <span style="color:var(--pass3-color);">③ 三刷（默写/草稿纸计算）</span>
+              <span id="pct-pass3">0/25</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-pass3" id="bar-pass3" style="width:0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">🔁 按三刷状态筛选</div>
+        <div class="filter-chips">
+          <button class="filter-chip active" data-pass-filter="all" onclick="setPassFilter('all')">全部</button>
+          <button class="filter-chip" data-pass-filter="unfinished" onclick="setPassFilter('unfinished')">未满三刷</button>
+          <button class="filter-chip" data-pass-filter="pass0" onclick="setPassFilter('pass0')">0刷待学</button>
+          <button class="filter-chip" data-pass-filter="pass1" onclick="setPassFilter('pass1')">已1刷</button>
+          <button class="filter-chip" data-pass-filter="pass2" onclick="setPassFilter('pass2')">已2刷</button>
+          <button class="filter-chip" data-pass-filter="pass3" onclick="setPassFilter('pass3')">★已3刷</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">🏷️ 按考纲题型筛选</div>
+        <div class="filter-chips">
+          <button class="filter-chip active" data-type-filter="all" onclick="setTypeFilter('all')">全部题型</button>
+          <button class="filter-chip" data-type-filter="term" onclick="setTypeFilter('term')">名词解释</button>
+          <button class="filter-chip" data-type-filter="short" onclick="setTypeFilter('short')">简答/图解</button>
+          <button class="filter-chip" data-type-filter="calc" onclick="setTypeFilter('calc')">草稿纸计算题</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">📑 考纲章节导航 (第1~7章)</div>
+        <div class="chapter-list" id="chapter-list"></div>
+      </div>
+    </aside>
+
+    <!-- 中央主工作区 -->
+    <section class="main-stage">
+      <!-- 考点题号矩阵快速跳转条 -->
+      <div class="question-strip-card">
+        <div class="strip-header">
+          <span class="strip-header-left" id="filtered-count-label">正在加载考点...</span>
+          <div class="strip-legend">
+            <span><i class="legend-dot" style="background:#cbd5e1;"></i>0刷</span>
+            <span><i class="legend-dot" style="background:var(--pass1-color);"></i>1刷</span>
+            <span><i class="legend-dot" style="background:var(--pass2-color);"></i>2刷</span>
+            <span><i class="legend-dot" style="background:var(--pass3-color);"></i>3刷通关</span>
+            <span><i class="legend-dot" style="background:var(--danger);"></i>错题标记</span>
+          </div>
+        </div>
+        <div class="question-dots-grid" id="question-dots-grid"></div>
+      </div>
+
+      <!-- 动态渲染的题目卡片 / 错题本 / 笔记画廊 -->
+      <div id="main-view-content"></div>
+    </section>
+
+    <!-- 右侧辅助栏：草稿纸光电科学计算器 + 常用物理常数速查 + 核心公式速记 -->
+    <aside class="right-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">🧮 草稿纸辅助光电计算器</div>
+        <div class="calc-widget">
+          <input type="text" id="sci-calc-input" class="calc-screen" placeholder="输入数值或算式，如 630/1000" />
+          <div class="calc-result-preview" id="sci-calc-output">支持四则运算与对数/波长换算</div>
+          <div class="calc-keys-grid">
+            <button class="calc-key key-fn" onclick="evalSciCalc('neg10lg')" title="耦合器损耗 -10lg(x)">-10lg(x)</button>
+            <button class="calc-key key-fn" onclick="evalSciCalc('10lg')" title="EDFA增益 10lg(x)">10lg(x)</button>
+            <button class="calc-key key-fn" onclick="evalSciCalc('mw2dbm')" title="毫瓦转dBm">mW→dBm</button>
+            <button class="calc-key key-fn" onclick="evalSciCalc('dbm2mw')" title="dBm转毫瓦">dBm→mW</button>
+
+            <button class="calc-key key-fn" onclick="evalSciCalc('eg2lam')" title="λp=1.2396/Eg">Eg→λ(μm)</button>
+            <button class="calc-key key-fn" onclick="evalSciCalc('nm2thz')" title="f=c/λ (nm转THz)">nm↔THz</button>
+            <button class="calc-key key-fn" onclick="evalSciCalc('lg')">lg(x)</button>
+            <button class="calc-key" style="color:var(--danger);" onclick="evalSciCalc('clear')">清空 C</button>
+
+            <button class="calc-key" onclick="appendCalcChar('7')">7</button>
+            <button class="calc-key" onclick="appendCalcChar('8')">8</button>
+            <button class="calc-key" onclick="appendCalcChar('9')">9</button>
+            <button class="calc-key" onclick="appendCalcChar('/')">÷</button>
+
+            <button class="calc-key" onclick="appendCalcChar('4')">4</button>
+            <button class="calc-key" onclick="appendCalcChar('5')">5</button>
+            <button class="calc-key" onclick="appendCalcChar('6')">6</button>
+            <button class="calc-key" onclick="appendCalcChar('*')">×</button>
+
+            <button class="calc-key" onclick="appendCalcChar('1')">1</button>
+            <button class="calc-key" onclick="appendCalcChar('2')">2</button>
+            <button class="calc-key" onclick="appendCalcChar('3')">3</button>
+            <button class="calc-key" onclick="appendCalcChar('-')">−</button>
+
+            <button class="calc-key" onclick="appendCalcChar('0')">0</button>
+            <button class="calc-key" onclick="appendCalcChar('.')">.</button>
+            <button class="calc-key key-eq" style="grid-column: span 2;" onclick="evalSciCalc('eval')">= 计算算式</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">📐 笔记必考公式与物理常数速查</div>
+        <div class="constants-list">
+          <div class="const-item">
+            <span>普朗克常数 h</span>
+            <code>6.6262×10⁻³⁴ J·s</code>
+          </div>
+          <div class="const-item">
+            <span>电子电荷 e₀</span>
+            <code>1.6022×10⁻¹⁹ C</code>
+          </div>
+          <div class="const-item">
+            <span>真空光速 c</span>
+            <code>2.9979×10⁸ m/s</code>
+          </div>
+          <div class="const-item">
+            <span>LED/LD 中心波长</span>
+            <code>λp = 1.2396/Eg (μm)</code>
+          </div>
+          <div class="const-item">
+            <span>PIN/APD 截止波长</span>
+            <code>λc = 1.24/Eg (μm)</code>
+          </div>
+          <div class="const-item">
+            <span>LD 外微分量子效率</span>
+            <code>ηD = [(Pex-Pth)/hν]/[(I-Ith)/e₀]</code>
+          </div>
+          <div class="const-item">
+            <span>单模光纤 V 条件</span>
+            <code>V = 2πa·NA/λ₀ ≤ 2.4048</code>
+          </div>
+          <div class="const-item">
+            <span>光纤衰减系数 α</span>
+            <code>α = (10/L)·lg(Pin/Pout)</code>
+          </div>
+          <div class="const-item">
+            <span>FRA 泵浦频率 (P.6)</span>
+            <code>fp = fs + 13 THz</code>
+          </div>
+          <div class="const-item">
+            <span>耦合器插入损耗 I·L</span>
+            <code>-10·lg(Pouti / Pin)</code>
+          </div>
+          <div class="const-item">
+            <span>耦合器附加损耗 E·L</span>
+            <code>-10·lg(ΣPouti / Pin)</code>
+          </div>
+          <div class="const-item">
+            <span>耦合器分光比 C·R</span>
+            <code>Pouti / ΣPouti × 100%</code>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 手写笔记原图高清查看弹窗 -->
+  <div class="modal-backdrop" id="pdf-modal" onclick="if(event.target===this) closePdfModal()">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="pdf-modal-title" style="font-size:16px;">原版手写笔记预览</h3>
+        <button class="btn btn-outline btn-sm" onclick="closePdfModal()">✖ 关闭预览</button>
+      </div>
+      <div class="modal-body">
+        <img id="pdf-modal-img" src="" alt="手写笔记扫描页" />
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

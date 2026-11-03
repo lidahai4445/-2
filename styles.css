@@ -1,0 +1,1372 @@
+/* ==========================================================================
+   《光电子器件》全考点三刷通关与草稿纸辅助计算系统 - 浅色主题样式表 (Light Theme)
+   ========================================================================== */
+
+:root {
+  --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --bg-accent-soft: #eff6ff;
+  --bg-paper: #fffef8;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-paper: #e5dec9;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #dbeafe;
+
+  --pass1-color: #3b82f6;
+  --pass1-bg: #eff6ff;
+  --pass2-color: #8b5cf6;
+  --pass2-bg: #f5f3ff;
+  --pass3-color: #10b981;
+  --pass3-bg: #ecfdf5;
+
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+
+  --warning: #f59e0b;
+  --warning-bg: #fffbeb;
+  --warning-border: #fde68a;
+
+  --danger: #ef4444;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* 顶部导航与全局三刷进度栏 */
+.top-header {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.brand-title h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.brand-title p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* 顶部模式切换导航标签 */
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-subtle);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.nav-tab {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+}
+
+.nav-tab:hover {
+  color: var(--primary);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.nav-tab.active {
+  background: var(--bg-surface);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-pill {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.badge-primary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.badge-success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+/* 三刷全局统计条 */
+.global-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.stat-chip strong {
+  font-weight: 700;
+}
+
+.stat-chip.pass1 strong { color: var(--pass1-color); }
+.stat-chip.pass2 strong { color: var(--pass2-color); }
+.stat-chip.pass3 strong { color: var(--pass3-color); }
+
+/* 主体布局容器 */
+.app-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 24px 48px;
+  display: grid;
+  grid-template-columns: 290px 1fr 330px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .app-container {
+    grid-template-columns: 260px 1fr;
+  }
+  .right-sidebar {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 左侧栏：章节与三刷筛选器 */
+.left-sidebar, .right-sidebar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-section {
+  margin-bottom: 18px;
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 三刷进度总览卡片 */
+.mastery-overview-card {
+  background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.progress-row {
+  margin-bottom: 10px;
+}
+
+.progress-row:last-child {
+  margin-bottom: 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.progress-bar-track {
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.fill-pass1 { background: var(--pass1-color); }
+.fill-pass2 { background: var(--pass2-color); }
+.fill-pass3 { background: var(--pass3-color); }
+
+/* 筛选按钮组 */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-chip {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-chip.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+/* 章节树列表 */
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: var(--bg-page);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+}
+
+.chapter-item:hover {
+  background: var(--bg-accent-soft);
+  border-color: #bfdbfe;
+}
+
+.chapter-item.active {
+  background: var(--bg-accent-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.chapter-meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 中央主刷题区域 */
+.main-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 考点题目导航网格条 */
+.question-strip-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.strip-header-left {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.strip-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.question-dots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 115px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.q-dot {
+  min-width: 36px;
+  height: 30px;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-page);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.q-dot:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.q-dot.current {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  font-weight: 700;
+}
+
+.q-dot.pass-0 { background: #ffffff; }
+.q-dot.pass-1 { background: var(--pass1-bg); border-color: #93c5fd; color: #1d4ed8; }
+.q-dot.pass-2 { background: var(--pass2-bg); border-color: #c4b5fd; color: #6d28d9; }
+.q-dot.pass-3 { background: var(--pass3-bg); border-color: #6ee7b7; color: #047857; }
+
+.q-dot.has-wrong::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+}
+
+.q-dot-stars {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+/* 题目主卡片 */
+.question-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.q-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.q-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.q-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+}
+
+.tag-chapter {
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.tag-type-term { background: #e0f2fe; color: #0369a1; }
+.tag-type-short { background: #fef3c7; color: #b45309; }
+.tag-type-calc { background: #fce7f3; color: #be185d; }
+
+.tag-pdf {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px dashed #94a3b8;
+  cursor: pointer;
+}
+
+.tag-pdf:hover {
+  background: #e2e8f0;
+  color: var(--primary);
+}
+
+.q-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+/* 三刷状态徽章与切换器 */
+.pass-controller {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.pass-stars-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid var(--border-light);
+  background: var(--bg-page);
+}
+
+.star-icon {
+  font-size: 16px;
+  color: #cbd5e1;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.star-icon.filled-1 { color: var(--pass1-color); }
+.star-icon.filled-2 { color: var(--pass2-color); }
+.star-icon.filled-3 { color: var(--pass3-color); }
+
+/* 刷次阶段切换按钮（一刷 / 二刷 / 三刷） */
+.stage-switcher {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-subtle);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  margin-bottom: 18px;
+}
+
+.stage-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.stage-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.stage-btn.active.stage-1 {
+  background: var(--bg-surface);
+  color: var(--pass1-color);
+  border-color: #bfdbfe;
+  box-shadow: var(--shadow-sm);
+}
+
+.stage-btn.active.stage-2 {
+  background: var(--bg-surface);
+  color: var(--pass2-color);
+  border-color: #ddd6fe;
+  box-shadow: var(--shadow-sm);
+}
+
+.stage-btn.active.stage-3 {
+  background: var(--bg-surface);
+  color: var(--pass3-color);
+  border-color: #a7f3d0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 题干与图表展示框 */
+.q-prompt-box {
+  font-size: 15.5px;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.diagram-container {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin: 14px 0;
+  text-align: center;
+}
+
+.diagram-caption {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* 一刷：选择题选项样式 */
+.mcq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mcq-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 14.5px;
+  text-align: left;
+}
+
+.mcq-option:hover:not(.disabled) {
+  border-color: var(--primary);
+  background: var(--bg-accent-soft);
+}
+
+.mcq-option.selected {
+  border-color: var(--primary);
+  background: var(--bg-accent-soft);
+}
+
+.mcq-option.correct {
+  border-color: var(--success);
+  background: var(--success-bg);
+  color: #065f46;
+}
+
+.mcq-option.wrong {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: #991b1b;
+}
+
+.option-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mcq-option.correct .option-letter {
+  background: var(--success);
+  color: #fff;
+}
+
+.mcq-option.wrong .option-letter {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* 二刷：挖空填空与关键词自检 */
+.cloze-box {
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.cloze-input {
+  border: none;
+  border-bottom: 2px solid var(--primary);
+  background: #ffffff;
+  padding: 2px 8px;
+  margin: 0 4px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--primary);
+  border-radius: 4px 4px 0 0;
+  min-width: 110px;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.cloze-input:focus {
+  outline: none;
+  background: #eff6ff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+}
+
+.cloze-input.correct {
+  border-bottom-color: var(--success);
+  background: var(--success-bg);
+  color: #047857;
+}
+
+.cloze-input.wrong {
+  border-bottom-color: var(--danger);
+  background: var(--danger-bg);
+  color: #b91c1c;
+}
+
+/* 三刷：闭卷默写与采分点核对清单 */
+.recall-area {
+  margin-bottom: 16px;
+}
+
+.recall-textarea {
+  width: 100%;
+  min-height: 95px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  background: var(--bg-paper);
+  margin-bottom: 12px;
+}
+
+.recall-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.rubric-checklist {
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-top: 12px;
+}
+
+.rubric-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--border-light);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.rubric-item:last-child {
+  border-bottom: none;
+}
+
+.rubric-item input[type="checkbox"] {
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--success);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   现实草稿纸辅助计算工作台 (Paper Scratchpad Calculation Workbench)
+   ========================================================================== */
+.scratchpad-workbench {
+  background: var(--bg-paper);
+  border: 2px solid var(--border-paper);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 18px;
+  position: relative;
+  background-image: radial-gradient(#d8d0b8 0.75px, transparent 0.75px);
+  background-size: 18px 18px;
+}
+
+.scratchpad-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.scratchpad-code {
+  font-family: "Consolas", "SFMono-Regular", monospace;
+  font-weight: 800;
+  font-size: 13.5px;
+  background: #ffffff;
+  padding: 3px 9px;
+  border-radius: 5px;
+  border: 1px solid #f59e0b;
+  color: #b45309;
+}
+
+.given-params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.param-box {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border-paper);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 13px;
+}
+
+.param-box .param-name {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  display: block;
+}
+
+.param-box .param-val {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 14.5px;
+  font-family: "Consolas", monospace;
+}
+
+/* 草稿纸分步验算卡片 */
+.calc-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calc-step-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  transition: all 0.2s;
+}
+
+.calc-step-card.step-correct {
+  border-color: var(--success);
+  background: #f0fdf4;
+}
+
+.calc-step-card.step-wrong {
+  border-color: var(--danger);
+  background: #fef2f2;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.step-hint-btn {
+  font-size: 12px;
+  color: var(--primary);
+  background: transparent;
+  border: 1px dashed var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.step-formula-hint {
+  font-size: 13px;
+  color: #475569;
+  background: #f8fafc;
+  border-left: 3px solid var(--primary);
+  padding: 6px 10px;
+  margin: 6px 0 10px;
+  border-radius: 0 4px 4px 0;
+}
+
+.step-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.step-num-input {
+  padding: 8px 12px;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Consolas", monospace;
+  width: 160px;
+  background: #ffffff;
+}
+
+.step-num-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.step-unit {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.step-feedback {
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* 标准答案与解析框 */
+.explanation-panel {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-top: 18px;
+}
+
+.explanation-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.explanation-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+/* 通用按钮 */
+.btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-success {
+  background: var(--success);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: var(--danger-border);
+}
+
+.btn-danger:hover {
+  background: #fee2e2;
+}
+
+.btn-outline {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border-color: var(--border-medium);
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-accent-soft);
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+/* 右侧栏：光电科学计算器 & 常数表 & 笔记快速预览 */
+.calc-widget {
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.calc-screen {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: "Consolas", monospace;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.calc-result-preview {
+  font-size: 12px;
+  color: var(--primary);
+  text-align: right;
+  min-height: 18px;
+  margin-bottom: 8px;
+  font-family: "Consolas", monospace;
+  font-weight: 600;
+}
+
+.calc-keys-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.calc-key {
+  padding: 7px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.12s;
+}
+
+.calc-key:hover {
+  background: var(--bg-accent-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.calc-key.key-fn {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.calc-key.key-eq {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* 快捷换算工具条 */
+.quick-converter {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.converter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.converter-row input {
+  width: 100%;
+  padding: 4px 7px;
+  border: 1px solid var(--border-medium);
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: "Consolas", monospace;
+}
+
+/* 常数表 */
+.constants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.const-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: var(--bg-page);
+  border-radius: 5px;
+  border: 1px solid var(--border-light);
+}
+
+.const-item code {
+  font-family: "Consolas", monospace;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* 错题本列表视图 */
+.wrong-book-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wrong-item-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--danger-border);
+  border-left: 5px solid var(--danger);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.wrong-item-card.resolved {
+  border-color: var(--success-border);
+  border-left-color: var(--success);
+  opacity: 0.88;
+}
+
+.wrong-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.wrong-note-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-top: 8px;
+  background: #fffbeb;
+}
+
+/* 原版手写笔记弹窗 / 预览框 */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-window {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  max-width: 980px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body {
+  padding: 18px;
+  overflow-y: auto;
+  text-align: center;
+  background: var(--bg-subtle);
+}
+
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+}
+
+/* 知识点背诵全景表视图 */
+.knowledge-table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.kp-summary-card {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  background: var(--bg-page);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+@media print {
+  .top-header, .left-sidebar, .right-sidebar, .question-strip-card, .stage-switcher, .btn-row {
+    display: none !important;
+  }
+  .app-container {
+    display: block;
+    padding: 0;
+  }
+}
+
+/* ==========================================================================
+   直观数学分式与公式排版样式（纯本地零依赖渲染上下分式、上下标与公式块）
+   ========================================================================== */
+.formula-card {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 10px 0;
+  font-family: "Cambria Math", "Times New Roman", "STIXGeneral", serif;
+  font-size: 16px;
+  color: #0f172a;
+  line-height: 1.8;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.math-inline {
+  font-family: "Cambria Math", "Times New Roman", serif;
+  font-size: 1.05em;
+  color: #0f172a;
+  padding: 0 2px;
+}
+
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 4px;
+  line-height: 1.25;
+  font-family: "Cambria Math", "Times New Roman", serif;
+}
+
+.frac-num {
+  border-bottom: 1.5px solid #1e293b;
+  padding: 0 5px 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.frac-den {
+  padding: 2px 5px 0;
+  text-align: center;
+  width: 100%;
+}
