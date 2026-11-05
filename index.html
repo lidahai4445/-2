@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2022-2026 考研真题三刷系统 · 支持AI自定义题库</title>
-  <link rel="stylesheet" href="styles.css?v=20261105_v10" />
+  <link rel="stylesheet" href="styles.css?v=20261105_v11" />
 </head>
 <body>
   <!-- 极简顶部导航栏：科目切换 + 核心三视图 + 统一设置入口 -->
@@ -125,12 +125,16 @@
                 id="sync-id-input"
                 class="step-num-input"
                 style="flex:1;min-width:200px;"
-                placeholder="输入专属口令（如：lidahai4445 / zhangsan）"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck="false"
+                placeholder="输入专属口令（不区分大小写，如：lidahai4445）"
                 onkeydown="if(event.key==='Enter') saveAndSwitchSyncId()"
               />
               <button class="btn btn-primary btn-sm" onclick="saveAndSwitchSyncId()">切换 / 进入该口令</button>
             </div>
             <div id="recent-sync-ids-box"></div>
+            <div id="cloud-progress-summary-bar" class="cloud-progress-summary-bar"></div>
             <div id="cloud-modal-status" style="font-size:12.5px;color:var(--primary);margin-top:8px;font-weight:600;"></div>
           </div>
 
@@ -157,12 +161,12 @@
           </div>
 
           <div class="settings-block">
-            <div class="settings-block-title">⚡ 当前题目进度微调 & 云端备份</div>
+            <div class="settings-block-title">⚡ 当前题目进度微调 & 云端极速同步</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+              <button class="btn btn-primary btn-xs" id="btn-manual-push" onclick="manualPushToCloud()">⬆️ 立即上传进度到云端</button>
+              <button class="btn btn-outline btn-xs" id="btn-manual-pull" onclick="manualPullFromCloud()">⬇️ 从云端拉取最新进度</button>
               <button class="btn btn-outline btn-xs" onclick="manualAddPassCurrent()">➕ 当前题目刷次 +1★</button>
               <button class="btn btn-outline btn-xs" onclick="resetCurrentQuestionPasses()">🔄 重置当前题目为 0刷</button>
-              <button class="btn btn-outline btn-xs" onclick="manualPushToCloud()">⬆️ 立即上传进度到云端</button>
-              <button class="btn btn-outline btn-xs" onclick="manualPullFromCloud()">⬇️ 从云端拉取最新进度</button>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px dashed var(--border-light);">
               <button class="btn btn-outline btn-xs" onclick="exportProgressJsonFile()">💾 导出做题进度备份 (.json)</button>
@@ -264,8 +268,11 @@
     </div>
   </div>
 
-  <script src="questions.js?v=20261105_v10"></script>
-  <script src="kaoyan_questions.js?v=20261105_v10"></script>
-  <script src="app.js?v=20261105_v10"></script>
+  <!-- 零布局抖动右下角云同步实时反馈悬浮胶囊 -->
+  <div id="cloud-sync-toast" class="cloud-sync-toast" aria-live="polite"></div>
+
+  <script src="questions.js?v=20261105_v11"></script>
+  <script src="kaoyan_questions.js?v=20261105_v11"></script>
+  <script src="app.js?v=20261105_v11"></script>
 </body>
 </html>

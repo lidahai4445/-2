@@ -138,6 +138,10 @@ let appState = {
   wrongFilter: "unresolved"
 };
 
+function normalizeSyncId(rawId) {
+  return String(rawId || "").trim().toLowerCase();
+}
+
 function touchRecord(rec) {
   const now = Date.now();
   rec.u = now;
@@ -145,17 +149,17 @@ function touchRecord(rec) {
 }
 
 function getStorageKeyForSyncId(syncId) {
-  const clean = String(syncId || "guest").trim().toLowerCase();
+  const clean = normalizeSyncId(syncId) || "guest";
   return `${STORAGE_KEY_PREFIX}${clean}`;
 }
 
 function getPrivateBanksKeyForSyncId(syncId) {
-  const clean = String(syncId || "guest").trim().toLowerCase();
+  const clean = normalizeSyncId(syncId) || "guest";
   return `${PRIVATE_BANKS_KEY_PREFIX}${clean}`;
 }
 
 function loadCustomBanksForCurrentUser() {
-  const cleanId = String(appState.syncId || "").trim();
+  const cleanId = normalizeSyncId(appState.syncId);
   // 1. 读取当前口令专属私人题库
   privateBanks = [];
   if (cleanId) {
@@ -183,7 +187,7 @@ function loadCustomBanksForCurrentUser() {
 }
 
 function savePrivateBanksLocal() {
-  const cleanId = String(appState.syncId || "").trim();
+  const cleanId = normalizeSyncId(appState.syncId);
   if (!cleanId) return;
   try {
     localStorage.setItem(getPrivateBanksKeyForSyncId(cleanId), JSON.stringify(privateBanks));
@@ -202,7 +206,7 @@ function savePublicBanksLocal() {
 
 // 获取当前用户可见的所有自定义题库（当前口令的私人题库 + 所有公开题库，按 id 去重）
 function getVisibleCustomBanks() {
-  const cleanId = String(appState.syncId || "").trim();
+  const cleanId = normalizeSyncId(appState.syncId);
   const map = new Map();
   // 先放公开题库
   publicBanks.forEach((b) => {
@@ -210,10 +214,10 @@ function getVisibleCustomBanks() {
       map.set(b.id, { ...b, visibility: "public" });
     }
   });
-  // 再放当前口令的私人题库（仅当 ownerSyncId === cleanId 时可见）
+  // 再放当前口令的私人题库（仅当 ownerSyncId === cleanId 时可见，不区分大小写）
   if (cleanId) {
     privateBanks.forEach((b) => {
-      if (b && b.id && Array.isArray(b.questions) && (!b.ownerSyncId || b.ownerSyncId === cleanId)) {
+      if (b && b.id && Array.isArray(b.questions) && (!b.ownerSyncId || normalizeSyncId(b.ownerSyncId) === cleanId)) {
         map.set(b.id, { ...b, visibility: "private", ownerSyncId: cleanId });
       }
     });
@@ -335,12 +339,13 @@ function createFreshRecordsMap() {
 }
 
 function recordRecentSyncId(syncId) {
-  const clean = String(syncId || "").trim();
+  const clean = normalizeSyncId(syncId);
   if (!clean) return;
   try {
     const raw = localStorage.getItem(RECENT_SYNC_IDS_KEY);
     const list = raw ? JSON.parse(raw) : [];
-    const next = [clean, ...list.filter((x) => x !== clean)].slice(0, 6);
+    const normalizedList = list.map((x) => normalizeSyncId(x)).filter(Boolean);
+    const next = [clean, ...normalizedList.filter((x) => x !== clean)].slice(0, 6);
     localStorage.setItem(RECENT_SYNC_IDS_KEY, JSON.stringify(next));
   } catch (e) {}
 }
@@ -348,7 +353,8 @@ function recordRecentSyncId(syncId) {
 function getRecentSyncIds() {
   try {
     const raw = localStorage.getItem(RECENT_SYNC_IDS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.from(new Set(list.map((x) => normalizeSyncId(x)).filter(Boolean)));
   } catch (e) {
     return [];
   }
@@ -359,7 +365,7 @@ function loadState(targetSyncId) {
     ? targetSyncId
     : (localStorage.getItem(ACTIVE_SYNC_ID_KEY) || "");
 
-  const cleanId = String(savedActiveId).trim();
+  const cleanId = normalizeSyncId(savedActiveId);
 
   // 先重置为完全独立的初始状态
   appState = {
@@ -416,7 +422,8 @@ function loadState(targetSyncId) {
 }
 
 function saveState(triggerCloud = false) {
-  const cleanId = String(appState.syncId || "").trim();
+  const cleanId = normalizeSyncId(appState.syncId);
+  appState.syncId = cleanId;
   try {
     if (cleanId) {
       localStorage.setItem(ACTIVE_SYNC_ID_KEY, cleanId);
@@ -428,8 +435,11 @@ function saveState(triggerCloud = false) {
   } catch (e) {
     console.warn("保存状态失败:", e);
   }
+  if (typeof renderCloudProgressSummary === "function") {
+    renderCloudProgressSummary();
+  }
   if (triggerCloud && cleanId && typeof scheduleCloudPush === "function") {
-    scheduleCloudPush(3500);
+    scheduleCloudPush(120);
   }
 }
 
@@ -1289,10 +1299,15 @@ function renderAiHubView(container) {
 }
 
 /* ==========================================================================
-   统一设置中心 & AI 生成题库上传（私人/公开口令权限） & 多端云同步引擎
+   统一设置中心 & AI 生成题库上传（私人/公开口令权限） & 多端双通道极速云同步引擎
    ========================================================================== */
 let cloudPushTimer = null;
-let isSyncingNow = false;
+let isPushingNow = false;
+let isPullingNow = false;
+let pendingPushQueued = false;
+let lastCloudSyncTimeStr = "";
+let toastHideTimer = null;
+let pillResetTimer = null;
 
 function getStandardAiPromptText() {
   return `你现在是专业的考试题库结构化专家。请将我发给你的题目与解析资料，转换为以下标准 JSON 格式（你可以直接生成一个 .json 文件供我下载，或输出纯 JSON 代码块）。
@@ -1357,6 +1372,7 @@ function openSettingsModal(defaultTab = "account") {
   if (promptBox) promptBox.textContent = getStandardAiPromptText();
 
   renderRecentSyncIdsInModal();
+  renderCloudProgressSummary();
   renderCustomBanksManageList();
   switchSettingsTab(defaultTab);
   if (modal) modal.classList.add("open");
@@ -1448,7 +1464,7 @@ function parseUploadedJsonToBank(rawText, fallbackFileName = "") {
   const customTitleInput = document.getElementById("new-bank-title-input");
   const visibilitySelect = document.getElementById("new-bank-visibility-select");
   const visibility = visibilitySelect ? visibilitySelect.value : "private";
-  const ownerSyncId = (appState.syncId || "").trim();
+  const ownerSyncId = normalizeSyncId(appState.syncId);
 
   if (!ownerSyncId) {
     throw new Error("请先在「🔑 口令与界面设置」中输入您的专属口令，才能绑定新题库权限！");
@@ -1605,7 +1621,7 @@ function renderCustomBanksManageList() {
   const box = document.getElementById("custom-banks-manage-list");
   if (!box) return;
   const banks = getVisibleCustomBanks();
-  const curSyncId = (appState.syncId || "").trim();
+  const curSyncId = normalizeSyncId(appState.syncId);
 
   if (banks.length === 0) {
     box.innerHTML = `
@@ -1617,7 +1633,7 @@ function renderCustomBanksManageList() {
   }
 
   box.innerHTML = banks.map((b) => {
-    const isOwner = Boolean(curSyncId && b.ownerSyncId === curSyncId);
+    const isOwner = Boolean(curSyncId && normalizeSyncId(b.ownerSyncId) === curSyncId);
     const isPriv = b.visibility === "private";
     return `
       <div class="custom-bank-card">
@@ -1674,13 +1690,13 @@ function exportSingleCustomBank(bankId) {
 }
 
 async function toggleCustomBankVisibility(bankId) {
-  const curSyncId = (appState.syncId || "").trim();
+  const curSyncId = normalizeSyncId(appState.syncId);
   const privIdx = privateBanks.findIndex((b) => b.id === bankId);
   const pubIdx = publicBanks.findIndex((b) => b.id === bankId);
 
   if (privIdx !== -1) {
     const bank = privateBanks[privIdx];
-    if (bank.ownerSyncId !== curSyncId) {
+    if (normalizeSyncId(bank.ownerSyncId) !== curSyncId) {
       alert("权限不足：只有创建该题库的口令才能修改权限！");
       return;
     }
@@ -1695,7 +1711,7 @@ async function toggleCustomBankVisibility(bankId) {
     await pushPublicBanksToGlobalHub();
   } else if (pubIdx !== -1) {
     const bank = publicBanks[pubIdx];
-    if (bank.ownerSyncId !== curSyncId) {
+    if (normalizeSyncId(bank.ownerSyncId) !== curSyncId) {
       alert("权限不足：只有创建该题库的口令才能将其转为私人！");
       return;
     }
@@ -1712,10 +1728,10 @@ async function toggleCustomBankVisibility(bankId) {
 }
 
 async function deleteCustomBank(bankId) {
-  const curSyncId = (appState.syncId || "").trim();
+  const curSyncId = normalizeSyncId(appState.syncId);
   const bank = getVisibleCustomBanks().find((b) => b.id === bankId);
   if (!bank) return;
-  if (bank.ownerSyncId !== curSyncId) {
+  if (normalizeSyncId(bank.ownerSyncId) !== curSyncId) {
     alert(`权限不足：仅创建者口令 [${bank.ownerSyncId}] 有权删除此题库！`);
     return;
   }
@@ -1742,26 +1758,89 @@ async function deleteCustomBank(bankId) {
 }
 
 async function refreshCustomBanksFromCloud() {
-  await pullFromCloud();
+  await pullFromCloud(true);
   renderCustomBanksManageList();
 }
 
 /* ==========================================================================
-   多端云同步与全局公共题库注册表 (Global Hub + Per-Passcode Private Vault)
+   多端双通道极速云同步引擎 (Single-Hop Fast Channel + Persistent Vault)
    ========================================================================== */
-function updateSyncStatusUI(state, msg) {
+function getProgressSummaryCounts() {
+  let answeredCount = 0;
+  let totalPasses = 0;
+  let wrongCount = 0;
+  Object.values(appState.records || {}).forEach((r) => {
+    if (!r) return;
+    if (r.passes > 0 || r.wrongCount > 0 || r.lastOpt || r.revealed) {
+      answeredCount++;
+    }
+    totalPasses += r.passes || 0;
+    if (r.wrongCount > 0 && !r.resolved) wrongCount++;
+  });
+  return { answeredCount, totalPasses, wrongCount };
+}
+
+function renderCloudProgressSummary() {
+  const bar = document.getElementById("cloud-progress-summary-bar");
+  if (!bar) return;
+  const sid = normalizeSyncId(appState.syncId);
+  const { answeredCount, totalPasses, wrongCount } = getProgressSummaryCounts();
+  if (!sid) {
+    bar.innerHTML = `<span style="color:var(--danger);">⚠️ 当前未设置口令，进度仅暂存本机浏览器，请上方输入口令开启跨设备同步</span>`;
+    return;
+  }
+  bar.innerHTML = `
+    <div>
+      🔑 当前口令：<strong style="color:var(--primary);">${escapeHtml(sid)}</strong>
+      &nbsp;|&nbsp; 📊 已作答：<strong>${answeredCount} 题</strong>（累计 <strong>${totalPasses} 刷★</strong> · 待攻克错题 <strong>${wrongCount} 道</strong>）
+    </div>
+    <div style="color:var(--success);font-weight:700;">
+      ${lastCloudSyncTimeStr ? `☁️ 最近同步：${escapeHtml(lastCloudSyncTimeStr)}` : "☁️ 自动实时同步已开启"}
+    </div>
+  `;
+}
+
+function showCloudToast(text, type = "ok", durationMs = 2200) {
+  const toast = document.getElementById("cloud-sync-toast");
+  if (!toast) return;
+  if (toastHideTimer) clearTimeout(toastHideTimer);
+  toast.textContent = text;
+  toast.className = `cloud-sync-toast visible ${type === "syncing" ? "toast-syncing" : "toast-ok"}`;
+  if (durationMs > 0) {
+    toastHideTimer = setTimeout(() => {
+      toast.classList.remove("visible");
+    }, durationMs);
+  }
+}
+
+function updateSyncStatusUI(state, msg, showToastPopup = false) {
   const dot = document.getElementById("sync-status-dot");
   const textEl = document.getElementById("sync-status-text");
   const btn = document.getElementById("cloud-sync-btn");
   const modalMsg = document.getElementById("cloud-modal-status");
-  const sid = (appState.syncId || "").trim();
+  const sid = normalizeSyncId(appState.syncId);
+  const { answeredCount } = getProgressSummaryCounts();
 
   if (dot) {
     dot.className = "sync-dot" + (!sid ? " error" : state === "syncing" ? " syncing" : state === "error" ? " error" : "");
   }
-  // 顶栏按钮文字永远固定长度，彻底杜绝顶栏换行抖动
-  if (textEl) {
-    textEl.textContent = sid ? `⚙️ 设置 (${sid.slice(0, 10)})` : `⚙️ 设置 / 口令`;
+  // 顶栏按钮已设置固定 min-width: 172px，切换文字绝不引起顶栏换行或抖动
+  if (textEl && btn) {
+    if (pillResetTimer) clearTimeout(pillResetTimer);
+    if (state === "syncing") {
+      btn.classList.remove("just-saved");
+      textEl.textContent = `🔄 正在同步云端...`;
+    } else if (state === "ok" && showToastPopup) {
+      btn.classList.add("just-saved");
+      textEl.textContent = `✅ 云端已存 (${answeredCount}题)`;
+      pillResetTimer = setTimeout(() => {
+        btn.classList.remove("just-saved");
+        textEl.textContent = sid ? `⚙️ 设置 (${sid.slice(0, 10)})` : `⚙️ 设置 / 口令`;
+      }, 2200);
+    } else {
+      btn.classList.remove("just-saved");
+      textEl.textContent = sid ? `⚙️ 设置 (${sid.slice(0, 10)})` : `⚙️ 设置 / 口令`;
+    }
   }
   if (btn && msg) {
     btn.title = `${msg}（点击打开设置与题库中心）`;
@@ -1769,11 +1848,14 @@ function updateSyncStatusUI(state, msg) {
   if (modalMsg && msg) {
     modalMsg.textContent = msg;
   }
+  renderCloudProgressSummary();
 }
 
 async function fetchGlobalHubData() {
   try {
-    const res = await fetch(`https://api.restful-api.dev/objects/${GLOBAL_HUB_VAULT_ID}`);
+    const res = await fetch(`https://api.restful-api.dev/objects/${GLOBAL_HUB_VAULT_ID}`, {
+      cache: "no-store"
+    });
     if (res.ok) {
       const obj = await res.json();
       return (obj && obj.data) || { userVaults: { ...DEFAULT_VAULT_MAP }, publicBanks: [] };
@@ -1803,18 +1885,22 @@ async function pushPublicBanksToGlobalHub() {
 }
 
 async function resolveVaultId(syncId, preloadedHubData = null) {
-  const cleanId = String(syncId || "").trim();
+  const cleanId = normalizeSyncId(syncId);
   if (!cleanId) return null;
+  // 优先匹配默认映射表（解决之前大小写缓存不一致问题）
   if (DEFAULT_VAULT_MAP[cleanId]) return DEFAULT_VAULT_MAP[cleanId];
 
-  const cacheKey = `kaoyan_vault_id_${cleanId}`;
+  const cacheKey = `kaoyan_vault_id_v3_${cleanId}`;
   const cached = localStorage.getItem(cacheKey);
   if (cached) return cached;
 
   const hubData = preloadedHubData || (await fetchGlobalHubData());
-  if (hubData && hubData.userVaults && hubData.userVaults[cleanId]) {
-    localStorage.setItem(cacheKey, hubData.userVaults[cleanId]);
-    return hubData.userVaults[cleanId];
+  if (hubData && hubData.userVaults) {
+    const matchedVault = hubData.userVaults[cleanId] || hubData.userVaults[syncId];
+    if (matchedVault) {
+      localStorage.setItem(cacheKey, matchedVault);
+      return matchedVault;
+    }
   }
 
   // 为该新口令创建独立云端仓库并注册到全局中心
@@ -1851,7 +1937,7 @@ async function resolveVaultId(syncId, preloadedHubData = null) {
   return null;
 }
 
-function buildCompactCloudPayload() {
+function buildCompactCloudPayload(includePrivateBanks = true) {
   const compactRecords = {};
   Object.keys(appState.records || {}).forEach((qId) => {
     const r = appState.records[qId];
@@ -1877,19 +1963,22 @@ function buildCompactCloudPayload() {
       };
     }
   });
-  return {
+  const payload = {
     updatedAt: appState.updatedAt || Date.now(),
-    syncId: appState.syncId || "",
+    syncId: normalizeSyncId(appState.syncId),
     activeSubject: appState.activeSubject,
     activeYear: appState.activeYear,
     activeChapter: appState.activeChapter,
     currentQId: appState.currentQId,
-    records: compactRecords,
-    privateBanks: privateBanks
+    records: compactRecords
   };
+  if (includePrivateBanks) {
+    payload.privateBanks = privateBanks;
+  }
+  return payload;
 }
 
-function mergeCloudPayloadIntoLocal(cloudData) {
+function mergeCloudPayloadIntoLocal(cloudData, forceJumpToCurrent = false) {
   if (!cloudData || typeof cloudData !== "object") return false;
   let hasLocalChangesToPush = false;
   let localWasUpdated = false;
@@ -1936,6 +2025,11 @@ function mergeCloudPayloadIntoLocal(cloudData) {
         lr.wrongCount = cr.w;
         localWasUpdated = true;
       }
+      if (cr.o && !lr.lastOpt) {
+        lr.lastOpt = cr.o;
+        lr.revealed = Boolean(cr.rev);
+        localWasUpdated = true;
+      }
     } else {
       hasLocalChangesToPush = true;
     }
@@ -1949,114 +2043,219 @@ function mergeCloudPayloadIntoLocal(cloudData) {
   });
 
   const isFreshDevice = (appState.updatedAt || 0) === 0;
-  if ((cloudData.updatedAt || 0) > (appState.updatedAt || 0)) {
-    appState.updatedAt = cloudData.updatedAt;
-    if (isFreshDevice) {
-      if (cloudData.currentQId) appState.currentQId = cloudData.currentQId;
-      if (cloudData.activeSubject) appState.activeSubject = cloudData.activeSubject;
-      localWasUpdated = true;
+  if ((cloudData.updatedAt || 0) >= (appState.updatedAt || 0)) {
+    appState.updatedAt = Math.max(appState.updatedAt || 0, cloudData.updatedAt || 0);
+    if (isFreshDevice || forceJumpToCurrent) {
+      if (cloudData.activeSubject && cloudData.activeSubject !== appState.activeSubject) {
+        appState.activeSubject = cloudData.activeSubject;
+        localWasUpdated = true;
+      }
+      if (cloudData.currentQId && cloudData.currentQId !== appState.currentQId) {
+        appState.currentQId = cloudData.currentQId;
+        localWasUpdated = true;
+      }
     }
   }
 
-  if (localWasUpdated) {
+  if (localWasUpdated || forceJumpToCurrent) {
     saveState(false);
-    renderSubjectBar();
-    renderGlobalHeaderStats();
-    renderSidebar();
-    renderQuestionDots();
-    if (isFreshDevice) {
-      renderMainStage();
-    }
+    renderAll();
   }
   return hasLocalChangesToPush;
 }
 
-async function pushToCloud() {
-  const sid = (appState.syncId || "").trim();
-  if (!sid || isSyncingNow) return;
-  isSyncingNow = true;
-  updateSyncStatusUI("syncing", `🔄 正在同步口令 [${sid}] 的进度与私人题库...`);
+function getFastChannelTopic(sid) {
+  const safe = normalizeSyncId(sid).replace(/[^a-z0-9_-]/g, "_");
+  return `kaoyan_v3_sync_${safe}`;
+}
 
-  const payload = buildCompactCloudPayload();
+async function pushToFastChannel(sid, compactPayload) {
+  const topic = getFastChannelTopic(sid);
+  const res = await fetch(`https://ntfy.sh/${topic}`, {
+    method: "POST",
+    body: JSON.stringify(compactPayload),
+    cache: "no-store"
+  });
+  if (!res.ok) throw new Error("fast channel post failed");
+  return true;
+}
+
+async function pullFromFastChannel(sid) {
+  const topic = getFastChannelTopic(sid);
+  const res = await fetch(`https://ntfy.sh/${topic}/json?poll=1&_t=${Date.now()}`, {
+    cache: "no-store"
+  });
+  if (!res.ok) return null;
+  const text = await res.text();
+  const lines = text.trim().split("\n").filter(Boolean);
+  let latestPayload = null;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    try {
+      const msgObj = JSON.parse(lines[i]);
+      if (msgObj && msgObj.event === "message" && msgObj.message) {
+        const parsed = JSON.parse(msgObj.message);
+        if (parsed && parsed.records) {
+          latestPayload = parsed;
+          break;
+        }
+      }
+    } catch (e) {}
+  }
+  return latestPayload;
+}
+
+async function pushToVaultChannel(sid, fullPayload) {
+  const vaultId = await resolveVaultId(sid);
+  if (!vaultId) throw new Error("no vault id");
+  const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: `kaoyan_sync_${sid}`,
+      data: fullPayload
+    }),
+    cache: "no-store"
+  });
+  if (!res.ok) throw new Error("vault put failed");
+  return true;
+}
+
+async function pushToCloud() {
+  const sid = normalizeSyncId(appState.syncId);
+  if (!sid) return false;
+
+  // 若已有上传在进行中，放入待传队列，绝不丢弃任何一次做题进度！
+  if (isPushingNow) {
+    pendingPushQueued = true;
+    return true;
+  }
+
+  isPushingNow = true;
+  const tStart = Date.now();
+  const { answeredCount } = getProgressSummaryCounts();
+  updateSyncStatusUI("syncing", `🔄 正在极速上传口令 [${sid}] 的进度 (${answeredCount}题)...`);
+  showCloudToast(`☁️ 正在同步云端进度...`, "syncing", 0);
+
+  const fullPayload = buildCompactCloudPayload(true);
+  const fastPayload = buildCompactCloudPayload(false);
   let ok = false;
 
   try {
-    const vaultId = await resolveVaultId(sid);
-    if (vaultId) {
-      const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: `kaoyan_sync_${sid}`,
-          data: payload
-        })
-      });
-      if (res.ok) ok = true;
-    }
+    // 双通道并发竞速：直连通道 (ntfy) 与持久化对象库 (restful-api) 同时发出，任一完成即立刻确认成功！
+    await Promise.any([
+      pushToFastChannel(sid, fastPayload),
+      pushToVaultChannel(sid, fullPayload)
+    ]);
+    ok = true;
   } catch (e) {
-    console.warn("云端推送异常:", e);
+    console.warn("云端双通道推送异常:", e);
+  } finally {
+    isPushingNow = false;
   }
 
-  isSyncingNow = false;
+  const costSec = ((Date.now() - tStart) / 1000).toFixed(1);
   if (ok) {
     const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    updateSyncStatusUI("ok", `✅ 口令 [${sid}] 云端已同步 (${timeStr})`);
+    lastCloudSyncTimeStr = `${timeStr} (耗时 ${costSec}s)`;
+    updateSyncStatusUI("ok", `✅ 口令 [${sid}] 云端已同步 · 共 ${answeredCount} 题 (${lastCloudSyncTimeStr})`, true);
+    showCloudToast(`✅ 云端已保存 · 口令 [${sid}] (已刷 ${answeredCount} 题)`, "ok", 2200);
   } else {
     updateSyncStatusUI("error", `⚠️ 口令 [${sid}] 已保存在本机`);
+    showCloudToast(`⚠️ 网络繁忙，进度已安全保存在本机`, "syncing", 2500);
   }
+
+  // 如果在上传期间用户又做了新题，立即无缝接力上传最新状态
+  if (pendingPushQueued) {
+    pendingPushQueued = false;
+    scheduleCloudPush(80);
+  }
+  return ok;
 }
 
-async function pullFromCloud() {
-  if (isSyncingNow) return;
-  isSyncingNow = true;
-  const sid = (appState.syncId || "").trim();
-  updateSyncStatusUI("syncing", `🔄 正在加载云端题库与进度...`);
+async function pullFromCloud(forceJumpToCurrent = false) {
+  if (isPullingNow) return;
+  isPullingNow = true;
+  const sid = normalizeSyncId(appState.syncId);
+  updateSyncStatusUI("syncing", `🔄 正在从云端同步最新题库与做题进度...`);
 
-  // 1. 先拉取全局中心（更新公开题库列表 + 获取口令仓库映射）
-  const hubData = await fetchGlobalHubData();
-  if (hubData && Array.isArray(hubData.publicBanks)) {
-    publicBanks = hubData.publicBanks;
-    savePublicBanksLocal();
-    rebuildQuestionBankPool();
-    renderSubjectBar();
-  }
-
-  // 2. 如果已设置口令，拉取该口令专属的私人进度与私人题库
-  if (sid) {
-    let cloudPayload = null;
-    try {
-      const vaultId = await resolveVaultId(sid, hubData);
-      if (vaultId) {
-        const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`);
-        if (res.ok) {
-          const obj = await res.json();
-          if (obj && obj.data) {
-            cloudPayload = obj.data;
+  try {
+    if (sid) {
+      // 双通道并行拉取：1. 快速直连通道 2. 全局中心+专属持久化仓库同时发起
+      const fastPromise = pullFromFastChannel(sid).catch(() => null);
+      const hubAndVaultPromise = (async () => {
+        const knownVaultId = DEFAULT_VAULT_MAP[sid] || localStorage.getItem(`kaoyan_vault_id_v3_${sid}`);
+        if (knownVaultId) {
+          // 已知仓库 ID 时，直接并行拉取仓库与全局中心，节省一倍等待时间！
+          const [vaultRes, hubData] = await Promise.all([
+            fetch(`https://api.restful-api.dev/objects/${knownVaultId}`, { cache: "no-store" }).catch(() => null),
+            fetchGlobalHubData()
+          ]);
+          if (hubData && Array.isArray(hubData.publicBanks)) {
+            publicBanks = hubData.publicBanks;
+            savePublicBanksLocal();
+            rebuildQuestionBankPool();
           }
+          if (vaultRes && vaultRes.ok) {
+            const obj = await vaultRes.json();
+            return (obj && obj.data) || null;
+          }
+          return null;
+        } else {
+          const hubData = await fetchGlobalHubData();
+          if (hubData && Array.isArray(hubData.publicBanks)) {
+            publicBanks = hubData.publicBanks;
+            savePublicBanksLocal();
+            rebuildQuestionBankPool();
+          }
+          const vaultId = await resolveVaultId(sid, hubData);
+          if (vaultId) {
+            const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`, { cache: "no-store" });
+            if (res.ok) {
+              const obj = await res.json();
+              return (obj && obj.data) || null;
+            }
+          }
+          return null;
         }
-      }
-    } catch (e) {
-      console.warn("拉取口令云端数据失败:", e);
-    }
+      })().catch(() => null);
 
-    isSyncingNow = false;
-    if (cloudPayload) {
-      const needPushBack = mergeCloudPayloadIntoLocal(cloudPayload);
-      const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit" });
-      updateSyncStatusUI("ok", `✅ 已加载口令 [${sid}] 独立空间 (${timeStr})`);
+      const [fastPayload, vaultPayload] = await Promise.all([fastPromise, hubAndVaultPromise]);
+
+      let needPushBack = false;
+      if (vaultPayload) {
+        if (mergeCloudPayloadIntoLocal(vaultPayload, forceJumpToCurrent)) needPushBack = true;
+      }
+      if (fastPayload) {
+        if (mergeCloudPayloadIntoLocal(fastPayload, forceJumpToCurrent)) needPushBack = true;
+      }
+
+      renderAll();
+      const { answeredCount } = getProgressSummaryCounts();
+      const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      lastCloudSyncTimeStr = timeStr;
+      updateSyncStatusUI("ok", `✅ 已同步口令 [${sid}] 云端进度 · 共 ${answeredCount} 题 (${timeStr})`, true);
+      if (forceJumpToCurrent) {
+        showCloudToast(`✅ 已从云端拉取最新进度 (共 ${answeredCount} 题)`, "ok", 2400);
+      }
       if (needPushBack) {
-        scheduleCloudPush(800);
+        scheduleCloudPush(200);
       }
     } else {
-      updateSyncStatusUI("ok", `✅ 口令 [${sid}] 独立空间已就绪`);
+      const hubData = await fetchGlobalHubData();
+      if (hubData && Array.isArray(hubData.publicBanks)) {
+        publicBanks = hubData.publicBanks;
+        savePublicBanksLocal();
+        rebuildQuestionBankPool();
+        renderSubjectBar();
+      }
+      updateSyncStatusUI("error", "🔑 点击设置您的专属刷题口令");
     }
-  } else {
-    isSyncingNow = false;
-    updateSyncStatusUI("error", "🔑 点击设置您的专属刷题口令");
+  } finally {
+    isPullingNow = false;
   }
 }
 
-function scheduleCloudPush(delayMs = 3500) {
+function scheduleCloudPush(delayMs = 120) {
   if (cloudPushTimer) clearTimeout(cloudPushTimer);
   cloudPushTimer = setTimeout(() => {
     pushToCloud();
@@ -2076,7 +2275,7 @@ function renderRecentSyncIdsInModal() {
       <span>本机常用口令快切：</span>
       ${recents.map((id) => `
         <button
-          class="btn ${id === appState.syncId ? "btn-primary" : "btn-outline"} btn-xs"
+          class="btn ${id === normalizeSyncId(appState.syncId) ? "btn-primary" : "btn-outline"} btn-xs"
           onclick="quickSwitchSyncId('${escapeHtml(id)}')"
         >${escapeHtml(id)}</button>
       `).join("")}
@@ -2086,18 +2285,19 @@ function renderRecentSyncIdsInModal() {
 
 async function quickSwitchSyncId(targetId) {
   const input = document.getElementById("sync-id-input");
-  if (input) input.value = targetId;
+  if (input) input.value = normalizeSyncId(targetId);
   await saveAndSwitchSyncId();
 }
 
 async function saveAndSwitchSyncId() {
   const input = document.getElementById("sync-id-input");
   if (!input) return;
-  const newId = input.value.trim();
+  const newId = normalizeSyncId(input.value);
   if (!newId) {
     alert("请输入您的专属同步口令（如姓名拼音、学号或昵称）！");
     return;
   }
+  input.value = newId;
 
   if (cloudPushTimer) {
     clearTimeout(cloudPushTimer);
@@ -2110,23 +2310,51 @@ async function saveAndSwitchSyncId() {
   saveState(false);
   renderAll();
   renderRecentSyncIdsInModal();
+  renderCloudProgressSummary();
   renderCustomBanksManageList();
 
   const ownerLabel = document.getElementById("current-owner-label");
   if (ownerLabel) ownerLabel.textContent = newId;
 
-  updateSyncStatusUI("syncing", `🔄 正在拉取口令 [${newId}] 的专属进度与私人题库...`);
-  await pullFromCloud();
+  showCloudToast(`🔄 正在切换至口令 [${newId}] 并拉取云端进度...`, "syncing", 0);
+  await pullFromCloud(true);
   renderAll();
+  renderCloudProgressSummary();
   renderCustomBanksManageList();
 }
 
 async function manualPushToCloud() {
-  await pushToCloud();
+  const btn = document.getElementById("btn-manual-push");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ 正在极速上传...";
+  }
+  const ok = await pushToCloud();
+  const { answeredCount } = getProgressSummaryCounts();
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = ok ? `✅ 已上传成功 (${answeredCount}题)` : "⚠️ 上传重试";
+    setTimeout(() => {
+      if (btn) btn.textContent = "⬆️ 立即上传进度到云端";
+    }, 2500);
+  }
 }
 
 async function manualPullFromCloud() {
-  await pullFromCloud();
+  const btn = document.getElementById("btn-manual-pull");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ 正在拉取最新进度...";
+  }
+  await pullFromCloud(true);
+  const { answeredCount } = getProgressSummaryCounts();
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = `✅ 已同步最新 (${answeredCount}题)`;
+    setTimeout(() => {
+      if (btn) btn.textContent = "⬇️ 从云端拉取最新进度";
+    }, 2500);
+  }
 }
 
 function exportProgressJsonFile() {
@@ -2147,7 +2375,7 @@ function importProgressJsonFile(event) {
   reader.onload = (e) => {
     try {
       const parsed = JSON.parse(e.target.result);
-      mergeCloudPayloadIntoLocal(parsed);
+      mergeCloudPayloadIntoLocal(parsed, true);
       pushToCloud();
       alert("🎉 进度文件导入成功，并已同步至云端！");
     } catch (err) {
@@ -2170,10 +2398,10 @@ window.addEventListener("DOMContentLoaded", () => {
   renderAll();
   if (appState.syncId) {
     updateSyncStatusUI("ok", `☁️ 当前口令: ${appState.syncId}`);
-    pullFromCloud();
+    pullFromCloud(true);
   } else {
     updateSyncStatusUI("error", "🔑 请设置您的专属刷题口令");
-    pullFromCloud(); // 即使未登录口令也拉取公开共享题库
+    pullFromCloud(false); // 即使未登录口令也拉取公开共享题库
     openSettingsModal("account");
   }
 });
