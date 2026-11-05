@@ -20,9 +20,12 @@ function copyRecursive(src, dest) {
   }
 }
 
+if (fs.existsSync(outDir)) {
+  fs.rmSync(outDir, { recursive: true, force: true });
+}
 fs.mkdirSync(outDir, { recursive: true });
 
-const filesToCopy = ["index.html", "styles.css", "questions.js", "kaoyan_questions.js", "app.js", "_headers"];
+const filesToCopy = ["index.html", "styles.css", "kaoyan_questions.js", "app.js", "_headers"];
 for (const file of filesToCopy) {
   const srcPath = path.join(__dirname, file);
   if (fs.existsSync(srcPath)) {
@@ -40,4 +43,4 @@ if (fs.existsSync(docsSrc)) {
   copyRecursive(docsSrc, path.join(outDir, "docs"));
 }
 
-console.log("✅ Cloudflare 静态站点构建完成：根目录 (.) 与 dist/ 目录均已就绪。");
+console.log("✅ Cloudflare 静态站点构建完成：已移除光电子器件内容，根目录 (.) 与 dist/ 目录均已就绪。");

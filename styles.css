@@ -1,5 +1,5 @@
 /* ==========================================================================
-   《光电子器件》全考点三刷通关与草稿纸辅助计算系统 - 浅色主题样式表 (Light Theme)
+   《考研数学二 · 考研英语二》真题三刷通关系统 - 极简浅色样式表 (Light Theme)
    ========================================================================== */
 
 :root {
@@ -72,45 +72,47 @@ body {
 }
 
 .header-inner {
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .brand-area {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 18px;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  font-size: 16px;
 }
 
 .brand-title h1 {
-  font-size: 18px;
+  font-size: 16.5px;
   font-weight: 700;
   color: var(--text-primary);
-}
-
-.brand-title p {
-  font-size: 12px;
-  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* 顶部模式切换导航标签 */
@@ -199,24 +201,19 @@ body {
 .stat-chip.pass2 strong { color: var(--pass2-color); }
 .stat-chip.pass3 strong { color: var(--pass3-color); }
 
-/* 主体布局容器 */
+/* 极简双栏主体布局 */
 .app-container {
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 20px 24px 48px;
   display: grid;
-  grid-template-columns: 290px 1fr 330px;
+  grid-template-columns: 260px 1fr;
   gap: 20px;
   align-items: start;
 }
 
-@media (max-width: 1200px) {
-  .app-container {
-    grid-template-columns: 260px 1fr;
-  }
-  .right-sidebar {
-    grid-column: 1 / -1;
-  }
+.app-container.single-col {
+  grid-template-columns: 1fr;
 }
 
 @media (max-width: 860px) {
@@ -226,7 +223,7 @@ body {
 }
 
 /* 左侧栏：章节与三刷筛选器 */
-.left-sidebar, .right-sidebar {
+.left-sidebar {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);

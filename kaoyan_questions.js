@@ -3,17 +3,11 @@
 // ============================================================================
 
 window.SUBJECTS = [
-  { id: "opto", name: "📘 专业课：光电子器件", badge: "7章·25考点" },
-  { id: "math2", name: "📐 考研数学二 (2022-2026真题分类)", badge: "6专题·真题+技巧" },
-  { id: "eng2", name: "🇬🇧 考研英语二 (2022-2026真题分类)", badge: "5模块·真题+技巧" }
+  { id: "math2", name: "📐 考研数学二", badge: "6专题" },
+  { id: "eng2", name: "🇬🇧 考研英语二", badge: "5模块" }
 ];
 
-// 为原有光电子器件章节标记 subject = 'opto'，并追加数学二、英语二章节分类
-window.CHAPTERS.forEach((ch) => {
-  ch.subject = "opto";
-});
-
-window.CHAPTERS.push(
+window.CHAPTERS = [
   // 数学二 6 大专题分类
   { id: "m_ch1", subject: "math2", name: "专题一：函数、极限与泰勒展开", pdfPages: [1] },
   { id: "m_ch2", subject: "math2", name: "专题二：一元微分学、反函数与曲率", pdfPages: [2] },
@@ -28,63 +22,14 @@ window.CHAPTERS.push(
   { id: "e_ch3", subject: "eng2", name: "模块三：新题型 Part B（2022-2026多项对应与小标题）", pdfPages: [] },
   { id: "e_ch4", subject: "eng2", name: "模块四：翻译 Section III（2022-2026长难句拆分精译）", pdfPages: [] },
   { id: "e_ch5", subject: "eng2", name: "模块五：写作 Section IV（2022-2026小作文书信+大作文图表）", pdfPages: [] }
-);
+];
 
-// 为原有光电子器件题目自动注入 subject='opto' 以及专属做题技巧 tips 与关联知识点 knowledgePoints
-const OPTO_TIPS_MAP = {
-  Q01: {
-    tips: "💡 记忆口诀：『信源先电再转光，光纤放大收端双（先光接收再电接收）』。注意发端是电→光，收端是光→电，顺序绝不可颠倒！",
-    knowledgePoints: ["电发射机与光发射机顺序", "光放大器中继位置", "光接收机(O/E)与电接收机顺序"]
-  },
-  Q03: {
-    tips: "💡 区分技巧：LED（发光二极管，无阈值，自发辐射）、LD（激光器，有阈值，受激辐射）；DH（双异质结）核心在于『两种带隙宽度Eg不同的半导体』形成势垒限制载流子和光子。",
-    knowledgePoints: ["LED自发辐射 vs LD受激辐射", "DH异质结定义（p-n、p-p或n-n结）"]
-  },
-  Q06: {
-    tips: "💡 必考简答采分词：① 偏置电流逼近阈值 Ith（作用：抑制张弛振荡）；② 限制条件：不能使消光比大于 10%；③ 两大控制电路：ATC（温控）+ APC（自动功率控制）。",
-    knowledgePoints: ["张弛振荡抑制方法", "消光比 ≤ 10% 限制", "ATC温度控制与APC自动功率控制"]
-  },
-  Q07: {
-    tips: "💡 草稿纸防错技巧：算外微分量子效率 ηD 时，利用简便公式 ηD = (ΔP / ΔI) / Eg(V) 最快！因为 hν/e0 在数值上正好等于以 eV 为单位的禁带宽度 Eg！",
-    knowledgePoints: ["峰值波长 λp(μm) = 1.2396 / Eg(eV)", "斜率效率 ΔP/ΔI", "外微分量子效率 ηD = (ΔP/ΔI)/Eg"]
-  },
-  Q08: {
-    tips: "💡 五种光纤速记口诀：『652常规零色散1310；653位移双点聚1550；654截止移海底；655非零抗四波混频上波分(WDM)；色散平坦双零点』。",
-    knowledgePoints: ["G.652非色散位移(1310零色散)", "G.653色散位移(1550零色散)", "G.654海底光缆极低衰减", "G.655非零色散抑制FWM用于WDM"]
-  },
-  Q12: {
-    tips: "💡 APD曲线三规律：『偏压略小于击穿VB；温度升则电离降、增益G减、击穿VB升；同偏压下波长越长增益越大』。",
-    knowledgePoints: ["APD工作偏压选择 V < VB", "温度升高导致G减小、VB升高", "APD响应速度3个决定时间"]
-  },
-  Q16: {
-    tips: "💡 EDFA四因素简答模板：『泵浦大则趋饱和；光纤过长反吸收故有最佳长度；小信号增益高、降3dB定饱和输出功率；3dB波长带宽超35nm』。",
-    knowledgePoints: ["EDFA增益 G = 10lg(Pout/Pin)", "最佳掺铒光纤长度成因", "小信号增益与3dB饱和输出功率"]
-  },
-  Q17: {
-    tips: "💡 草稿纸秒算技巧：取光速 c = 3×10⁸ m/s 时，频率 f(THz) 与波长 λ(nm) 的乘积恒为 300,000！即 f(THz) = 300000 / λ(nm)，三步心算即可验证！",
-    knowledgePoints: ["频率波长速算 f(THz) = 300000 / λ(nm)", "石英光纤拉曼频移 Δf_Raman = 13 THz", "泵浦频率高于信号频率 fp = fs + 13 THz"]
-  },
-  Q22: {
-    tips: "💡 耦合器黄金考点：被问『哪个指标反映制造工艺质量？』必答『附加损耗 E·L』！因为插入损耗 I·L 包含分光比分配损耗，不能单独反映制作优劣。",
-    knowledgePoints: ["插入损耗 I·Li = -10lg(Pouti/Pin)", "附加损耗 E·L = -10lg(ΣPout/Pin) 反映工艺质量", "分光比 C·Ri 与方向性 D·L"]
-  }
-};
-
-window.QUESTIONS.forEach((q) => {
-  q.subject = "opto";
-  if (OPTO_TIPS_MAP[q.id]) {
-    q.tips = OPTO_TIPS_MAP[q.id].tips;
-    q.knowledgePoints = OPTO_TIPS_MAP[q.id].knowledgePoints;
-  } else {
-    q.tips = "💡 复习技巧：一刷抓物理本质与分类框架，二刷精准默写英文缩写与公式符号，三刷结合原版扫描笔记图解闭卷复述全部采分点。";
-    q.knowledgePoints = q.rubric ? q.rubric.slice(0, 3) : [];
-  }
-});
+window.CALC_GENERATORS = {};
 
 // ============================================================================
 // 考研数学二 (2022-2026) 分类真题库（含做题技巧、关联知识点与草稿纸分步计算）
 // ============================================================================
-window.QUESTIONS.push(
+window.QUESTIONS = [
   {
     id: "M26_01",
     subject: "math2",
@@ -364,7 +309,7 @@ window.QUESTIONS.push(
     ],
     answerHtml: "<strong>【2026数二第8、9、22题·标准解析】</strong><div class='formula-card'>1. <strong>第8题（置换矩阵）</strong>：置换矩阵列向量组标准正交，故 <i>A</i><sup>−1</sup> = <i>A<sup>T</sup></i> 仍为置换矩阵（选 <strong>B</strong>）。注意互换奇数次两行时 |<i>A</i>| = −1，此时 <i>A</i><sup>*</sup> = −<i>A</i><sup>−1</sup>。</div><div class='formula-card'>2. <strong>第9题（矩阵方程 <i>AB = C</i>）</strong>：对增广矩阵 (<i>A</i> | <i>C</i>) 作初等行变换，由 <i>r</i>(<i>A</i>) = <i>r</i>(<i>A</i>, <i>C</i>) = 2 消去底行可得 <strong><i>a</i> = −1，<i>b</i> = −1</strong>（选 <strong>A</strong>）。</div><div class='formula-card'>3. <strong>第22题（12分线代大题：求 <i>H</i> 与 <i>A</i><sup>10</sup>）</strong>：<br>• (1) 对 (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>) 行化简得行最简形前两行为 [1, 0, −1, 1] 与 [0, 1, 1, −1]，故 <i>r</i>(<i>A</i>) = 2 且 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub> 线性无关，是极大无关组。<br>• (2) 由行最简形直接读出系数矩阵 <i>H</i> = [ [1, 0, −1, 1], [0, 1, 1, −1] ]。<br>• 计算 2 阶矩阵 <i>HG</i> = [ [1, −1], [0, 1] ]，因此 (<i>HG</i>)<sup>9</sup> = [ [1, −9], [0, 1] ]。<br>• 故 <strong><i>A</i><sup>10</sup> = <i>G</i>(<i>HG</i>)<sup>9</sup><i>H</i></strong>，代入矩阵乘法即得最终 4×4 矩阵。</div>"
   }
-);
+];
 
 // 数学二草稿纸计算题生成器扩充
 Object.assign(window.CALC_GENERATORS, {
@@ -602,7 +547,7 @@ Object.assign(window.CALC_GENERATORS, {
 // ============================================================================
 window.QUESTIONS.push(
   {
-    id: "M22_25_ Core",
+    id: "M22_25_CORE",
     subject: "math2",
     year: 2025,
     chapter: "m_ch2",
