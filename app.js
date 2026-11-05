@@ -2531,6 +2531,23 @@ function escapeHtml(str) {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadState();
+
+  // 支持 URL 参数指定科目，如 ?subject=xiao1000_part1 或 ?subject=xiao1000
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    let targetSubj = urlParams.get("subject");
+    if (targetSubj === "xiao1000") targetSubj = "xiao1000_part1";
+    if (targetSubj && allQuestions.some((q) => q.subject === targetSubj)) {
+      appState.activeSubject = targetSubj;
+      const firstQ = getSubjectQuestions(targetSubj)[0];
+      if (firstQ) appState.currentQId = firstQ.id;
+      appState.activeYear = "all";
+      appState.activeChapter = "all";
+    }
+  } catch (e) {
+    console.error("解析URL科目参数失败", e);
+  }
+
   renderAll();
   if (appState.syncId) {
     updateSyncStatusUI("ok", `☁️ 当前口令: ${appState.syncId}`);
