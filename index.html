@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2022-2026 考研数二 · 英二 全真题三刷系统</title>
-  <link rel="stylesheet" href="styles.css?v=20261105_v8" />
+  <link rel="stylesheet" href="styles.css?v=20261105_v9" />
 </head>
 <body>
   <!-- 顶部导航栏 -->
@@ -103,17 +103,18 @@
   <div class="modal-backdrop" id="cloud-sync-modal" onclick="if(event.target===this) closeCloudSyncModal()">
     <div class="modal-window" style="max-width:540px;">
       <div class="modal-header">
-        <h3 style="font-size:16px;">☁️ 多设备实时云同步中心</h3>
+        <h3 style="font-size:16px;">🔑 专属刷题口令 & 独立进度空间</h3>
         <button class="btn btn-outline btn-sm" onclick="closeCloudSyncModal()">✖ 关闭</button>
       </div>
       <div class="modal-body" style="text-align:left;background:#ffffff;padding:20px;">
         <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px;">
-          只要在电脑、手机或平板上使用相同的<strong>同步口令</strong>（已默认设为您的专属口令 <code>lidahai4445</code>），每做完一道题都会实时自动同步到云端，换设备打开网页自动恢复进度！
+          <strong>每个不同的口令拥有完全独立隔离的做题进度与错题本！</strong><br>
+          不同同学进入网站只需输入各自的口令（如姓名拼音、学号或任意自定义代号），即可开启属于自己的独立刷题空间；同一人在手机、平板、电脑输入相同口令即可跨设备同步。
         </p>
 
         <div style="background:var(--bg-page);border:1px solid var(--border-light);border-radius:8px;padding:14px;margin-bottom:16px;">
           <label style="font-size:12.5px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:6px;">
-            🔑 您的跨设备同步口令 (Sync ID)：
+            🔑 请输入您的专属刷题口令（不同口令进度互不影响）：
           </label>
           <div style="display:flex;gap:8px;">
             <input
@@ -121,10 +122,12 @@
               id="sync-id-input"
               class="step-num-input"
               style="flex:1;width:auto;"
-              placeholder="例如：lidahai4445"
+              placeholder="输入任意专属口令（如：zhangsan / lidahai4445）"
+              onkeydown="if(event.key==='Enter') saveAndSwitchSyncId()"
             />
-            <button class="btn btn-primary btn-sm" onclick="saveAndSwitchSyncId()">保存口令并同步</button>
+            <button class="btn btn-primary btn-sm" onclick="saveAndSwitchSyncId()">进入该口令空间</button>
           </div>
+          <div id="recent-sync-ids-box"></div>
           <div id="cloud-modal-status" style="font-size:12.5px;color:var(--primary);margin-top:8px;font-weight:600;"></div>
         </div>
 
@@ -151,8 +154,8 @@
     </div>
   </div>
 
-  <script src="questions.js?v=20261105_v8"></script>
-  <script src="kaoyan_questions.js?v=20261105_v8"></script>
-  <script src="app.js?v=20261105_v8"></script>
+  <script src="questions.js?v=20261105_v9"></script>
+  <script src="kaoyan_questions.js?v=20261105_v9"></script>
+  <script src="app.js?v=20261105_v9"></script>
 </body>
 </html>

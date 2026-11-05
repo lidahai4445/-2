@@ -3,7 +3,10 @@
  * 纯原生考场题型作答 + 年份套卷/专题双维筛选 + 英语双语原文阅读 + 三刷进度与错题本
  */
 
-const STORAGE_KEY = "kaoyan_real_exam_2022_2026_v1";
+const STORAGE_KEY_PREFIX = "kaoyan_user_state_v2_";
+const ACTIVE_SYNC_ID_KEY = "kaoyan_active_sync_id_v2";
+const RECENT_SYNC_IDS_KEY = "kaoyan_recent_sync_ids_v2";
+const LEGACY_STORAGE_KEY = "kaoyan_real_exam_2022_2026_v1";
 const CUSTOM_QUESTIONS_KEY = "kaoyan_custom_questions_v1";
 
 const SUBJECTS = [
@@ -148,43 +151,115 @@ function initQuestionBank() {
   allQuestions = [...baseList, ...customList];
 }
 
-function loadState() {
+function createFreshRecordsMap() {
+  const map = {};
+  allQuestions.forEach((q) => {
+    map[q.id] = {
+      passes: 0,
+      wrongCount: 0,
+      wrongNote: "",
+      resolved: false,
+      lastOpt: null,
+      revealed: false,
+      draft: "",
+      u: 0
+    };
+  });
+  return map;
+}
+
+function getStorageKeyForSyncId(syncId) {
+  const clean = String(syncId || "guest").trim().toLowerCase();
+  return `${STORAGE_KEY_PREFIX}${clean}`;
+}
+
+function recordRecentSyncId(syncId) {
+  const clean = String(syncId || "").trim();
+  if (!clean) return;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(RECENT_SYNC_IDS_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    const next = [clean, ...list.filter((x) => x !== clean)].slice(0, 6);
+    localStorage.setItem(RECENT_SYNC_IDS_KEY, JSON.stringify(next));
+  } catch (e) {}
+}
+
+function getRecentSyncIds() {
+  try {
+    const raw = localStorage.getItem(RECENT_SYNC_IDS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function loadState(targetSyncId) {
+  const savedActiveId = targetSyncId !== undefined
+    ? targetSyncId
+    : (localStorage.getItem(ACTIVE_SYNC_ID_KEY) || "");
+
+  const cleanId = String(savedActiveId).trim();
+
+  // 先重置为完全独立的空白初始状态，确保不同口令之间绝不串数据
+  appState = {
+    syncId: cleanId,
+    updatedAt: 0,
+    activeSubject: "math2",
+    activeTab: "practice",
+    activeYear: "all",
+    activeChapter: "all",
+    passFilter: "all",
+    currentQId: "M2026_01",
+    dotsCollapsed: false,
+    passageState: {
+      showZh: false,
+      tallMode: false,
+      collapsed: false
+    },
+    records: createFreshRecordsMap(),
+    wrongFilter: "unresolved"
+  };
+
+  if (!cleanId) {
+    return;
+  }
+
+  try {
+    const userKey = getStorageKeyForSyncId(cleanId);
+    let raw = localStorage.getItem(userKey);
+    // 兼容迁移：如果是 lidahai4445 且尚无新键，读取旧版存储一次
+    if (!raw && cleanId === "lidahai4445") {
+      raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    }
     if (raw) {
       const parsed = JSON.parse(raw);
       appState = {
         ...appState,
         ...parsed,
+        syncId: cleanId,
         passageState: { ...appState.passageState, ...(parsed.passageState || {}) },
-        records: parsed.records || {}
+        records: { ...createFreshRecordsMap(), ...(parsed.records || {}) }
       };
     }
   } catch (e) {
-    console.warn("读取本地状态失败:", e);
+    console.warn("读取口令专属本地状态失败:", e);
   }
-  allQuestions.forEach((q) => {
-    if (!appState.records[q.id]) {
-      appState.records[q.id] = {
-        passes: 0,
-        wrongCount: 0,
-        wrongNote: "",
-        resolved: false,
-        lastOpt: null,
-        revealed: false,
-        draft: ""
-      };
-    }
-  });
 }
 
 function saveState(triggerCloud = false) {
+  const cleanId = String(appState.syncId || "").trim();
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    if (cleanId) {
+      localStorage.setItem(ACTIVE_SYNC_ID_KEY, cleanId);
+      localStorage.setItem(getStorageKeyForSyncId(cleanId), JSON.stringify(appState));
+      recordRecentSyncId(cleanId);
+    } else {
+      localStorage.setItem( getStorageKeyForSyncId("guest"), JSON.stringify(appState));
+    }
   } catch (e) {
     console.warn("保存状态失败:", e);
   }
-  if (triggerCloud && typeof scheduleCloudPush === "function") {
+  if (triggerCloud && cleanId && typeof scheduleCloudPush === "function") {
     scheduleCloudPush(3500);
   }
 }
@@ -1205,16 +1280,17 @@ function updateSyncStatusUI(state, msg) {
   const textEl = document.getElementById("sync-status-text");
   const btn = document.getElementById("cloud-sync-btn");
   const modalMsg = document.getElementById("cloud-modal-status");
+  const sid = (appState.syncId || "").trim();
+
   if (dot) {
-    dot.className = "sync-dot" + (state === "syncing" ? " syncing" : state === "error" ? " error" : "");
+    dot.className = "sync-dot" + (!sid ? " error" : state === "syncing" ? " syncing" : state === "error" ? " error" : "");
   }
-  const sid = appState.syncId || "lidahai4445";
-  // 保持顶部按钮文字长度恒定，彻底杜绝顶栏换行抖动
+  // 保持顶部按钮文字简短固定（仅显示当前口令标识），绝不在同步时拉长文字导致换行抖动
   if (textEl) {
-    textEl.textContent = `☁️ 云同步`;
+    textEl.textContent = sid ? `🔑 ${sid}` : `🔑 点击输入口令`;
   }
   if (btn && msg) {
-    btn.title = `${msg}（点击打开云同步设置）`;
+    btn.title = `${msg}（点击切换刷题口令）`;
   }
   if (modalMsg && msg) {
     modalMsg.textContent = msg;
@@ -1425,10 +1501,10 @@ function decodeBase64Snapshot(b64Str) {
 }
 
 async function pushToCloud() {
-  if (isSyncingNow) return;
+  const sid = (appState.syncId || "").trim();
+  if (!sid || isSyncingNow) return;
   isSyncingNow = true;
-  const sid = (appState.syncId || "lidahai4445").trim();
-  updateSyncStatusUI("syncing", `🔄 正在同步 (${sid})...`);
+  updateSyncStatusUI("syncing", `🔄 正在同步口令 [${sid}] 的进度...`);
 
   const payload = buildCompactCloudPayload();
   let okCount = 0;
@@ -1468,17 +1544,17 @@ async function pushToCloud() {
   isSyncingNow = false;
   if (okCount > 0) {
     const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    updateSyncStatusUI("ok", `☁️ 已同步 (${sid} · ${timeStr})`);
+    updateSyncStatusUI("ok", `✅ 口令 [${sid}] 云端已同步 (${timeStr})`);
   } else {
-    updateSyncStatusUI("error", `⚠️ 离线保存 (${sid})`);
+    updateSyncStatusUI("error", `⚠️ 口令 [${sid}] 已保存在本机`);
   }
 }
 
 async function pullFromCloud() {
-  if (isSyncingNow) return;
+  const sid = (appState.syncId || "").trim();
+  if (!sid || isSyncingNow) return;
   isSyncingNow = true;
-  const sid = (appState.syncId || "lidahai4445").trim();
-  updateSyncStatusUI("syncing", `🔄 正在同步云端进度...`);
+  updateSyncStatusUI("syncing", `🔄 正在读取口令 [${sid}] 的云端进度...`);
 
   let cloudPayload = null;
 
@@ -1519,12 +1595,12 @@ async function pullFromCloud() {
   if (cloudPayload) {
     const needPushBack = mergeCloudPayloadIntoLocal(cloudPayload);
     const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit" });
-    updateSyncStatusUI("ok", `☁️ 已同步 (${sid} · ${timeStr})`);
+    updateSyncStatusUI("ok", `✅ 已加载口令 [${sid}] 的独立进度 (${timeStr})`);
     if (needPushBack) {
-      scheduleCloudPush(300);
+      scheduleCloudPush(500);
     }
   } else {
-    updateSyncStatusUI("ok", `☁️ 云同步就绪 (${sid})`);
+    updateSyncStatusUI("ok", `✅ 口令 [${sid}] 独立空间已就绪`);
   }
 }
 
@@ -1535,10 +1611,32 @@ function scheduleCloudPush(delayMs = 3500) {
   }, delayMs);
 }
 
+function renderRecentSyncIdsInModal() {
+  const box = document.getElementById("recent-sync-ids-box");
+  if (!box) return;
+  const recents = getRecentSyncIds();
+  if (recents.length === 0) {
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML = `
+    <div style="font-size:12px;color:var(--text-muted);margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span>本机常用口令快切：</span>
+      ${recents.map((id) => `
+        <button
+          class="btn ${id === appState.syncId ? "btn-primary" : "btn-outline"} btn-xs"
+          onclick="quickSwitchSyncId('${escapeHtml(id)}')"
+        >${escapeHtml(id)}</button>
+      `).join("")}
+    </div>
+  `;
+}
+
 function openCloudSyncModal() {
   const modal = document.getElementById("cloud-sync-modal");
   const input = document.getElementById("sync-id-input");
-  if (input) input.value = appState.syncId || "lidahai4445";
+  if (input) input.value = appState.syncId || "";
+  renderRecentSyncIdsInModal();
   if (modal) modal.classList.add("open");
 }
 
@@ -1547,56 +1645,49 @@ function closeCloudSyncModal() {
   if (modal) modal.classList.remove("open");
 }
 
+async function quickSwitchSyncId(targetId) {
+  const input = document.getElementById("sync-id-input");
+  if (input) input.value = targetId;
+  await saveAndSwitchSyncId();
+}
+
 async function saveAndSwitchSyncId() {
   const input = document.getElementById("sync-id-input");
   if (!input) return;
-  const newId = input.value.trim() || "lidahai4445";
-  appState.syncId = newId;
+  const newId = input.value.trim();
+  if (!newId) {
+    alert("请输入您的专属同步口令（如姓名拼音、学号或昵称）！");
+    return;
+  }
+
+  // 取消旧口令尚未执行的延时上传，防止串号
+  if (cloudPushTimer) {
+    clearTimeout(cloudPushTimer);
+    cloudPushTimer = null;
+  }
+
+  // 切换到新口令的完全独立空间（不继承旧口令内存中的任何做题记录）
+  localStorage.setItem(ACTIVE_SYNC_ID_KEY, newId);
+  recordRecentSyncId(newId);
+  loadState(newId);
   saveState(false);
+  renderAll();
+  renderRecentSyncIdsInModal();
+  updateSyncStatusUI("syncing", `🔄 正在拉取口令 [${newId}] 的专属进度...`);
+
   await pullFromCloud();
-  await pushToCloud();
-}
-
-async function manualPushToCloud() {
-  await pushToCloud();
-}
-
-async function manualPullFromCloud() {
-  await pullFromCloud();
-}
-
-function exportProgressJsonFile() {
-  const dataStr = JSON.stringify(buildCompactCloudPayload(), null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `kaoyan_progress_${appState.syncId || "backup"}_${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importProgressJsonFile(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      mergeCloudPayloadIntoLocal(parsed);
-      pushToCloud();
-      alert("🎉 进度文件导入成功，并已同步至云端！");
-    } catch (err) {
-      alert("❌ 进度文件解析失败：" + err.message);
-    }
-  };
-  reader.readAsText(file);
+  renderAll();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   initQuestionBank();
   loadState();
   renderAll();
-  // 仅在首次打开网页时静默拉取一次云端最新进度，不做高频定时轮询，彻底告别页面抖动
-  pullFromCloud();
+  if (appState.syncId) {
+    updateSyncStatusUI("ok", `☁️ 当前口令: ${appState.syncId}`);
+    pullFromCloud();
+  } else {
+    updateSyncStatusUI("error", "🔑 请设置您的专属刷题口令");
+    openCloudSyncModal();
+  }
 });
