@@ -1,20 +1,27 @@
 /**
- * 2022–2026 考研数学二 (110题) · 考研英语二 (240题) 全真题三刷系统
- * 纯原生考场题型作答 + 年份套卷/专题双维筛选 + 英语双语原文阅读 + 三刷进度与错题本
+ * 2022–2026 考研真题三刷系统 · 支持多口令独立空间 & AI 生成 JSON 自动建题库（私人/公开权限）
  */
 
 const STORAGE_KEY_PREFIX = "kaoyan_user_state_v2_";
 const ACTIVE_SYNC_ID_KEY = "kaoyan_active_sync_id_v2";
 const RECENT_SYNC_IDS_KEY = "kaoyan_recent_sync_ids_v2";
 const LEGACY_STORAGE_KEY = "kaoyan_real_exam_2022_2026_v1";
-const CUSTOM_QUESTIONS_KEY = "kaoyan_custom_questions_v1";
 
-const SUBJECTS = [
-  { id: "math2", name: "📐 考研数学二", badge: "22题×5年=110题" },
-  { id: "eng2", name: "🇬🇧 考研英语二", badge: "48题×5年=240题" }
+const PRIVATE_BANKS_KEY_PREFIX = "kaoyan_private_banks_v2_";
+const PUBLIC_BANKS_CACHE_KEY = "kaoyan_public_banks_cache_v2";
+
+// 云端全局中心（存储口令->私有仓库映射 + 公开共享题库列表）
+const GLOBAL_HUB_VAULT_ID = "ff808181a09d98f701a1ab80eeaf416b";
+const DEFAULT_VAULT_MAP = {
+  lidahai4445: "ff808181a09d98f701a1aae7d2593f3d"
+};
+
+const BASE_SUBJECTS = [
+  { id: "math2", name: "📐 考研数学二", isBuiltin: true },
+  { id: "eng2", name: "🇬🇧 考研英语二", isBuiltin: true }
 ];
 
-const YEARS = [
+const BASE_YEARS = [
   { id: "all", name: "全部年份 (2022-2026)", fullRow: true },
   { id: 2026, name: "2026 真题" },
   { id: 2025, name: "2025 真题" },
@@ -23,7 +30,7 @@ const YEARS = [
   { id: 2022, name: "2022 真题" }
 ];
 
-const CHAPTERS_BY_SUBJECT = {
+const BASE_CHAPTERS_BY_SUBJECT = {
   math2: [
     { id: "all", title: "全部模块与题型" },
     { id: "type_choice", title: "【题型】选择题 (第1–10题)" },
@@ -46,7 +53,6 @@ const CHAPTERS_BY_SUBJECT = {
   ]
 };
 
-// 高频重复记忆速查库（用于「高频速记 & AI导入」标签页）
 const HIGH_FREQ_DOCS = {
   math2: [
     {
@@ -110,14 +116,17 @@ const HIGH_FREQ_DOCS = {
 
 let allQuestions = [];
 let passagesMap = {};
+let privateBanks = []; // 当前口令专属的私人题库列表
+let publicBanks = [];  // 全站公开共享题库列表
+
 let appState = {
-  syncId: "lidahai4445",       // 默认跨设备云同步口令
+  syncId: "",
   updatedAt: 0,
   activeSubject: "math2",
-  activeTab: "practice",       // 'practice' | 'wrong-book' | 'ai-hub'
-  activeYear: "all",           // 'all' | 2026 | 2025 | 2024 | 2023 | 2022
+  activeTab: "practice",
+  activeYear: "all",
   activeChapter: "all",
-  passFilter: "all",           // 'all' | 'unfinished' | 'pass0' | 'pass1' | 'pass2' | 'pass3'
+  passFilter: "all",
   currentQId: "M2026_01",
   dotsCollapsed: false,
   passageState: {
@@ -125,7 +134,7 @@ let appState = {
     tallMode: false,
     collapsed: false
   },
-  records: {},                 // { [qId]: { passes: 0..3, wrongCount: 0, wrongNote: "", resolved: false, lastOpt: null, revealed: false, draft: "", u: 0 } }
+  records: {},
   wrongFilter: "unresolved"
 };
 
@@ -135,20 +144,177 @@ function touchRecord(rec) {
   appState.updatedAt = now;
 }
 
-function initQuestionBank() {
-  passagesMap = window.KAOYAN_PASSAGES || {};
-  const baseList = Array.isArray(window.KAOYAN_QUESTIONS) ? window.KAOYAN_QUESTIONS : [];
-  let customList = [];
+function getStorageKeyForSyncId(syncId) {
+  const clean = String(syncId || "guest").trim().toLowerCase();
+  return `${STORAGE_KEY_PREFIX}${clean}`;
+}
+
+function getPrivateBanksKeyForSyncId(syncId) {
+  const clean = String(syncId || "guest").trim().toLowerCase();
+  return `${PRIVATE_BANKS_KEY_PREFIX}${clean}`;
+}
+
+function loadCustomBanksForCurrentUser() {
+  const cleanId = String(appState.syncId || "").trim();
+  // 1. 读取当前口令专属私人题库
+  privateBanks = [];
+  if (cleanId) {
+    try {
+      const rawPriv = localStorage.getItem(getPrivateBanksKeyForSyncId(cleanId));
+      if (rawPriv) {
+        const parsed = JSON.parse(rawPriv);
+        if (Array.isArray(parsed)) privateBanks = parsed;
+      }
+    } catch (e) {
+      console.warn("读取私人题库失败:", e);
+    }
+  }
+  // 2. 读取公开共享题库本地缓存
+  publicBanks = [];
   try {
-    const raw = localStorage.getItem(CUSTOM_QUESTIONS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) customList = parsed;
+    const rawPub = localStorage.getItem(PUBLIC_BANKS_CACHE_KEY);
+    if (rawPub) {
+      const parsed = JSON.parse(rawPub);
+      if (Array.isArray(parsed)) publicBanks = parsed;
     }
   } catch (e) {
-    console.warn("读取自定义题库失败:", e);
+    console.warn("读取公开题库缓存失败:", e);
   }
-  allQuestions = [...baseList, ...customList];
+}
+
+function savePrivateBanksLocal() {
+  const cleanId = String(appState.syncId || "").trim();
+  if (!cleanId) return;
+  try {
+    localStorage.setItem(getPrivateBanksKeyForSyncId(cleanId), JSON.stringify(privateBanks));
+  } catch (e) {
+    console.warn("保存私人题库失败:", e);
+  }
+}
+
+function savePublicBanksLocal() {
+  try {
+    localStorage.setItem(PUBLIC_BANKS_CACHE_KEY, JSON.stringify(publicBanks));
+  } catch (e) {
+    console.warn("保存公开题库缓存失败:", e);
+  }
+}
+
+// 获取当前用户可见的所有自定义题库（当前口令的私人题库 + 所有公开题库，按 id 去重）
+function getVisibleCustomBanks() {
+  const cleanId = String(appState.syncId || "").trim();
+  const map = new Map();
+  // 先放公开题库
+  publicBanks.forEach((b) => {
+    if (b && b.id && Array.isArray(b.questions)) {
+      map.set(b.id, { ...b, visibility: "public" });
+    }
+  });
+  // 再放当前口令的私人题库（仅当 ownerSyncId === cleanId 时可见）
+  if (cleanId) {
+    privateBanks.forEach((b) => {
+      if (b && b.id && Array.isArray(b.questions) && (!b.ownerSyncId || b.ownerSyncId === cleanId)) {
+        map.set(b.id, { ...b, visibility: "private", ownerSyncId: cleanId });
+      }
+    });
+  }
+  return Array.from(map.values());
+}
+
+function getAllSubjectsList() {
+  const customSubs = getVisibleCustomBanks().map((b) => ({
+    id: b.id,
+    name: `${b.visibility === "private" ? "🔒" : "🌐"} ${b.title}`,
+    isBuiltin: false,
+    visibility: b.visibility,
+    ownerSyncId: b.ownerSyncId
+  }));
+  return [...BASE_SUBJECTS, ...customSubs];
+}
+
+function getChaptersForSubject(subjectId) {
+  if (BASE_CHAPTERS_BY_SUBJECT[subjectId]) {
+    return BASE_CHAPTERS_BY_SUBJECT[subjectId];
+  }
+  const bank = getVisibleCustomBanks().find((b) => b.id === subjectId);
+  const baseChapters = [
+    { id: "all", title: "全部模块与题型" },
+    { id: "type_choice", title: "【题型】选择题" },
+    { id: "type_fill", title: "【题型】填空题" },
+    { id: "type_solve", title: "【题型】解答/主观题" }
+  ];
+  if (!bank) return baseChapters;
+  if (Array.isArray(bank.chapters) && bank.chapters.length > 0) {
+    return [...baseChapters, ...bank.chapters];
+  }
+  // 自动从题目提取唯一章节
+  const seen = new Set();
+  const dynamicChs = [];
+  (bank.questions || []).forEach((q) => {
+    const ch = q.chapter || "默认章节";
+    if (!seen.has(ch)) {
+      seen.add(ch);
+      dynamicChs.push({ id: ch, title: ch });
+    }
+  });
+  return [...baseChapters, ...dynamicChs];
+}
+
+function getYearsForSubject(subjectId) {
+  if (subjectId === "math2" || subjectId === "eng2") {
+    return BASE_YEARS;
+  }
+  const subQs = getSubjectQuestions(subjectId);
+  const yearsSet = new Set();
+  subQs.forEach((q) => {
+    if (q.year) yearsSet.add(Number(q.year));
+  });
+  const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+  if (sortedYears.length <= 1) {
+    return [{ id: "all", name: `全部题目 (${subQs.length}题)`, fullRow: true }];
+  }
+  return [
+    { id: "all", name: `全部年份/批次`, fullRow: true },
+    ...sortedYears.map((y) => ({ id: y, name: `${y} 真题/批次` }))
+  ];
+}
+
+function rebuildQuestionBankPool() {
+  passagesMap = { ...(window.KAOYAN_PASSAGES || {}) };
+  const baseList = Array.isArray(window.KAOYAN_QUESTIONS) ? window.KAOYAN_QUESTIONS : [];
+  const customQs = [];
+
+  getVisibleCustomBanks().forEach((bank) => {
+    if (bank.passages && typeof bank.passages === "object") {
+      Object.assign(passagesMap, bank.passages);
+    }
+    (bank.questions || []).forEach((q, idx) => {
+      customQs.push({
+        ...q,
+        subject: bank.id,
+        qNum: q.qNum || idx + 1,
+        year: q.year || 2026
+      });
+    });
+  });
+
+  allQuestions = [...baseList, ...customQs];
+
+  // 确保所有题目在 records 中有默认项
+  allQuestions.forEach((q) => {
+    if (!appState.records[q.id]) {
+      appState.records[q.id] = {
+        passes: 0,
+        wrongCount: 0,
+        wrongNote: "",
+        resolved: false,
+        lastOpt: null,
+        revealed: false,
+        draft: "",
+        u: 0
+      };
+    }
+  });
 }
 
 function createFreshRecordsMap() {
@@ -166,11 +332,6 @@ function createFreshRecordsMap() {
     };
   });
   return map;
-}
-
-function getStorageKeyForSyncId(syncId) {
-  const clean = String(syncId || "guest").trim().toLowerCase();
-  return `${STORAGE_KEY_PREFIX}${clean}`;
 }
 
 function recordRecentSyncId(syncId) {
@@ -200,7 +361,7 @@ function loadState(targetSyncId) {
 
   const cleanId = String(savedActiveId).trim();
 
-  // 先重置为完全独立的空白初始状态，确保不同口令之间绝不串数据
+  // 先重置为完全独立的初始状态
   appState = {
     syncId: cleanId,
     updatedAt: 0,
@@ -216,18 +377,19 @@ function loadState(targetSyncId) {
       tallMode: false,
       collapsed: false
     },
-    records: createFreshRecordsMap(),
+    records: {},
     wrongFilter: "unresolved"
   };
 
-  if (!cleanId) {
-    return;
-  }
+  loadCustomBanksForCurrentUser();
+  rebuildQuestionBankPool();
+  appState.records = createFreshRecordsMap();
+
+  if (!cleanId) return;
 
   try {
     const userKey = getStorageKeyForSyncId(cleanId);
     let raw = localStorage.getItem(userKey);
-    // 兼容迁移：如果是 lidahai4445 且尚无新键，读取旧版存储一次
     if (!raw && cleanId === "lidahai4445") {
       raw = localStorage.getItem(LEGACY_STORAGE_KEY);
     }
@@ -244,6 +406,13 @@ function loadState(targetSyncId) {
   } catch (e) {
     console.warn("读取口令专属本地状态失败:", e);
   }
+
+  // 如果当前激活的题库对新口令不可见，回退到 math2
+  const visibleSubIds = getAllSubjectsList().map((s) => s.id);
+  if (!visibleSubIds.includes(appState.activeSubject)) {
+    appState.activeSubject = "math2";
+    appState.currentQId = "M2026_01";
+  }
 }
 
 function saveState(triggerCloud = false) {
@@ -254,7 +423,7 @@ function saveState(triggerCloud = false) {
       localStorage.setItem(getStorageKeyForSyncId(cleanId), JSON.stringify(appState));
       recordRecentSyncId(cleanId);
     } else {
-      localStorage.setItem( getStorageKeyForSyncId("guest"), JSON.stringify(appState));
+      localStorage.setItem(getStorageKeyForSyncId("guest"), JSON.stringify(appState));
     }
   } catch (e) {
     console.warn("保存状态失败:", e);
@@ -273,7 +442,8 @@ function getRecord(qId) {
       resolved: false,
       lastOpt: null,
       revealed: false,
-      draft: ""
+      draft: "",
+      u: 0
     };
   }
   return appState.records[qId];
@@ -308,9 +478,8 @@ function getFilteredQuestions() {
     return true;
   });
 
-  // 排序：如果选择了具体某一年份，严格按题号 1 -> 22/48 升序；若为全部年份，按年份降序 + 题号升序
   list.sort((a, b) => {
-    if (a.year !== b.year) return b.year - a.year;
+    if (a.year !== b.year) return (b.year || 0) - (a.year || 0);
     return (a.qNum || 0) - (b.qNum || 0);
   });
   return list;
@@ -327,27 +496,33 @@ function renderAll() {
 function renderSubjectBar() {
   const container = document.getElementById("subject-pills-container");
   if (!container) return;
-  container.innerHTML = SUBJECTS.map((s) => {
+  const subjects = getAllSubjectsList();
+  container.innerHTML = subjects.map((s) => {
     const count = getSubjectQuestions(s.id).length;
     const isActive = appState.activeSubject === s.id;
     return `
-      <button class="subject-pill ${isActive ? "active" : ""}" onclick="switchSubject('${s.id}')">
-        <span>${s.name}</span>
+      <button class="subject-pill ${isActive ? "active" : ""}" onclick="switchSubject('${escapeHtml(s.id)}')">
+        <span>${escapeHtml(s.name)}</span>
         <span class="sub-badge">${count}题</span>
       </button>
     `;
-  }).join("");
+  }).join("") + `
+    <button class="subject-pill" style="border-style:dashed;color:var(--primary);" onclick="openSettingsModal('import')" title="使用 AI 生成并上传新题库">
+      <span>➕ 导入新题库</span>
+    </button>
+  `;
 }
 
 function switchSubject(subjectId) {
   if (appState.activeSubject === subjectId) return;
   appState.activeSubject = subjectId;
+  appState.activeYear = "all";
   appState.activeChapter = "all";
   const subQs = getFilteredQuestions();
   if (subQs.length > 0) {
     appState.currentQId = subQs[0].id;
   }
-  saveState();
+  saveState(false);
   renderAll();
 }
 
@@ -372,17 +547,18 @@ function renderGlobalHeaderStats() {
 
 function renderSidebar() {
   const subQs = getSubjectQuestions();
+  const years = getYearsForSubject(appState.activeSubject);
 
   // 1. 渲染年份套卷列表
   const yearListEl = document.getElementById("year-list");
   if (yearListEl) {
-    yearListEl.innerHTML = YEARS.map((yr) => {
+    yearListEl.innerHTML = years.map((yr) => {
       const qs = yr.id === "all" ? subQs : subQs.filter((q) => Number(q.year) === Number(yr.id));
       const done3 = qs.filter((q) => getRecord(q.id).passes >= 3).length;
       const isActive = String(appState.activeYear) === String(yr.id);
       return `
         <div class="year-item ${yr.fullRow ? "full-row" : ""} ${isActive ? "active" : ""}" onclick="setYearFilter('${yr.id}')">
-          <span>${yr.name}</span>
+          <span>${escapeHtml(yr.name)}</span>
           <span class="chapter-meta">${done3}/${qs.length}★</span>
         </div>
       `;
@@ -392,7 +568,7 @@ function renderSidebar() {
   // 2. 渲染考点/题型模块列表
   const chapterListEl = document.getElementById("chapter-list");
   if (chapterListEl) {
-    const chapters = CHAPTERS_BY_SUBJECT[appState.activeSubject] || [];
+    const chapters = getChaptersForSubject(appState.activeSubject);
     const basePool = appState.activeYear === "all"
       ? subQs
       : subQs.filter((q) => Number(q.year) === Number(appState.activeYear));
@@ -402,8 +578,8 @@ function renderSidebar() {
       const done3 = qs.filter((q) => getRecord(q.id).passes >= 3).length;
       const isActive = appState.activeChapter === ch.id;
       return `
-        <div class="chapter-item ${isActive ? "active" : ""}" onclick="setChapterFilter('${ch.id}')">
-          <span>${ch.title}</span>
+        <div class="chapter-item ${isActive ? "active" : ""}" onclick="setChapterFilter('${escapeHtml(ch.id)}')">
+          <span>${escapeHtml(ch.title)}</span>
           <span class="chapter-meta"><span>${done3}/${qs.length}★</span></span>
         </div>
       `;
@@ -422,7 +598,7 @@ function setYearFilter(yrId) {
   if (filtered.length > 0 && !filtered.some((q) => q.id === appState.currentQId)) {
     appState.currentQId = filtered[0].id;
   }
-  saveState();
+  saveState(false);
   renderAll();
 }
 
@@ -432,7 +608,7 @@ function setChapterFilter(chId) {
   if (filtered.length > 0 && !filtered.some((q) => q.id === appState.currentQId)) {
     appState.currentQId = filtered[0].id;
   }
-  saveState();
+  saveState(false);
   renderAll();
 }
 
@@ -442,19 +618,13 @@ function setPassFilter(filterVal) {
   if (filtered.length > 0 && !filtered.some((q) => q.id === appState.currentQId)) {
     appState.currentQId = filtered[0].id;
   }
-  saveState();
+  saveState(false);
   renderAll();
-}
-
-function toggleDotsCollapse() {
-  appState.dotsCollapsed = !appState.dotsCollapsed;
-  saveState();
-  renderQuestionDots();
 }
 
 function renderQuestionDots() {
   const stripCard = document.getElementById("question-strip-card");
-  if (appState.activeTab !== "practice") {
+  if (appState.activeTab !== "practice" || appState.dotsCollapsed) {
     stripCard.style.display = "none";
     return;
   }
@@ -462,18 +632,11 @@ function renderQuestionDots() {
 
   const filtered = getFilteredQuestions();
   const labelEl = document.getElementById("filtered-count-label");
-  const yearBadge = appState.activeYear === "all" ? "2022–2026全真题" : `${appState.activeYear}年真题套卷`;
-  labelEl.textContent = `📋 ${yearBadge} · 当前筛选共 ${filtered.length} 题`;
+  const curSub = getAllSubjectsList().find((s) => s.id === appState.activeSubject);
+  const subTitle = curSub ? curSub.name : "当前题库";
+  labelEl.textContent = `📋 ${subTitle} · 当前筛选共 ${filtered.length} 题`;
 
-  const toggleBtn = document.getElementById("toggle-dots-btn");
   const grid = document.getElementById("question-dots-grid");
-  if (toggleBtn) {
-    toggleBtn.textContent = appState.dotsCollapsed ? "展开题号卡 ▼" : "收起题号卡 ▲";
-  }
-  if (appState.dotsCollapsed) {
-    grid.style.display = "none";
-    return;
-  }
   grid.style.display = "flex";
 
   if (filtered.length === 0) {
@@ -486,15 +649,14 @@ function renderQuestionDots() {
     const isCurrent = q.id === appState.currentQId;
     const hasWrong = rec.wrongCount > 0 && !rec.resolved;
     const stars = "★".repeat(rec.passes) + "☆".repeat(3 - rec.passes);
-    // 如果选了单一年份，直接显示 第 1..48 题号；如果是全部年份，显示 26-01
-    const shortLabel = appState.activeYear === "all"
-      ? `${String(q.year).slice(2)}-${String(q.qNum).padStart(2, "0")}`
+    const shortLabel = appState.activeYear === "all" && q.year
+      ? `${String(q.year).slice(-2)}-${String(q.qNum).padStart(2, "0")}`
       : `${q.qNum}`;
     return `
       <button
         class="q-dot pass-${rec.passes} ${isCurrent ? "current" : ""} ${hasWrong ? "has-wrong" : ""}"
-        title="${q.title}"
-        onclick="selectQuestion('${q.id}')"
+        title="${escapeHtml(q.title)}"
+        onclick="selectQuestion('${escapeHtml(q.id)}')"
       >
         <span>${shortLabel}</span>
         <span class="q-dot-stars">${stars}</span>
@@ -505,7 +667,7 @@ function renderQuestionDots() {
 
 function selectQuestion(qId) {
   appState.currentQId = qId;
-  saveState();
+  saveState(false);
   renderQuestionDots();
   renderMainStage();
 }
@@ -526,7 +688,7 @@ function switchTab(tabName) {
     leftSidebar.style.display = "none";
   }
 
-  saveState();
+  saveState(false);
   renderQuestionDots();
   renderMainStage();
 }
@@ -543,7 +705,7 @@ function renderMainStage() {
 }
 
 /* ==========================================================================
-   核心视图 1：2022–2026 真题原生刷题面板
+   核心视图 1：极简真题原生刷题面板（已移除冗余小按钮，统一收拢至右上角设置）
    ========================================================================== */
 function renderPracticeCard(container) {
   const filtered = getFilteredQuestions();
@@ -556,16 +718,16 @@ function renderPracticeCard(container) {
   if (!q) {
     container.innerHTML = `
       <div class="question-card" style="text-align:center;padding:48px 20px;">
-        <h3 style="margin-bottom:8px;">🎉 当前筛选条件下没有待刷真题</h3>
-        <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;">您可以切换左侧「真题年份」或点击下方按钮查看全部真题。</p>
-        <button class="btn btn-primary" onclick="setPassFilter('all')">显示全部真题</button>
+        <h3 style="margin-bottom:8px;">🎉 当前筛选条件下没有待刷题目</h3>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;">您可以切换左侧筛选条件，或点击下方按钮查看全部题目。</p>
+        <button class="btn btn-primary" onclick="setPassFilter('all')">显示全部题目</button>
       </div>
     `;
     return;
   }
 
   const rec = getRecord(q.id);
-  const chList = CHAPTERS_BY_SUBJECT[q.subject] || [];
+  const chList = getChaptersForSubject(q.subject);
   const chObj = chList.find((c) => c.id === q.chapter);
   const typeBadge = q.qType === "choice"
     ? { label: "客观选择题", cls: "tag-type-term" }
@@ -583,16 +745,14 @@ function renderPracticeCard(container) {
   }).join("");
 
   const passStatusText =
-    rec.passes === 0 ? "0刷 (未掌握)" :
-    rec.passes === 1 ? "一刷已过 ★☆☆" :
-    rec.passes === 2 ? "二刷已过 ★★☆" : "三刷通关 ★★★";
+    rec.passes === 0 ? "0刷" :
+    rec.passes === 1 ? "一刷已过" :
+    rec.passes === 2 ? "二刷已过" : "三刷通关";
 
-  // 英语二原文阅读框（若有 passageId）
-  const passageHtml = q.passageId && passagesMap[q.passageId]
+  const passageHtml = q.passageId && passagesMap[q.passageId] && !appState.passageState.collapsed
     ? renderPassagePanel(q, passagesMap[q.passageId])
     : "";
 
-  // 根据题型渲染考场原生作答区
   let interactionHtml = "";
   if (q.qType === "choice") {
     interactionHtml = renderChoiceQuestionBody(q, rec);
@@ -607,29 +767,25 @@ function renderPracticeCard(container) {
       <div class="q-card-header">
         <div>
           <div class="q-tags">
-            <span class="q-tag" style="background:#1e40af;color:#fff;">${q.year}年真题 · 第${q.qNum}题</span>
-            <span class="q-tag tag-chapter">${chObj ? chObj.title : q.chapter}</span>
+            <span class="q-tag" style="background:#1e40af;color:#fff;">${q.year || 2026} · 第${q.qNum}题</span>
+            <span class="q-tag tag-chapter">${escapeHtml(chObj ? chObj.title : (q.chapter || "综合模块"))}</span>
             <span class="q-tag ${typeBadge.cls}">${typeBadge.label}</span>
-            ${q.kp ? `<span class="q-tag" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;">考点：${q.kp}</span>` : ""}
+            ${q.kp ? `<span class="q-tag" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;">考点：${escapeHtml(q.kp)}</span>` : ""}
           </div>
           <h2 class="q-title">${q.title}</h2>
         </div>
 
         <div class="pass-controller">
-          <div class="pass-stars-badge" title="每做对/掌握1遍自动点亮1颗星，满3颗星即完成三刷">
+          <div class="pass-stars-badge" onclick="openSettingsModal('account')" style="cursor:pointer;" title="点击打开设置可微调刷次">
             <div>${starHtml}</div>
             <span>${passStatusText}</span>
-          </div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
-            ${rec.passes < 3 ? `<button class="btn btn-outline btn-xs" onclick="manualAddPass('${q.id}')">➕ 记入本遍通过 (+1★)</button>` : ""}
-            ${rec.passes > 0 ? `<button class="btn btn-outline btn-xs" onclick="resetQuestionPasses('${q.id}')">重置刷次</button>` : ""}
           </div>
         </div>
       </div>
 
       ${passageHtml}
 
-      <!-- 真题题干 -->
+      <!-- 题干 -->
       <div class="q-prompt-box">
         ${q.stem}
       </div>
@@ -642,16 +798,16 @@ function renderPracticeCard(container) {
       <!-- 底部上下题导航与错题本按钮 -->
       <div class="btn-row" style="border-top:1px solid var(--border-light);padding-top:16px;margin-top:22px;">
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-outline" ${!prevQ ? "disabled style='opacity:0.45;cursor:not-allowed;'" : `onclick="selectQuestion('${prevQ.id}')"`}>
+          <button class="btn btn-outline" ${!prevQ ? "disabled style='opacity:0.45;cursor:not-allowed;'" : `onclick="selectQuestion('${escapeHtml(prevQ.id)}')"`}>
             ⬅️ 上一题 ${prevQ ? `(第${prevQ.qNum}题)` : ""}
           </button>
-          <button class="btn btn-outline" ${!nextQ ? "disabled style='opacity:0.45;cursor:not-allowed;'" : `onclick="selectQuestion('${nextQ.id}')"`}>
+          <button class="btn btn-outline" ${!nextQ ? "disabled style='opacity:0.45;cursor:not-allowed;'" : `onclick="selectQuestion('${escapeHtml(nextQ.id)}')"`}>
             下一题 ${nextQ ? `(第${nextQ.qNum}题)` : ""} ➡️
           </button>
         </div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-danger btn-sm" onclick="addQuestionToWrongBook('${q.id}', '手动加入重点复盘')">
+          <button class="btn btn-danger btn-sm" onclick="addQuestionToWrongBook('${escapeHtml(q.id)}', '手动加入重点复盘')">
             📕 加入错题本 ${rec.wrongCount > 0 && !rec.resolved ? `(已记错 ${rec.wrongCount} 次)` : ""}
           </button>
         </div>
@@ -660,21 +816,10 @@ function renderPracticeCard(container) {
   `;
 }
 
-/* 英语二原文双语阅读框 */
+/* 英语二原文双语阅读框（极简头部，高度与折叠控制已收拢至设置） */
 function renderPassagePanel(q, passage) {
   const ps = appState.passageState;
-  const pTitle = (typeof passage === "object" && passage.title) ? passage.title : `${q.year}年英语二 原文阅读`;
-
-  if (ps.collapsed) {
-    return `
-      <div class="passage-panel">
-        <div class="passage-header">
-          <div class="passage-title">📖 ${pTitle}（已折叠）</div>
-          <button class="btn btn-outline btn-xs" onclick="togglePassageState('collapsed')">👁️ 展开原文阅读面板</button>
-        </div>
-      </div>
-    `;
-  }
+  const pTitle = (typeof passage === "object" && passage.title) ? passage.title : `${q.year}年 原文阅读`;
 
   let contentHtml = "";
   if (typeof passage === "string") {
@@ -683,13 +828,11 @@ function renderPassagePanel(q, passage) {
     contentHtml = ps.showZh ? (passage.bilingual || passage.en || "") : (passage.en || "");
   }
 
-  // 对完形填空 (1-20题) 自动高亮当前题号空位 [n]
   if (q.qNum >= 1 && q.qNum <= 20) {
     const targetTag = `<u>&nbsp;<strong>[${q.qNum}]</strong>&nbsp;</u>`;
     contentHtml = contentHtml.split(targetTag).join(`<span class="cloze-active-blank">[第 ${q.qNum} 空]</span>`);
   }
 
-  // 对新题型 Part B (41-45题) 自动高亮当前段落空位 (41)____
   if (q.qNum >= 41 && q.qNum <= 45) {
     const pbReg = new RegExp(`\\(${q.qNum}\\)_{3,}`, "g");
     contentHtml = contentHtml.replace(pbReg, `<span class="cloze-active-blank">(${q.qNum}) 【当前待选匹配处】</span>`);
@@ -700,19 +843,10 @@ function renderPassagePanel(q, passage) {
       <div class="passage-header">
         <div class="passage-title">
           <span>📖 ${pTitle}</span>
-          <span style="font-size:11.5px;color:var(--text-muted);font-weight:500;">（支持独立上下滚动 · 当前题号已在文中高亮标黄）</span>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="btn ${ps.showZh ? "btn-primary" : "btn-outline"} btn-xs" onclick="togglePassageState('showZh')">
-            🇨🇳 ${ps.showZh ? "隐藏段落译文 (纯英考场模式)" : "显示逐段译文 (双语精读模式)"}
-          </button>
-          <button class="btn btn-outline btn-xs" onclick="togglePassageState('tallMode')">
-            ↕️ ${ps.tallMode ? "标准高度" : "加高阅读框"}
-          </button>
-          <button class="btn btn-outline btn-xs" onclick="togglePassageState('collapsed')">
-            收起原文 ▲
-          </button>
-        </div>
+        <button class="btn ${ps.showZh ? "btn-primary" : "btn-outline"} btn-xs" onclick="togglePassageState('showZh')">
+          🇨🇳 ${ps.showZh ? "切换纯英文原貌" : "显示逐段译文"}
+        </button>
       </div>
       <div class="passage-body ${ps.tallMode ? "tall" : ""}">
         <div>${contentHtml}</div>
@@ -723,23 +857,20 @@ function renderPassagePanel(q, passage) {
 
 function togglePassageState(key) {
   appState.passageState[key] = !appState.passageState[key];
-  saveState();
+  saveState(false);
   renderMainStage();
 }
 
-/* 1. 客观选择题作答区（数二 1–10 题、英二 1–45 题） */
+/* 1. 客观选择题作答区 */
 function renderChoiceQuestionBody(q, rec) {
   const options = Array.isArray(q.options) ? q.options : ["A", "B", "C", "D"];
   const answered = rec.lastOpt !== null && rec.lastOpt !== undefined;
   const isRevealed = answered || rec.revealed;
   const correctLetter = String(q.answer || "A").trim().toUpperCase().charAt(0);
-
-  // 如果是新题型 A-G 短选项，使用网格紧凑排布
-  const isShortLetters = options.length > 4 && options.every((o) => o.trim().length <= 3);
+  const isShortLetters = options.length > 4 && options.every((o) => String(o).trim().length <= 3);
 
   const optionsHtml = options.map((optStr, idx) => {
     const letter = ["A", "B", "C", "D", "E", "F", "G"][idx] || String(idx);
-    // 剥离选项开头自带的 "A. " 或 "[A] " 避免重复显示字母圆圈
     const cleanText = String(optStr).replace(/^(?:\[\s*[A-G]\s*\]|[A-G][\.\、\s])\s*/i, "").trim();
 
     let stateCls = "";
@@ -752,7 +883,7 @@ function renderChoiceQuestionBody(q, rec) {
     }
 
     return `
-      <button class="mcq-option ${stateCls}" onclick="submitChoiceOption('${q.id}', '${letter}')">
+      <button class="mcq-option ${stateCls}" onclick="submitChoiceOption('${escapeHtml(q.id)}', '${letter}')">
         <span class="option-letter">${letter}</span>
         <span style="flex:1;">${cleanText || letter}</span>
       </button>
@@ -765,11 +896,11 @@ function renderChoiceQuestionBody(q, rec) {
         <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-subtle);padding:8px 14px;border-radius:8px;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
           <span style="font-size:13.5px;font-weight:600;color:${rec.lastOpt === correctLetter ? "var(--success)" : "var(--danger)"};">
             ${rec.lastOpt === correctLetter
-              ? `✅ 本遍回答正确（您选了 ${rec.lastOpt}）！当前已完成 ${rec.passes}/3 刷`
-              : `❌ 本遍回答有误（您选了 ${rec.lastOpt}，正确答案为 ${correctLetter}），已记入错题本`}
+              ? `✅ 本遍回答正确（已选 ${rec.lastOpt}）！当前进度 ${rec.passes}/3 刷`
+              : `❌ 本遍回答有误（您选了 ${rec.lastOpt}，正确答案 ${correctLetter}），已记入错题本`}
           </span>
-          <button class="btn btn-primary btn-xs" onclick="retryQuestionForNextPass('${q.id}')">
-            🔄 再刷一遍（遮挡答案冲击下一刷）
+          <button class="btn btn-primary btn-xs" onclick="retryQuestionForNextPass('${escapeHtml(q.id)}')">
+            🔄 再刷一遍
           </button>
         </div>
       ` : ""}
@@ -780,9 +911,9 @@ function renderChoiceQuestionBody(q, rec) {
 
       ${!isRevealed ? `
         <div style="display:flex;gap:10px;">
-          <button class="btn btn-outline btn-sm" onclick="revealAnswerOnly('${q.id}')">👁️ 直接看答案与详尽解析</button>
+          <button class="btn btn-outline btn-sm" onclick="revealAnswerOnly('${escapeHtml(q.id)}')">👁️ 直接看答案与解析</button>
         </div>
-      ` : renderAnalysisAndTipsBox(q, rec)}
+      ` : renderAnalysisAndTipsBox(q)}
     </div>
   `;
 }
@@ -793,7 +924,6 @@ function submitChoiceOption(qId, chosenLetter) {
   const rec = getRecord(qId);
   const correctLetter = String(q.answer || "A").trim().toUpperCase().charAt(0);
 
-  // 如果已经选过，点击选项直接允许重新作答判分
   const wasAlreadyAnswered = rec.lastOpt !== null && rec.lastOpt !== undefined;
   rec.lastOpt = chosenLetter;
   rec.revealed = true;
@@ -831,28 +961,25 @@ function revealAnswerOnly(qId) {
   renderMainStage();
 }
 
-/* 2. 客观填空题作答区（数二 11–16 题） */
+/* 2. 客观填空题作答区 */
 function renderFillQuestionBody(q, rec) {
   return `
     <div>
       <div class="fill-answer-box">
-        <div style="font-size:13.5px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">
-          ✍️ 请在草稿纸上算出结果后填入下方（或直接点击核对标准答案）：
-        </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
           <input
             type="text"
             class="step-num-input"
             style="flex:1;min-width:220px;"
-            placeholder="在此输入您的计算结果（支持分式如 3π/2、31e 等）..."
+            placeholder="在此输入您的计算结果（或在草稿纸算出后直接核对）..."
             value="${escapeHtml(rec.draft || "")}"
-            oninput="saveQuestionDraft('${q.id}', this.value)"
+            oninput="saveQuestionDraft('${escapeHtml(q.id)}', this.value)"
           />
-          <button class="btn btn-primary" onclick="revealAnswerOnly('${q.id}')">
-            🔍 核对标准答案 & 展开解析
+          <button class="btn btn-primary" onclick="revealAnswerOnly('${escapeHtml(q.id)}')">
+            🔍 核对标准答案 & 解析
           </button>
           ${rec.revealed ? `
-            <button class="btn btn-outline btn-sm" onclick="retryQuestionForNextPass('${q.id}')">
+            <button class="btn btn-outline btn-sm" onclick="retryQuestionForNextPass('${escapeHtml(q.id)}')">
               🙈 隐藏答案重做
             </button>
           ` : ""}
@@ -866,27 +993,27 @@ function renderFillQuestionBody(q, rec) {
             <span style="font-size:16px;font-weight:800;color:#0f172a;margin-left:8px;">${q.answer}</span>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-success btn-sm" onclick="gradeSelfSubjective('${q.id}', true)">
-              ✅ 我算对了（刷次 +1★，当前 ${rec.passes}/3）
+            <button class="btn btn-success btn-sm" onclick="gradeSelfSubjective('${escapeHtml(q.id)}', true)">
+              ✅ 算对了 (+1★，当前 ${rec.passes}/3)
             </button>
-            <button class="btn btn-danger btn-sm" onclick="gradeSelfSubjective('${q.id}', false)">
+            <button class="btn btn-danger btn-sm" onclick="gradeSelfSubjective('${escapeHtml(q.id)}', false)">
               ❌ 算错了（记入错题本）
             </button>
           </div>
         </div>
-        ${renderAnalysisAndTipsBox(q, rec)}
+        ${renderAnalysisAndTipsBox(q)}
       ` : ""}
     </div>
   `;
 }
 
-/* 3. 主观解答题 / 英译汉 / 大小作文作答区（数二 17–22 题、英二 46–48 题） */
+/* 3. 主观解答题 / 英译汉 / 大小作文作答区 */
 function renderSolveQuestionBody(q, rec) {
   const placeholderText = q.subject === "math2"
-    ? "可在现实草稿纸上推导，也可在此记录关键方程、换元步骤或最终结果..."
+    ? "可在现实草稿纸上推导，也可在此记录关键步骤或结果..."
     : q.qNum === 46
-    ? "请在此输入您的中文翻译草稿（完成后点击下方按钮对照标准参考译文与采分点）..."
-    : "请在此输入您的作文提纲、核心句或完整习作（完成后点击下方按钮对照高分范文）...";
+    ? "请在此输入您的中文翻译草稿（完成后点击下方按钮对照标准译文）..."
+    : "请在此输入您的作答提纲或习作（完成后点击下方按钮对照标准解析）...";
 
   return `
     <div>
@@ -894,14 +1021,14 @@ function renderSolveQuestionBody(q, rec) {
         <textarea
           class="recall-textarea"
           placeholder="${placeholderText}"
-          oninput="saveQuestionDraft('${q.id}', this.value)"
+          oninput="saveQuestionDraft('${escapeHtml(q.id)}', this.value)"
         >${escapeHtml(rec.draft || "")}</textarea>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <button class="btn btn-primary" onclick="revealAnswerOnly('${q.id}')">
-            👁️ 展开标准答案、步骤详解与高分范文
+          <button class="btn btn-primary" onclick="revealAnswerOnly('${escapeHtml(q.id)}')">
+            👁️ 展开标准答案与步骤详解
           </button>
           ${rec.revealed ? `
-            <button class="btn btn-outline btn-sm" onclick="retryQuestionForNextPass('${q.id}')">
+            <button class="btn btn-outline btn-sm" onclick="retryQuestionForNextPass('${escapeHtml(q.id)}')">
               🙈 收起答案重新演练
             </button>
           ` : ""}
@@ -911,25 +1038,25 @@ function renderSolveQuestionBody(q, rec) {
       ${rec.revealed ? `
         <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div style="flex:1;min-width:240px;">
-            <span style="font-size:13px;font-weight:700;color:#1e40af;">【核心答案 / 译文概览】</span>
+            <span style="font-size:13px;font-weight:700;color:#1e40af;">【核心答案】</span>
             <span style="font-size:14.5px;font-weight:700;color:#0f172a;margin-left:6px;">${q.answer}</span>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-success btn-sm" onclick="gradeSelfSubjective('${q.id}', true)">
-              ✅ 本遍已掌握（刷次 +1★，当前 ${rec.passes}/3）
+            <button class="btn btn-success btn-sm" onclick="gradeSelfSubjective('${escapeHtml(q.id)}', true)">
+              ✅ 本遍已掌握 (+1★，当前 ${rec.passes}/3)
             </button>
-            <button class="btn btn-danger btn-sm" onclick="gradeSelfSubjective('${q.id}', false)">
-              ❌ 步骤卡壳 / 未掌握（记入错题本）
+            <button class="btn btn-danger btn-sm" onclick="gradeSelfSubjective('${escapeHtml(q.id)}', false)">
+              ❌ 未掌握（记入错题本）
             </button>
           </div>
         </div>
-        ${renderAnalysisAndTipsBox(q, rec)}
+        ${renderAnalysisAndTipsBox(q)}
       ` : ""}
     </div>
   `;
 }
 
-function renderAnalysisAndTipsBox(q, rec) {
+function renderAnalysisAndTipsBox(q) {
   return `
     ${(q.tips || q.kp) ? `
       <div class="tips-kp-panel" style="margin-top:14px;">
@@ -939,14 +1066,14 @@ function renderAnalysisAndTipsBox(q, rec) {
         </div>
         <div class="kp-box">
           <strong>📚 关联核心考点：</strong>
-          <div style="margin-top:6px;font-weight:600;">${q.kp || "考研核心常考题型"}</div>
+          <div style="margin-top:6px;font-weight:600;">${q.kp || "核心常考题型"}</div>
         </div>
       </div>
     ` : ""}
 
     <div class="explanation-panel">
       <div class="explanation-title">
-        <span>📖 真题权威精解与步骤推导</span>
+        <span>📖 权威精解与步骤推导</span>
         <span>正确答案：<strong>${q.answer}</strong></span>
       </div>
       <div class="explanation-body">${q.analysis}</div>
@@ -979,8 +1106,9 @@ function gradeSelfSubjective(qId, isCorrect) {
   renderMainStage();
 }
 
-function manualAddPass(qId) {
-  const rec = getRecord(qId);
+function manualAddPassCurrent() {
+  if (!appState.currentQId) return;
+  const rec = getRecord(appState.currentQId);
   if (rec.passes < 3) {
     rec.passes += 1;
     touchRecord(rec);
@@ -989,8 +1117,9 @@ function manualAddPass(qId) {
   }
 }
 
-function resetQuestionPasses(qId) {
-  const rec = getRecord(qId);
+function resetCurrentQuestionPasses() {
+  if (!appState.currentQId) return;
+  const rec = getRecord(appState.currentQId);
   rec.passes = 0;
   rec.lastOpt = null;
   rec.revealed = false;
@@ -1012,7 +1141,7 @@ function addQuestionToWrongBook(qId, reason) {
 }
 
 /* ==========================================================================
-   核心视图 2：错题本与薄弱真题复盘 (Wrong Question Book)
+   核心视图 2：错题本与薄弱真题复盘
    ========================================================================== */
 function renderWrongBookView(container) {
   const wrongQs = getSubjectQuestions().filter((q) => {
@@ -1026,9 +1155,9 @@ function renderWrongBookView(container) {
     <div class="question-card">
       <div class="q-card-header">
         <div>
-          <h2 class="q-title">📕 真题错题本与薄弱点复盘</h2>
+          <h2 class="q-title">📕 错题本与薄弱点复盘</h2>
           <p style="font-size:13.5px;color:var(--text-muted);margin-top:4px;">
-            做错的选择题或自评未掌握的填空/解答题会自动收录至此，支持记录错因并一键跳回原题二刷、三刷。
+            当前口令（<code>${escapeHtml(appState.syncId || "未设口令")}</code>）专属错题记录，支持记录错因并一键跳回原题重刷。
           </p>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
@@ -1045,7 +1174,6 @@ function renderWrongBookView(container) {
         <div style="text-align:center;padding:42px 20px;color:var(--text-muted);">
           <div style="font-size:36px;margin-bottom:8px;">🎉</div>
           <div style="font-size:15px;font-weight:600;color:var(--text-secondary);">当前没有待攻克的错题！</div>
-          <p style="font-size:13px;margin-top:4px;">继续保持，去完成剩余真题的一刷、二刷和三刷吧。</p>
         </div>
       ` : `
         <div class="wrong-book-container">
@@ -1060,11 +1188,11 @@ function renderWrongBookView(container) {
                     <strong>${q.title}</strong>
                   </div>
                   <div style="display:flex;gap:8px;">
-                    <button class="btn btn-primary btn-sm" onclick="jumpToWrongQuestion('${q.id}')">
-                      🎯 跳回原真题重刷
+                    <button class="btn btn-primary btn-sm" onclick="jumpToWrongQuestion('${escapeHtml(q.id)}')">
+                      🎯 跳回原题重刷
                     </button>
-                    <button class="btn btn-outline btn-sm" onclick="toggleResolveWrong('${q.id}')">
-                      ${r.resolved ? "↩️ 重新标记未掌握" : "✅ 标记已彻底消灭"}
+                    <button class="btn btn-outline btn-sm" onclick="toggleResolveWrong('${escapeHtml(q.id)}')">
+                      ${r.resolved ? "↩️ 重新标记未掌握" : "✅ 标记已消灭"}
                     </button>
                   </div>
                 </div>
@@ -1078,9 +1206,9 @@ function renderWrongBookView(container) {
                 <input
                   type="text"
                   class="wrong-note-input"
-                  placeholder="✍️ 记录错因心得（如：等价无穷小阶数不够 / 被强干扰项偷换概念误导）..."
+                  placeholder="✍️ 记录错因心得..."
                   value="${escapeHtml(r.wrongNote || "")}"
-                  onchange="saveWrongNote('${q.id}', this.value)"
+                  onchange="saveWrongNote('${escapeHtml(q.id)}', this.value)"
                 />
               </div>
             `;
@@ -1126,155 +1254,501 @@ function saveWrongNote(qId, text) {
 }
 
 /* ==========================================================================
-   核心视图 3：高频重复记忆总结文档 & 外部 AI 题库导入中心
+   核心视图 3：高频重复记忆总结文档
    ========================================================================== */
 function renderAiHubView(container) {
   const docs = HIGH_FREQ_DOCS[appState.activeSubject] || HIGH_FREQ_DOCS.math2;
 
-  const aiPromptTemplate = `你现在是考研命题专家（考研数学二 / 考研英语二）。请将我发给你的真题或讲义解析，整理为以下可直接导入刷题网页的 JSON 数组格式（严禁输出任何原始 LaTeX 反斜杠代码如 \\frac 或 $，分式统一使用 <span class="frac"><span class="frac-num">分子</span><span class="frac-den">分母</span></span>，上下标使用 <sup> 和 <sub>）：
-
-[
-  {
-    "id": "CUSTOM_${Date.now().toString().slice(-4)}_01",
-    "subject": "${appState.activeSubject}",
-    "year": 2026,
-    "qNum": 1,
-    "qType": "choice",
-    "chapter": "${appState.activeSubject === "math2" ? "m_ch1" : "e_ch2"}",
-    "title": "真题或模拟题标题",
-    "stem": "题干完整 HTML 内容",
-    "options": ["A. 选项A", "B. 选项B", "C. 选项C", "D. 选项D"],
-    "answer": "A",
-    "analysis": "详尽步骤解析 HTML",
-    "tips": "考场秒杀与破题技巧",
-    "kp": "核心考点名称"
-  }
-]`;
-
   container.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:20px;">
-      <div class="question-card">
-        <div class="q-card-header">
-          <div>
-            <h2 class="q-title">📚 2022–2026 必背高频重复知识点总结 (${appState.activeSubject === "math2" ? "考研数学二" : "考研英语二"})</h2>
-            <p style="font-size:13.5px;color:var(--text-muted);margin-top:4px;">
-              提炼近五年真题中反复出现的公式、定理与破题母模版，刷题卡壳时随时对照。
-            </p>
-          </div>
+    <div class="question-card">
+      <div class="q-card-header">
+        <div>
+          <h2 class="q-title">📚 必背高频重复知识点总结 (${appState.activeSubject === "eng2" ? "考研英语二" : "考研数学二"})</h2>
+          <p style="font-size:13.5px;color:var(--text-muted);margin-top:4px;">
+            提炼近五年真题中反复出现的公式、定理与破题母模版，刷题卡壳时随时对照。
+          </p>
         </div>
-        <div class="kp-grid">
-          ${docs.map((sec) => `
-            <div class="kp-summary-card">
-              <div>
-                <h3 style="font-size:15px;color:var(--primary);margin-bottom:8px;">${sec.title}</h3>
-                <ul style="padding-left:18px;font-size:13.5px;color:var(--text-secondary);line-height:1.8;">
-                  ${sec.items.map((it) => `<li style="margin-bottom:6px;">${it}</li>`).join("")}
-                </ul>
-              </div>
-            </div>
-          `).join("")}
-        </div>
+        <button class="btn btn-primary btn-sm" onclick="openSettingsModal('import')">
+          📥 使用 AI 生成并导入新题库
+        </button>
       </div>
-
-      <div class="question-card">
-        <div class="q-card-header">
-          <div>
-            <h2 class="q-title">🤖 外部 AI 扩展题库一键接入中心</h2>
-            <p style="font-size:13.5px;color:var(--text-muted);margin-top:4px;">
-              如果您有其他年份真题、模拟卷（如李林6+4、张宇8+4）或错题讲义，复制下方提示词发给任意 AI，将生成的 JSON 粘贴至下方即可并入本系统刷题。
-            </p>
+      <div class="kp-grid">
+        ${docs.map((sec) => `
+          <div class="kp-summary-card">
+            <div>
+              <h3 style="font-size:15px;color:var(--primary);margin-bottom:8px;">${sec.title}</h3>
+              <ul style="padding-left:18px;font-size:13.5px;color:var(--text-secondary);line-height:1.8;">
+                ${sec.items.map((it) => `<li style="margin-bottom:6px;">${it}</li>`).join("")}
+              </ul>
+            </div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="copyAiPrompt()">📋 一键复制 AI 转换提示词</button>
-        </div>
-
-        <pre class="prompt-code-box" id="ai-prompt-box">${escapeHtml(aiPromptTemplate)}</pre>
-
-        <div style="margin-top:16px;">
-          <div style="font-size:13.5px;font-weight:700;margin-bottom:6px;">📥 粘贴外部 AI 生成的 JSON 数组并导入题库：</div>
-          <textarea
-            id="json-import-input"
-            class="json-import-textarea"
-            placeholder='在此粘贴以 [ 开头、以 ] 结尾的 JSON 数组...'
-          ></textarea>
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <button class="btn btn-success" onclick="importCustomJsonQuestions()">➕ 立即校验并导入题库</button>
-            <button class="btn btn-danger btn-sm" onclick="clearCustomJsonQuestions()">🗑️ 清空外部扩展题目</button>
-            <span id="json-import-msg" style="font-size:13px;font-weight:600;"></span>
-          </div>
-        </div>
+        `).join("")}
       </div>
     </div>
   `;
 }
 
-function copyAiPrompt() {
-  const box = document.getElementById("ai-prompt-box");
-  if (!box) return;
-  navigator.clipboard.writeText(box.textContent).then(() => {
-    alert("✅ 已复制 AI 提示词！可直接发给任意 AI 生成扩展题库。");
-  });
-}
-
-function importCustomJsonQuestions() {
-  const input = document.getElementById("json-import-input");
-  const msgEl = document.getElementById("json-import-msg");
-  if (!input || !msgEl) return;
-  try {
-    let raw = input.value.trim();
-    raw = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
-    const arr = JSON.parse(raw);
-    if (!Array.isArray(arr) || arr.length === 0) {
-      throw new Error("顶层必须是包含至少 1 道题目的非空 JSON 数组 [...]");
-    }
-    const existingRaw = localStorage.getItem(CUSTOM_QUESTIONS_KEY);
-    const existing = existingRaw ? JSON.parse(existingRaw) : [];
-    const merged = [...existing, ...arr];
-    localStorage.setItem(CUSTOM_QUESTIONS_KEY, JSON.stringify(merged));
-    initQuestionBank();
-    loadState();
-    renderAll();
-    msgEl.style.color = "var(--success)";
-    msgEl.textContent = `🎉 成功导入 ${arr.length} 道题目！`;
-    input.value = "";
-  } catch (e) {
-    msgEl.style.color = "var(--danger)";
-    msgEl.textContent = `❌ JSON 解析失败：${e.message}`;
-  }
-}
-
-function clearCustomJsonQuestions() {
-  localStorage.removeItem(CUSTOM_QUESTIONS_KEY);
-  initQuestionBank();
-  loadState();
-  renderAll();
-  const msgEl = document.getElementById("json-import-msg");
-  if (msgEl) {
-    msgEl.style.color = "var(--primary)";
-    msgEl.textContent = "已清空外部扩展题目，恢复 350 道内置真题。";
-  }
-}
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 /* ==========================================================================
-   多设备实时云端同步引擎 (Dual-Redundant Cloud Sync Engine)
-   - 主通道: restful-api.dev JSON 云对象库 (支持完整草稿/错因/刷次/阅读偏好)
-   - 备通道: keyvalue.immanuel.co 高速键值库 (存指针 + Base64 刷次快照双保险)
+   统一设置中心 & AI 生成题库上传（私人/公开口令权限） & 多端云同步引擎
    ========================================================================== */
-const IMMANUEL_APP_KEY = "tulf4tej";
-const DEFAULT_VAULT_MAP = {
-  lidahai4445: "ff808181a09d98f701a1aae7d2593f3d"
-};
-
 let cloudPushTimer = null;
 let isSyncingNow = false;
 
+function getStandardAiPromptText() {
+  return `你现在是专业的考试题库结构化专家。请将我发给你的题目与解析资料，转换为以下标准 JSON 格式（你可以直接生成一个 .json 文件供我下载，或输出纯 JSON 代码块）。
+【排版铁律】：严禁输出任何未转义的 LaTeX 反斜杠（如 \\frac 或 $）！数学分式必须使用 <span class='frac'><span class='frac-num'>分子</span><span class='frac-den'>分母</span></span>，上下标使用 <sup>2</sup> 和 <sub>n</sub>，换行使用 <br>。
+
+{
+  "bankTitle": "请填写题库名称（如：考研政治肖1000题 / 数二模拟卷）",
+  "chapters": [
+    { "id": "ch1", "title": "第一部分：基础核心题" },
+    { "id": "ch2", "title": "第二部分：拔高综合题" }
+  ],
+  "questions": [
+    {
+      "qNum": 1,
+      "year": 2026,
+      "qType": "choice",
+      "chapter": "ch1",
+      "title": "第1题（选择题）",
+      "stem": "题干完整 HTML 内容...",
+      "options": ["A. 选项A内容", "B. 选项B内容", "C. 选项C内容", "D. 选项D内容"],
+      "answer": "A",
+      "analysis": "详尽步骤解析 HTML...",
+      "tips": "考场秒杀与破题技巧...",
+      "kp": "关联核心考点名称"
+    },
+    {
+      "qNum": 2,
+      "year": 2026,
+      "qType": "fill",
+      "chapter": "ch2",
+      "title": "第2题（填空或简答题，无选项时 qType 填 fill 或 solve）",
+      "stem": "填空或解答题题干 HTML...",
+      "options": null,
+      "answer": "标准答案文本",
+      "analysis": "完整推导步骤与采分点解析 HTML...",
+      "tips": "易错点提示...",
+      "kp": "核心考点"
+    }
+  ]
+}`;
+}
+
+function openSettingsModal(defaultTab = "account") {
+  const modal = document.getElementById("cloud-sync-modal");
+  const input = document.getElementById("sync-id-input");
+  if (input) input.value = appState.syncId || "";
+
+  // 同步当前界面偏好复选框状态
+  const chkDots = document.getElementById("pref-show-dots");
+  if (chkDots) chkDots.checked = !appState.dotsCollapsed;
+  const chkZh = document.getElementById("pref-passage-zh");
+  if (chkZh) chkZh.checked = Boolean(appState.passageState.showZh);
+  const chkTall = document.getElementById("pref-passage-tall");
+  if (chkTall) chkTall.checked = Boolean(appState.passageState.tallMode);
+  const chkCol = document.getElementById("pref-passage-collapse");
+  if (chkCol) chkCol.checked = Boolean(appState.passageState.collapsed);
+
+  const ownerLabel = document.getElementById("current-owner-label");
+  if (ownerLabel) ownerLabel.textContent = appState.syncId || "未设置口令（请先在第一栏设置口令）";
+
+  const promptBox = document.getElementById("settings-ai-prompt-box");
+  if (promptBox) promptBox.textContent = getStandardAiPromptText();
+
+  renderRecentSyncIdsInModal();
+  renderCustomBanksManageList();
+  switchSettingsTab(defaultTab);
+  if (modal) modal.classList.add("open");
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById("cloud-sync-modal");
+  if (modal) modal.classList.remove("open");
+}
+
+function switchSettingsTab(tabId) {
+  document.querySelectorAll(".settings-subtab").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-stab") === tabId);
+  });
+  ["account", "import", "manage"].forEach((id) => {
+    const panel = document.getElementById(`stab-panel-${id}`);
+    if (panel) panel.style.display = id === tabId ? "block" : "none";
+  });
+  if (tabId === "manage") {
+    renderCustomBanksManageList();
+  }
+}
+
+function toggleUiPreference(prefKey, checked) {
+  if (prefKey === "showDots") {
+    appState.dotsCollapsed = !checked;
+    renderQuestionDots();
+  } else if (prefKey === "showZh") {
+    appState.passageState.showZh = checked;
+    renderMainStage();
+  } else if (prefKey === "tallMode") {
+    appState.passageState.tallMode = checked;
+    renderMainStage();
+  } else if (prefKey === "collapsed") {
+    appState.passageState.collapsed = checked;
+    renderMainStage();
+  }
+  saveState(false);
+}
+
+function copyStandardAiPrompt() {
+  navigator.clipboard.writeText(getStandardAiPromptText()).then(() => {
+    const msgEl = document.getElementById("bank-import-status-msg");
+    if (msgEl) {
+      msgEl.style.color = "var(--success)";
+      msgEl.textContent = "✅ 已复制 AI 提示词！请粘贴给任意 AI 并附上您的题目资料生成 .json 文件。";
+    }
+  });
+}
+
+function downloadSampleBankJson() {
+  const sample = {
+    bankTitle: "示例新题库（数二核心模拟题）",
+    chapters: [
+      { id: "sim_ch1", title: "一、高等数学精选" },
+      { id: "sim_ch2", title: "二、线性代数精选" }
+    ],
+    questions: [
+      {
+        qNum: 1,
+        year: 2026,
+        qType: "choice",
+        chapter: "sim_ch1",
+        title: "模拟卷 第1题（选择题 5分）",
+        stem: "当 <i>x</i> → 0 时，1 − cos <i>x</i> 与 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup><i>k</i></sup> 是等价无穷小，则 <i>k</i> =（　　）",
+        options: ["A. 1", "B. 2", "C. 3", "D. 4"],
+        answer: "B",
+        analysis: "由等价无穷小公式知，当 <i>x</i> → 0 时，1 − cos <i>x</i> ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup>，故 <i>k</i> = 2，选 B。",
+        tips: "熟记 1 − cos x ~ (1/2)x²。",
+        kp: "等价无穷小阶数判定"
+      }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(sample, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ai_question_bank_template.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 解析上传的 JSON 文本并构建标准 Bank 对象
+function parseUploadedJsonToBank(rawText, fallbackFileName = "") {
+  let cleaned = String(rawText || "").trim();
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  const parsed = JSON.parse(cleaned);
+
+  const customTitleInput = document.getElementById("new-bank-title-input");
+  const visibilitySelect = document.getElementById("new-bank-visibility-select");
+  const visibility = visibilitySelect ? visibilitySelect.value : "private";
+  const ownerSyncId = (appState.syncId || "").trim();
+
+  if (!ownerSyncId) {
+    throw new Error("请先在「🔑 口令与界面设置」中输入您的专属口令，才能绑定新题库权限！");
+  }
+
+  const bankId = `bank_${ownerSyncId.replace(/[^a-zA-Z0-9]/g, "")}_${Date.now().toString().slice(-6)}`;
+  let bankTitle = (customTitleInput && customTitleInput.value.trim()) || "";
+  let rawQuestions = [];
+  let chapters = [];
+  let passages = {};
+
+  if (Array.isArray(parsed)) {
+    rawQuestions = parsed;
+    if (!bankTitle) {
+      bankTitle = fallbackFileName.replace(/\.json$/i, "") || `AI导入题库 (${rawQuestions.length}题)`;
+    }
+  } else if (parsed && typeof parsed === "object") {
+    rawQuestions = Array.isArray(parsed.questions) ? parsed.questions : [];
+    if (!bankTitle) {
+      bankTitle = parsed.bankTitle || parsed.title || parsed.name || fallbackFileName.replace(/\.json$/i, "") || `AI导入题库`;
+    }
+    if (Array.isArray(parsed.chapters)) chapters = parsed.chapters;
+    if (parsed.passages && typeof parsed.passages === "object") passages = parsed.passages;
+  }
+
+  if (!Array.isArray(rawQuestions) || rawQuestions.length === 0) {
+    throw new Error("JSON 文件中未找到有效的题目数组（questions 不能为空）！");
+  }
+
+  const normalizedQuestions = rawQuestions.map((q, idx) => {
+    const qNum = Number(q.qNum) || idx + 1;
+    const hasOptions = Array.isArray(q.options) && q.options.length >= 2;
+    const qType = q.qType || (hasOptions ? "choice" : "solve");
+    return {
+      id: `${bankId}_Q${String(qNum).padStart(3, "0")}_${idx}`,
+      subject: bankId,
+      year: Number(q.year) || 2026,
+      qNum,
+      qType,
+      chapter: q.chapter || "default_ch",
+      passageId: q.passageId || null,
+      title: q.title || `${bankTitle} · 第${qNum}题`,
+      stem: q.stem || q.question || "请阅读题目并作答",
+      options: hasOptions ? q.options : null,
+      answer: String(q.answer ?? "详见解析"),
+      analysis: q.analysis || q.explanation || "详见标准答案。",
+      tips: q.tips || "",
+      kp: q.kp || ""
+    };
+  });
+
+  return {
+    id: bankId,
+    title: bankTitle,
+    visibility, // 'private' | 'public'
+    ownerSyncId,
+    createdAt: Date.now(),
+    chapters,
+    passages,
+    questions: normalizedQuestions
+  };
+}
+
+async function registerNewCustomBank(bank) {
+  if (bank.visibility === "private") {
+    privateBanks.push(bank);
+    savePrivateBanksLocal();
+  } else {
+    publicBanks.push(bank);
+    savePublicBanksLocal();
+  }
+
+  rebuildQuestionBankPool();
+  appState.activeSubject = bank.id;
+  appState.activeYear = "all";
+  appState.activeChapter = "all";
+  if (bank.questions.length > 0) {
+    appState.currentQId = bank.questions[0].id;
+  }
+  saveState(false);
+  renderAll();
+  renderCustomBanksManageList();
+
+  // 同步到云端（私人题库推入个人云端仓库，公开题库推入全局公共中心）
+  if (bank.visibility === "private") {
+    await pushToCloud();
+  } else {
+    await pushPublicBanksToGlobalHub();
+  }
+}
+
+async function handleBankJsonFileUpload(event) {
+  const files = event.target.files;
+  const msgEl = document.getElementById("bank-import-status-msg");
+  if (!files || files.length === 0) return;
+
+  let importedCount = 0;
+  let totalQs = 0;
+
+  for (const file of Array.from(files)) {
+    try {
+      const text = await file.text();
+      const bank = parseUploadedJsonToBank(text, file.name);
+      await registerNewCustomBank(bank);
+      importedCount++;
+      totalQs += bank.questions.length;
+    } catch (err) {
+      if (msgEl) {
+        msgEl.style.color = "var(--danger)";
+        msgEl.textContent = `❌ 文件 [${file.name}] 导入失败：${err.message}`;
+      }
+      event.target.value = "";
+      return;
+    }
+  }
+
+  event.target.value = "";
+  const titleInput = document.getElementById("new-bank-title-input");
+  if (titleInput) titleInput.value = "";
+
+  if (msgEl) {
+    msgEl.style.color = "var(--success)";
+    msgEl.textContent = `🎉 成功生成 ${importedCount} 个新题库（共 ${totalQs} 道题），已自动切换至新题库！`;
+  }
+}
+
+async function handleBankJsonTextImport() {
+  const input = document.getElementById("bank-json-paste-input");
+  const msgEl = document.getElementById("bank-import-status-msg");
+  if (!input || !input.value.trim()) {
+    if (msgEl) {
+      msgEl.style.color = "var(--danger)";
+      msgEl.textContent = "❌ 请先粘贴 AI 生成的 JSON 文本！";
+    }
+    return;
+  }
+  try {
+    const bank = parseUploadedJsonToBank(input.value.trim(), "粘贴题库");
+    await registerNewCustomBank(bank);
+    input.value = "";
+    if (msgEl) {
+      msgEl.style.color = "var(--success)";
+      msgEl.textContent = `🎉 成功生成新题库「${bank.title}」（共 ${bank.questions.length} 道题）！`;
+    }
+  } catch (err) {
+    if (msgEl) {
+      msgEl.style.color = "var(--danger)";
+      msgEl.textContent = `❌ JSON 解析失败：${err.message}`;
+    }
+  }
+}
+
+function renderCustomBanksManageList() {
+  const box = document.getElementById("custom-banks-manage-list");
+  if (!box) return;
+  const banks = getVisibleCustomBanks();
+  const curSyncId = (appState.syncId || "").trim();
+
+  if (banks.length === 0) {
+    box.innerHTML = `
+      <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px;">
+        当前暂无自定义题库。您可以点击上方「📥 AI生成并上传题库」上传 <code>.json</code> 文件自动创建！
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = banks.map((b) => {
+    const isOwner = Boolean(curSyncId && b.ownerSyncId === curSyncId);
+    const isPriv = b.visibility === "private";
+    return `
+      <div class="custom-bank-card">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="badge-pill ${isPriv ? "badge-primary" : "badge-success"}">
+              ${isPriv ? "🔒 私人题库 (仅创建口令可见)" : "🌐 公开题库 (全员可刷)"}
+            </span>
+            <strong style="font-size:14px;">${escapeHtml(b.title)}</strong>
+            <span style="font-size:12px;color:var(--text-muted);">(${b.questions.length} 题)</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+            创建者口令：<code>${escapeHtml(b.ownerSyncId || "未知")}</code>
+            ${isOwner ? `<span style="color:var(--success);font-weight:600;margin-left:6px;">（您拥有最高管理权限）</span>` : `<span style="margin-left:6px;">（只读共享权限）</span>`}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-xs" onclick="switchSubject('${escapeHtml(b.id)}'); closeSettingsModal();">
+            🎯 进入刷题
+          </button>
+          <button class="btn btn-outline btn-xs" onclick="exportSingleCustomBank('${escapeHtml(b.id)}')">
+            ⬇️ 导出JSON
+          </button>
+          ${isOwner ? `
+            <button class="btn btn-outline btn-xs" onclick="toggleCustomBankVisibility('${escapeHtml(b.id)}')">
+              🔄 转为${isPriv ? "公开共享" : "私人独享"}
+            </button>
+            <button class="btn btn-danger btn-xs" onclick="deleteCustomBank('${escapeHtml(b.id)}')">
+              🗑️ 删除
+            </button>
+          ` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function exportSingleCustomBank(bankId) {
+  const bank = getVisibleCustomBanks().find((b) => b.id === bankId);
+  if (!bank) return;
+  const exportObj = {
+    bankTitle: bank.title,
+    chapters: bank.chapters,
+    passages: bank.passages,
+    questions: bank.questions
+  };
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${bank.title}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function toggleCustomBankVisibility(bankId) {
+  const curSyncId = (appState.syncId || "").trim();
+  const privIdx = privateBanks.findIndex((b) => b.id === bankId);
+  const pubIdx = publicBanks.findIndex((b) => b.id === bankId);
+
+  if (privIdx !== -1) {
+    const bank = privateBanks[privIdx];
+    if (bank.ownerSyncId !== curSyncId) {
+      alert("权限不足：只有创建该题库的口令才能修改权限！");
+      return;
+    }
+    privateBanks.splice(privIdx, 1);
+    bank.visibility = "public";
+    publicBanks.push(bank);
+    savePrivateBanksLocal();
+    savePublicBanksLocal();
+    renderAll();
+    renderCustomBanksManageList();
+    await pushToCloud();
+    await pushPublicBanksToGlobalHub();
+  } else if (pubIdx !== -1) {
+    const bank = publicBanks[pubIdx];
+    if (bank.ownerSyncId !== curSyncId) {
+      alert("权限不足：只有创建该题库的口令才能将其转为私人！");
+      return;
+    }
+    publicBanks.splice(pubIdx, 1);
+    bank.visibility = "private";
+    privateBanks.push(bank);
+    savePrivateBanksLocal();
+    savePublicBanksLocal();
+    renderAll();
+    renderCustomBanksManageList();
+    await pushPublicBanksToGlobalHub();
+    await pushToCloud();
+  }
+}
+
+async function deleteCustomBank(bankId) {
+  const curSyncId = (appState.syncId || "").trim();
+  const bank = getVisibleCustomBanks().find((b) => b.id === bankId);
+  if (!bank) return;
+  if (bank.ownerSyncId !== curSyncId) {
+    alert(`权限不足：仅创建者口令 [${bank.ownerSyncId}] 有权删除此题库！`);
+    return;
+  }
+
+  privateBanks = privateBanks.filter((b) => b.id !== bankId);
+  publicBanks = publicBanks.filter((b) => b.id !== bankId);
+  savePrivateBanksLocal();
+  savePublicBanksLocal();
+
+  if (appState.activeSubject === bankId) {
+    appState.activeSubject = "math2";
+    appState.currentQId = "M2026_01";
+  }
+
+  rebuildQuestionBankPool();
+  renderAll();
+  renderCustomBanksManageList();
+
+  if (bank.visibility === "private") {
+    await pushToCloud();
+  } else {
+    await pushPublicBanksToGlobalHub();
+  }
+}
+
+async function refreshCustomBanksFromCloud() {
+  await pullFromCloud();
+  renderCustomBanksManageList();
+}
+
+/* ==========================================================================
+   多端云同步与全局公共题库注册表 (Global Hub + Per-Passcode Private Vault)
+   ========================================================================== */
 function updateSyncStatusUI(state, msg) {
   const dot = document.getElementById("sync-status-dot");
   const textEl = document.getElementById("sync-status-text");
@@ -1285,16 +1759,96 @@ function updateSyncStatusUI(state, msg) {
   if (dot) {
     dot.className = "sync-dot" + (!sid ? " error" : state === "syncing" ? " syncing" : state === "error" ? " error" : "");
   }
-  // 保持顶部按钮文字简短固定（仅显示当前口令标识），绝不在同步时拉长文字导致换行抖动
+  // 顶栏按钮文字永远固定长度，彻底杜绝顶栏换行抖动
   if (textEl) {
-    textEl.textContent = sid ? `🔑 ${sid}` : `🔑 点击输入口令`;
+    textEl.textContent = sid ? `⚙️ 设置 (${sid.slice(0, 10)})` : `⚙️ 设置 / 口令`;
   }
   if (btn && msg) {
-    btn.title = `${msg}（点击切换刷题口令）`;
+    btn.title = `${msg}（点击打开设置与题库中心）`;
   }
   if (modalMsg && msg) {
     modalMsg.textContent = msg;
   }
+}
+
+async function fetchGlobalHubData() {
+  try {
+    const res = await fetch(`https://api.restful-api.dev/objects/${GLOBAL_HUB_VAULT_ID}`);
+    if (res.ok) {
+      const obj = await res.json();
+      return (obj && obj.data) || { userVaults: { ...DEFAULT_VAULT_MAP }, publicBanks: [] };
+    }
+  } catch (e) {
+    console.warn("获取全局中心失败:", e);
+  }
+  return null;
+}
+
+async function pushPublicBanksToGlobalHub() {
+  try {
+    const hubData = (await fetchGlobalHubData()) || { userVaults: { ...DEFAULT_VAULT_MAP }, publicBanks: [] };
+    hubData.publicBanks = publicBanks;
+    hubData.updatedAt = Date.now();
+    await fetch(`https://api.restful-api.dev/objects/${GLOBAL_HUB_VAULT_ID}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "kaoyan_global_hub_v2",
+        data: hubData
+      })
+    });
+  } catch (e) {
+    console.warn("同步公开题库到全局中心失败:", e);
+  }
+}
+
+async function resolveVaultId(syncId, preloadedHubData = null) {
+  const cleanId = String(syncId || "").trim();
+  if (!cleanId) return null;
+  if (DEFAULT_VAULT_MAP[cleanId]) return DEFAULT_VAULT_MAP[cleanId];
+
+  const cacheKey = `kaoyan_vault_id_${cleanId}`;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) return cached;
+
+  const hubData = preloadedHubData || (await fetchGlobalHubData());
+  if (hubData && hubData.userVaults && hubData.userVaults[cleanId]) {
+    localStorage.setItem(cacheKey, hubData.userVaults[cleanId]);
+    return hubData.userVaults[cleanId];
+  }
+
+  // 为该新口令创建独立云端仓库并注册到全局中心
+  try {
+    const createRes = await fetch("https://api.restful-api.dev/objects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: `kaoyan_sync_${cleanId}`,
+        data: buildCompactCloudPayload()
+      })
+    });
+    if (createRes.ok) {
+      const created = await createRes.json();
+      if (created && created.id) {
+        localStorage.setItem(cacheKey, created.id);
+        const latestHub = hubData || { userVaults: { ...DEFAULT_VAULT_MAP }, publicBanks: publicBanks };
+        if (!latestHub.userVaults) latestHub.userVaults = {};
+        latestHub.userVaults[cleanId] = created.id;
+        fetch(`https://api.restful-api.dev/objects/${GLOBAL_HUB_VAULT_ID}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "kaoyan_global_hub_v2",
+            data: latestHub
+          })
+        }).catch(() => {});
+        return created.id;
+      }
+    }
+  } catch (e) {
+    console.warn("创建新口令专属云端仓库失败:", e);
+  }
+  return null;
 }
 
 function buildCompactCloudPayload() {
@@ -1325,12 +1879,13 @@ function buildCompactCloudPayload() {
   });
   return {
     updatedAt: appState.updatedAt || Date.now(),
-    syncId: appState.syncId || "lidahai4445",
+    syncId: appState.syncId || "",
     activeSubject: appState.activeSubject,
     activeYear: appState.activeYear,
     activeChapter: appState.activeChapter,
     currentQId: appState.currentQId,
-    records: compactRecords
+    records: compactRecords,
+    privateBanks: privateBanks
   };
 }
 
@@ -1339,6 +1894,22 @@ function mergeCloudPayloadIntoLocal(cloudData) {
   let hasLocalChangesToPush = false;
   let localWasUpdated = false;
 
+  // 1. 合并该口令专属的私人题库
+  if (Array.isArray(cloudData.privateBanks) && cloudData.privateBanks.length > 0) {
+    const localIds = new Set(privateBanks.map((b) => b.id));
+    cloudData.privateBanks.forEach((cb) => {
+      if (cb && cb.id && !localIds.has(cb.id)) {
+        privateBanks.push(cb);
+        localWasUpdated = true;
+      }
+    });
+    if (localWasUpdated) {
+      savePrivateBanksLocal();
+      rebuildQuestionBankPool();
+    }
+  }
+
+  // 2. 合并每道题的刷题进度
   const cloudRecords = cloudData.records || {};
   Object.keys(cloudRecords).forEach((qId) => {
     const cr = cloudRecords[qId];
@@ -1370,7 +1941,6 @@ function mergeCloudPayloadIntoLocal(cloudData) {
     }
   });
 
-  // 检查本地是否有云端尚未收录的新做题记录
   Object.keys(appState.records || {}).forEach((qId) => {
     const lr = appState.records[qId];
     if ((lr.passes > 0 || lr.wrongCount > 0 || lr.lastOpt || lr.u > 0) && !cloudRecords[qId]) {
@@ -1378,7 +1948,6 @@ function mergeCloudPayloadIntoLocal(cloudData) {
     }
   });
 
-  // 仅当本机尚无任何做题记录（全新设备首次打开）时，才继承云端上次停留的科目与题号
   const isFreshDevice = (appState.updatedAt || 0) === 0;
   if ((cloudData.updatedAt || 0) > (appState.updatedAt || 0)) {
     appState.updatedAt = cloudData.updatedAt;
@@ -1391,6 +1960,7 @@ function mergeCloudPayloadIntoLocal(cloudData) {
 
   if (localWasUpdated) {
     saveState(false);
+    renderSubjectBar();
     renderGlobalHeaderStats();
     renderSidebar();
     renderQuestionDots();
@@ -1401,115 +1971,15 @@ function mergeCloudPayloadIntoLocal(cloudData) {
   return hasLocalChangesToPush;
 }
 
-async function resolveVaultId(syncId) {
-  const cleanId = String(syncId || "lidahai4445").trim();
-  if (DEFAULT_VAULT_MAP[cleanId]) return DEFAULT_VAULT_MAP[cleanId];
-
-  const cacheKey = `kaoyan_vault_id_${cleanId}`;
-  const cached = localStorage.getItem(cacheKey);
-  if (cached) return cached;
-
-  // 查询 Immanuel KV 指针
-  try {
-    const ptrRes = await fetch(
-      `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${IMMANUEL_APP_KEY}/kaoyan_ptr_${encodeURIComponent(cleanId)}`
-    );
-    if (ptrRes.ok) {
-      const text = (await ptrRes.text()).replace(/^"+|"+$/g, "").trim();
-      if (text && text !== "null" && text.length > 10) {
-        localStorage.setItem(cacheKey, text);
-        return text;
-      }
-    }
-  } catch (e) {
-    console.warn("查询云端指针失败:", e);
-  }
-
-  // 创建新的云端对象并写入指针
-  try {
-    const createRes = await fetch("https://api.restful-api.dev/objects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: `kaoyan_sync_${cleanId}`,
-        data: buildCompactCloudPayload()
-      })
-    });
-    if (createRes.ok) {
-      const created = await createRes.json();
-      if (created && created.id) {
-        localStorage.setItem(cacheKey, created.id);
-        fetch(
-          `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${IMMANUEL_APP_KEY}/kaoyan_ptr_${encodeURIComponent(cleanId)}/${encodeURIComponent(created.id)}`,
-          { method: "POST" }
-        ).catch(() => {});
-        return created.id;
-      }
-    }
-  } catch (e) {
-    console.warn("创建新云端仓库失败:", e);
-  }
-  return null;
-}
-
-function encodeBase64Snapshot(payload) {
-  try {
-    // 极简快照用于备用 KV 通道
-    const mini = { u: payload.updatedAt, s: payload.activeSubject, q: payload.currentQId, r: {} };
-    Object.keys(payload.records || {}).forEach((k) => {
-      const it = payload.records[k];
-      mini.r[k] = [it.p, it.w, it.res, it.o || "", it.rev, it.u || 0];
-    });
-    const jsonStr = JSON.stringify(mini);
-    return btoa(unescape(encodeURIComponent(jsonStr)))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-  } catch (e) {
-    return "";
-  }
-}
-
-function decodeBase64Snapshot(b64Str) {
-  try {
-    const clean = String(b64Str).replace(/^"+|"+$/g, "").trim();
-    if (!clean || clean === "null") return null;
-    const std = clean.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonStr = decodeURIComponent(escape(atob(std)));
-    const mini = JSON.parse(jsonStr);
-    const records = {};
-    Object.keys(mini.r || {}).forEach((k) => {
-      const arr = mini.r[k];
-      records[k] = {
-        p: arr[0] || 0,
-        w: arr[1] || 0,
-        res: arr[2] || 0,
-        o: arr[3] || null,
-        rev: arr[4] || 0,
-        u: arr[5] || 0
-      };
-    });
-    return {
-      updatedAt: mini.u || 0,
-      activeSubject: mini.s || "math2",
-      currentQId: mini.q || "M2026_01",
-      records
-    };
-  } catch (e) {
-    return null;
-  }
-}
-
 async function pushToCloud() {
   const sid = (appState.syncId || "").trim();
   if (!sid || isSyncingNow) return;
   isSyncingNow = true;
-  updateSyncStatusUI("syncing", `🔄 正在同步口令 [${sid}] 的进度...`);
+  updateSyncStatusUI("syncing", `🔄 正在同步口令 [${sid}] 的进度与私人题库...`);
 
   const payload = buildCompactCloudPayload();
-  let okCount = 0;
+  let ok = false;
 
-  // 通道 1：主云端库 restful-api.dev
   try {
     const vaultId = await resolveVaultId(sid);
     if (vaultId) {
@@ -1521,28 +1991,14 @@ async function pushToCloud() {
           data: payload
         })
       });
-      if (res.ok) okCount++;
+      if (res.ok) ok = true;
     }
   } catch (e) {
-    console.warn("主云端通道推送异常:", e);
-  }
-
-  // 通道 2：备用高速 KV 通道 (Base64 快照)
-  try {
-    const b64 = encodeBase64Snapshot(payload);
-    if (b64 && b64.length < 3200) {
-      const res2 = await fetch(
-        `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${IMMANUEL_APP_KEY}/kaoyan_b64_${encodeURIComponent(sid)}/${b64}`,
-        { method: "POST" }
-      );
-      if (res2.ok) okCount++;
-    }
-  } catch (e) {
-    console.warn("备用云端通道推送异常:", e);
+    console.warn("云端推送异常:", e);
   }
 
   isSyncingNow = false;
-  if (okCount > 0) {
+  if (ok) {
     const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
     updateSyncStatusUI("ok", `✅ 口令 [${sid}] 云端已同步 (${timeStr})`);
   } else {
@@ -1551,56 +2007,52 @@ async function pushToCloud() {
 }
 
 async function pullFromCloud() {
-  const sid = (appState.syncId || "").trim();
-  if (!sid || isSyncingNow) return;
+  if (isSyncingNow) return;
   isSyncingNow = true;
-  updateSyncStatusUI("syncing", `🔄 正在读取口令 [${sid}] 的云端进度...`);
+  const sid = (appState.syncId || "").trim();
+  updateSyncStatusUI("syncing", `🔄 正在加载云端题库与进度...`);
 
-  let cloudPayload = null;
+  // 1. 先拉取全局中心（更新公开题库列表 + 获取口令仓库映射）
+  const hubData = await fetchGlobalHubData();
+  if (hubData && Array.isArray(hubData.publicBanks)) {
+    publicBanks = hubData.publicBanks;
+    savePublicBanksLocal();
+    rebuildQuestionBankPool();
+    renderSubjectBar();
+  }
 
-  // 优先从主通道拉取
-  try {
-    const vaultId = await resolveVaultId(sid);
-    if (vaultId) {
-      const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`);
-      if (res.ok) {
-        const obj = await res.json();
-        if (obj && obj.data && obj.data.records) {
-          cloudPayload = obj.data;
+  // 2. 如果已设置口令，拉取该口令专属的私人进度与私人题库
+  if (sid) {
+    let cloudPayload = null;
+    try {
+      const vaultId = await resolveVaultId(sid, hubData);
+      if (vaultId) {
+        const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`);
+        if (res.ok) {
+          const obj = await res.json();
+          if (obj && obj.data) {
+            cloudPayload = obj.data;
+          }
         }
       }
+    } catch (e) {
+      console.warn("拉取口令云端数据失败:", e);
     }
-  } catch (e) {
-    console.warn("主通道拉取失败，尝试备用通道:", e);
-  }
 
-  // 同时尝试从备用 KV 通道拉取并取最新
-  try {
-    const res2 = await fetch(
-      `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${IMMANUEL_APP_KEY}/kaoyan_b64_${encodeURIComponent(sid)}`
-    );
-    if (res2.ok) {
-      const b64Text = await res2.text();
-      const backupData = decodeBase64Snapshot(b64Text);
-      if (backupData && (!cloudPayload || (backupData.updatedAt || 0) > (cloudPayload.updatedAt || 0))) {
-        cloudPayload = backupData;
+    isSyncingNow = false;
+    if (cloudPayload) {
+      const needPushBack = mergeCloudPayloadIntoLocal(cloudPayload);
+      const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit" });
+      updateSyncStatusUI("ok", `✅ 已加载口令 [${sid}] 独立空间 (${timeStr})`);
+      if (needPushBack) {
+        scheduleCloudPush(800);
       }
-    }
-  } catch (e) {
-    console.warn("备用通道拉取失败:", e);
-  }
-
-  isSyncingNow = false;
-
-  if (cloudPayload) {
-    const needPushBack = mergeCloudPayloadIntoLocal(cloudPayload);
-    const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit" });
-    updateSyncStatusUI("ok", `✅ 已加载口令 [${sid}] 的独立进度 (${timeStr})`);
-    if (needPushBack) {
-      scheduleCloudPush(500);
+    } else {
+      updateSyncStatusUI("ok", `✅ 口令 [${sid}] 独立空间已就绪`);
     }
   } else {
-    updateSyncStatusUI("ok", `✅ 口令 [${sid}] 独立空间已就绪`);
+    isSyncingNow = false;
+    updateSyncStatusUI("error", "🔑 点击设置您的专属刷题口令");
   }
 }
 
@@ -1632,19 +2084,6 @@ function renderRecentSyncIdsInModal() {
   `;
 }
 
-function openCloudSyncModal() {
-  const modal = document.getElementById("cloud-sync-modal");
-  const input = document.getElementById("sync-id-input");
-  if (input) input.value = appState.syncId || "";
-  renderRecentSyncIdsInModal();
-  if (modal) modal.classList.add("open");
-}
-
-function closeCloudSyncModal() {
-  const modal = document.getElementById("cloud-sync-modal");
-  if (modal) modal.classList.remove("open");
-}
-
 async function quickSwitchSyncId(targetId) {
   const input = document.getElementById("sync-id-input");
   if (input) input.value = targetId;
@@ -1660,27 +2099,73 @@ async function saveAndSwitchSyncId() {
     return;
   }
 
-  // 取消旧口令尚未执行的延时上传，防止串号
   if (cloudPushTimer) {
     clearTimeout(cloudPushTimer);
     cloudPushTimer = null;
   }
 
-  // 切换到新口令的完全独立空间（不继承旧口令内存中的任何做题记录）
   localStorage.setItem(ACTIVE_SYNC_ID_KEY, newId);
   recordRecentSyncId(newId);
   loadState(newId);
   saveState(false);
   renderAll();
   renderRecentSyncIdsInModal();
-  updateSyncStatusUI("syncing", `🔄 正在拉取口令 [${newId}] 的专属进度...`);
+  renderCustomBanksManageList();
 
+  const ownerLabel = document.getElementById("current-owner-label");
+  if (ownerLabel) ownerLabel.textContent = newId;
+
+  updateSyncStatusUI("syncing", `🔄 正在拉取口令 [${newId}] 的专属进度与私人题库...`);
   await pullFromCloud();
   renderAll();
+  renderCustomBanksManageList();
+}
+
+async function manualPushToCloud() {
+  await pushToCloud();
+}
+
+async function manualPullFromCloud() {
+  await pullFromCloud();
+}
+
+function exportProgressJsonFile() {
+  const dataStr = JSON.stringify(buildCompactCloudPayload(), null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `kaoyan_progress_${appState.syncId || "backup"}_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgressJsonFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      mergeCloudPayloadIntoLocal(parsed);
+      pushToCloud();
+      alert("🎉 进度文件导入成功，并已同步至云端！");
+    } catch (err) {
+      alert("❌ 进度文件解析失败：" + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  initQuestionBank();
   loadState();
   renderAll();
   if (appState.syncId) {
@@ -1688,6 +2173,7 @@ window.addEventListener("DOMContentLoaded", () => {
     pullFromCloud();
   } else {
     updateSyncStatusUI("error", "🔑 请设置您的专属刷题口令");
-    openCloudSyncModal();
+    pullFromCloud(); // 即使未登录口令也拉取公开共享题库
+    openSettingsModal("account");
   }
 });

@@ -3,46 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2022-2026 考研数二 · 英二 全真题三刷系统</title>
-  <link rel="stylesheet" href="styles.css?v=20261105_v9" />
+  <title>2022-2026 考研真题三刷系统 · 支持AI自定义题库</title>
+  <link rel="stylesheet" href="styles.css?v=20261105_v10" />
 </head>
 <body>
-  <!-- 顶部导航栏 -->
+  <!-- 极简顶部导航栏：科目切换 + 核心三视图 + 统一设置入口 -->
   <header class="top-header">
     <div class="header-inner">
       <div class="header-left">
         <div class="brand-area">
           <div class="brand-logo">研</div>
           <div class="brand-title">
-            <h1>2022–2026 考研数二 · 英二 全真题三刷</h1>
+            <h1>考研真题三刷系统</h1>
           </div>
         </div>
-        <!-- 科目切换胶囊 -->
+        <!-- 题库/科目切换胶囊（内置数二、英二 + 用户上传的私人/公开新题库） -->
         <div class="subject-pills" id="subject-pills-container"></div>
       </div>
 
       <!-- 核心功能视图切换 -->
       <nav class="nav-tabs">
         <button class="nav-tab active" data-tab="practice" onclick="switchTab('practice')">
-          🎯 真题刷卷 (350题)
+          🎯 刷题
         </button>
         <button class="nav-tab" data-tab="wrong-book" onclick="switchTab('wrong-book')">
           📕 错题本
           <span class="badge-pill badge-danger" id="wrong-count-badge">0</span>
         </button>
         <button class="nav-tab" data-tab="ai-hub" onclick="switchTab('ai-hub')">
-          🤖 高频速记 & AI导入
+          📚 高频速记
         </button>
       </nav>
 
-      <!-- 三刷全局统计 + 多端实时云同步按钮 -->
+      <!-- 三刷全局统计 + 统一设置与题库中心按钮 -->
       <div class="global-stats">
         <div class="stat-chip pass1">一刷 <strong id="stat-pass1">0/0</strong></div>
         <div class="stat-chip pass2">二刷 <strong id="stat-pass2">0/0</strong></div>
         <div class="stat-chip pass3">三刷★ <strong id="stat-pass3">0/0</strong></div>
-        <button class="cloud-sync-pill" id="cloud-sync-btn" onclick="openCloudSyncModal()" title="多设备实时云端同步设置">
+        <button class="cloud-sync-pill" id="cloud-sync-btn" onclick="openSettingsModal('account')" title="打开口令、界面偏好与AI导入题库设置">
           <span class="sync-dot" id="sync-status-dot"></span>
-          <span id="sync-status-text">☁️ 云同步</span>
+          <span id="sync-status-text">⚙️ 设置</span>
         </button>
       </div>
     </div>
@@ -52,7 +52,7 @@
   <main class="app-container">
     <aside class="left-sidebar" id="left-sidebar">
       <div class="sidebar-section">
-        <div class="sidebar-title">📅 真题年份套卷</div>
+        <div class="sidebar-title">📅 年份 / 批次筛选</div>
         <div class="year-list" id="year-list"></div>
       </div>
 
@@ -79,10 +79,7 @@
       <!-- 顶部题号答题卡面板 -->
       <div class="question-strip-card" id="question-strip-card">
         <div class="strip-header">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="strip-header-left" id="filtered-count-label">题库加载中...</span>
-            <button class="btn btn-outline btn-xs" id="toggle-dots-btn" onclick="toggleDotsCollapse()">收起题号卡 ▲</button>
-          </div>
+          <span class="strip-header-left" id="filtered-count-label">题库加载中...</span>
           <div class="strip-legend">
             <span><i class="legend-dot" style="background:#cbd5e1;"></i>0刷</span>
             <span><i class="legend-dot" style="background:var(--pass1-color);"></i>1刷</span>
@@ -99,63 +96,176 @@
     </section>
   </main>
 
-  <!-- 多设备实时云同步管理弹窗 -->
-  <div class="modal-backdrop" id="cloud-sync-modal" onclick="if(event.target===this) closeCloudSyncModal()">
-    <div class="modal-window" style="max-width:540px;">
+  <!-- 统一设置与 AI 题库管理中心弹窗（整合所有零散按钮、口令同步、AI提示词与JSON上传） -->
+  <div class="modal-backdrop" id="cloud-sync-modal" onclick="if(event.target===this) closeSettingsModal()">
+    <div class="modal-window" style="max-width:720px;">
       <div class="modal-header">
-        <h3 style="font-size:16px;">🔑 专属刷题口令 & 独立进度空间</h3>
-        <button class="btn btn-outline btn-sm" onclick="closeCloudSyncModal()">✖ 关闭</button>
-      </div>
-      <div class="modal-body" style="text-align:left;background:#ffffff;padding:20px;">
-        <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px;">
-          <strong>每个不同的口令拥有完全独立隔离的做题进度与错题本！</strong><br>
-          不同同学进入网站只需输入各自的口令（如姓名拼音、学号或任意自定义代号），即可开启属于自己的独立刷题空间；同一人在手机、平板、电脑输入相同口令即可跨设备同步。
-        </p>
-
-        <div style="background:var(--bg-page);border:1px solid var(--border-light);border-radius:8px;padding:14px;margin-bottom:16px;">
-          <label style="font-size:12.5px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:6px;">
-            🔑 请输入您的专属刷题口令（不同口令进度互不影响）：
-          </label>
-          <div style="display:flex;gap:8px;">
-            <input
-              type="text"
-              id="sync-id-input"
-              class="step-num-input"
-              style="flex:1;width:auto;"
-              placeholder="输入任意专属口令（如：zhangsan / lidahai4445）"
-              onkeydown="if(event.key==='Enter') saveAndSwitchSyncId()"
-            />
-            <button class="btn btn-primary btn-sm" onclick="saveAndSwitchSyncId()">进入该口令空间</button>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h3 style="font-size:16.5px;">⚙️ 系统设置与 AI 题库中心</h3>
+          <div class="settings-subtabs">
+            <button class="settings-subtab active" data-stab="account" onclick="switchSettingsTab('account')">🔑 口令与界面设置</button>
+            <button class="settings-subtab" data-stab="import" onclick="switchSettingsTab('import')">📥 AI生成并上传题库</button>
+            <button class="settings-subtab" data-stab="manage" onclick="switchSettingsTab('manage')">🗂️ 题库与权限管理</button>
           </div>
-          <div id="recent-sync-ids-box"></div>
-          <div id="cloud-modal-status" style="font-size:12.5px;color:var(--primary);margin-top:8px;font-weight:600;"></div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="closeSettingsModal()">✖ 关闭</button>
+      </div>
+
+      <div class="modal-body" style="text-align:left;background:#ffffff;padding:22px;">
+        <!-- 子面板 1：口令同步、界面显示偏好与当前题目操作 -->
+        <div id="stab-panel-account" class="stab-panel">
+          <div class="settings-block">
+            <div class="settings-block-title">🔑 专属刷题口令（不同口令进度与私人题库完全独立）</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">
+              每个口令拥有独立的刷题进度、错题本与私人题库权限；换设备输入同一口令自动恢复。
+            </p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <input
+                type="text"
+                id="sync-id-input"
+                class="step-num-input"
+                style="flex:1;min-width:200px;"
+                placeholder="输入专属口令（如：lidahai4445 / zhangsan）"
+                onkeydown="if(event.key==='Enter') saveAndSwitchSyncId()"
+              />
+              <button class="btn btn-primary btn-sm" onclick="saveAndSwitchSyncId()">切换 / 进入该口令</button>
+            </div>
+            <div id="recent-sync-ids-box"></div>
+            <div id="cloud-modal-status" style="font-size:12.5px;color:var(--primary);margin-top:8px;font-weight:600;"></div>
+          </div>
+
+          <div class="settings-block">
+            <div class="settings-block-title">🎛️ 界面显示与阅读框偏好（原零散小按钮已整合至此）</div>
+            <div class="pref-toggles-grid">
+              <label class="pref-toggle-item">
+                <input type="checkbox" id="pref-show-dots" onchange="toggleUiPreference('showDots', this.checked)" />
+                <span>显示顶部「题号答题卡」网格面板</span>
+              </label>
+              <label class="pref-toggle-item">
+                <input type="checkbox" id="pref-passage-zh" onchange="toggleUiPreference('showZh', this.checked)" />
+                <span>英语阅读原文框默认开启「逐段中文译文对照」</span>
+              </label>
+              <label class="pref-toggle-item">
+                <input type="checkbox" id="pref-passage-tall" onchange="toggleUiPreference('tallMode', this.checked)" />
+                <span>英语阅读原文框默认使用「加高大视窗模式」</span>
+              </label>
+              <label class="pref-toggle-item">
+                <input type="checkbox" id="pref-passage-collapse" onchange="toggleUiPreference('collapsed', this.checked)" />
+                <span>折叠隐藏英语原文阅读框（专注看题干）</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-block">
+            <div class="settings-block-title">⚡ 当前题目进度微调 & 云端备份</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+              <button class="btn btn-outline btn-xs" onclick="manualAddPassCurrent()">➕ 当前题目刷次 +1★</button>
+              <button class="btn btn-outline btn-xs" onclick="resetCurrentQuestionPasses()">🔄 重置当前题目为 0刷</button>
+              <button class="btn btn-outline btn-xs" onclick="manualPushToCloud()">⬆️ 立即上传进度到云端</button>
+              <button class="btn btn-outline btn-xs" onclick="manualPullFromCloud()">⬇️ 从云端拉取最新进度</button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px dashed var(--border-light);">
+              <button class="btn btn-outline btn-xs" onclick="exportProgressJsonFile()">💾 导出做题进度备份 (.json)</button>
+              <label class="btn btn-outline btn-xs" style="cursor:pointer;margin:0;">
+                📂 导入做题进度备份
+                <input type="file" accept=".json" style="display:none;" onchange="importProgressJsonFile(event)" />
+              </label>
+            </div>
+          </div>
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-          <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center;" onclick="manualPushToCloud()">
-            ⬆️ 立即推送本机进度到云端
-          </button>
-          <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center;" onclick="manualPullFromCloud()">
-            ⬇️ 立即从云端拉取并合并进度
-          </button>
+        <!-- 子面板 2：复制 AI 提示词 & 上传 JSON 文件自动生成新题库 -->
+        <div id="stab-panel-import" class="stab-panel" style="display:none;">
+          <div class="settings-block">
+            <div class="settings-block-title">第一步：复制专属提示词发给任意 AI 生成 `.json` 题库文件</div>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">
+              将下方提示词连同您的题目资料（PDF/Word/图片/文本）发送给 DeepSeek、ChatGPT、Kimi 或豆包，让 AI 直接生成标准 JSON 题库文件：
+            </p>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-xs" onclick="copyStandardAiPrompt()">📋 一键复制 AI 生成题库提示词</button>
+              <button class="btn btn-outline btn-xs" onclick="downloadSampleBankJson()">⬇️ 下载标准题库 JSON 模板文件</button>
+            </div>
+            <pre class="prompt-code-box" id="settings-ai-prompt-box" style="max-height:155px;margin:0;"></pre>
+          </div>
+
+          <div class="settings-block">
+            <div class="settings-block-title">第二步：设置新题库名称与访问权限（与您的口令绑定）</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+              <div>
+                <label style="font-size:12px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:4px;">
+                  📚 新题库显示名称（留空则读取 JSON 内名称）：
+                </label>
+                <input
+                  type="text"
+                  id="new-bank-title-input"
+                  class="step-num-input"
+                  style="width:100%;"
+                  placeholder="例如：数二李林6套卷 / 政治肖1000题"
+                />
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:4px;">
+                  🔐 题库可见与管理权限（当前口令：<code id="current-owner-label">未设置</code>）：
+                </label>
+                <select id="new-bank-visibility-select" class="step-num-input" style="width:100%;font-family:inherit;font-size:13px;">
+                  <option value="private">🔒 私人使用题库（仅我当前口令可见与使用）</option>
+                  <option value="public">🌐 公开共享题库（所有人可见，仅我的口令可修改/删除）</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="upload-dropzone" id="json-upload-dropzone">
+              <div style="font-size:26px;margin-bottom:4px;">📂</div>
+              <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">
+                点击上传 AI 生成的 <code>.json</code> 题库文件（支持多选）
+              </div>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+                上传后自动在顶部导航栏生成独立新题库，并按所选权限同步至云端
+              </div>
+              <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+                📄 选择 .json 题库文件上传
+                <input type="file" id="bank-json-file-input" accept=".json,application/json" multiple style="display:none;" onchange="handleBankJsonFileUpload(event)" />
+              </label>
+            </div>
+
+            <details style="margin-top:10px;">
+              <summary style="font-size:12.5px;font-weight:600;color:var(--primary);cursor:pointer;">
+                📝 或者直接粘贴 AI 生成的 JSON 代码文本导入...
+              </summary>
+              <div style="margin-top:8px;">
+                <textarea
+                  id="bank-json-paste-input"
+                  class="json-import-textarea"
+                  style="min-height:110px;margin:0 0 8px 0;"
+                  placeholder="在此粘贴 AI 输出的 JSON 对象 { ... } 或题目数组 [ ... ]..."
+                ></textarea>
+                <button class="btn btn-success btn-sm" onclick="handleBankJsonTextImport()">🚀 立即从文本生成新题库</button>
+              </div>
+            </details>
+
+            <div id="bank-import-status-msg" style="font-size:13px;font-weight:700;margin-top:10px;"></div>
+          </div>
         </div>
 
-        <div style="border-top:1px dashed var(--border-light);padding-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-          <span style="font-size:12.5px;color:var(--text-muted);">离线文件备份（可选）：</span>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-outline btn-xs" onclick="exportProgressJsonFile()">💾 导出进度文件 (.json)</button>
-            <label class="btn btn-outline btn-xs" style="cursor:pointer;margin:0;">
-              📂 导入进度文件
-              <input type="file" accept=".json" style="display:none;" onchange="importProgressJsonFile(event)" />
-            </label>
+        <!-- 子面板 3：已导入题库与口令权限管理 -->
+        <div id="stab-panel-manage" class="stab-panel" style="display:none;">
+          <div class="settings-block">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <div class="settings-block-title" style="margin-bottom:0;">🗂️ 自定义题库列表与口令权限管理</div>
+              <button class="btn btn-outline btn-xs" onclick="refreshCustomBanksFromCloud()">🔄 刷新云端公开/私人题库</button>
+            </div>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;">
+              说明：<strong>🔒 私人题库</strong>仅对创建该题库的口令可见；<strong>🌐 公开题库</strong>对所有口令可见，但仅创建者口令有权切换权限或删除。
+            </p>
+            <div id="custom-banks-manage-list"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="questions.js?v=20261105_v9"></script>
-  <script src="kaoyan_questions.js?v=20261105_v9"></script>
-  <script src="app.js?v=20261105_v9"></script>
+  <script src="questions.js?v=20261105_v10"></script>
+  <script src="kaoyan_questions.js?v=20261105_v10"></script>
+  <script src="app.js?v=20261105_v10"></script>
 </body>
 </html>
