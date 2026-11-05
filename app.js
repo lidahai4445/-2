@@ -108,6 +108,8 @@ const HIGH_FREQ_DOCS = {
 let allQuestions = [];
 let passagesMap = {};
 let appState = {
+  syncId: "lidahai4445",       // 默认跨设备云同步口令
+  updatedAt: 0,
   activeSubject: "math2",
   activeTab: "practice",       // 'practice' | 'wrong-book' | 'ai-hub'
   activeYear: "all",           // 'all' | 2026 | 2025 | 2024 | 2023 | 2022
@@ -120,9 +122,15 @@ let appState = {
     tallMode: false,
     collapsed: false
   },
-  records: {},                 // { [qId]: { passes: 0..3, wrongCount: 0, wrongNote: "", resolved: false, lastOpt: null, revealed: false, draft: "" } }
+  records: {},                 // { [qId]: { passes: 0..3, wrongCount: 0, wrongNote: "", resolved: false, lastOpt: null, revealed: false, draft: "", u: 0 } }
   wrongFilter: "unresolved"
 };
+
+function touchRecord(rec) {
+  const now = Date.now();
+  rec.u = now;
+  appState.updatedAt = now;
+}
 
 function initQuestionBank() {
   passagesMap = window.KAOYAN_PASSAGES || {};
@@ -170,11 +178,14 @@ function loadState() {
   });
 }
 
-function saveState() {
+function saveState(triggerCloud = true) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   } catch (e) {
     console.warn("保存状态失败:", e);
+  }
+  if (triggerCloud && typeof scheduleCloudPush === "function") {
+    scheduleCloudPush();
   }
 }
 
@@ -721,6 +732,7 @@ function submitChoiceOption(qId, chosenLetter) {
     rec.resolved = false;
   }
 
+  touchRecord(rec);
   saveState();
   renderGlobalHeaderStats();
   renderSidebar();
@@ -732,6 +744,7 @@ function retryQuestionForNextPass(qId) {
   const rec = getRecord(qId);
   rec.lastOpt = null;
   rec.revealed = false;
+  touchRecord(rec);
   saveState();
   renderMainStage();
 }
@@ -739,6 +752,7 @@ function retryQuestionForNextPass(qId) {
 function revealAnswerOnly(qId) {
   const rec = getRecord(qId);
   rec.revealed = true;
+  touchRecord(rec);
   saveState();
   renderMainStage();
 }
@@ -869,6 +883,7 @@ function renderAnalysisAndTipsBox(q, rec) {
 function saveQuestionDraft(qId, val) {
   const rec = getRecord(qId);
   rec.draft = val;
+  touchRecord(rec);
   saveState();
 }
 
@@ -881,6 +896,7 @@ function gradeSelfSubjective(qId, isCorrect) {
     rec.wrongCount += 1;
     rec.resolved = false;
   }
+  touchRecord(rec);
   saveState();
   renderGlobalHeaderStats();
   renderSidebar();
@@ -892,6 +908,7 @@ function manualAddPass(qId) {
   const rec = getRecord(qId);
   if (rec.passes < 3) {
     rec.passes += 1;
+    touchRecord(rec);
     saveState();
     renderAll();
   }
@@ -902,6 +919,7 @@ function resetQuestionPasses(qId) {
   rec.passes = 0;
   rec.lastOpt = null;
   rec.revealed = false;
+  touchRecord(rec);
   saveState();
   renderAll();
 }
@@ -911,6 +929,7 @@ function addQuestionToWrongBook(qId, reason) {
   rec.wrongCount += 1;
   rec.resolved = false;
   if (!rec.wrongNote) rec.wrongNote = reason;
+  touchRecord(rec);
   saveState();
   renderGlobalHeaderStats();
   renderQuestionDots();
@@ -1017,6 +1036,7 @@ function jumpToWrongQuestion(qId) {
 function toggleResolveWrong(qId) {
   const r = getRecord(qId);
   r.resolved = !r.resolved;
+  touchRecord(r);
   saveState();
   renderGlobalHeaderStats();
   renderQuestionDots();
@@ -1026,6 +1046,7 @@ function toggleResolveWrong(qId) {
 function saveWrongNote(qId, text) {
   const r = getRecord(qId);
   r.wrongNote = text;
+  touchRecord(r);
   saveState();
 }
 
@@ -1166,8 +1187,412 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
+/* ==========================================================================
+   多设备实时云端同步引擎 (Dual-Redundant Cloud Sync Engine)
+   - 主通道: restful-api.dev JSON 云对象库 (支持完整草稿/错因/刷次/阅读偏好)
+   - 备通道: keyvalue.immanuel.co 高速键值库 (存指针 + Base64 刷次快照双保险)
+   ========================================================================== */
+const IMMANUEL_APP_KEY = "tulf4tej";
+const DEFAULT_VAULT_MAP = {
+  lidahai4445: "ff808181a09d98f701a1aae7d2593f3d"
+};
+
+let cloudPushTimer = null;
+let isSyncingNow = false;
+
+function updateSyncStatusUI(state, msg) {
+  const dot = document.getElementById("sync-status-dot");
+  const textEl = document.getElementById("sync-status-text");
+  const modalMsg = document.getElementById("cloud-modal-status");
+  if (dot) {
+    dot.className = "sync-dot" + (state === "syncing" ? " syncing" : state === "error" ? " error" : "");
+  }
+  const sid = appState.syncId || "lidahai4445";
+  if (textEl) {
+    textEl.textContent = msg || `☁️ 云同步: ${sid}`;
+  }
+  if (modalMsg && msg) {
+    modalMsg.textContent = msg;
+  }
+}
+
+function buildCompactCloudPayload() {
+  const compactRecords = {};
+  Object.keys(appState.records || {}).forEach((qId) => {
+    const r = appState.records[qId];
+    if (
+      r &&
+      (r.passes > 0 ||
+        r.wrongCount > 0 ||
+        r.lastOpt ||
+        r.revealed ||
+        (r.wrongNote && r.wrongNote.trim()) ||
+        (r.draft && r.draft.trim()) ||
+        r.u > 0)
+    ) {
+      compactRecords[qId] = {
+        p: r.passes || 0,
+        w: r.wrongCount || 0,
+        res: r.resolved ? 1 : 0,
+        o: r.lastOpt || null,
+        rev: r.revealed ? 1 : 0,
+        n: r.wrongNote || "",
+        d: r.draft || "",
+        u: r.u || 0
+      };
+    }
+  });
+  return {
+    updatedAt: appState.updatedAt || Date.now(),
+    syncId: appState.syncId || "lidahai4445",
+    activeSubject: appState.activeSubject,
+    activeYear: appState.activeYear,
+    activeChapter: appState.activeChapter,
+    currentQId: appState.currentQId,
+    records: compactRecords
+  };
+}
+
+function mergeCloudPayloadIntoLocal(cloudData) {
+  if (!cloudData || typeof cloudData !== "object") return false;
+  let hasLocalChangesToPush = false;
+  let localWasUpdated = false;
+
+  const cloudRecords = cloudData.records || {};
+  Object.keys(cloudRecords).forEach((qId) => {
+    const cr = cloudRecords[qId];
+    const lr = getRecord(qId);
+    const cloudU = cr.u || 0;
+    const localU = lr.u || 0;
+
+    if (cloudU > localU) {
+      lr.passes = cr.p ?? lr.passes;
+      lr.wrongCount = cr.w ?? lr.wrongCount;
+      lr.resolved = Boolean(cr.res);
+      lr.lastOpt = cr.o ?? null;
+      lr.revealed = Boolean(cr.rev);
+      if (cr.n !== undefined) lr.wrongNote = cr.n;
+      if (cr.d !== undefined) lr.draft = cr.d;
+      lr.u = cloudU;
+      localWasUpdated = true;
+    } else if (cloudU === localU) {
+      if ((cr.p || 0) > lr.passes) {
+        lr.passes = cr.p;
+        localWasUpdated = true;
+      }
+      if ((cr.w || 0) > lr.wrongCount) {
+        lr.wrongCount = cr.w;
+        localWasUpdated = true;
+      }
+    } else {
+      hasLocalChangesToPush = true;
+    }
+  });
+
+  // 检查本地是否有云端尚未收录的新做题记录
+  Object.keys(appState.records || {}).forEach((qId) => {
+    const lr = appState.records[qId];
+    if ((lr.passes > 0 || lr.wrongCount > 0 || lr.lastOpt || lr.u > 0) && !cloudRecords[qId]) {
+      hasLocalChangesToPush = true;
+    }
+  });
+
+  if ((cloudData.updatedAt || 0) > (appState.updatedAt || 0)) {
+    appState.updatedAt = cloudData.updatedAt;
+    if (cloudData.currentQId) appState.currentQId = cloudData.currentQId;
+    if (cloudData.activeSubject) appState.activeSubject = cloudData.activeSubject;
+    localWasUpdated = true;
+  }
+
+  if (localWasUpdated) {
+    saveState(false);
+    renderAll();
+  }
+  return hasLocalChangesToPush;
+}
+
+async function resolveVaultId(syncId) {
+  const cleanId = String(syncId || "lidahai4445").trim();
+  if (DEFAULT_VAULT_MAP[cleanId]) return DEFAULT_VAULT_MAP[cleanId];
+
+  const cacheKey = `kaoyan_vault_id_${cleanId}`;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) return cached;
+
+  // 查询 Immanuel KV 指针
+  try {
+    const ptrRes = await fetch(
+      `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${IMMANUEL_APP_KEY}/kaoyan_ptr_${encodeURIComponent(cleanId)}`
+    );
+    if (ptrRes.ok) {
+      const text = (await ptrRes.text()).replace(/^"+|"+$/g, "").trim();
+      if (text && text !== "null" && text.length > 10) {
+        localStorage.setItem(cacheKey, text);
+        return text;
+      }
+    }
+  } catch (e) {
+    console.warn("查询云端指针失败:", e);
+  }
+
+  // 创建新的云端对象并写入指针
+  try {
+    const createRes = await fetch("https://api.restful-api.dev/objects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: `kaoyan_sync_${cleanId}`,
+        data: buildCompactCloudPayload()
+      })
+    });
+    if (createRes.ok) {
+      const created = await createRes.json();
+      if (created && created.id) {
+        localStorage.setItem(cacheKey, created.id);
+        fetch(
+          `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${IMMANUEL_APP_KEY}/kaoyan_ptr_${encodeURIComponent(cleanId)}/${encodeURIComponent(created.id)}`,
+          { method: "POST" }
+        ).catch(() => {});
+        return created.id;
+      }
+    }
+  } catch (e) {
+    console.warn("创建新云端仓库失败:", e);
+  }
+  return null;
+}
+
+function encodeBase64Snapshot(payload) {
+  try {
+    // 极简快照用于备用 KV 通道
+    const mini = { u: payload.updatedAt, s: payload.activeSubject, q: payload.currentQId, r: {} };
+    Object.keys(payload.records || {}).forEach((k) => {
+      const it = payload.records[k];
+      mini.r[k] = [it.p, it.w, it.res, it.o || "", it.rev, it.u || 0];
+    });
+    const jsonStr = JSON.stringify(mini);
+    return btoa(unescape(encodeURIComponent(jsonStr)))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  } catch (e) {
+    return "";
+  }
+}
+
+function decodeBase64Snapshot(b64Str) {
+  try {
+    const clean = String(b64Str).replace(/^"+|"+$/g, "").trim();
+    if (!clean || clean === "null") return null;
+    const std = clean.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonStr = decodeURIComponent(escape(atob(std)));
+    const mini = JSON.parse(jsonStr);
+    const records = {};
+    Object.keys(mini.r || {}).forEach((k) => {
+      const arr = mini.r[k];
+      records[k] = {
+        p: arr[0] || 0,
+        w: arr[1] || 0,
+        res: arr[2] || 0,
+        o: arr[3] || null,
+        rev: arr[4] || 0,
+        u: arr[5] || 0
+      };
+    });
+    return {
+      updatedAt: mini.u || 0,
+      activeSubject: mini.s || "math2",
+      currentQId: mini.q || "M2026_01",
+      records
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+async function pushToCloud() {
+  if (isSyncingNow) return;
+  isSyncingNow = true;
+  const sid = (appState.syncId || "lidahai4445").trim();
+  updateSyncStatusUI("syncing", `🔄 正在同步 (${sid})...`);
+
+  const payload = buildCompactCloudPayload();
+  let okCount = 0;
+
+  // 通道 1：主云端库 restful-api.dev
+  try {
+    const vaultId = await resolveVaultId(sid);
+    if (vaultId) {
+      const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `kaoyan_sync_${sid}`,
+          data: payload
+        })
+      });
+      if (res.ok) okCount++;
+    }
+  } catch (e) {
+    console.warn("主云端通道推送异常:", e);
+  }
+
+  // 通道 2：备用高速 KV 通道 (Base64 快照)
+  try {
+    const b64 = encodeBase64Snapshot(payload);
+    if (b64 && b64.length < 3200) {
+      const res2 = await fetch(
+        `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${IMMANUEL_APP_KEY}/kaoyan_b64_${encodeURIComponent(sid)}/${b64}`,
+        { method: "POST" }
+      );
+      if (res2.ok) okCount++;
+    }
+  } catch (e) {
+    console.warn("备用云端通道推送异常:", e);
+  }
+
+  isSyncingNow = false;
+  if (okCount > 0) {
+    const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    updateSyncStatusUI("ok", `☁️ 已同步 (${sid} · ${timeStr})`);
+  } else {
+    updateSyncStatusUI("error", `⚠️ 离线保存 (${sid})`);
+  }
+}
+
+async function pullFromCloud() {
+  if (isSyncingNow) return;
+  isSyncingNow = true;
+  const sid = (appState.syncId || "lidahai4445").trim();
+  updateSyncStatusUI("syncing", `🔄 正在同步云端进度...`);
+
+  let cloudPayload = null;
+
+  // 优先从主通道拉取
+  try {
+    const vaultId = await resolveVaultId(sid);
+    if (vaultId) {
+      const res = await fetch(`https://api.restful-api.dev/objects/${vaultId}`);
+      if (res.ok) {
+        const obj = await res.json();
+        if (obj && obj.data && obj.data.records) {
+          cloudPayload = obj.data;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("主通道拉取失败，尝试备用通道:", e);
+  }
+
+  // 同时尝试从备用 KV 通道拉取并取最新
+  try {
+    const res2 = await fetch(
+      `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${IMMANUEL_APP_KEY}/kaoyan_b64_${encodeURIComponent(sid)}`
+    );
+    if (res2.ok) {
+      const b64Text = await res2.text();
+      const backupData = decodeBase64Snapshot(b64Text);
+      if (backupData && (!cloudPayload || (backupData.updatedAt || 0) > (cloudPayload.updatedAt || 0))) {
+        cloudPayload = backupData;
+      }
+    }
+  } catch (e) {
+    console.warn("备用通道拉取失败:", e);
+  }
+
+  isSyncingNow = false;
+
+  if (cloudPayload) {
+    const needPushBack = mergeCloudPayloadIntoLocal(cloudPayload);
+    const timeStr = new Date().toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit" });
+    updateSyncStatusUI("ok", `☁️ 已同步 (${sid} · ${timeStr})`);
+    if (needPushBack) {
+      scheduleCloudPush(300);
+    }
+  } else {
+    updateSyncStatusUI("ok", `☁️ 云同步就绪 (${sid})`);
+  }
+}
+
+function scheduleCloudPush(delayMs = 600) {
+  if (cloudPushTimer) clearTimeout(cloudPushTimer);
+  cloudPushTimer = setTimeout(() => {
+    pushToCloud();
+  }, delayMs);
+}
+
+function openCloudSyncModal() {
+  const modal = document.getElementById("cloud-sync-modal");
+  const input = document.getElementById("sync-id-input");
+  if (input) input.value = appState.syncId || "lidahai4445";
+  if (modal) modal.classList.add("open");
+}
+
+function closeCloudSyncModal() {
+  const modal = document.getElementById("cloud-sync-modal");
+  if (modal) modal.classList.remove("open");
+}
+
+async function saveAndSwitchSyncId() {
+  const input = document.getElementById("sync-id-input");
+  if (!input) return;
+  const newId = input.value.trim() || "lidahai4445";
+  appState.syncId = newId;
+  saveState(false);
+  await pullFromCloud();
+  await pushToCloud();
+}
+
+async function manualPushToCloud() {
+  await pushToCloud();
+}
+
+async function manualPullFromCloud() {
+  await pullFromCloud();
+}
+
+function exportProgressJsonFile() {
+  const dataStr = JSON.stringify(buildCompactCloudPayload(), null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `kaoyan_progress_${appState.syncId || "backup"}_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgressJsonFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      mergeCloudPayloadIntoLocal(parsed);
+      pushToCloud();
+      alert("🎉 进度文件导入成功，并已同步至云端！");
+    } catch (err) {
+      alert("❌ 进度文件解析失败：" + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   initQuestionBank();
   loadState();
   renderAll();
+  // 启动时自动拉取并合并云端最新进度
+  pullFromCloud();
+  // 每 25 秒静默同步一次，支持多设备同时打开实时联动
+  setInterval(() => {
+    if (!document.hidden) pullFromCloud();
+  }, 25000);
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    pullFromCloud();
+  }
 });
