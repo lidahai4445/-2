@@ -555,7 +555,36 @@ function renderGlobalHeaderStats() {
   document.getElementById("wrong-count-badge").textContent = unresolvedWrong;
 }
 
+function toggleSidebarCollapse() {
+  appState.sidebarCollapsed = !appState.sidebarCollapsed;
+  saveState(false);
+  applySidebarCollapseUI();
+}
+
+function applySidebarCollapseUI() {
+  const appContainer = document.querySelector(".app-container");
+  const leftSidebar = document.getElementById("left-sidebar");
+  const fab = document.getElementById("sidebar-expand-fab");
+  const isCollapsed = Boolean(appState.sidebarCollapsed);
+
+  if (leftSidebar) {
+    leftSidebar.style.display = isCollapsed ? "none" : "block";
+  }
+  if (appContainer) {
+    appContainer.classList.toggle("sidebar-collapsed", isCollapsed);
+    appContainer.classList.remove("single-col");
+  }
+  if (fab) {
+    fab.style.display = isCollapsed ? "inline-flex" : "none";
+  }
+}
+
 function renderSidebar() {
+  applySidebarCollapseUI();
+  document.querySelectorAll(".nav-tab").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === appState.activeTab);
+  });
+
   const subQs = getSubjectQuestions();
   const years = getYearsForSubject(appState.activeSubject);
 
@@ -705,16 +734,7 @@ function switchTab(tabName) {
     btn.classList.toggle("active", btn.getAttribute("data-tab") === tabName);
   });
 
-  const appContainer = document.querySelector(".app-container");
-  const leftSidebar = document.getElementById("left-sidebar");
-  if (tabName === "practice") {
-    appContainer.classList.remove("single-col");
-    leftSidebar.style.display = "block";
-  } else {
-    appContainer.classList.add("single-col");
-    leftSidebar.style.display = "none";
-  }
-
+  applySidebarCollapseUI();
   saveState(false);
   renderQuestionDots();
   renderMainStage();

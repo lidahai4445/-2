@@ -4,63 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2022-2026 考研真题三刷系统 · 支持AI自定义题库</title>
-  <link rel="stylesheet" href="styles.css?v=20261105_v13" />
+  <link rel="stylesheet" href="styles.css?v=20261105_v14" />
 </head>
 <body>
-  <!-- 极简顶部导航栏：科目切换 + 核心三视图 + 统一设置入口 -->
-  <header class="top-header">
-    <div class="header-inner">
-      <div class="header-left">
+  <!-- 侧边栏隐藏时的左上角极简唤起按钮 -->
+  <button
+    class="sidebar-expand-fab"
+    id="sidebar-expand-fab"
+    onclick="toggleSidebarCollapse()"
+    title="展开左侧功能与筛选菜单栏"
+    style="display:none;"
+  >
+    ☰ 展开侧栏
+  </button>
+
+  <!-- 双栏主体：左侧全功能可隐藏控制栏 + 右侧纯净刷题区 -->
+  <main class="app-container" id="app-container">
+    <aside class="left-sidebar" id="left-sidebar">
+      <!-- 1. 顶部品牌 + 侧向隐藏按钮 -->
+      <div class="sidebar-brand-bar">
         <div class="brand-area">
           <div class="brand-logo">研</div>
           <div class="brand-title">
-            <h1>考研真题三刷系统</h1>
+            <h1>考研真题三刷</h1>
           </div>
         </div>
-        <!-- 题库/科目切换胶囊（内置数二、英二 + 用户上传的私人/公开新题库） -->
-        <div class="subject-pills" id="subject-pills-container"></div>
+        <button class="btn btn-outline btn-xs" onclick="toggleSidebarCollapse()" title="侧向隐藏菜单栏，进入纯净刷题模式">
+          ◀ 隐藏侧栏
+        </button>
       </div>
 
-      <!-- 核心功能视图切换 -->
-      <nav class="nav-tabs">
-        <button class="nav-tab active" data-tab="practice" onclick="switchTab('practice')">
-          🎯 刷题
-        </button>
-        <button class="nav-tab" data-tab="wrong-book" onclick="switchTab('wrong-book')">
-          📕 错题本
-          <span class="badge-pill badge-danger" id="wrong-count-badge">0</span>
-        </button>
-        <button class="nav-tab" data-tab="ai-hub" onclick="switchTab('ai-hub')">
-          📚 高频速记
-        </button>
-      </nav>
-
-      <!-- 三刷全局统计 + 统一设置与题库中心按钮 -->
-      <div class="global-stats">
-        <div class="stat-chip pass1">一刷 <strong id="stat-pass1">0/0</strong></div>
-        <div class="stat-chip pass2">二刷 <strong id="stat-pass2">0/0</strong></div>
-        <div class="stat-chip pass3">三刷★ <strong id="stat-pass3">0/0</strong></div>
-        <button class="cloud-sync-pill" id="cloud-sync-btn" onclick="openSettingsModal('account')" title="打开口令、界面偏好与AI导入题库设置">
+      <!-- 2. 口令设置入口 + 三刷全局统计 -->
+      <div class="sidebar-section" style="margin-bottom:14px;">
+        <button class="cloud-sync-pill" id="cloud-sync-btn" style="width:100%;margin-bottom:8px;" onclick="openSettingsModal('account')" title="打开口令、界面偏好与AI导入题库设置">
           <span class="sync-dot" id="sync-status-dot"></span>
-          <span id="sync-status-text">⚙️ 设置</span>
+          <span id="sync-status-text">⚙️ 设置 / 口令</span>
         </button>
+        <div class="sidebar-stats-grid">
+          <div class="stat-chip pass1">一刷 <strong id="stat-pass1">0/0</strong></div>
+          <div class="stat-chip pass2">二刷 <strong id="stat-pass2">0/0</strong></div>
+          <div class="stat-chip pass3">三刷★ <strong id="stat-pass3">0/0</strong></div>
+        </div>
       </div>
-    </div>
-  </header>
 
-  <!-- 双栏主体：左侧套卷与专题筛选 + 右侧真题原生刷题区 -->
-  <main class="app-container">
-    <aside class="left-sidebar" id="left-sidebar">
+      <!-- 3. 核心功能视图切换（刷题 / 错题本 / 高频速记） -->
+      <div class="sidebar-section" style="margin-bottom:14px;">
+        <nav class="nav-tabs sidebar-nav-tabs">
+          <button class="nav-tab active" data-tab="practice" onclick="switchTab('practice')">
+            🎯 刷题
+          </button>
+          <button class="nav-tab" data-tab="wrong-book" onclick="switchTab('wrong-book')">
+            📕 错题
+            <span class="badge-pill badge-danger" id="wrong-count-badge">0</span>
+          </button>
+          <button class="nav-tab" data-tab="ai-hub" onclick="switchTab('ai-hub')">
+            📚 速记
+          </button>
+        </nav>
+      </div>
+
+      <!-- 4. 题库 / 科目切换 -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">📚 题库 / 科目切换</div>
+        <div class="subject-pills sidebar-subject-pills" id="subject-pills-container"></div>
+      </div>
+
+      <!-- 5. 年份 / 批次筛选 -->
       <div class="sidebar-section">
         <div class="sidebar-title">📅 年份 / 批次筛选</div>
         <div class="year-list" id="year-list"></div>
       </div>
 
+      <!-- 6. 考点 / 题型模块 -->
       <div class="sidebar-section">
         <div class="sidebar-title">📑 考点 / 题型模块</div>
         <div class="chapter-list" id="chapter-list"></div>
       </div>
 
+      <!-- 7. 三刷进度筛选 -->
       <div class="sidebar-section">
         <div class="sidebar-title">🔁 三刷进度筛选</div>
         <div class="filter-chips">
@@ -272,8 +293,8 @@
   <!-- 零布局抖动右下角云同步实时反馈悬浮胶囊 -->
   <div id="cloud-sync-toast" class="cloud-sync-toast" aria-live="polite"></div>
 
-  <script src="questions.js?v=20261105_v13"></script>
-  <script src="kaoyan_questions.js?v=20261105_v13"></script>
-  <script src="app.js?v=20261105_v13"></script>
+  <script src="questions.js?v=20261105_v14"></script>
+  <script src="kaoyan_questions.js?v=20261105_v14"></script>
+  <script src="app.js?v=20261105_v14"></script>
 </body>
 </html>
