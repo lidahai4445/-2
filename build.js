@@ -22,7 +22,7 @@ function copyRecursive(src, dest) {
 
 fs.mkdirSync(outDir, { recursive: true });
 
-const filesToCopy = ["index.html", "styles.css", "questions.js", "app.js", "_headers"];
+const filesToCopy = ["index.html", "styles.css", "questions.js", "kaoyan_questions.js", "app.js", "_headers"];
 for (const file of filesToCopy) {
   const srcPath = path.join(__dirname, file);
   if (fs.existsSync(srcPath)) {
@@ -33,6 +33,11 @@ for (const file of filesToCopy) {
 const assetsSrc = path.join(__dirname, "assets");
 if (fs.existsSync(assetsSrc)) {
   copyRecursive(assetsSrc, path.join(outDir, "assets"));
+}
+
+const docsSrc = path.join(__dirname, "docs");
+if (fs.existsSync(docsSrc)) {
+  copyRecursive(docsSrc, path.join(outDir, "docs"));
 }
 
 console.log("✅ Cloudflare 静态站点构建完成：根目录 (.) 与 dist/ 目录均已就绪。");

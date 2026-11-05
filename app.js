@@ -1,11 +1,13 @@
 // ============================================================================
-// 《光电子器件》三刷通关系统 + 自动错题本 + 现实草稿纸计算工作台 核心逻辑 (app.js)
+// 《考研全科三刷通关系统》（光电子器件 + 考研数学二 + 考研英语二）核心交互逻辑 (app.js)
 // ============================================================================
 
 const STORAGE_KEY = "optoelectronics_3pass_state_v1";
+const CUSTOM_Q_KEY = "kaoyan_custom_ai_questions_v1";
 
 const state = {
-  activeTab: "practice", // 'practice' | 'calc-bench' | 'wrong-book' | 'notes-gallery'
+  activeTab: "practice", // 'practice' | 'calc-bench' | 'wrong-book' | 'ai-hub' | 'notes-gallery'
+  subjectFilter: "all",  // 'all' | 'opto' | 'math2' | 'eng2'
   chapterFilter: "all",
   typeFilter: "all",     // 'all' | 'term' | 'short' | 'calc'
   passFilter: "all",     // 'all' | 'unfinished' | 'pass0' | 'pass1' | 'pass2' | 'pass3'
@@ -15,10 +17,28 @@ const state = {
   selectedMcq: null,
   calcInstances: {},     // 缓存每道计算题当前生成的参数与步骤答案
   progress: {},          // { [qid]: { passes: 0..3, stagePassed: {1:false,2:false,3:false} } }
-  wrongBook: {}          // { [qid]: { count, lastTime, lastStage, detail, note, resolved } }
+  wrongBook: {},         // { [qid]: { count, lastTime, lastStage, detail, note, resolved } }
+  customQuestions: []    // 用户通过 AI 提示词生成并导入的扩展题库
 };
 
 function loadState() {
+  try {
+    const customRaw = localStorage.getItem(CUSTOM_Q_KEY);
+    if (customRaw) {
+      const parsed = JSON.parse(customRaw);
+      if (Array.isArray(parsed)) {
+        state.customQuestions = parsed;
+        parsed.forEach((cq) => {
+          if (!window.QUESTIONS.some((q) => q.id === cq.id)) {
+            window.QUESTIONS.push(cq);
+          }
+        });
+      }
+    }
+  } catch (e) {
+    console.warn("读取自定义AI导入题库失败:", e);
+  }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
@@ -26,10 +46,12 @@ function loadState() {
       if (saved.progress) state.progress = saved.progress;
       if (saved.wrongBook) state.wrongBook = saved.wrongBook;
       if (saved.currentQuestionId) state.currentQuestionId = saved.currentQuestionId;
+      if (saved.subjectFilter) state.subjectFilter = saved.subjectFilter;
     }
   } catch (e) {
     console.warn("读取本地三刷进度失败:", e);
   }
+
   window.QUESTIONS.forEach((q) => {
     if (!state.progress[q.id]) {
       state.progress[q.id] = { passes: 0, stagePassed: { 1: false, 2: false, 3: false } };
@@ -44,7 +66,8 @@ function saveState() {
       JSON.stringify({
         progress: state.progress,
         wrongBook: state.wrongBook,
-        currentQuestionId: state.currentQuestionId
+        currentQuestionId: state.currentQuestionId,
+        subjectFilter: state.subjectFilter
       })
     );
   } catch (e) {
@@ -54,6 +77,7 @@ function saveState() {
 
 function getFilteredQuestions() {
   return window.QUESTIONS.filter((q) => {
+    if (state.subjectFilter !== "all" && q.subject !== state.subjectFilter) return false;
     if (state.activeTab === "calc-bench" && q.type !== "calc") return false;
     if (state.chapterFilter !== "all" && q.chapter !== state.chapterFilter) return false;
     if (state.typeFilter !== "all" && q.type !== state.typeFilter) return false;
@@ -77,7 +101,6 @@ function getCurrentQuestion() {
   return q || window.QUESTIONS[0];
 }
 
-// 自动推荐当前知识点的下一刷阶段（0->1刷，1->2刷，2->3刷）
 function syncRecommendedStage(qid) {
   const rec = state.progress[qid] || { passes: 0, stagePassed: {} };
   if (!rec.stagePassed[1]) state.currentStage = 1;
@@ -87,7 +110,6 @@ function syncRecommendedStage(qid) {
   state.selectedMcq = null;
 }
 
-// 记录某一刷通过
 function recordStageSuccess(qid, stageNum) {
   const rec = state.progress[qid] || { passes: 0, stagePassed: { 1: false, 2: false, 3: false } };
   rec.stagePassed[stageNum] = true;
@@ -98,7 +120,6 @@ function recordStageSuccess(qid, stageNum) {
   renderAll();
 }
 
-// 自动整理错题：记录某题答错
 function recordMistake(qid, stageNum, detailText) {
   const now = new Date().toLocaleString("zh-CN", { hour12: false });
   const existing = state.wrongBook[qid] || {
@@ -120,11 +141,14 @@ function recordMistake(qid, stageNum, detailText) {
   renderQuestionStrip();
 }
 
-// 渲染顶部三刷统计与错题数
+// 渲染顶部学科切换栏与三刷统计
 function renderHeaderStats() {
-  const total = window.QUESTIONS.length;
+  const scopeQs = window.QUESTIONS.filter(
+    (q) => state.subjectFilter === "all" || q.subject === state.subjectFilter
+  );
+  const total = scopeQs.length || 1;
   let p1 = 0, p2 = 0, p3 = 0;
-  window.QUESTIONS.forEach((q) => {
+  scopeQs.forEach((q) => {
     const rec = state.progress[q.id];
     if (rec) {
       if (rec.passes >= 1) p1++;
@@ -133,33 +157,62 @@ function renderHeaderStats() {
     }
   });
 
-  document.getElementById("stat-pass1").textContent = `${p1}/${total}`;
-  document.getElementById("stat-pass2").textContent = `${p2}/${total}`;
-  document.getElementById("stat-pass3").textContent = `${p3}/${total}`;
+  document.getElementById("stat-pass1").textContent = `${p1}/${scopeQs.length}`;
+  document.getElementById("stat-pass2").textContent = `${p2}/${scopeQs.length}`;
+  document.getElementById("stat-pass3").textContent = `${p3}/${scopeQs.length}`;
 
   document.getElementById("bar-pass1").style.width = `${Math.round((p1 / total) * 100)}%`;
   document.getElementById("bar-pass2").style.width = `${Math.round((p2 / total) * 100)}%`;
   document.getElementById("bar-pass3").style.width = `${Math.round((p3 / total) * 100)}%`;
 
-  document.getElementById("pct-pass1").textContent = `${p1}/${total}`;
-  document.getElementById("pct-pass2").textContent = `${p2}/${total}`;
-  document.getElementById("pct-pass3").textContent = `${p3}/${total}`;
+  document.getElementById("pct-pass1").textContent = `${p1}/${scopeQs.length}`;
+  document.getElementById("pct-pass2").textContent = `${p2}/${scopeQs.length}`;
+  document.getElementById("pct-pass3").textContent = `${p3}/${scopeQs.length}`;
 
   const activeWrongCount = Object.values(state.wrongBook).filter((w) => !w.resolved).length;
   document.getElementById("wrong-count-badge").textContent = activeWrongCount;
+
+  // 渲染学科胶囊切换栏
+  const subBar = document.getElementById("subject-pills-container");
+  if (subBar && window.SUBJECTS) {
+    const allCount = window.QUESTIONS.length;
+    let html = `
+      <button class="subject-pill ${state.subjectFilter === "all" ? "active" : ""}" onclick="setSubjectFilter('all')">
+        <span>🌐 全部考研科目合集</span>
+        <span class="sub-badge">${allCount}题</span>
+      </button>
+    `;
+    window.SUBJECTS.forEach((s) => {
+      const cnt = window.QUESTIONS.filter((q) => q.subject === s.id).length;
+      html += `
+        <button class="subject-pill ${state.subjectFilter === s.id ? "active" : ""}" onclick="setSubjectFilter('${s.id}')">
+          <span>${s.name}</span>
+          <span class="sub-badge">${cnt}题</span>
+        </button>
+      `;
+    });
+    subBar.innerHTML = html;
+  }
 }
 
 // 渲染左侧章节树与筛选器
 function renderLeftSidebar() {
   const chapterContainer = document.getElementById("chapter-list");
+  const visibleChapters = window.CHAPTERS.filter(
+    (ch) => state.subjectFilter === "all" || ch.subject === state.subjectFilter
+  );
+  const scopeTotal = window.QUESTIONS.filter(
+    (q) => state.subjectFilter === "all" || q.subject === state.subjectFilter
+  ).length;
+
   let html = `
     <div class="chapter-item ${state.chapterFilter === "all" ? "active" : ""}" onclick="setChapterFilter('all')">
-      <span>📚 全部章节考点</span>
-      <span class="chapter-meta">${window.QUESTIONS.length} 题</span>
+      <span>📚 当前科目全部章节/专题</span>
+      <span class="chapter-meta">${scopeTotal} 题</span>
     </div>
   `;
 
-  window.CHAPTERS.forEach((ch) => {
+  visibleChapters.forEach((ch) => {
     const qs = window.QUESTIONS.filter((q) => q.chapter === ch.id);
     const done3 = qs.filter((q) => (state.progress[q.id]?.passes || 0) >= 3).length;
     html += `
@@ -183,7 +236,7 @@ function renderLeftSidebar() {
 function renderQuestionStrip() {
   const list = getFilteredQuestions();
   const grid = document.getElementById("question-dots-grid");
-  document.getElementById("filtered-count-label").textContent = `当前筛选共 ${list.length} 个必考知识点`;
+  document.getElementById("filtered-count-label").textContent = `当前筛选共 ${list.length} 道必刷考点/真题`;
 
   if (list.length === 0) {
     grid.innerHTML = `<div style="font-size:13px;color:#64748b;padding:6px;">当前筛选条件下暂无题目，请切换左侧筛选条件。</div>`;
@@ -206,7 +259,7 @@ function renderQuestionStrip() {
     .join("");
 }
 
-// 渲染主题目卡片（支持一刷、二刷、三刷与草稿纸计算工作台）
+// 渲染主舞台区域
 function renderMainStage() {
   const stageEl = document.getElementById("main-view-content");
 
@@ -218,13 +271,17 @@ function renderMainStage() {
     renderNotesGalleryView(stageEl);
     return;
   }
+  if (state.activeTab === "ai-hub") {
+    renderAiHubView(stageEl);
+    return;
+  }
 
   const list = getFilteredQuestions();
   if (list.length === 0) {
     stageEl.innerHTML = `
       <div class="question-card" style="text-align:center;padding:48px 20px;">
         <h3 style="margin-bottom:8px;">🎉 当前筛选条件下没有待刷题目！</h3>
-        <p style="color:#64748b;margin-bottom:16px;">您可以切换为「全部章节」或「全部刷次」继续复习。</p>
+        <p style="color:#64748b;margin-bottom:16px;">您可以切换为「全部科目」或「全部刷次」继续复习。</p>
         <button class="btn btn-primary" onclick="resetFilters()">显示全部考点</button>
       </div>
     `;
@@ -247,6 +304,33 @@ function renderMainStage() {
     bodyHtml = renderStage3RecallHtml(q);
   }
 
+  // 原卷/笔记对照按钮
+  let previewBtnHtml = "";
+  if (q.kaoyanImg) {
+    previewBtnHtml = `<span class="q-tag tag-pdf" onclick="openImageModal('${q.kaoyanImg}', '${q.title} - 真题原卷预览')">📄 查看真题原卷扫描图</span>`;
+  } else if (q.subject === "opto" && q.pdfPage) {
+    previewBtnHtml = `<span class="q-tag tag-pdf" onclick="openPdfModal(${q.pdfPage})">📖 查看手写笔记原图 P.${q.pdfPage}</span>`;
+  }
+
+  // 做题技巧与关联知识点面板
+  const tipsHtml =
+    q.tips || (q.knowledgePoints && q.knowledgePoints.length > 0)
+      ? `
+      <div class="tips-kp-panel">
+        <div class="tips-box">
+          <strong>🎯 考场做题技巧 & 秒杀口诀：</strong><br>
+          ${q.tips || "结合题干关键词定位核心公式与同义替换。"}
+        </div>
+        <div class="kp-box">
+          <strong>📚 本题关联高频知识点（需反复强化）：</strong>
+          <ul>
+            ${(q.knowledgePoints || []).map((kp) => `<li>${kp}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+    `
+      : "";
+
   stageEl.innerHTML = `
     <div class="question-card">
       <div class="q-card-header">
@@ -254,7 +338,8 @@ function renderMainStage() {
           <div class="q-tags">
             <span class="q-tag tag-chapter">${chObj ? chObj.name : ""}</span>
             <span class="q-tag ${typeClass}">${q.typeName}</span>
-            <span class="q-tag tag-pdf" onclick="openPdfModal(${q.pdfPage})">📖 查看手写笔记原图 P.${q.pdfPage}</span>
+            ${q.year ? `<span class="q-tag" style="background:#e0e7ff;color:#3730a3;">${q.year}真题</span>` : ""}
+            ${previewBtnHtml}
           </div>
           <h2 class="q-title">${q.id}. ${q.title}</h2>
         </div>
@@ -272,17 +357,19 @@ function renderMainStage() {
       <!-- 一刷 / 二刷 / 三刷 切换栏 -->
       <div class="stage-switcher">
         <button class="stage-btn stage-1 ${state.currentStage === 1 ? "active" : ""}" onclick="setStage(1)">
-          ${rec.stagePassed[1] ? "✅" : "①"} 一刷·概念快筛 (选择辨析)
+          ${rec.stagePassed[1] ? "✅" : "①"} 一刷·概念与真题快筛 (选择辨析)
         </button>
         <button class="stage-btn stage-2 ${state.currentStage === 2 ? "active" : ""}" onclick="setStage(2)">
-          ${rec.stagePassed[2] ? "✅" : "②"} 二刷·关键词挖空 (精准填空)
+          ${rec.stagePassed[2] ? "✅" : "②"} 二刷·核心公式/同义词挖空 (填空)
         </button>
         <button class="stage-btn stage-3 ${state.currentStage === 3 ? "active" : ""}" onclick="setStage(3)">
-          ${rec.stagePassed[3] ? "✅" : "③"} 三刷·${q.type === "calc" ? "现实草稿纸实战计算" : "闭卷默写与采分点通关"}
+          ${rec.stagePassed[3] ? "✅" : "③"} 三刷·${q.type === "calc" ? "现实草稿纸分步实战计算" : "闭卷默写与采分点通关"}
         </button>
       </div>
 
       <div class="q-prompt-box">${q.prompt}</div>
+
+      ${tipsHtml}
 
       ${bodyHtml}
 
@@ -291,8 +378,7 @@ function renderMainStage() {
           ? `
         <div class="explanation-panel">
           <div class="explanation-title">
-            <span>📌 笔记原版答案与核心采分点解析（对应 PDF 第 ${q.pdfPage} 页）</span>
-            <button class="btn btn-outline btn-sm" onclick="openPdfModal(${q.pdfPage})">🔍 对照手写笔记 P.${q.pdfPage}</button>
+            <span>📌 标准答案与详细步骤精析</span>
           </div>
           <div class="explanation-body">${q.answerHtml}</div>
         </div>
@@ -307,7 +393,7 @@ function renderMainStage() {
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-outline" onclick="toggleAnswer()">
-            ${state.showAnswer ? "🙈 隐藏标准答案" : "👁️ 查看标准答案与笔记解析"}
+            ${state.showAnswer ? "🙈 隐藏标准答案" : "👁️ 查看标准答案与详细解析"}
           </button>
           ${
             q.type === "calc" && state.currentStage !== 3
@@ -357,7 +443,7 @@ function submitMcqAnswer(qid, optionIdx) {
     const fb = document.getElementById("mcq-feedback-msg");
     if (fb) {
       fb.style.color = "#059669";
-      fb.innerHTML = "✅ 一刷回答正确！已点亮第 1 颗星，点击上方「二刷·关键词挖空」继续强化！";
+      fb.innerHTML = "✅ 一刷回答正确！已点亮第 1 颗星，点击上方「二刷·核心词挖空」继续强化！";
     }
   } else {
     recordMistake(qid, 1, `一刷选择题误选了选项 ${["A", "B", "C", "D"][optionIdx]}`);
@@ -380,7 +466,7 @@ function renderStage2ClozeHtml(q) {
   return `
     <div>
       <div style="font-size:13px;color:#6d28d9;font-weight:600;margin-bottom:8px;">
-        ✍️ 二刷要求：请在不看答案的情况下填入核心采分关键词（支持同义词包容匹配），全部填对点亮第 2 颗星！
+        ✍️ 二刷要求：请在不看答案的情况下填入核心公式/同义词/采分关键词，全部填对点亮第 2 颗星！
       </div>
       <div class="cloze-box">${htmlText}</div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
@@ -460,15 +546,15 @@ function renderStage3RecallHtml(q) {
   return `
     <div class="recall-area">
       <div style="font-size:13px;color:#047857;font-weight:600;margin-bottom:8px;">
-        🏆 三刷终极通关：请在下方默写框或您的实体草稿纸上完整默写本题，然后逐项勾选下方【采分点自检清单】：
+        🏆 三刷终极通关：请在下方默写框或您的实体草稿纸上完整默写/推演本题，然后逐项勾选下方【采分点自检清单】：
       </div>
-      <textarea class="recall-textarea" placeholder="在此处默写要点，或直接在您的现实草稿纸上默写后核对下方采分点..."></textarea>
+      <textarea class="recall-textarea" placeholder="在此处默写要点/译文/范文，或直接在您的现实草稿纸上推演后核对下方采分点..."></textarea>
 
       <div class="rubric-checklist">
         <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;color:#0f172a;">
-          📋 考纲标准采分点核对清单（必须全部掌握方可点亮第 3 颗星）：
+          📋 标准采分点核对清单（必须全部掌握方可点亮第 3 颗星）：
         </div>
-        ${q.rubric
+        ${(q.rubric || [])
           .map(
             (r, idx) => `
           <label class="rubric-item">
@@ -497,7 +583,6 @@ function submitStage3Rubric(qid) {
   const chks = Array.from(document.querySelectorAll(".rubric-chk"));
   const allChecked = chks.length > 0 && chks.every((c) => c.checked);
   state.showAnswer = true;
-
   if (!allChecked) {
     chks.forEach((c) => (c.checked = true));
   }
@@ -511,7 +596,7 @@ function submitStage3Rubric(qid) {
 
 function failStage3Rubric(qid) {
   state.showAnswer = true;
-  recordMistake(qid, 3, "三刷闭卷默写自评：部分简答/名词采分点未背熟");
+  recordMistake(qid, 3, "三刷闭卷默写自评：部分核心采分点未背熟");
   renderMainStage();
 }
 
@@ -555,14 +640,13 @@ function renderCalcWorkbenchHtml(q) {
           <div style="font-size:12.5px;margin-top:4px;">${inst.noteTip}</div>
         </div>
         <div style="display:flex;gap:6px;">
-          <button class="btn btn-outline btn-sm" onclick="resetStandardCalcParams('${q.id}')">📌 恢复笔记原题参数</button>
-          <button class="btn btn-primary btn-sm" onclick="randomizeCalcParams('${q.id}')">🎲 随机换一组数值在草稿纸重算</button>
+          <button class="btn btn-outline btn-sm" onclick="resetStandardCalcParams('${q.id}')">📌 恢复原题参数</button>
+          <button class="btn btn-primary btn-sm" onclick="randomizeCalcParams('${q.id}')">🎲 随机变参在草稿纸重算</button>
         </div>
       </div>
 
-      <!-- 已知条件抄写核对区 -->
       <div style="font-size:12.5px;font-weight:700;color:#475569;margin-bottom:6px;">
-        ① 第一步：请在您的现实草稿纸上抄写以下已知参数（注意单位换算）：
+        ① 第一步：请在您的现实草稿纸上抄写以下已知条件：
       </div>
       <div class="given-params-grid">
         ${inst.params
@@ -577,9 +661,8 @@ function renderCalcWorkbenchHtml(q) {
           .join("")}
       </div>
 
-      <!-- 草稿纸分步验算区 -->
       <div style="font-size:12.5px;font-weight:700;color:#475569;margin-bottom:8px;">
-        ② 第二步：在现实草稿纸上分步列式推导，每算完一步可在下方输入数值单独验算（防连环算错）：
+        ② 第二步：在现实草稿纸上分步列式推导，每算完一步可在下方输入数值单独验算：
       </div>
       <div class="calc-steps-list">
         ${inst.steps
@@ -657,7 +740,7 @@ function verifySingleCalcStep(qid, idx) {
     cardEl.classList.remove("step-correct");
     cardEl.classList.add("step-wrong");
     fbEl.style.color = "#dc2626";
-    fbEl.textContent = `❌ 本步偏差较大（标准值为 ${st.answer} ${st.unit}），请检查草稿纸上的公式或单位换算！`;
+    fbEl.textContent = `❌ 本步偏差较大（标准值为 ${st.answer} ${st.unit}），请检查草稿纸上的公式或正负号！`;
     return false;
   }
 }
@@ -716,7 +799,7 @@ function renderWrongBookView(container) {
     container.innerHTML = `
       <div class="question-card" style="text-align:center;padding:48px 20px;">
         <h2 style="margin-bottom:8px;">✨ 错题本目前为空！</h2>
-        <p style="color:#64748b;margin-bottom:16px;">您在三刷过程中答错的选择题、填空题、未背熟的简答题或算错的计算题步骤都会自动整理到这里。</p>
+        <p style="color:#64748b;margin-bottom:16px;">您在光电子器件、数学二、英语二三刷过程中答错或未掌握的题目都会自动整理到这里。</p>
         <button class="btn btn-primary" onclick="switchTab('practice')">返回三刷题库开始刷题</button>
       </div>
     `;
@@ -764,8 +847,8 @@ function renderWrongBookView(container) {
     <div class="question-card" style="margin-bottom:14px;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <div>
-          <h2 style="font-size:18px;">📕 自动错题整理本（共收录 ${entries.length} 题）</h2>
-          <p style="font-size:12.5px;color:#64748b;">答错或自评未掌握的考点会自动归集在此，支持针对性重刷与个人防错笔记。</p>
+          <h2 style="font-size:18px;">📕 全科自动错题整理本（共收录 ${entries.length} 题）</h2>
+          <p style="font-size:12.5px;color:#64748b;">涵盖光电子器件、考研数学二、考研英语二全部错题记录。</p>
         </div>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-outline btn-sm" onclick="window.print()">🖨️ 打印/导出错题清单</button>
@@ -777,7 +860,9 @@ function renderWrongBookView(container) {
 }
 
 function jumpToWrongQuestion(qid, stageNum) {
+  const q = window.QUESTIONS.find((item) => item.id === qid);
   state.activeTab = "practice";
+  if (q && q.subject) state.subjectFilter = q.subject;
   state.chapterFilter = "all";
   state.typeFilter = "all";
   state.passFilter = "all";
@@ -803,25 +888,196 @@ function saveWrongNote(qid, val) {
 }
 
 // ============================================================================
-// 原版9页手写笔记与教材图解画廊 (Notes Gallery)
+// 🤖 高频需大量重复记忆手册 & 外部 AI 题库提示词与一键导入中心 (AI Hub)
+// ============================================================================
+function renderAiHubView(container) {
+  const mathPrompt = window.AI_PROMPTS ? window.AI_PROMPTS.math2 : "";
+  const engPrompt = window.AI_PROMPTS ? window.AI_PROMPTS.eng2 : "";
+
+  container.innerHTML = `
+    <div class="question-card" style="margin-bottom:16px;">
+      <h2 style="font-size:19px;margin-bottom:6px;">🤖 AI 批量生成题库提示词 (Prompts) & 一键导入中心</h2>
+      <p style="font-size:13.5px;color:#475569;margin-bottom:14px;">
+        您可以点击下方按钮一键复制标准化提示词（Prompt），连同任意年份的数学二/英语二/专业课资料发给其他 AI（如 DeepSeek、ChatGPT、Claude、Kimi、豆包等）。将其他 AI 生成的 JSON 数组粘贴到下方输入框，即可<strong>一键并入本网页进行三刷与错题管理</strong>！
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div style="border:1px solid #cbd5e1;border-radius:10px;padding:14px;background:#f8fafc;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <strong style="color:#1d4ed8;">📐 提示词模板 A：让别的 AI 生成【数学二】真题 JSON</strong>
+            <button class="btn btn-primary btn-sm" onclick="copyPromptText('math2')">📋 一键复制数二提示词</button>
+          </div>
+          <div class="prompt-code-box" id="prompt-box-math2">${mathPrompt.replace(/</g, "&lt;")}</div>
+        </div>
+
+        <div style="border:1px solid #cbd5e1;border-radius:10px;padding:14px;background:#f8fafc;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <strong style="color:#047857;">🇬🇧 提示词模板 B：让别的 AI 生成【英语二】真题 JSON</strong>
+            <button class="btn btn-success btn-sm" onclick="copyPromptText('eng2')">📋 一键复制英二提示词</button>
+          </div>
+          <div class="prompt-code-box" id="prompt-box-eng2">${engPrompt.replace(/</g, "&lt;")}</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px dashed #cbd5e1;padding-top:16px;">
+        <h3 style="font-size:16px;margin-bottom:6px;">📥 粘贴其他 AI 生成的 JSON 题库（一键接入三刷系统）</h3>
+        <textarea id="custom-json-input" class="json-import-textarea" placeholder='请将其他 AI 输出的 JSON 数组 [ { "id": "...", "subject": "math2", ... } ] 粘贴在此处...'></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="importCustomJsonQuestions()">🚀 立即校验并接入网页题库</button>
+            <button class="btn btn-danger btn-sm" onclick="clearCustomJsonQuestions()">🗑️ 清空已导入的自定义题目 (当前已导入 ${state.customQuestions.length} 题)</button>
+          </div>
+          <span id="json-import-msg" style="font-size:13.5px;font-weight:700;"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 需大量重复记忆的高频知识点速记总表 -->
+    <div class="question-card">
+      <h2 style="font-size:19px;margin-bottom:10px;">🔥 需大量重复记忆的高频必背知识点精粹（每日早晚默写一遍）</h2>
+
+      <div class="formula-card">
+        <strong>一、【考研数学二】八大三阶泰勒展开式（<i>x</i> → 0 时见到加减法消首项必用！）</strong><br>
+        1. sin <i>x</i> = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>) &nbsp;|&nbsp;
+        2. arcsin <i>x</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>)<br>
+        3. tan <i>x</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>) &nbsp;|&nbsp;
+        4. arctan <i>x</i> = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>)<br>
+        5. 1 − cos <i>x</i> ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> ，1 − cos<sup><i>α</i></sup><i>x</i> ~ <span class='frac'><span class='frac-num'><i>α</i></span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup><br>
+        6. ln(1 + <i>x</i>) = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>) &nbsp;|&nbsp;
+        7. (1 + <i>x</i>)<sup><i>α</i></sup> − 1 ~ <i>αx</i> + <span class='frac'><span class='frac-num'><i>α</i>(<i>α</i>−1)</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup>
+      </div>
+
+      <div class="formula-card">
+        <strong>二、【考研数学二】微积分与线代高频秒杀二级结论</strong><br>
+        • <strong>反函数导数</strong>：若 <i>y</i><sub>0</sub> = <i>f</i>(<i>x</i><sub>0</sub>)，则 <i>g'</i>(<i>y</i><sub>0</sub>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>f'</i>(<i>x</i><sub>0</sub>)</span></span> &nbsp;|&nbsp;
+        <strong>曲率半径</strong>：<i>R</i> = <span class='frac'><span class='frac-num'>(1 + <i>y'</i><sup>2</sup>)<sup>3/2</sup></span><span class='frac-den'>|<i>y''</i>|</span></span><br>
+        • <strong>非齐次线性微分方程特解组合</strong>：<i>k</i><sub>1</sub><i>y</i><sub>1</sub> + <i>k</i><sub>2</sub><i>y</i><sub>2</sub> 为非齐次解 ⇔ <i>k</i><sub>1</sub> + <i>k</i><sub>2</sub> = 1；为齐次解 ⇔ <i>k</i><sub>1</sub> + <i>k</i><sub>2</sub> = 0。<br>
+        • <strong>二元极值充分条件</strong>：驻点处 <i>AC − B</i><sup>2</sup> &gt; 0 有极值（<i>A</i> &lt; 0 极大，<i>A</i> &gt; 0 极小）；<i>AC − B</i><sup>2</sup> &lt; 0 无极值。<br>
+        • <strong>秩 1 / 秩 2 矩阵求高次幂</strong>：若 <i>A = GH</i>，则 <i>A<sup>n</sup></i> = <i>G</i>(<i>HG</i>)<sup><i>n</i>−1</sup><i>H</i>。
+      </div>
+
+      <div class="formula-card">
+        <strong>三、【考研英语二】阅读态度词 & 大小作文必背功能句（需默写10遍）</strong><br>
+        • <strong>态度题必排陪跑词</strong>：<code>indifferent</code>（漠不关心）、<code>unconcerned</code>、<code>prejudiced/biased</code>（偏见）、<code>puzzled/confused</code>（困惑）、<code>indulgent</code>（纵容）。<br>
+        • <strong>小作文开头万能句</strong>：<code>I am writing this email to warmly invite you to take part in... / share my suggestions on...</code><br>
+        • <strong>大作文第一段描图句</strong>：<code>As is vividly illustrated in the chart above, the proportion of... surged dramatically from X% to Y%, whereas that of... witnessed a slight decline.</code><br>
+        • <strong>大作文第二段析因句</strong>：<code>Several key factors account for this remarkable phenomenon. First and foremost, people attach increasing importance to...</code>
+      </div>
+    </div>
+  `;
+}
+
+function copyPromptText(key) {
+  const txt = window.AI_PROMPTS && window.AI_PROMPTS[key];
+  if (!txt) return;
+  navigator.clipboard.writeText(txt).then(() => {
+    const msg = document.getElementById("json-import-msg");
+    if (msg) {
+      msg.style.color = "#059669";
+      msg.textContent = `✅ 已成功复制【${key === "math2" ? "考研数学二" : "考研英语二"}】AI 生成提示词到剪贴板！`;
+    }
+  });
+}
+
+function importCustomJsonQuestions() {
+  const input = document.getElementById("custom-json-input");
+  const msg = document.getElementById("json-import-msg");
+  if (!input || !msg) return;
+
+  try {
+    let raw = input.value.trim();
+    raw = raw.replace(/^```json/i, "").replace(/^```/, "").replace(/```$/, "").trim();
+    const arr = JSON.parse(raw);
+    const items = Array.isArray(arr) ? arr : [arr];
+    let added = 0;
+
+    items.forEach((item) => {
+      if (item && item.id && item.title && item.mcq && item.cloze) {
+        item.subject = item.subject || "math2";
+        item.chapter = item.chapter || (item.subject === "eng2" ? "e_ch2" : "m_ch1");
+        item.type = item.type || "short";
+        item.typeName = item.typeName || "AI导入真题";
+        item.rubric = item.rubric || ["准确掌握本题核心公式与采分点"];
+        item.answerHtml = item.answerHtml || "请参考题干与解析掌握核心要点。";
+
+        const existIdx = window.QUESTIONS.findIndex((q) => q.id === item.id);
+        if (existIdx >= 0) {
+          window.QUESTIONS[existIdx] = item;
+        } else {
+          window.QUESTIONS.push(item);
+        }
+        if (!state.progress[item.id]) {
+          state.progress[item.id] = { passes: 0, stagePassed: { 1: false, 2: false, 3: false } };
+        }
+        state.customQuestions.push(item);
+        added++;
+      }
+    });
+
+    localStorage.setItem(CUSTOM_Q_KEY, JSON.stringify(state.customQuestions));
+    saveState();
+    renderHeaderStats();
+    renderLeftSidebar();
+    renderQuestionStrip();
+    msg.style.color = "#059669";
+    msg.textContent = `🎉 成功导入并接入 ${added} 道新题目！您现在可以切换到对应学科开始三刷了！`;
+    input.value = "";
+  } catch (e) {
+    msg.style.color = "#dc2626";
+    msg.textContent = "❌ JSON 解析失败，请检查粘贴的内容是否为合法的 JSON 数组格式 [...]";
+  }
+}
+
+function clearCustomJsonQuestions() {
+  localStorage.removeItem(CUSTOM_Q_KEY);
+  state.customQuestions = [];
+  location.reload();
+}
+
+// ============================================================================
+// 原版手写笔记与真题原卷画廊 (Notes Gallery)
 // ============================================================================
 function renderNotesGalleryView(container) {
   const pageDescs = [
-    "P.1：光通信系统组成、光电子器件分类、LED与LD定义/原理/分类/特性参数/偏置选择与控制",
-    "P.2：LED能带复合图、P-I曲线、温度光谱特性；LD的P-I阈值特性与温度特性曲线(Ith=I0·exp(T/T0))",
-    "P.3：LD外微分量子效率公式；5种单模光纤(G.652~G.655/色散平坦)；光纤分类；单模参数V与衰减α；光纤非线性效应",
-    "P.4：石英光纤预制棒制造4法(OVPD/VAD/MCVD/PCVD)；PIN PD与APD工作原理、截止波长λc与平均雪崩增益G",
-    "P.5：APD的G-V曲线（与反向偏压、温度、波长的关系图解）及APD响应速度3大决定因素",
-    "P.6：光接收机3种前置放大器；光纤激光器、EDFA、FRA、FBA、SOA原理及FRA/FBA算泵浦波长公式",
-    "P.7：EDFA三能级跃迁与受激辐射原理图；影响EDFA增益的4大因素关系曲线（最佳光纤长度、饱和输出功率、35nm带宽）",
-    "P.8：电光/声光/磁光效应、间接调制器；光调制器分类树；光纤活动/固定连接器、插入损耗5因素与光纤对准3法",
-    "P.9：光耦合器的4维分类与4大技术参数公式（插入损耗I·L、附加损耗E·L、分光比C·R、方向性D·L）"
+    "光电子笔记 P.1：光通信系统组成、光电子器件分类、LED与LD定义/原理/分类/特性参数/偏置选择与控制",
+    "光电子笔记 P.2：LED能带复合图、P-I曲线、温度光谱特性；LD的P-I阈值特性与温度特性曲线(Ith=I0·exp(T/T0))",
+    "光电子笔记 P.3：LD外微分量子效率公式；5种单模光纤(G.652~G.655/色散平坦)；光纤分类；单模参数V与衰减α；光纤非线性效应",
+    "光电子笔记 P.4：石英光纤预制棒制造4法(OVPD/VAD/MCVD/PCVD)；PIN PD与APD工作原理、截止波长λc与平均雪崩增益G",
+    "光电子笔记 P.5：APD的G-V曲线（与反向偏压、温度、波长的关系图解）及APD响应速度3大决定因素",
+    "光电子笔记 P.6：光接收机3种前置放大器；光纤激光器、EDFA、FRA、FBA、SOA原理及FRA/FBA算泵浦波长公式",
+    "光电子笔记 P.7：EDFA三能级跃迁与受激辐射原理图；影响EDFA增益的4大因素关系曲线（最佳光纤长度、饱和输出功率、35nm带宽）",
+    "光电子笔记 P.8：电光/声光/磁光效应、间接调制器；光调制器分类树；光纤活动/固定连接器、插入损耗5因素与光纤对准3法",
+    "光电子笔记 P.9：光耦合器的4维分类与4大技术参数公式（插入损耗I·L、附加损耗E·L、分光比C·R、方向性D·L）"
   ];
 
+  const kaoyanYears = [2022, 2023, 2024, 2025, 2026];
+
   container.innerHTML = `
+    <div class="question-card" style="margin-bottom:16px;">
+      <h2 style="font-size:18px;margin-bottom:6px;">📐 2022—2026 考研数学二真题原卷扫描预览</h2>
+      <p style="font-size:13px;color:#64748b;margin-bottom:14px;">点击可放大查看近五年考研数学二真题原卷首页扫描图。</p>
+      <div class="kp-grid">
+        ${kaoyanYears
+          .map(
+            (yr) => `
+          <div class="kp-summary-card">
+            <div style="font-weight:700;font-size:13.5px;color:#1d4ed8;">${yr}年考研数学二真题原卷 (P.1)</div>
+            <img src="assets/kaoyan/math2_${yr}_p1.png" alt="${yr}数二真题"
+                 style="width:100%;height:200px;object-fit:cover;object-position:top;border-radius:6px;border:1px solid #cbd5e1;cursor:pointer;"
+                 onclick="openImageModal('assets/kaoyan/math2_${yr}_p1.png', '${yr}年考研数学二真题原卷 P.1')" />
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;"
+                    onclick="openImageModal('assets/kaoyan/math2_${yr}_p1.png', '${yr}年考研数学二真题原卷 P.1')">
+              🔍 放大查看 ${yr} 年真题原卷
+            </button>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+
     <div class="question-card">
       <h2 style="font-size:18px;margin-bottom:6px;">📖 《光电子器件(1).pdf》9页扫描笔记与教材图解全景对照</h2>
-      <p style="font-size:13px;color:#64748b;margin-bottom:16px;">点击任意一页可放大高清查看，所有字迹与图表均已整理为左侧对应章节的三刷考题。</p>
       <div class="kp-grid">
         ${pageDescs
           .map(
@@ -847,7 +1103,7 @@ function renderNotesGalleryView(container) {
 }
 
 // ============================================================================
-// 右侧光电科学计算器与快捷换算工具
+// 右侧光电/高数科学计算器与快捷换算工具
 // ============================================================================
 function evalSciCalc(mode) {
   const input = document.getElementById("sci-calc-input");
@@ -862,7 +1118,7 @@ function evalSciCalc(mode) {
       const res = Function(`"use strict"; return (${safe});`)();
       out.textContent = `= ${Number(res).toPrecision(6)}`;
     } else if (mode === "lg") {
-      out.textContent = `lg(${x}) = ${Math.log10(x).toFixed(4)}`;
+      out.textContent = `lg(${x}) = ${Math.log10(x).toFixed(4)} | ln(${x}) = ${Math.log(x).toFixed(4)}`;
     } else if (mode === "neg10lg") {
       out.textContent = `-10·lg(${x}) = ${(-10 * Math.log10(x)).toFixed(3)} dB`;
     } else if (mode === "10lg") {
@@ -895,6 +1151,25 @@ function appendCalcChar(ch) {
 // ============================================================================
 // 交互导航与弹窗事件
 // ============================================================================
+function setSubjectFilter(sub) {
+  state.subjectFilter = sub;
+  state.chapterFilter = "all";
+  state.typeFilter = "all";
+  if (state.activeTab === "ai-hub" || state.activeTab === "notes-gallery") {
+    state.activeTab = "practice";
+    document.querySelectorAll(".nav-tab").forEach((el) => {
+      el.classList.toggle("active", el.getAttribute("data-tab") === "practice");
+    });
+  }
+  const list = getFilteredQuestions();
+  if (list.length > 0) {
+    state.currentQuestionId = list[0].id;
+    syncRecommendedStage(state.currentQuestionId);
+  }
+  saveState();
+  renderAll();
+}
+
 function switchTab(tab) {
   state.activeTab = tab;
   if (tab === "calc-bench") {
@@ -944,6 +1219,7 @@ function setPassFilter(pf) {
 }
 
 function resetFilters() {
+  state.subjectFilter = "all";
   state.chapterFilter = "all";
   state.typeFilter = "all";
   state.passFilter = "all";
@@ -989,12 +1265,16 @@ function nextQuestion() {
 }
 
 function openPdfModal(pageNum) {
+  openImageModal(`assets/notes/page_${pageNum}.png`, `《光电子器件(1).pdf》手写笔记与教材图解 - 第 ${pageNum} 页`);
+}
+
+function openImageModal(imgSrc, titleText) {
   const modal = document.getElementById("pdf-modal");
   const img = document.getElementById("pdf-modal-img");
   const title = document.getElementById("pdf-modal-title");
   if (modal && img && title) {
-    title.textContent = `《光电子器件(1).pdf》手写笔记与教材图解 - 第 ${pageNum} 页`;
-    img.src = `assets/notes/page_${pageNum}.png`;
+    title.textContent = titleText || "高清原图预览";
+    img.src = imgSrc;
     modal.classList.add("open");
   }
 }
