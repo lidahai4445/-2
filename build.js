@@ -25,7 +25,20 @@ if (fs.existsSync(outDir)) {
 }
 fs.mkdirSync(outDir, { recursive: true });
 
-const filesToCopy = ["index.html", "styles.css", "questions.js", "kaoyan_questions.js", "app.js", "_headers"];
+const filesToCopy = [
+  "index.html",
+  "styles.css",
+  "questions.js",
+  "kaoyan_questions.js",
+  "app.js",
+  "_headers",
+  "c9e1b65a8ac42036810d5541984fd2e0.txt"
+];
+for (const entry of fs.readdirSync(__dirname)) {
+  if (entry.endsWith(".txt") && !filesToCopy.includes(entry)) {
+    filesToCopy.push(entry);
+  }
+}
 for (const file of filesToCopy) {
   const srcPath = path.join(__dirname, file);
   if (fs.existsSync(srcPath)) {
