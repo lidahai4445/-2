@@ -692,6 +692,8 @@ function renderQuestionDots() {
 
 function selectQuestion(qId) {
   appState.currentQId = qId;
+  const rec = getRecord(qId);
+  rec.revealed = false;
   saveState(false);
   renderQuestionDots();
   renderMainStage();
@@ -893,11 +895,11 @@ function togglePassageState(key) {
   renderMainStage();
 }
 
-/* 1. 客观选择题作答区 */
+/* 1. 客观选择题作答区（无论作答正确与否绝不自动展开答案与解析，仅支持手动点击触发） */
 function renderChoiceQuestionBody(q, rec) {
   const options = Array.isArray(q.options) ? q.options : ["A", "B", "C", "D"];
   const answered = rec.lastOpt !== null && rec.lastOpt !== undefined;
-  const isRevealed = answered || rec.revealed;
+  const isRevealed = Boolean(rec.revealed);
   const correctLetter = String(q.answer || "A").trim().toUpperCase().charAt(0);
   const isShortLetters = options.length > 4 && options.every((o) => String(o).trim().length <= 3);
 
@@ -912,6 +914,8 @@ function renderChoiceQuestionBody(q, rec) {
       } else if (rec.lastOpt === letter) {
         stateCls = "wrong";
       }
+    } else if (answered && rec.lastOpt === letter) {
+      stateCls = letter === correctLetter ? "correct" : "wrong";
     }
 
     return `
@@ -929,7 +933,7 @@ function renderChoiceQuestionBody(q, rec) {
           <span style="font-size:13.5px;font-weight:600;color:${rec.lastOpt === correctLetter ? "var(--success)" : "var(--danger)"};">
             ${rec.lastOpt === correctLetter
               ? `✅ 本遍回答正确（已选 ${rec.lastOpt}）！当前进度 ${rec.passes}/3 刷`
-              : `❌ 本遍回答有误（您选了 ${rec.lastOpt}，正确答案 ${correctLetter}），已记入错题本`}
+              : `❌ 本遍回答有误（您选了 ${rec.lastOpt}${isRevealed ? `，正确答案 ${correctLetter}` : ""}），已记入错题本`}
           </span>
           <button class="btn btn-primary btn-xs" onclick="retryQuestionForNextPass('${escapeHtml(q.id)}')">
             🔄 再刷一遍
@@ -941,11 +945,13 @@ function renderChoiceQuestionBody(q, rec) {
         ${optionsHtml}
       </div>
 
-      ${!isRevealed ? `
-        <div style="display:flex;gap:10px;">
-          <button class="btn btn-outline btn-sm" onclick="revealAnswerOnly('${escapeHtml(q.id)}')">👁️ 直接看答案与解析</button>
-        </div>
-      ` : renderAnalysisAndTipsBox(q)}
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn ${isRevealed ? "btn-primary" : "btn-outline"} btn-sm" onclick="toggleRevealAnswer('${escapeHtml(q.id)}')">
+          ${isRevealed ? "🙈 收起答案与解析" : "👁️ 查看答案与解析"}
+        </button>
+      </div>
+
+      ${isRevealed ? renderAnalysisAndTipsBox(q) : ""}
     </div>
   `;
 }
@@ -958,7 +964,7 @@ function submitChoiceOption(qId, chosenLetter) {
 
   const wasAlreadyAnswered = rec.lastOpt !== null && rec.lastOpt !== undefined;
   rec.lastOpt = chosenLetter;
-  rec.revealed = true;
+  // 严格遵循规则：作答后绝不自动触发查看答案与解析（保持 rec.revealed 原状，仅手动按钮可触发）
 
   if (chosenLetter === correctLetter) {
     if (!wasAlreadyAnswered && rec.passes < 3) {
@@ -982,6 +988,13 @@ function retryQuestionForNextPass(qId) {
   rec.lastOpt = null;
   rec.revealed = false;
   touchRecord(rec);
+  saveState(false);
+  renderMainStage();
+}
+
+function toggleRevealAnswer(qId) {
+  const rec = getRecord(qId);
+  rec.revealed = !rec.revealed;
   saveState(false);
   renderMainStage();
 }
