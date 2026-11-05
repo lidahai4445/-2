@@ -632,9 +632,15 @@ function setPassFilter(filterVal) {
   renderAll();
 }
 
+function toggleDotsCollapse() {
+  appState.dotsCollapsed = !appState.dotsCollapsed;
+  saveState(false);
+  renderQuestionDots();
+}
+
 function renderQuestionDots() {
   const stripCard = document.getElementById("question-strip-card");
-  if (appState.activeTab !== "practice" || appState.dotsCollapsed) {
+  if (appState.activeTab !== "practice") {
     stripCard.style.display = "none";
     return;
   }
@@ -644,9 +650,18 @@ function renderQuestionDots() {
   const labelEl = document.getElementById("filtered-count-label");
   const curSub = getAllSubjectsList().find((s) => s.id === appState.activeSubject);
   const subTitle = curSub ? curSub.name : "当前题库";
-  labelEl.textContent = `📋 ${subTitle} · 当前筛选共 ${filtered.length} 题`;
+  labelEl.textContent = `📋 ${subTitle} · 当前筛选共 ${filtered.length} 题${appState.dotsCollapsed ? "（已折叠）" : ""}`;
+
+  const colBtn = document.getElementById("strip-collapse-btn");
+  if (colBtn) {
+    colBtn.textContent = appState.dotsCollapsed ? "🔽 展开答题卡" : "🔼 收起答题卡";
+  }
 
   const grid = document.getElementById("question-dots-grid");
+  if (appState.dotsCollapsed) {
+    grid.style.display = "none";
+    return;
+  }
   grid.style.display = "flex";
 
   if (filtered.length === 0) {
@@ -759,7 +774,7 @@ function renderPracticeCard(container) {
     rec.passes === 1 ? "一刷已过" :
     rec.passes === 2 ? "二刷已过" : "三刷通关";
 
-  const passageHtml = q.passageId && passagesMap[q.passageId] && !appState.passageState.collapsed
+  const passageHtml = q.passageId && passagesMap[q.passageId]
     ? renderPassagePanel(q, passagesMap[q.passageId])
     : "";
 
@@ -850,17 +865,24 @@ function renderPassagePanel(q, passage) {
 
   return `
     <div class="passage-panel">
-      <div class="passage-header">
+      <div class="passage-header" onclick="togglePassageState('collapsed')" style="cursor:pointer;user-select:none;" title="点击折叠/展开英语原文阅读框">
         <div class="passage-title">
-          <span>📖 ${pTitle}</span>
+          <span>📖 ${pTitle}${ps.collapsed ? "（已折叠）" : ""}</span>
         </div>
-        <button class="btn ${ps.showZh ? "btn-primary" : "btn-outline"} btn-xs" onclick="togglePassageState('showZh')">
-          🇨🇳 ${ps.showZh ? "切换纯英文原貌" : "显示逐段译文"}
-        </button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" onclick="event.stopPropagation()">
+          <button class="btn ${ps.showZh ? "btn-primary" : "btn-outline"} btn-xs" onclick="togglePassageState('showZh')">
+            🇨🇳 ${ps.showZh ? "纯英" : "译文"}
+          </button>
+          <button class="btn btn-outline btn-xs" onclick="togglePassageState('collapsed')">
+            ${ps.collapsed ? "🔽 展开原文" : "🔼 收起原文"}
+          </button>
+        </div>
       </div>
-      <div class="passage-body ${ps.tallMode ? "tall" : ""}">
-        <div>${contentHtml}</div>
-      </div>
+      ${ps.collapsed ? "" : `
+        <div class="passage-body ${ps.tallMode ? "tall" : ""}">
+          <div>${contentHtml}</div>
+        </div>
+      `}
     </div>
   `;
 }
