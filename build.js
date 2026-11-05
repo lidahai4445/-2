@@ -25,7 +25,7 @@ if (fs.existsSync(outDir)) {
 }
 fs.mkdirSync(outDir, { recursive: true });
 
-const filesToCopy = ["index.html", "styles.css", "kaoyan_questions.js", "app.js", "_headers"];
+const filesToCopy = ["index.html", "styles.css", "questions.js", "kaoyan_questions.js", "app.js", "_headers"];
 for (const file of filesToCopy) {
   const srcPath = path.join(__dirname, file);
   if (fs.existsSync(srcPath)) {

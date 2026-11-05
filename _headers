@@ -1,11 +1,15 @@
 /*
   X-Content-Type-Options: nosniff
+  Cache-Control: no-cache, must-revalidate
 
 /*.html
   Content-Type: text/html; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
 
 /*.js
   Content-Type: application/javascript; charset=utf-8
+  Cache-Control: no-cache, must-revalidate
 
 /*.css
   Content-Type: text/css; charset=utf-8
+  Cache-Control: no-cache, must-revalidate

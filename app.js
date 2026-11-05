@@ -156,14 +156,18 @@ function renderHeaderStats() {
     }
   });
 
-  document.getElementById("stat-pass1").textContent = `${p1}/${scopeQs.length}`;
-  document.getElementById("stat-pass2").textContent = `${p2}/${scopeQs.length}`;
-  document.getElementById("stat-pass3").textContent = `${p3}/${scopeQs.length}`;
+  const elP1 = document.getElementById("stat-pass1");
+  const elP2 = document.getElementById("stat-pass2");
+  const elP3 = document.getElementById("stat-pass3");
+  if (elP1) elP1.textContent = `${p1}/${scopeQs.length}`;
+  if (elP2) elP2.textContent = `${p2}/${scopeQs.length}`;
+  if (elP3) elP3.textContent = `${p3}/${scopeQs.length}`;
 
   const activeWrongCount = Object.entries(state.wrongBook).filter(
     ([qid, w]) => !w.resolved && window.QUESTIONS.some((q) => q.id === qid)
   ).length;
-  document.getElementById("wrong-count-badge").textContent = activeWrongCount;
+  const elWb = document.getElementById("wrong-count-badge");
+  if (elWb) elWb.textContent = activeWrongCount;
 
   const subBar = document.getElementById("subject-pills-container");
   if (subBar && window.SUBJECTS) {
@@ -1151,8 +1155,16 @@ function renderAll() {
   renderMainStage();
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+function initApp() {
+  if (window.__kaoyan_inited) return;
+  window.__kaoyan_inited = true;
   loadState();
   syncRecommendedStage(state.currentQuestionId);
   renderAll();
-});
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
