@@ -577,43 +577,48 @@ function renderPracticeCard(container) {
 /* 英语二原文双语阅读框 */
 function renderPassagePanel(q, passage) {
   const ps = appState.passageState;
+  const pTitle = (typeof passage === "object" && passage.title) ? passage.title : `${q.year}年英语二 原文阅读`;
+
   if (ps.collapsed) {
     return `
       <div class="passage-panel">
         <div class="passage-header">
-          <div class="passage-title">📖 ${passage.title}（已折叠）</div>
+          <div class="passage-title">📖 ${pTitle}（已折叠）</div>
           <button class="btn btn-outline btn-xs" onclick="togglePassageState('collapsed')">👁️ 展开原文阅读面板</button>
         </div>
       </div>
     `;
   }
 
-  // 对完形填空 (1-20题) 自动高亮当前题号空格
-  let formattedEn = (passage.en || "").replace(/\n/g, "<br>");
-  if (q.qNum >= 1 && q.qNum <= 20) {
-    const blankRegex = new RegExp(`(\\b${q.qNum}\\b)(?=\\s*[A-Za-z,\\.;—\\-\\)]|\\s*<br>)`, "g");
-    let replaced = false;
-    formattedEn = formattedEn.replace(blankRegex, (m) => {
-      if (!replaced) {
-        replaced = true;
-        return `<span class="cloze-active-blank">[第 ${q.qNum} 空]</span>`;
-      }
-      return m;
-    });
+  let contentHtml = "";
+  if (typeof passage === "string") {
+    contentHtml = passage;
+  } else {
+    contentHtml = ps.showZh ? (passage.bilingual || passage.en || "") : (passage.en || "");
   }
 
-  const formattedZh = (passage.zh || "").replace(/\n/g, "<br>");
+  // 对完形填空 (1-20题) 自动高亮当前题号空位 [n]
+  if (q.qNum >= 1 && q.qNum <= 20) {
+    const targetTag = `<u>&nbsp;<strong>[${q.qNum}]</strong>&nbsp;</u>`;
+    contentHtml = contentHtml.split(targetTag).join(`<span class="cloze-active-blank">[第 ${q.qNum} 空]</span>`);
+  }
+
+  // 对新题型 Part B (41-45题) 自动高亮当前段落空位 (41)____
+  if (q.qNum >= 41 && q.qNum <= 45) {
+    const pbReg = new RegExp(`\\(${q.qNum}\\)_{3,}`, "g");
+    contentHtml = contentHtml.replace(pbReg, `<span class="cloze-active-blank">(${q.qNum}) 【当前待选匹配处】</span>`);
+  }
 
   return `
     <div class="passage-panel">
       <div class="passage-header">
         <div class="passage-title">
-          <span>📖 ${passage.title}</span>
-          <span style="font-size:11.5px;color:var(--text-muted);font-weight:500;">（支持上下滚动 · 做同篇阅读时无需重复翻页）</span>
+          <span>📖 ${pTitle}</span>
+          <span style="font-size:11.5px;color:var(--text-muted);font-weight:500;">（支持独立上下滚动 · 当前题号已在文中高亮标黄）</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
           <button class="btn ${ps.showZh ? "btn-primary" : "btn-outline"} btn-xs" onclick="togglePassageState('showZh')">
-            🇨🇳 ${ps.showZh ? "隐藏全文译文" : "对照全文译文"}
+            🇨🇳 ${ps.showZh ? "隐藏段落译文 (纯英考场模式)" : "显示逐段译文 (双语精读模式)"}
           </button>
           <button class="btn btn-outline btn-xs" onclick="togglePassageState('tallMode')">
             ↕️ ${ps.tallMode ? "标准高度" : "加高阅读框"}
@@ -624,13 +629,7 @@ function renderPassagePanel(q, passage) {
         </div>
       </div>
       <div class="passage-body ${ps.tallMode ? "tall" : ""}">
-        <div>${formattedEn}</div>
-        ${ps.showZh && formattedZh ? `
-          <div class="passage-zh-block">
-            <div style="font-weight:700;color:var(--primary);margin-bottom:6px;">【全文参考译文 / 候选项详解】</div>
-            ${formattedZh}
-          </div>
-        ` : ""}
+        <div>${contentHtml}</div>
       </div>
     </div>
   `;
