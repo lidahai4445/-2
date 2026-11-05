@@ -178,14 +178,14 @@ function loadState() {
   });
 }
 
-function saveState(triggerCloud = true) {
+function saveState(triggerCloud = false) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   } catch (e) {
     console.warn("保存状态失败:", e);
   }
   if (triggerCloud && typeof scheduleCloudPush === "function") {
-    scheduleCloudPush();
+    scheduleCloudPush(3500);
   }
 }
 
@@ -733,7 +733,7 @@ function submitChoiceOption(qId, chosenLetter) {
   }
 
   touchRecord(rec);
-  saveState();
+  saveState(true);
   renderGlobalHeaderStats();
   renderSidebar();
   renderQuestionDots();
@@ -745,15 +745,14 @@ function retryQuestionForNextPass(qId) {
   rec.lastOpt = null;
   rec.revealed = false;
   touchRecord(rec);
-  saveState();
+  saveState(false);
   renderMainStage();
 }
 
 function revealAnswerOnly(qId) {
   const rec = getRecord(qId);
   rec.revealed = true;
-  touchRecord(rec);
-  saveState();
+  saveState(false);
   renderMainStage();
 }
 
@@ -884,7 +883,8 @@ function saveQuestionDraft(qId, val) {
   const rec = getRecord(qId);
   rec.draft = val;
   touchRecord(rec);
-  saveState();
+  saveState(false);
+  scheduleCloudPush(6000);
 }
 
 function gradeSelfSubjective(qId, isCorrect) {
@@ -897,7 +897,7 @@ function gradeSelfSubjective(qId, isCorrect) {
     rec.resolved = false;
   }
   touchRecord(rec);
-  saveState();
+  saveState(true);
   renderGlobalHeaderStats();
   renderSidebar();
   renderQuestionDots();
@@ -909,7 +909,7 @@ function manualAddPass(qId) {
   if (rec.passes < 3) {
     rec.passes += 1;
     touchRecord(rec);
-    saveState();
+    saveState(true);
     renderAll();
   }
 }
@@ -920,7 +920,7 @@ function resetQuestionPasses(qId) {
   rec.lastOpt = null;
   rec.revealed = false;
   touchRecord(rec);
-  saveState();
+  saveState(true);
   renderAll();
 }
 
@@ -930,7 +930,7 @@ function addQuestionToWrongBook(qId, reason) {
   rec.resolved = false;
   if (!rec.wrongNote) rec.wrongNote = reason;
   touchRecord(rec);
-  saveState();
+  saveState(true);
   renderGlobalHeaderStats();
   renderQuestionDots();
   renderMainStage();
@@ -1037,7 +1037,7 @@ function toggleResolveWrong(qId) {
   const r = getRecord(qId);
   r.resolved = !r.resolved;
   touchRecord(r);
-  saveState();
+  saveState(true);
   renderGlobalHeaderStats();
   renderQuestionDots();
   renderMainStage();
@@ -1047,7 +1047,7 @@ function saveWrongNote(qId, text) {
   const r = getRecord(qId);
   r.wrongNote = text;
   touchRecord(r);
-  saveState();
+  saveState(true);
 }
 
 /* ==========================================================================
@@ -1203,13 +1203,18 @@ let isSyncingNow = false;
 function updateSyncStatusUI(state, msg) {
   const dot = document.getElementById("sync-status-dot");
   const textEl = document.getElementById("sync-status-text");
+  const btn = document.getElementById("cloud-sync-btn");
   const modalMsg = document.getElementById("cloud-modal-status");
   if (dot) {
     dot.className = "sync-dot" + (state === "syncing" ? " syncing" : state === "error" ? " error" : "");
   }
   const sid = appState.syncId || "lidahai4445";
+  // 保持顶部按钮文字长度恒定，彻底杜绝顶栏换行抖动
   if (textEl) {
-    textEl.textContent = msg || `☁️ 云同步: ${sid}`;
+    textEl.textContent = `☁️ 云同步`;
+  }
+  if (btn && msg) {
+    btn.title = `${msg}（点击打开云同步设置）`;
   }
   if (modalMsg && msg) {
     modalMsg.textContent = msg;
@@ -1297,16 +1302,25 @@ function mergeCloudPayloadIntoLocal(cloudData) {
     }
   });
 
+  // 仅当本机尚无任何做题记录（全新设备首次打开）时，才继承云端上次停留的科目与题号
+  const isFreshDevice = (appState.updatedAt || 0) === 0;
   if ((cloudData.updatedAt || 0) > (appState.updatedAt || 0)) {
     appState.updatedAt = cloudData.updatedAt;
-    if (cloudData.currentQId) appState.currentQId = cloudData.currentQId;
-    if (cloudData.activeSubject) appState.activeSubject = cloudData.activeSubject;
-    localWasUpdated = true;
+    if (isFreshDevice) {
+      if (cloudData.currentQId) appState.currentQId = cloudData.currentQId;
+      if (cloudData.activeSubject) appState.activeSubject = cloudData.activeSubject;
+      localWasUpdated = true;
+    }
   }
 
   if (localWasUpdated) {
     saveState(false);
-    renderAll();
+    renderGlobalHeaderStats();
+    renderSidebar();
+    renderQuestionDots();
+    if (isFreshDevice) {
+      renderMainStage();
+    }
   }
   return hasLocalChangesToPush;
 }
@@ -1514,7 +1528,7 @@ async function pullFromCloud() {
   }
 }
 
-function scheduleCloudPush(delayMs = 600) {
+function scheduleCloudPush(delayMs = 3500) {
   if (cloudPushTimer) clearTimeout(cloudPushTimer);
   cloudPushTimer = setTimeout(() => {
     pushToCloud();
@@ -1583,16 +1597,6 @@ window.addEventListener("DOMContentLoaded", () => {
   initQuestionBank();
   loadState();
   renderAll();
-  // 启动时自动拉取并合并云端最新进度
+  // 仅在首次打开网页时静默拉取一次云端最新进度，不做高频定时轮询，彻底告别页面抖动
   pullFromCloud();
-  // 每 25 秒静默同步一次，支持多设备同时打开实时联动
-  setInterval(() => {
-    if (!document.hidden) pullFromCloud();
-  }, 25000);
-});
-
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    pullFromCloud();
-  }
 });
