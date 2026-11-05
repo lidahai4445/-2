@@ -30,12 +30,14 @@ const filesToCopy = [
   "styles.css",
   "questions.js",
   "kaoyan_questions.js",
+  "xiao1000_questions.js",
+  "xiao1000_part1.json",
   "app.js",
   "_headers",
   "c9e1b65a8ac42036810d5541984fd2e0.txt"
 ];
 for (const entry of fs.readdirSync(__dirname)) {
-  if (entry.endsWith(".txt") && !filesToCopy.includes(entry)) {
+  if ((entry.endsWith(".txt") || entry.endsWith(".json")) && !filesToCopy.includes(entry)) {
     filesToCopy.push(entry);
   }
 }

@@ -18,11 +18,13 @@ const DEFAULT_VAULT_MAP = {
 
 const BASE_SUBJECTS = [
   { id: "math2", name: "📐 考研数学二", isBuiltin: true },
-  { id: "eng2", name: "🇬🇧 考研英语二", isBuiltin: true }
+  { id: "eng2", name: "🇬🇧 考研英语二", isBuiltin: true },
+  { id: "xiao1000_part1", name: "🚩 肖1000题·马原(前200题)", isBuiltin: true }
 ];
 
 const BASE_YEARS = [
-  { id: "all", name: "全部年份 (2022-2026)", fullRow: true },
+  { id: "all", name: "全部年份/批次", fullRow: true },
+  { id: 2027, name: "2027 肖1000题" },
   { id: 2026, name: "2026 真题" },
   { id: 2025, name: "2025 真题" },
   { id: 2024, name: "2024 真题" },
@@ -50,6 +52,19 @@ const BASE_CHAPTERS_BY_SUBJECT = {
     { id: "e_ch3", title: "三、新题型 Part B (第41–45题)" },
     { id: "e_ch4", title: "四、英译汉 Section III (第46题)" },
     { id: "e_ch5", title: "五、大小作文 Section IV (第47–48题)" }
+  ],
+  xiao1000_part1: [
+    { id: "all", title: "全部章节与题型 (前200题)" },
+    { id: "type_choice", title: "【题型】单项选择题 (第1–184题)" },
+    { id: "type_multi", title: "【题型】多项选择题 (第185–200题)" },
+    { id: "ch_intro", title: "导论 (单选1–7, 多选1–2)" },
+    { id: "ch_1", title: "第一章 世界的物质性及发展规律 (单选8–55, 多选3–16)" },
+    { id: "ch_2", title: "第二章 实践与认识及其发展规律 (单选56–93)" },
+    { id: "ch_3", title: "第三章 人类社会及其发展规律 (单选94–121)" },
+    { id: "ch_4", title: "第四章 资本主义的本质及规律 (单选122–159)" },
+    { id: "ch_5", title: "第五章 资本主义的发展及其趋势 (单选160–174)" },
+    { id: "ch_6", title: "第六章 社会主义的发展及其规律 (单选175–182)" },
+    { id: "ch_7", title: "第七章 共产主义崇高理想及其最终实现 (单选183–184)" }
   ]
 };
 
@@ -285,7 +300,10 @@ function getYearsForSubject(subjectId) {
 
 function rebuildQuestionBankPool() {
   passagesMap = { ...(window.KAOYAN_PASSAGES || {}) };
-  const baseList = Array.isArray(window.KAOYAN_QUESTIONS) ? window.KAOYAN_QUESTIONS : [];
+  const baseList = [
+    ...(Array.isArray(window.KAOYAN_QUESTIONS) ? window.KAOYAN_QUESTIONS : []),
+    ...(Array.isArray(window.XIAO1000_QUESTIONS) ? window.XIAO1000_QUESTIONS : [])
+  ];
   const customQs = [];
 
   getVisibleCustomBanks().forEach((bank) => {
@@ -466,6 +484,7 @@ function getSubjectQuestions(subjectId = appState.activeSubject) {
 function matchChapterOrType(q, chapterFilter) {
   if (chapterFilter === "all") return true;
   if (chapterFilter === "type_choice") return q.qType === "choice";
+  if (chapterFilter === "type_multi") return q.qType === "multi_choice";
   if (chapterFilter === "type_fill") return q.qType === "fill";
   if (chapterFilter === "type_solve") return q.qType === "solve";
   return q.chapter === chapterFilter;
@@ -777,7 +796,9 @@ function renderPracticeCard(container) {
   const chList = getChaptersForSubject(q.subject);
   const chObj = chList.find((c) => c.id === q.chapter);
   const typeBadge = q.qType === "choice"
-    ? { label: "客观选择题", cls: "tag-type-term" }
+    ? { label: "单项选择题", cls: "tag-type-term" }
+    : q.qType === "multi_choice"
+    ? { label: "多项选择题", cls: "tag-type-calc" }
     : q.qType === "fill"
     ? { label: "客观填空题", cls: "tag-type-short" }
     : { label: "主观解答 / 译写题", cls: "tag-type-calc" };
@@ -801,7 +822,7 @@ function renderPracticeCard(container) {
     : "";
 
   let interactionHtml = "";
-  if (q.qType === "choice") {
+  if (q.qType === "choice" || q.qType === "multi_choice") {
     interactionHtml = renderChoiceQuestionBody(q, rec);
   } else if (q.qType === "fill") {
     interactionHtml = renderFillQuestionBody(q, rec);
@@ -915,31 +936,49 @@ function togglePassageState(key) {
   renderMainStage();
 }
 
-/* 1. 客观选择题作答区（无论作答正确与否绝不自动展开答案与解析，仅支持手动点击触发） */
+/* 1. 客观选择题作答区（支持单选题与多项选择题，无论作答正确与否绝不自动展开答案与解析，仅支持手动点击触发） */
 function renderChoiceQuestionBody(q, rec) {
   const options = Array.isArray(q.options) ? q.options : ["A", "B", "C", "D"];
   const answered = rec.lastOpt !== null && rec.lastOpt !== undefined;
   const isRevealed = Boolean(rec.revealed);
-  const correctLetter = String(q.answer || "A").trim().toUpperCase().charAt(0);
+  const isMulti = q.qType === "multi_choice" || String(q.answer || "").trim().length > 1;
+  const correctAnswer = String(q.answer || "A").trim().toUpperCase();
+  const correctLetters = correctAnswer.split("");
   const isShortLetters = options.length > 4 && options.every((o) => String(o).trim().length <= 3);
+
+  const selectedLetters = answered
+    ? String(rec.lastOpt || "").split("")
+    : (Array.isArray(rec.tempChoices) ? rec.tempChoices : []);
+
+  const isAllCorrect = answered && (
+    isMulti
+      ? selectedLetters.sort().join("") === correctLetters.sort().join("")
+      : String(rec.lastOpt || "").charAt(0) === correctLetters[0]
+  );
 
   const optionsHtml = options.map((optStr, idx) => {
     const letter = ["A", "B", "C", "D", "E", "F", "G"][idx] || String(idx);
     const cleanText = String(optStr).replace(/^(?:\[\s*[A-G]\s*\]|[A-G][\.\、\s])\s*/i, "").trim();
 
     let stateCls = "";
-    if (isRevealed) {
-      if (letter === correctLetter) {
+    if (answered || isRevealed) {
+      if (isRevealed && correctLetters.includes(letter)) {
         stateCls = "correct";
-      } else if (rec.lastOpt === letter) {
-        stateCls = "wrong";
+      } else if (selectedLetters.includes(letter)) {
+        stateCls = correctLetters.includes(letter) ? "correct" : "wrong";
       }
-    } else if (answered && rec.lastOpt === letter) {
-      stateCls = letter === correctLetter ? "correct" : "wrong";
+    } else {
+      if (selectedLetters.includes(letter)) {
+        stateCls = "selected";
+      }
     }
 
+    const clickAction = isMulti
+      ? `toggleMultiOption('${escapeHtml(q.id)}', '${letter}')`
+      : `submitChoiceOption('${escapeHtml(q.id)}', '${letter}')`;
+
     return `
-      <button class="mcq-option ${stateCls}" onclick="submitChoiceOption('${escapeHtml(q.id)}', '${letter}')">
+      <button class="mcq-option ${stateCls}" onclick="${clickAction}">
         <span class="option-letter">${letter}</span>
         <span style="flex:1;">${cleanText || letter}</span>
       </button>
@@ -950,10 +989,10 @@ function renderChoiceQuestionBody(q, rec) {
     <div>
       ${answered ? `
         <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-subtle);padding:8px 14px;border-radius:8px;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-          <span style="font-size:13.5px;font-weight:600;color:${rec.lastOpt === correctLetter ? "var(--success)" : "var(--danger)"};">
-            ${rec.lastOpt === correctLetter
+          <span style="font-size:13.5px;font-weight:600;color:${isAllCorrect ? "var(--success)" : "var(--danger)"};">
+            ${isAllCorrect
               ? `✅ 本遍回答正确（已选 ${rec.lastOpt}）！当前进度 ${rec.passes}/3 刷`
-              : `❌ 本遍回答有误（您选了 ${rec.lastOpt}${isRevealed ? `，正确答案 ${correctLetter}` : ""}），已记入错题本`}
+              : `❌ 本遍回答有误（您选了 ${rec.lastOpt || "未选"}${isRevealed ? `，正确答案 ${correctAnswer}` : ""}），已记入错题本`}
           </span>
           <button class="btn btn-primary btn-xs" onclick="retryQuestionForNextPass('${escapeHtml(q.id)}')">
             🔄 再刷一遍
@@ -961,11 +1000,23 @@ function renderChoiceQuestionBody(q, rec) {
         </div>
       ` : ""}
 
+      ${isMulti && !answered ? `
+        <div style="margin-bottom:8px;font-size:13px;color:var(--text-secondary);display:flex;align-items:center;gap:6px;">
+          <span style="padding:2px 6px;background:#e0e7ff;color:#3730a3;border-radius:4px;font-weight:600;">多选题</span>
+          <span>可勾选多个选项，确认无误后点击下方【提交作答】按钮：</span>
+        </div>
+      ` : ""}
+
       <div class="mcq-options" style="${isShortLetters ? "display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));" : ""}">
         ${optionsHtml}
       </div>
 
-      <div style="display:flex;gap:10px;margin-top:4px;">
+      <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;align-items:center;">
+        ${isMulti && !answered ? `
+          <button class="btn btn-primary btn-sm" onclick="submitMultiChoiceAnswer('${escapeHtml(q.id)}')">
+            🚀 提交多选作答（已选：${selectedLetters.join("") || "未选"}）
+          </button>
+        ` : ""}
         <button class="btn ${isRevealed ? "btn-primary" : "btn-outline"} btn-sm" onclick="toggleRevealAnswer('${escapeHtml(q.id)}')">
           ${isRevealed ? "🙈 收起答案与解析" : "👁️ 查看答案与解析"}
         </button>
@@ -976,17 +1027,45 @@ function renderChoiceQuestionBody(q, rec) {
   `;
 }
 
-function submitChoiceOption(qId, chosenLetter) {
+function toggleMultiOption(qId, letter) {
+  const rec = getRecord(qId);
+  if (rec.lastOpt !== null && rec.lastOpt !== undefined) return;
+  rec.tempChoices = Array.isArray(rec.tempChoices) ? rec.tempChoices : [];
+  const idx = rec.tempChoices.indexOf(letter);
+  if (idx > -1) {
+    rec.tempChoices.splice(idx, 1);
+  } else {
+    rec.tempChoices.push(letter);
+    rec.tempChoices.sort();
+  }
+  renderMainStage();
+}
+
+function submitMultiChoiceAnswer(qId) {
+  const rec = getRecord(qId);
+  const choices = (rec.tempChoices || []).sort().join("");
+  if (!choices) {
+    alert("请至少勾选一个选项后再提交作答！");
+    return;
+  }
+  submitChoiceOption(qId, choices);
+}
+
+function submitChoiceOption(qId, chosenAnswer) {
   const q = allQuestions.find((item) => item.id === qId);
   if (!q) return;
   const rec = getRecord(qId);
-  const correctLetter = String(q.answer || "A").trim().toUpperCase().charAt(0);
+  const isMulti = q.qType === "multi_choice" || String(q.answer || "").trim().length > 1;
+  const correctAnswer = String(q.answer || "A").trim().toUpperCase();
 
   const wasAlreadyAnswered = rec.lastOpt !== null && rec.lastOpt !== undefined;
-  rec.lastOpt = chosenLetter;
-  // 严格遵循规则：作答后绝不自动触发查看答案与解析（保持 rec.revealed 原状，仅手动按钮可触发）
+  rec.lastOpt = chosenAnswer;
 
-  if (chosenLetter === correctLetter) {
+  const isCorrect = isMulti
+    ? (chosenAnswer.split("").sort().join("") === correctAnswer.split("").sort().join(""))
+    : (chosenAnswer.charAt(0) === correctAnswer.charAt(0));
+
+  if (isCorrect) {
     if (!wasAlreadyAnswered && rec.passes < 3) {
       rec.passes += 1;
     }
@@ -1006,6 +1085,7 @@ function submitChoiceOption(qId, chosenLetter) {
 function retryQuestionForNextPass(qId) {
   const rec = getRecord(qId);
   rec.lastOpt = null;
+  rec.tempChoices = [];
   rec.revealed = false;
   touchRecord(rec);
   saveState(false);
