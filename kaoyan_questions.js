@@ -1,816 +1,6961 @@
-// ============================================================================
-// 《考研数学二 (302)》与《考研英语二 (204)》近五年 (2022-2026) 分类真题汇总、做题技巧与草稿纸演算库
-// ============================================================================
-
-window.SUBJECTS = [
-  { id: "math2", name: "📐 考研数学二", badge: "6专题" },
-  { id: "eng2", name: "🇬🇧 考研英语二", badge: "5模块" }
-];
-
-window.CHAPTERS = [
-  // 数学二 6 大专题分类
-  { id: "m_ch1", subject: "math2", name: "专题一：函数、极限与泰勒展开", pdfPages: [1] },
-  { id: "m_ch2", subject: "math2", name: "专题二：一元微分学、反函数与曲率", pdfPages: [2] },
-  { id: "m_ch3", subject: "math2", name: "专题三：一元积分学、反常积分与微元法应用", pdfPages: [1, 2] },
-  { id: "m_ch4", subject: "math2", name: "专题四：常微分方程解的结构与求解", pdfPages: [1, 2] },
-  { id: "m_ch5", subject: "math2", name: "专题五：多元函数微分、极值与二重积分", pdfPages: [1, 2] },
-  { id: "m_ch6", subject: "math2", name: "专题六：线性代数（矩阵/方程组/特征值/二次型）", pdfPages: [2] },
-
-  // 英语二 5 大题型模块分类
-  { id: "e_ch1", subject: "eng2", name: "模块一：完形填空（逻辑关系与高频词辨析）", pdfPages: [] },
-  { id: "e_ch2", subject: "eng2", name: "模块二：阅读理解 Part A（四大题型同义改写与态度）", pdfPages: [] },
-  { id: "e_ch3", subject: "eng2", name: "模块三：新题型 Part B（2022-2026多项对应与小标题）", pdfPages: [] },
-  { id: "e_ch4", subject: "eng2", name: "模块四：翻译 Section III（2022-2026长难句拆分精译）", pdfPages: [] },
-  { id: "e_ch5", subject: "eng2", name: "模块五：写作 Section IV（2022-2026小作文书信+大作文图表）", pdfPages: [] }
-];
-
-window.CALC_GENERATORS = {};
-
-// ============================================================================
-// 考研数学二 (2022-2026) 分类真题库（含做题技巧、关联知识点与草稿纸分步计算）
-// ============================================================================
-window.QUESTIONS = [
-  {
-    id: "M26_01",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch1",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_01",
-    pdfPage: 1,
-    kaoyanImg: "assets/kaoyan/math2_2026_p1.png",
-    title: "【2026数二真题·第1题】泰勒展开与等价无穷小求参数 a, b",
-    prompt: "已知当 <i>x</i> → 0 时，<i>ax</i><sup>2</sup> + <i>bx</i> + arcsin <i>x</i> 与 <span class='math-inline'>(1 + <i>x</i><sup>2</sup>)<sup>1/3</sup> − 1</span> 是等价无穷小，求常数 <i>a</i>, <i>b</i> 的值。",
-    tips: "💡 破题秒杀技巧：见到加减法无穷小等价求参数，立刻用泰勒展开对比同阶系数！右端 <span class='math-inline'>(1 + <i>x</i><sup>2</sup>)<sup>1/3</sup> − 1 ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>2</sup></span> 是 2 阶无穷小，因此左端展开后 1 次项系数 (<i>b</i> + 1) 必须为 0，2 次项系数 <i>a</i> 必须等于 1/3！",
-    knowledgePoints: [
-      "广义二项式等价无穷小：(1 + u)^α − 1 ~ α·u (u → 0)",
-      "反正弦泰勒展开：arcsin x = x + (1/6)x³ + o(x³)",
-      "多项式与无穷小等价的充要条件：最低次幂阶数相同且主部系数相等"
-    ],
-    mcq: {
-      question: "【一刷·真题原题】已知当 x → 0 时，ax² + bx + arcsin x 与 (1+x²)¹/³ − 1 是等价无穷小，则 (  )",
-      options: [
-        "(A) a = 1/3, b = −1",
-        "(B) a = 1/3, b = 1",
-        "(C) a = 2/3, b = −1",
-        "(D) a = 2/3, b = 1"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "当 x→0 时，右端 (1+x²)¹/³ − 1 ~ {{0}}x²；左端利用 arcsin x = x + x³/6 + o(x³) 展开得 (b+1)x + ax² + o(x²)。因两式等价，必有一次项系数 b+1 = {{1}}，二次项系数 a = {{2}}，解得 b = {{3}}。",
-      answers: ["1/3", "0", "1/3", "-1"]
-    },
-    rubric: [
-      "写出右端等价无穷小主部：(1 + x²)¹/³ − 1 ~ (1/3)x²",
-      "写出左端泰勒展开：ax² + bx + arcsin x = (b + 1)x + ax² + (1/6)x³ + o(x³)",
-      "对比一阶与二阶系数得 b + 1 = 0 且 a = 1/3，算出 a = 1/3, b = −1"
-    ],
-    answerHtml: "<strong>【2026数二第1题·标准解析】</strong><div class='formula-card'>1. <strong>右端等价代换</strong>：当 <i>x</i> → 0 时，(1 + <i>x</i><sup>2</sup>)<sup>1/3</sup> − 1 ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>2</sup></div><div class='formula-card'>2. <strong>左端泰勒展开</strong>：因为 arcsin <i>x</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>)，故：<br><i>ax</i><sup>2</sup> + <i>bx</i> + arcsin <i>x</i> = (<i>b</i> + 1)<i>x</i> + <i>ax</i><sup>2</sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>)</div><div class='formula-card'>3. <strong>同阶主部系数匹配</strong>：要使左端与 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>2</sup> 等价，必有 <i>b</i> + 1 = 0 且 <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>，解得 <strong><i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>，<i>b</i> = −1</strong>（选 A）。</div>"
-  },
-  {
-    id: "M26_12",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch1",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_12",
-    pdfPage: 3,
-    kaoyanImg: "assets/kaoyan/math2_2026_p1.png",
-    title: "【2026数二真题·第12题】分式通分与泰勒展开求 0/0 型极限",
-    prompt: "求极限：<div class='formula-card'>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> [ <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> sin <i>x</i></span></span> · <i>x</i><sup>2</sup> ] &nbsp;（原卷形式：lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> [ <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>sin <i>x</i></span></span> ]，或等价二阶泰勒展开求值）</div>",
-    tips: "💡 破题技巧：先将中括号内整理到分母为 x²，再用 ln(1+x) = x − x²/2 + o(x²) 与 sin x = x − x³/6 + o(x³) 展开到二阶即可秒出结果 −1/2！",
-    knowledgePoints: [
-      "对数泰勒展开：ln(1+x) = x − (1/2)x² + (1/3)x³ + o(x³)",
-      "正弦泰勒展开：sin x = x − (1/6)x³ + o(x³)，故 x/sin x = 1 + (1/6)x² + o(x²)",
-      "定阶法则：外层乘 1/x，故中括号内部只需展开到 x 的一次项"
-    ],
-    mcq: {
-      question: "【一刷·泰勒定阶快筛】当 x → 0 时，ln(1+x)/x 与 x/sin x 的一阶泰勒展开分别为：",
-      options: [
-        "ln(1+x)/x = 1 − x/2 + o(x)，且 x/sin x = 1 + o(x)，故相减除以 x 极限为 −1/2",
-        "ln(1+x)/x = 1 + x/2 + o(x)，极限为 +1/2",
-        "两项均等价于 1，故相减必为 0",
-        "极限不存在"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "当 x→0 时，ln(1+x) = x − {{0}}x² + o(x²)，故 ln(1+x)/x = 1 − {{1}}x + o(x)；而 x/sin x = 1 + {{2}}x² + o(x²)。代入原式得极限值为 {{3}}。",
-      answers: ["1/2", "1/2", "1/6", "-1/2"]
-    },
-    rubric: [
-      "将 ln(1+x)/x 展开为 1 − x/2 + x²/3 + o(x²)",
-      "将 x/sin x 展开为 1 + x²/6 + o(x²)",
-      "两式相减除以 x，求出极限绝对值为 1/2（带符号为 −1/2）"
-    ],
-    answerHtml: "<strong>【2026数二第12题·标准解析】</strong><div class='formula-card'>利用泰勒公式展开：<br><span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'><i>x</i></span></span> = <span class='frac'><span class='frac-num'><i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>)</span><span class='frac-den'><i>x</i></span></span> = 1 − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i> + <i>o</i>(<i>x</i>)</div><div class='formula-card'>而 <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>sin <i>x</i></span></span> = 1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>) = 1 + <i>o</i>(<i>x</i>)</div><div class='formula-card'>故原极限 = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>(1 − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i>) − 1 + <i>o</i>(<i>x</i>)</span><span class='frac-den'><i>x</i></span></span> = <strong>−<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span></strong>（若题目为 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>[<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(1+<i>x</i>)</span></span>] 则极限为 <strong>+<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span></strong>）。</div>"
-  },
-  {
-    id: "M26_05_06",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch2",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_06_13",
-    pdfPage: 2,
-    kaoyanImg: "assets/kaoyan/math2_2026_p2.png",
-    title: "【2026数二真题·第6 & 13题】变限积分反函数求导与隐函数曲率半径",
-    prompt: "(1)【2026第6题】已知 <i>f</i>(<i>x</i>) = ∫<sub>1</sub><sup><i>x</i></sup> <span class='frac'><span class='frac-num'><i>e<sup>t</sup></i></span><span class='frac-den'>1 + <i>t</i><sup>2</sup></span></span> d<i>t</i>，<i>g</i>(<i>x</i>) 为 <i>f</i>(<i>x</i>) 的反函数，求 <i>g</i>(0) 与 <i>g'</i>(0)。<br>(2)【2026第13题】求隐函数曲线 <i>x</i><sup>2</sup> + 2<i>xy</i> + 3<i>y</i><sup>2</sup> = 3（或 <i>x</i><sup>2</sup> + 2<i>y</i> + <i>y</i><sup>2</sup> = 3）在点 (0, 1) 处的曲率半径 <i>R</i>。",
-    tips: "💡 反函数求导防坑铁律：求 g'(0) 时，这里的 0 是 y = f(x) 的函数值！必须先令 f(x0) = 0 找到积分上下限相等的点 x0 = 1（即 g(0) = 1），再用 g'(0) = 1 / f'(1) 计算！千万别算成 1 / f'(0)！",
-    knowledgePoints: [
-      "变上限积分求导公式：(∫_a^x φ(t)dt)' = φ(x)",
-      "反函数一阶导数定理：若 y0 = f(x0)，则 g'(y0) = 1 / f'(x0)",
-      "曲率半径公式：R = (1 + y'²)^(3/2) / |y''|"
-    ],
-    mcq: {
-      question: "【一刷·2026数二第6题原题】已知 f(x) = ∫₁ˣ [eᵗ/(1+t²)] dt，g(x) 为 f(x) 的反函数，则 (  )",
-      options: [
-        "(B) g(0) = 1,  g'(0) = 2/e",
-        "(A) g(0) = 1,  g'(0) = 3/(2e)",
-        "(C) g(1) = 0,  g'(0) = 2/e",
-        "(D) g(1) = 0,  g'(0) = 1"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "因为 f(1) = 0，由反函数定义知 g(0) = {{0}}。又 f'(x) = eˣ / (1+x²)，故 f'(1) = {{1}}。由反函数求导公式得 g'(0) = 1 / f'(1) = {{2}}。曲率半径公式为 R = (1 + y'²)^(3/2) / |{{3}}|。",
-      answers: ["1", "e/2", "2/e", "y''"]
-    },
-    rubric: [
-      "由积分上下限相等 f(1) = 0 得 g(0) = 1",
-      "求导得 f'(x) = eˣ/(1+x²)，代入 x=1 得 f'(1) = e/2，从而 g'(0) = 2/e",
-      "隐函数两边对 x 求一阶、二阶导数代入 (0,1)，由 R = (1+y'²)^(3/2)/|y''| 算出 R = 4"
-    ],
-    answerHtml: "<strong>【2026数二第6题 & 第13题·标准解析】</strong><div class='formula-card'>1. <strong>第6题（反函数求导）</strong>：<br>由 <i>f</i>(1) = ∫<sub>1</sub><sup>1</sup> <span class='frac'><span class='frac-num'><i>e<sup>t</sup></i></span><span class='frac-den'>1 + <i>t</i><sup>2</sup></span></span> d<i>t</i> = 0，得反函数值 <strong><i>g</i>(0) = 1</strong>。<br>又 <i>f'</i>(<i>x</i>) = <span class='frac'><span class='frac-num'><i>e<sup>x</sup></i></span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span>，故 <i>f'</i>(1) = <span class='frac'><span class='frac-num'><i>e</i></span><span class='frac-den'>2</span></span>，从而 <strong><i>g'</i>(0) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>f'</i>(1)</span></span> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span></strong>（选 B）。</div><div class='formula-card'>2. <strong>第13题（曲率半径）</strong>：<br>由隐函数求导得 (0, 1) 处 <i>y'</i>(0) = 0，<i>y''</i>(0) = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>，代入曲率半径公式：<br><i>R</i> = <span class='frac'><span class='frac-num'>(1 + <i>y'</i><sup>2</sup>)<sup>3/2</sup></span><span class='frac-den'>|<i>y''</i>|</span></span> = <span class='frac'><span class='frac-num'>(1 + 0)<sup>3/2</sup></span><span class='frac-den'>1/4</span></span> = <strong>4</strong>。</div>"
-  },
-  {
-    id: "M26_04_11_15_20",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch3",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_INTEGRAL",
-    pdfPage: 4,
-    kaoyanImg: "assets/kaoyan/math2_2026_p1.png",
-    title: "【2026数二真题·第4/11/15/20题】反常积分审敛、函数平均值与无界旋转体体积",
-    prompt: "请在草稿纸上完成2026数二积分学4道真题：<br>①【第11题】若反常积分 ∫<sub>0</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>arctan <i>x</i></span><span class='frac-den'><i>x<sup>p</sup></i>(1 + <i>x</i>)</span></span> d<i>x</i> 收敛，求实数 <i>p</i> 的取值范围；<br>②【第15题】求函数 <i>f</i>(<i>x</i>) = ln(2 + <i>x</i>) 在 [0, 2] 上的平均值；<br>③【第20题(12分大题)】设 <i>M</i>(<i>x</i><sub>0</sub>, <i>y</i><sub>0</sub>) 是曲线 <i>y</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> (<i>x</i> ≥ 0) 的拐点，区域 <i>D</i> 由该曲线 (<i>x</i> ≥ <i>x</i><sub>0</sub>)、线段 <i>OM</i> 及 <i>x</i> 轴正半轴围成，求 <i>D</i> 绕 <i>x</i> 轴旋转所得旋转体体积 <i>V</i>。",
-    tips: "💡 破题技巧：① 反常积分既有无穷区间又有 x=0 瑕点，必须拆成 (0,1) 和 (1,+∞) 两段分别用 p-积分定阶！② 第20题旋转体体积在 x0 左侧是圆锥 V1 = (1/3)π·y0²·x0，右侧是无界积分 V2 = π∫_(x0)^(+∞) (1+x²)⁻² dx（令 x = tan t 秒算）！",
-    knowledgePoints: [
-      "反常积分两头审敛：x→0⁺ 时被积函数 ~ x^(1-p) 需 p-1 < 1；x→+∞ 时 ~ 1/x^(p+1) 需 p+1 > 1",
-      "函数平均值公式：f_avg = [1/(b-a)] ∫_a^b f(x)dx",
-      "分部积分公式：∫ ln(2+x) dx = (2+x)ln(2+x) − x + C",
-      "三角换元求积分：∫ 1/(1+x²)² dx 令 x = tan t 化为 ∫ cos²t dt"
-    ],
-    mcq: {
-      question: "【一刷·真题快筛】2026数二第11题中反常积分收敛的 p 范围，以及第20题曲线 y = 1/(1+x²) (x≥0) 的拐点横坐标 x0 分别是：",
-      options: [
-        "0 < p < 2 ；拐点横坐标 x0 = √3 / 3 （此时 y0 = 3/4）",
-        "1 < p < 2 ；拐点横坐标 x0 = 1",
-        "0 < p < 1 ；拐点横坐标 x0 = 1/2",
-        "−1 < p < 2 ；拐点横坐标 x0 = √3"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "① 第11题：x→0⁺ 时被积函数 ~ 1/x^(p−1)，收敛要求 p−1 < 1 即 p < {{0}}；x→+∞ 时 ~ (π/2)/x^(p+1)，收敛要求 p+1 > 1 即 p > {{1}}，故 0 < p < 2。② 第15题：平均值 = (1/2)∫₀² ln(2+x)dx = {{2}}ln2 − 1。③ 第20题：y'' = (6x²−2)/(1+x²)³ = 0 得拐点 x0 = {{3}}。",
-      answers: ["2", "0", "3", "√3/3"]
-    },
-    rubric: [
-      "第11题：准确拆分 x→0⁺ (p < 2) 与 x→+∞ (p > 0)，得出 0 < p < 2",
-      "第15题：算出 (1/2) [(2+x)ln(2+x) − x]₀² = (1/2)(4ln4 − 2 − 2ln2) = 3ln2 − 1",
-      "第20题：求出拐点 (√3/3, 3/4)，圆锥体积 V1 = (1/3)π(3/4)²(√3/3) = √3·π/16",
-      "第20题：令 x = tan t 算出右侧体积 V2 = π∫_(π/6)^(π/2) cos²t dt = π²/6 − √3·π/8，总体积 V = V1 + V2 = π²/6 − √3·π/16"
-    ],
-    answerHtml: "<strong>【2026数二第11、15、20题·草稿纸完整解析】</strong><div class='formula-card'>1. <strong>第11题（反常积分审敛）</strong>：<br>• 当 <i>x</i> → 0<sup>+</sup> 时，<span class='frac'><span class='frac-num'>arctan <i>x</i></span><span class='frac-den'><i>x<sup>p</sup></i>(1 + <i>x</i>)</span></span> ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup><i>p</i>−1</sup></span></span>，由瑕积分收敛知 <i>p</i> − 1 &lt; 1 ⇒ <strong><i>p</i> &lt; 2</strong>；<br>• 当 <i>x</i> → +∞ 时，<span class='frac'><span class='frac-num'>arctan <i>x</i></span><span class='frac-den'><i>x<sup>p</sup></i>(1 + <i>x</i>)</span></span> ~ <span class='frac'><span class='frac-num'>π / 2</span><span class='frac-den'><i>x</i><sup><i>p</i>+1</sup></span></span>，由无穷积分收敛知 <i>p</i> + 1 &gt; 1 ⇒ <strong><i>p</i> &gt; 0</strong>。<br>综上：<strong>0 &lt; <i>p</i> &lt; 2</strong>。</div><div class='formula-card'>2. <strong>第15题（函数平均值）</strong>：<br>平均值 = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2 − 0</span></span> ∫<sub>0</sub><sup>2</sup> ln(2 + <i>x</i>) d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> [ (2 + <i>x</i>)ln(2 + <i>x</i>) − <i>x</i> ]<sub>0</sub><sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> (8 ln 2 − 2 − 2 ln 2) = <strong>3 ln 2 − 1</strong>。</div><div class='formula-card'>3. <strong>第20题（12分旋转体体积大题）</strong>：<br>• 求二阶导：<i>y'</i> = <span class='frac'><span class='frac-num'>−2<i>x</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>2</sup></span></span>，<i>y''</i> = <span class='frac'><span class='frac-num'>6<i>x</i><sup>2</sup> − 2</span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>3</sup></span></span> = 0 ⇒ 拐点 <i>M</i> 为 <strong>( <span class='frac'><span class='frac-num'>√3</span><span class='frac-den'>3</span></span>, <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>4</span></span> )</strong>。<br>• 左侧圆锥体积：<i>V</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>π <i>y</i><sub>0</sub><sup>2</sup> <i>x</i><sub>0</sub> = <span class='frac'><span class='frac-num'>√3</span><span class='frac-den'>16</span></span>π。<br>• 右侧旋转体体积：令 <i>x</i> = tan <i>t</i>，<i>V</i><sub>2</sub> = π ∫<sub><i>x</i><sub>0</sub></sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>2</sup></span></span> d<i>x</i> = π ∫<sub>π/6</sub><sup>π/2</sup> cos<sup>2</sup><i>t</i> d<i>t</i> = <span class='frac'><span class='frac-num'>π<sup>2</sup></span><span class='frac-den'>6</span></span> − <span class='frac'><span class='frac-num'>√3</span><span class='frac-den'>8</span></span>π。<br>• 总体积：<i>V</i> = <i>V</i><sub>1</sub> + <i>V</i><sub>2</sub> = <strong><span class='frac'><span class='frac-num'>π<sup>2</sup></span><span class='frac-den'>6</span></span> − <span class='frac'><span class='frac-num'>√3</span><span class='frac-den'>16</span></span>π</strong>。</div>"
-  },
-  {
-    id: "M26_02_21",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch4",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_ODE",
-    pdfPage: 6,
-    kaoyanImg: "assets/kaoyan/math2_2026_p1.png",
-    title: "【2026数二真题·第2 & 21题】线性微分方程解的结构与二阶可降阶微分方程",
-    prompt: "(1)【2026第2题】设 <i>y</i><sub>1</sub>(<i>x</i>), <i>y</i><sub>2</sub>(<i>x</i>) 是某2阶非齐次线性微分方程的两个特解，若常数 <i>λ</i>, <i>μ</i> 使得 2<i>λy</i><sub>1</sub> + <i>μy</i><sub>2</sub> 是该非齐次方程的解，且 <i>λy</i><sub>1</sub> − 2<i>μy</i><sub>2</sub> 是对应齐次方程的解，求 <i>λ</i>, <i>μ</i>。<br>(2)【2026第21题(12分大题)】求微分方程 <i>x</i><sup>2</sup><i>y''</i> − 2<i>xy'</i> − (<i>y'</i>)<sup>2</sup> = 0 (<i>x</i> &gt; 2) 满足初值 <i>y</i>(3) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, <i>y'</i>(3) = −9 的特解。",
-    tips: "💡 秒杀口诀：① 非齐次特解线性组合 k₁y₁ + k₂y₂：『仍是原非齐次解 ⇔ 系数和 = 1；变成齐次解 ⇔ 系数和 = 0』！3秒列出 2λ+μ=1 且 λ−2μ=0！② 第21题见到 x²y'' − 2xy' 除以 (y')² 立刻凑成 -(x²/y')' = 1！",
-    knowledgePoints: [
-      "非齐次特解组合定理：k₁y₁ + k₂y₂ 为非齐次解 ⇔ k₁ + k₂ = 1；为齐次解 ⇔ k₁ + k₂ = 0",
-      "商的导数逆用凑微分：(x² / y')' = (2xy' − x²y'') / (y')²",
-      "有理分式裂项积分：∫ x²/(2−x) dx 巧用多项式带余除法 x² = (x²−4) + 4"
-    ],
-    mcq: {
-      question: "【一刷·2026数二第2题原题】满足 2λy₁ + μy₂ 为非齐次解、λy₁ − 2μy₂ 为齐次解的常数 λ, μ 为 (  )",
-      options: [
-        "(B) λ = 2/5,  μ = 1/5",
-        "(A) λ = 1/5,  μ = 2/5",
-        "(C) λ = 1/2,  μ = 1/4",
-        "(D) λ = 1/4,  μ = 1/2"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "由非齐次线性微分方程解的结构定理：2λ + μ = {{0}}，且 λ − 2μ = {{1}}，解得 λ = {{2}}，μ = {{3}}。第21题将方程改写为 (x²/y')' = {{4}}，积分并代入 y'(3)=−9 得 C1 = 2。",
-      answers: ["1", "0", "2/5", "1/5", "-1"]
-    },
-    rubric: [
-      "第2题：列出方程组 2λ + μ = 1 与 λ − 2μ = 0，解得 λ = 2/5, μ = 1/5",
-      "第21题：原方程两边同除以 -(y')² 化为 (x²/y')' = -1，积分得 x²/y' = -x + C1",
-      "第21题：由 y'(3) = -9 解得 C1 = 2，从而 y' = x²/(2 - x)",
-      "第21题：裂项积分 y = ∫ [-(x+2) + 4/(2-x)] dx 并代入 y(3)=1/2 得 y = -4ln(x-2) - (1/2)x² - 2x + 11"
-    ],
-    answerHtml: "<strong>【2026数二第2题 & 第21题·标准解析】</strong><div class='formula-card'>1. <strong>第2题（解的结构秒杀）</strong>：<br>由解的结构定理得：<br>2<i>λ</i> + <i>μ</i> = 1 （非齐次方程的解系数和为 1）<br><i>λ</i> − 2<i>μ</i> = 0 （齐次方程的解系数和为 0）<br>联立解得：<strong><i>λ</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>，<i>μ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span></strong>（选 B）。</div><div class='formula-card'>2. <strong>第21题（12分微分方程大题）</strong>：<br>• 原方程变形为：<span class='frac'><span class='frac-num'>2<i>xy'</i> − <i>x</i><sup>2</sup><i>y''</i></span><span class='frac-den'>(<i>y'</i>)<sup>2</sup></span></span> = −1 ⇒ ( <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'><i>y'</i></span></span> )<i>'</i> = −1。<br>• 两边积分得：<span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'><i>y'</i></span></span> = −<i>x</i> + <i>C</i><sub>1</sub>，代入 <i>y'</i>(3) = −9 得 <span class='frac'><span class='frac-num'>9</span><span class='frac-den'>−9</span></span> = −3 + <i>C</i><sub>1</sub> ⇒ <i>C</i><sub>1</sub> = 2。<br>• 故 <i>y'</i> = <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2 − <i>x</i></span></span> = −(<i>x</i> + 2) − <span class='frac'><span class='frac-num'>4</span><span class='frac-den'><i>x</i> − 2</span></span>，积分得：<i>y</i> = −4 ln(<i>x</i> − 2) − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> − 2<i>x</i> + <i>C</i><sub>2</sub>。<br>• 代入 <i>y</i>(3) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> 得 <i>C</i><sub>2</sub> = 11，故所求特解为：<strong><i>y</i> = −4 ln(<i>x</i> − 2) − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> − 2<i>x</i> + 11 (<i>x</i> &gt; 2)</strong>。</div>"
-  },
-  {
-    id: "M26_03_14_19",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch5",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_MULTI",
-    pdfPage: 5,
-    kaoyanImg: "assets/kaoyan/math2_2026_p1.png",
-    title: "【2026数二真题·第3/14/19题】隐函数偏导、全微分链式法则与二元函数极值",
-    prompt: "请在草稿纸上完成2026数二多元微分3道真题：<br>①【第3题】设 <i>z</i> = <i>z</i>(<i>x</i>, <i>y</i>) 由方程 <i>x</i> − <i>az</i> = <i>e</i><sup><i>y</i>+<i>az</i></sup>（<i>a</i> 为非零常数）确定，求 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> 与 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> 满足的恒等式；<br>②【第14题】设 <i>f</i>(<i>x</i>, <i>y</i>) 可微，且 d<i>f</i>(0, 0) = πd<i>x</i> + 3d<i>y</i>，若 <i>g</i>(<i>x</i>) = <i>f</i>(ln <i>x</i>, sin π<i>x</i>)，计算 <i>g'</i>(1)；<br>③【第19题(12分大题)】求二元函数 <i>f</i>(<i>x</i>, <i>y</i>) = (2<i>x</i><sup>2</sup> − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i> 的极值。",
-    tips: "💡 秒杀技巧：① 第3题直接对 x−az = e^(y+az) 两边取全微分：dx − a·dz = e^(y+az)(dy + a·dz)，整理即可秒出 ∂z/∂x − ∂z/∂y = 1/a！② 第14题由 df(0,0) = πdx + 3dy 直接读出 f'₁(0,0) = π, f'₂(0,0) = 3！",
-    knowledgePoints: [
-      "一阶全微分形式不变性：dz = (∂z/∂x)dx + (∂z/∂y)dy",
-      "多元复合函数求导链式法则：g'(x) = f'₁(u,v)·u'(x) + f'₂(u,v)·v'(x)",
-      "二元函数无条件极值判别式：AC − B² > 0 时有极值（A < 0 极大，A > 0 极小）"
-    ],
-    mcq: {
-      question: "【一刷·真题快筛】2026数二第14题中 g'(1) 的值以及第19题函数 f(x,y) = (2x²−y²)eˣ 的极值情况分别为：",
-      options: [
-        "g'(1) = −2π ；函数在 (0,0) 处无极值，在 (−2,0) 处取得极大值 8e⁻²",
-        "g'(1) = 4π ；函数在 (0,0) 处取得极小值 0",
-        "g'(1) = −2π ；函数在 (−2,0) 处取得极小值 8e⁻²",
-        "g'(1) = π − 3 ；函数有两个极值点"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "① 第3题：∂z/∂x − ∂z/∂y = {{0}}。② 第14题：由 df(0,0) = πdx + 3dy 知 f'₁(0,0) = π，f'₂(0,0) = 3；g'(1) = f'₁(0,0)·(1/1) + f'₂(0,0)·(π·cos π) = {{1}}。③ 第19题：驻点为 (0,0) 和 ({{2}}, 0)，极大值为 {{3}}。",
-      answers: ["1/a", "-2π", "-2", "8e^-2"]
-    },
-    rubric: [
-      "第3题：两边求偏导或取全微分得出 ∂z/∂x − ∂z/∂y = 1/a（选A）",
-      "第14题：准确使用链式法则 g'(1) = π × 1 + 3 × (-π) = -2π",
-      "第19题：解 f'x = eˣ(2x²+4x-y²) = 0 与 f'y = -2yeˣ = 0 得驻点 (0,0) 和 (-2,0)",
-      "第19题：算二阶偏导判别：(0,0) 处 AC-B² = -8 < 0 非极值；(-2,0) 处 A = -4e⁻² < 0, AC-B² = 8e⁻⁴ > 0，极大值为 f(-2,0) = 8e⁻²"
-    ],
-    answerHtml: "<strong>【2026数二第3、14、19题·标准解析】</strong><div class='formula-card'>1. <strong>第3题（隐函数偏导）</strong>：<br>方程 <i>x</i> − <i>az</i> = <i>e</i><sup><i>y</i>+<i>az</i></sup> 两边分别对 <i>x</i>, <i>y</i> 求偏导：<br>1 − <i>a</i><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> = <i>a e</i><sup><i>y</i>+<i>az</i></sup><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> ，&nbsp; −<i>a</i><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <i>e</i><sup><i>y</i>+<i>az</i></sup>(1 + <i>a</i><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span>)<br>整理相减即得：<strong><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> − <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span></strong>（选 A）。</div><div class='formula-card'>2. <strong>第14题（复合函数求导）</strong>：<br>由 d<i>f</i>(0,0) = πd<i>x</i> + 3d<i>y</i> 得 <i>f'</i><sub>1</sub>(0,0) = π，<i>f'</i><sub>2</sub>(0,0) = 3。<br><i>g'</i>(<i>x</i>) = <i>f'</i><sub>1</sub>(ln <i>x</i>, sin π<i>x</i>)·<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> + <i>f'</i><sub>2</sub>(ln <i>x</i>, sin π<i>x</i>)·(π cos π<i>x</i>)<br>代入 <i>x</i> = 1（此时 ln 1 = 0, sin π = 0, cos π = −1）：<i>g'</i>(1) = π × 1 + 3 × (−π) = <strong>−2π</strong>。</div><div class='formula-card'>3. <strong>第19题（12分二元极值大题）</strong>：<br>• 一阶偏导：<i>f'<sub>x</sub></i> = (2<i>x</i><sup>2</sup> + 4<i>x</i> − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i> = 0，<i>f'<sub>y</sub></i> = −2<i>ye<sup>x</sup></i> = 0 ⇒ 驻点 <strong>(0, 0)</strong> 与 <strong>(−2, 0)</strong>。<br>• 二阶偏导：<i>f''<sub>xx</sub></i> = (2<i>x</i><sup>2</sup> + 8<i>x</i> + 4 − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i>，<i>f''<sub>xy</sub></i> = −2<i>ye<sup>x</sup></i>，<i>f''<sub>yy</sub></i> = −2<i>e<sup>x</sup></i>。<br>• 在 (0, 0) 处：<i>A</i> = 4, <i>B</i> = 0, <i>C</i> = −2，<i>AC − B</i><sup>2</sup> = −8 &lt; 0，故 (0, 0) 不是极值点；<br>• 在 (−2, 0) 处：<i>A</i> = −4<i>e</i><sup>−2</sup> &lt; 0, <i>B</i> = 0, <i>C</i> = −2<i>e</i><sup>−2</sup>，<i>AC − B</i><sup>2</sup> = 8<i>e</i><sup>−4</sup> &gt; 0，故在 (−2, 0) 处取得<strong>极大值 <i>f</i>(−2, 0) = 8<i>e</i><sup>−2</sup></strong>。</div>"
-  },
-  {
-    id: "M26_08_09_10_22",
-    subject: "math2",
-    year: 2026,
-    chapter: "m_ch6",
-    type: "calc",
-    typeName: "真题计算(草稿纸)",
-    calcType: "MATH2_26_LINALG",
-    pdfPage: 6,
-    kaoyanImg: "assets/kaoyan/math2_2026_p2.png",
-    title: "【2026数二真题·第8/9/10/22题】置换矩阵、矩阵方程 AB=C 与满秩分解求 A¹⁰",
-    prompt: "请在草稿纸上完成2026数二线性代数核心真题：<br>①【第8题】单位阵经过若干次两行互换得到的矩阵为置换矩阵，设 <i>A</i> 为 <i>n</i> 阶置换矩阵，判断 <i>A</i><sup>−1</sup> 与 <i>A</i><sup>*</sup> 的性质；<br>②【第9题】给定 4×3 矩阵 <i>A</i> 与 4×2 矩阵 <i>C</i>（含参数 <i>a</i>, <i>b</i>），若存在矩阵 <i>B</i> 满足 <i>AB</i> = <i>C</i>，求 <i>a</i>, <i>b</i>；<br>③【第22题(12分线代大题)】设向量组 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub> 构成矩阵 <i>A</i> = (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>)，<i>G</i> = (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>)：(1) 证明 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub> 是极大线性无关组；(2) 求矩阵 <i>H</i> 满足 <i>A</i> = <i>GH</i>，并求高次幂 <i>A</i><sup>10</sup>。",
-    tips: "💡 线代大题破题神技：求 4 阶矩阵 A 的 10 次幂 A¹⁰，既然题目已经提示了 A = GH（其中 G 是 4×2，H 是 2×4），千万不要硬乘 4 阶矩阵！直接利用结合律 A¹⁰ = G·(HG)⁹·H，把 4 阶矩阵求幂瞬间降维成 2 阶上三角矩阵 HG = [[1, -1], [0, 1]] 的 9 次幂（其 n 次幂右上角元素就是 -n）！",
-    knowledgePoints: [
-      "置换矩阵必为正交矩阵：A⁻¹ = Aᵀ，置换矩阵的转置仍是置换矩阵",
-      "矩阵方程 AB = C 有解 ⇔ r(A) = r(A, C)",
-      "满秩分解求高次幂：A = GH ⇒ Aⁿ = G (HG)ⁿ⁻¹ H",
-      "二阶上三角矩阵求幂：[[1, k], [0, 1]]ⁿ = [[1, n·k], [0, 1]]"
-    ],
-    mcq: {
-      question: "【一刷·2026数二第8 & 9题原题】关于置换矩阵 A 以及矩阵方程 AB = C 有解的结论，正确的是：",
-      options: [
-        "第8题选(B) A⁻¹ 必为置换矩阵；第9题由增广矩阵 (A|C) 行变换使非零行比例一致得 a = −1, b = −1 (选A)",
-        "第8题选(C) A* = A⁻¹ 恒成立（忽略了奇排列置换矩阵行列式为 −1）",
-        "第9题 a = 2, b = 2",
-        "第22题中 2 阶矩阵 HG = [[1, -1], [0, 1]] 的 9 次幂为 [[1, -1], [0, 1]]"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "① 第8题：置换矩阵满足 AᵀA = E，故 A⁻¹ = {{0}} 仍为置换矩阵。② 第9题：AB = C 有解充要条件为 r(A) = r({{1}})，解得 a = {{2}}, b = −1。③ 第22题：利用结合律 A¹⁰ = G · ({{3}})⁹ · H，其中 (HG)⁹ = [[1, {{4}}], [0, 1]]。",
-      answers: ["A^T", "A,C", "-1", "HG", "-9"]
-    },
-    rubric: [
-      "第8题：指出置换矩阵是正交阵 A⁻¹ = Aᵀ 仍是置换阵，而 |A| = ±1 故 A* = ±A⁻¹，选(B)",
-      "第9题：对 (A | C) 作初等行变换，令第3、4行零行右侧同为 0，算出 a = −1, b = −1",
-      "第22题(1)：对 A 作初等行变换化为行阶梯形，得 r(A) = 2 且前两列主元独立，证毕",
-      "第22题(2)：写出 H = [[1,0,-1,1],[0,1,1,-1]]，算出 HG = [[1,-1],[0,1]] 及 (HG)⁹ = [[1,-9],[0,1]]，代回 A¹⁰ = G(HG)⁹H 得出结果"
-    ],
-    answerHtml: "<strong>【2026数二第8、9、22题·标准解析】</strong><div class='formula-card'>1. <strong>第8题（置换矩阵）</strong>：置换矩阵列向量组标准正交，故 <i>A</i><sup>−1</sup> = <i>A<sup>T</sup></i> 仍为置换矩阵（选 <strong>B</strong>）。注意互换奇数次两行时 |<i>A</i>| = −1，此时 <i>A</i><sup>*</sup> = −<i>A</i><sup>−1</sup>。</div><div class='formula-card'>2. <strong>第9题（矩阵方程 <i>AB = C</i>）</strong>：对增广矩阵 (<i>A</i> | <i>C</i>) 作初等行变换，由 <i>r</i>(<i>A</i>) = <i>r</i>(<i>A</i>, <i>C</i>) = 2 消去底行可得 <strong><i>a</i> = −1，<i>b</i> = −1</strong>（选 <strong>A</strong>）。</div><div class='formula-card'>3. <strong>第22题（12分线代大题：求 <i>H</i> 与 <i>A</i><sup>10</sup>）</strong>：<br>• (1) 对 (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>) 行化简得行最简形前两行为 [1, 0, −1, 1] 与 [0, 1, 1, −1]，故 <i>r</i>(<i>A</i>) = 2 且 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub> 线性无关，是极大无关组。<br>• (2) 由行最简形直接读出系数矩阵 <i>H</i> = [ [1, 0, −1, 1], [0, 1, 1, −1] ]。<br>• 计算 2 阶矩阵 <i>HG</i> = [ [1, −1], [0, 1] ]，因此 (<i>HG</i>)<sup>9</sup> = [ [1, −9], [0, 1] ]。<br>• 故 <strong><i>A</i><sup>10</sup> = <i>G</i>(<i>HG</i>)<sup>9</sup><i>H</i></strong>，代入矩阵乘法即得最终 4×4 矩阵。</div>"
-  }
-];
-
-// 数学二草稿纸计算题生成器扩充
-Object.assign(window.CALC_GENERATORS, {
-  MATH2_26_01: function(randomize) {
-    const k = randomize ? [2, 3, 4, 5][Math.floor(Math.random() * 4)] : 3;
-    const c_sin = randomize ? (Math.random() > 0.5 ? 1 : 2) : 1;
-    const a_ans = +(1 / k).toFixed(3);
-    const b_ans = -c_sin;
-    return {
-      code: "#MATH2-2026-01 | 泰勒展开与等价无穷小求参",
-      noteTip: "草稿纸步骤：① 将 (1 + x²)^(1/k) − 1 展开为 (1/k)x²；② 将左端 bx + c·arcsin x 展开合并一次项 (b+c)x = 0",
-      params: [
-        { name: "左端表达式", val: `ax² + bx + ${c_sin === 1 ? "" : c_sin}arcsin x` },
-        { name: "右端表达式", val: `(1 + x²)^(1/${k}) − 1` },
-        { name: "极限过程", val: "x → 0 时两式为等价无穷小" }
-      ],
-      steps: [
-        {
-          label: "Step 1：求一次项系数消去条件下的参数 b",
-          formula: `b + ${c_sin} = 0  ⇒  b = −${c_sin}`,
-          unit: "(常数)",
-          answer: b_ans,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：求二次项主部系数匹配下的参数 a（保留3位小数，如 1/3 填 0.333）",
-          formula: `(1 + x²)^(1/${k}) − 1 ~ (1/${k})x²  ⇒  a = 1/${k}`,
-          unit: "(常数)",
-          answer: a_ans,
-          tolerance: 0.01
-        }
-      ]
-    };
-  },
-
-  MATH2_26_12: function(randomize) {
-    const k = randomize ? Math.round(1 + Math.random() * 3) : 1;
-    const ans = +(-0.5 * k).toFixed(2);
-    return {
-      code: "#MATH2-2026-12 | 泰勒展开求分式差极限",
-      noteTip: "在草稿纸写出：ln(1+kx)/x = k − (k²/2)x + o(x)，减去 k·x/sin(x) 后除以 k·x",
-      params: [
-        { name: "待求极限表达式", val: `lim(x→0) [1/(${k}x)] · [ ln(1+${k}x)/x − ${k}x / sin x ]` }
-      ],
-      steps: [
-        {
-          label: "Step 1：写出 ln(1+kx)/x 展开式中 x 一次项的系数",
-          formula: `ln(1+${k}x)/x = ${k} − (${k * k}/2)x + o(x)`,
-          unit: "",
-          answer: -0.5 * k * k,
-          tolerance: 0.02
-        },
-        {
-          label: "Step 2：计算最终极限值",
-          formula: `-(${k}² / 2) / ${k} = -${k}/2`,
-          unit: "",
-          answer: ans,
-          tolerance: 0.02
-        }
-      ]
-    };
-  },
-
-  MATH2_26_06_13: function(randomize) {
-    const a = randomize ? Math.round(1 + Math.random() * 3) : 1;
-    const g0 = 1;
-    const f_prime_1 = +(Math.E / (1 + a)).toFixed(3);
-    const g_prime_0 = +((1 + a) / Math.E).toFixed(3);
-    return {
-      code: "#MATH2-2026-06&13 | 变限积分反函数导数与曲率半径",
-      noteTip: "草稿纸铁律：先令 f(x0)=0 得 x0=1，再算 g'(0) = 1 / f'(1)",
-      params: [
-        { name: "变限积分函数 f(x)", val: `∫₁ˣ [ eᵗ / (1 + ${a}t²) ] dt` },
-        { name: "曲线方程 (第13题)", val: "x² + 2y + y² = 3 在点 (0, 1)" }
-      ],
-      steps: [
-        {
-          label: "Step 1：求反函数在 0 处的值 g(0)",
-          formula: "令 f(x0) = 0 ⇒ 积分上下限相等 x0 = 1",
-          unit: "",
-          answer: g0,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：求反函数导数值 g'(0)（取 e ≈ 2.718 计算小数）",
-          formula: `g'(0) = 1 / f'(1) = (1 + ${a}) / e`,
-          unit: "",
-          answer: g_prime_0,
-          tolerance: 0.03
-        },
-        {
-          label: "Step 3：计算第13题曲线在 (0,1) 处的曲率半径 R",
-          formula: "R = (1 + y'²)^(3/2) / |y''| = 1 / (1/4) = 4",
-          unit: "",
-          answer: 4,
-          tolerance: 0.05
-        }
-      ]
-    };
-  },
-
-  MATH2_26_INTEGRAL: function() {
-    return {
-      code: "#MATH2-2026-11/15/20 | 积分学三大真题草稿演算",
-      noteTip: "在草稿纸依次演算第11题(p范围)、第15题(平均值 3ln2-1 ≈ 1.079)与第20题(拐点 x0 = √3/3 ≈ 0.577)",
-      params: [
-        { name: "第11题反常积分", val: "∫₀^(+∞) arctan(x) / [x^p(1+x)] dx" },
-        { name: "第15题平均值区间", val: "f(x) = ln(2+x), x ∈ [0, 2]" },
-        { name: "第20题曲线", val: "y = 1 / (1 + x²) (x ≥ 0)" }
-      ],
-      steps: [
-        {
-          label: "Step 1：第11题反常积分收敛的 p 的上限值（0 < p < ?）",
-          formula: "x→0⁺ 时 x^(1-p) 收敛需 p - 1 < 1 ⇒ p < 2",
-          unit: "",
-          answer: 2,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：第15题平均值 3ln2 − 1 的小数近似值（取 ln2 ≈ 0.693）",
-          formula: "3 × 0.6931 − 1 ≈ 1.079",
-          unit: "",
-          answer: 1.079,
-          tolerance: 0.03
-        },
-        {
-          label: "Step 3：第20题拐点 M(x0, y0) 的纵坐标 y0",
-          formula: "由 6x0² - 2 = 0 得 x0² = 1/3，代入 y0 = 1/(1 + 1/3) = 3/4 = 0.75",
-          unit: "",
-          answer: 0.75,
-          tolerance: 0.01
-        }
-      ]
-    };
-  },
-
-  MATH2_26_ODE: function() {
-    return {
-      code: "#MATH2-2026-02&21 | 微分方程真题草稿演算",
-      noteTip: "第2题：2λ+μ=1, λ-2μ=0；第21题：x²y'' - 2xy' - (y')² = 0, y(3)=0.5, y'(3)=-9",
-      params: [
-        { name: "第2题特解组合", val: "2λy₁+μy₂ 为非齐次解，λy₁−2μy₂ 为齐次解" },
-        { name: "第21题初值条件", val: "x=3 时 y=1/2, y'=−9" }
-      ],
-      steps: [
-        {
-          label: "Step 1：计算第2题中的参数 λ（2/5 填小数 0.4）",
-          formula: "2λ + μ = 1 且 λ = 2μ ⇒ 5μ = 1 ⇒ μ = 0.2, λ = 0.4",
-          unit: "",
-          answer: 0.4,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：第21题积分 x²/y' = -x + C1，代入 y'(3)=-9 求常数 C1",
-          formula: "3² / (-9) = -3 + C1 ⇒ -1 = -3 + C1 ⇒ C1 = 2",
-          unit: "",
-          answer: 2,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 3：第21题积分 y = -4ln(x-2) - 0.5x² - 2x + C2，代入 y(3)=0.5 求 C2",
-          formula: "0.5 = 0 - 4.5 - 6 + C2 ⇒ C2 = 11",
-          unit: "",
-          answer: 11,
-          tolerance: 0.01
-        }
-      ]
-    };
-  },
-
-  MATH2_26_MULTI: function() {
-    return {
-      code: "#MATH2-2026-14&19 | 多元微分与极值大题草稿演算",
-      noteTip: "第14题：df(0,0)=πdx+3dy, g(x)=f(lnx, sinπx)；第19题：f(x,y)=(2x²-y²)e^x",
-      params: [
-        { name: "第14题全微分", val: "df(0,0) = π dx + 3 dy" },
-        { name: "第19题二元函数", val: "f(x,y) = (2x² − y²)eˣ" }
-      ],
-      steps: [
-        {
-          label: "Step 1：第14题求 g'(1) 中 π 的系数（即 g'(1) = k·π 中的 k）",
-          formula: "g'(1) = π·(1/1) + 3·(π·cos π) = π − 3π = −2π",
-          unit: "π",
-          answer: -2,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：第19题求极值点 (x0, 0) 的横坐标 x0（非零驻点）",
-          formula: "2x² + 4x = 0 (x ≠ 0) ⇒ x0 = −2",
-          unit: "",
-          answer: -2,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 3：第19题极大值 f(-2, 0) = k·e⁻² 中的系数 k",
-          formula: "f(-2, 0) = [2×(-2)² − 0]·e⁻² = 8e⁻²",
-          unit: "e⁻²",
-          answer: 8,
-          tolerance: 0.01
-        }
-      ]
-    };
-  },
-
-  MATH2_26_LINALG: function() {
-    return {
-      code: "#MATH2-2026-09&22 | 线性代数真题草稿演算",
-      noteTip: "第9题：AB=C 有解求 a,b；第22题：A=GH，求 2 阶矩阵 HG = [[1, -1], [0, 1]] 的 9 次幂",
-      params: [
-        { name: "第9题条件", val: "存在矩阵 B 使 AB = C ⇔ r(A) = r(A, C)" },
-        { name: "第22题分解", val: "A = GH, 其中 HG = [[1, -1], [0, 1]]" }
-      ],
-      steps: [
-        {
-          label: "Step 1：第9题求出参数 a 的值",
-          formula: "由增广矩阵初等行变换消元得 a = −1, b = −1",
-          unit: "",
-          answer: -1,
-          tolerance: 0.01
-        },
-        {
-          label: "Step 2：第22题计算 2 阶矩阵 (HG)⁹ 右上角 (1,2) 位置的元素值",
-          formula: "[[1, -1], [0, 1]]⁹ = [[1, -9], [0, 1]]",
-          unit: "",
-          answer: -9,
-          tolerance: 0.01
-        }
-      ]
-    };
-  }
-});
-
-// ============================================================================
-// 2022-2025 数学二高频经典真题 + 2022-2026 英语二五大模块分类真题汇总
-// ============================================================================
-window.QUESTIONS.push(
-  {
-    id: "M22_25_CORE",
-    subject: "math2",
-    year: 2025,
-    chapter: "m_ch2",
-    type: "short",
-    typeName: "五年真题汇总",
-    pdfPage: 1,
-    kaoyanImg: "assets/kaoyan/math2_2025_p1.png",
-    title: "【2022-2025数二真题汇总】中值定理辅助函数构造与零点/极值点个数判定",
-    prompt: "汇总2022—2025年数学二微分中值定理高频真题：<br>(1) 见到待证等式含 <i>f'</i>(<i>ξ</i>) + <i>a f</i>(<i>ξ</i>) = 0 或 <i>x f'</i>(<i>x</i>) + <i>n f</i>(<i>x</i>) = 0 时，如何快速构造罗尔定理辅助函数 <i>F</i>(<i>x</i>)？<br>(2) 见到双介值点 <i>ξ</i>, <i>η</i> 问题时，什么时候用『两次拉格朗日中值定理』，什么时候用『拉格朗日 + 柯西中值定理』？",
-    tips: "💡 中值定理构造口诀：『加号乘幂乘指数，减号除幂除指数』！例如 f'(x) + a·f(x) 乘积分因子 e^(ax) 构造成 F(x) = e^(ax)·f(x)；x·f'(x) + n·f(x) 乘 x^(n-1) 构造成 F(x) = xⁿ·f(x)！双介值若两式共享同一个区间端点则用两次拉格朗日，若区间不重叠则分段用拉格朗日。",
-    knowledgePoints: [
-      "罗尔定理辅助函数表：① f'+af → e^(ax)f(x)；② f'-af → e^(-ax)f(x)；③ xf'+nf → xⁿf(x)",
-      "零点定理（定存在）+ 单调性/罗尔定理推论（定唯一）",
-      "泰勒中值定理：当题干出现二阶导 f''(ξ) 且已知一点处一阶导 f'(x0)=0 时必用泰勒展开到二阶！"
-    ],
-    mcq: {
-      question: "【一刷·构造秒杀】若要在 [a, b] 上证明存在 ξ 使 ξ·f'(ξ) + 2f(ξ) = 0，应构造的罗尔定理辅助函数 F(x) 是：",
-      options: [
-        "F(x) = x² · f(x)   （因为 [x²f(x)]' = x · [x·f'(x) + 2f(x)]）",
-        "F(x) = e^(2x) · f(x)",
-        "F(x) = f(x) / x²",
-        "F(x) = x · f²(x)"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "微分中值定理三大构造模型：① 证 f'(ξ) + a·f(ξ) = 0 构造 F(x) = {{0}}·f(x)；② 证 ξ·f'(ξ) + n·f(ξ) = 0 构造 F(x) = {{1}}·f(x)；③ 题干含函数值与二阶导数 f''(ξ) 关系时，必用{{2}}公式在极值点或端点处展开。",
-      answers: ["e^(ax)", "x^n", "泰勒"]
-    },
-    rubric: [
-      "熟练写出指数型积分因子辅助函数 F(x) = e^(∫p(x)dx)·f(x)",
-      "熟练写出幂函数型辅助函数 F(x) = xⁿ·f(x) 与商型 F(x) = f(x)/x",
-      "掌握一阶导用拉格朗日/柯西、高阶导用泰勒公式的破题分流原则"
-    ],
-    answerHtml: "<strong>【2022-2025数二中值定理核心总结】</strong><div class='formula-card'>1. <strong>常见微分算子对应的辅助函数 <i>F</i>(<i>x</i>)</strong>：<br>• <i>f'</i>(<i>x</i>) + <i>a f</i>(<i>x</i>) = 0  ⇒  构造 <strong><i>F</i>(<i>x</i>) = <i>e<sup>ax</sup> f</i>(<i>x</i>)</strong><br>• <i>x f'</i>(<i>x</i>) + <i>n f</i>(<i>x</i>) = 0  ⇒  构造 <strong><i>F</i>(<i>x</i>) = <i>x<sup>n</sup> f</i>(<i>x</i>)</strong><br>• <i>x f'</i>(<i>x</i>) − <i>f</i>(<i>x</i>) = 0  ⇒  构造 <strong><i>F</i>(<i>x</i>) = <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>x</i></span></span></strong></div><div class='formula-card'>2. <strong>高阶导数中值问题（含 <i>f''</i>(<i>ξ</i>)）</strong>：<br>在已知 <i>f'</i>(<i>x</i><sub>0</sub>) = 0 的点 <i>x</i><sub>0</sub> 处将 <i>f</i>(<i>x</i>) 展开到二阶：<br><i>f</i>(<i>x</i>) = <i>f</i>(<i>x</i><sub>0</sub>) + <i>f'</i>(<i>x</i><sub>0</sub>)(<i>x</i> − <i>x</i><sub>0</sub>) + <span class='frac'><span class='frac-num'><i>f''</i>(<i>ξ</i>)</span><span class='frac-den'>2!</span></span>(<i>x</i> − <i>x</i><sub>0</sub>)<sup>2</sup>，代入两端点 <i>a</i>, <i>b</i> 即可消去未知量。</div>"
-  },
-
-  // ==================== 考研英语二 (2022-2026) 五大模块分类真题 ====================
-  {
-    id: "E_M1_CLOZE",
-    subject: "eng2",
-    year: 2026,
-    chapter: "e_ch1",
-    type: "short",
-    typeName: "完形真题技巧",
-    pdfPage: 1,
-    title: "【2022-2026英二真题分类·模块一】完形填空十大逻辑关系词与高频复现词",
-    prompt: "汇总2022—2026年英语二完形填空（Section I Use of English, 10分）核心命题规律：(1) 写出完形填空必考的五大句间逻辑关系及标志词；(2) 如何利用『总分结构对立/同义复现』在 12 分钟内稳拿 7~8 分？",
-    tips: "💡 完形考场做题技巧：① 首句不设空，必读首句定全文感情基调与核心话题！② 先做逻辑关系词（约5~6题，送分题）：转折(however/yet/whereas)、让步(although/even though/while)、因果(therefore/consequently/given that)、对比(by contrast/conversely)。③ 实词辨析90%在上下文中有原词或同义词复现，切忌脱离上下文纯靠中文语感硬凑！",
-    knowledgePoints: [
-      "让步转折高频词：while (尽管), whereas (然而，表对比), nevertheless (然而), albeit (尽管)",
-      "因果条件高频词：given that (鉴于，考虑到), in that (因为), provided that (假如), thereby (从而)",
-      "总分照应原则：段首总括句的态度词（正/负）直接决定段内分述句空格的褒贬色彩"
-    ],
-    mcq: {
-      question: "【一刷·真题逻辑快筛】在英语二完形填空中，若前后两句主语不同且动作/属性完全相反（如前句说陌生人之间长停顿会降低亲密感，后句说朋友之间长停顿反而增进亲密感），最常选的对比/转折逻辑词是：",
-      options: [
-        "whereas / by contrast / conversely （表鲜明对比或转折）",
-        "furthermore / likewise （表并列递进）",
-        "for instance / specifically （表举例例证）",
-        "consequently / hence （表顺承因果）"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "英语二完形高频逻辑词：①『尽管/虽然』：although / even though / {{0}}；②『鉴于/考虑到』：{{1}} that；③『因为（后接原因从句）』：{{2}} that；④『相反地/相比之下』：by {{3}} / conversely。",
-      answers: ["while", "given", "in", "contrast"]
-    },
-    rubric: [
-      "熟练区分让步转折词：while / whereas / nevertheless / albeit",
-      "熟练掌握特殊复合连词：given that (鉴于)、in that (因为)、provided that (倘若)",
-      "掌握实词题『褒贬一致 + 主谓搭配 + 上下文同义复现』三步定位法"
-    ],
-    answerHtml: "<strong>【2022-2026英语二完形填空核心解题体系】</strong><div class='formula-card'>1. <strong>必背四大逻辑关系词库（占完形 30% 分值）</strong>：<br>• <strong>对立/转折/让步</strong>：<code>however</code>, <code>yet</code>, <code>whereas</code>（然而/反观）, <code>while</code>（尽管）, <code>albeit</code>（尽管）, <code>nevertheless</code><br>• <strong>因果/条件</strong>：<code>therefore</code>, <code>consequently</code>, <code>thereby</code>（从而+doing）, <code>given that</code>（鉴于）, <code>in that</code>（因为）<br>• <strong>相似/递进</strong>：<code>similarly</code>, <code>likewise</code>（同样地）, <code>moreover</code>, <code>furthermore</code><br>• <strong>举例/具体化</strong>：<code>for instance</code>, <code>specifically</code>, <code>in particular</code></div><div class='formula-card'>2. <strong>考场抢分口诀</strong>：先看选项定题型（逻辑词题 vs 实词搭配题）→ 逻辑词看前后句褒贬与主语异同 → 实词题向前/向后找同义复现词。</div>"
-  },
-  {
-    id: "E_M2_READING",
-    subject: "eng2",
-    year: 2026,
-    chapter: "e_ch2",
-    type: "short",
-    typeName: "阅读真题技巧",
-    pdfPage: 1,
-    title: "【2022-2026英二真题分类·模块二】阅读理解 Part A (40分) 四大题型破题铁律与态度词表",
-    prompt: "汇总2022—2026年英语二阅读理解 Part A（4篇共20题，每题2分）核心破题技巧：(1) 细节题正确选项的『同义改写』有哪些常见手法？(2) 作者态度题必选词与绝对不选的『陪跑词』有哪些？(3) 例证题与主旨题如何秒杀？",
-    tips: "💡 阅读 Part A 拿 34+ 分铁律：① 『顺序出题原则』：5道题严格对应文章段落顺序，先题干划定位词（大写/数字/核心名词）再回文定位！② 『定位句即答案』：英二阅读极少需要跨段推理，90%正确选项就是定位句的同义词替换或正话反说！③ 态度题见到 indifferent（漠不关心）、biased/prejudiced（偏见）、puzzled（困惑）、indulgent（纵容）直接排除！",
-    knowledgePoints: [
-      "细节题正确选项公式：定位句主干同义替换（具体下义词 → 概括上义词，或词性转换）",
-      "态度题必排陪跑词：indifferent, unconcerned, biased, prejudiced, puzzled, indulgent",
-      "例证题黄金法则：例子本身不重要，往例子前一句（或段首总括句）找论点",
-      "主旨大意题串线法：把各段首尾转折句串联，或者把5道题题干都出现的『高频中心词』选入标题"
-    ],
-    mcq: {
-      question: "【一刷·阅读铁律快筛】在英语二阅读理解 Attitude（作者态度题）中，下列哪一组词汇属于一旦出现在选项中即可『99%直接排除』的干扰陪跑词？",
-      options: [
-        "indifferent (漠不关心的) / prejudiced (有偏见的) / puzzled (困惑不解的) / indulgent (纵容的)",
-        "supportive (支持的) / approving (赞同的) / optimistic (乐观的)",
-        "skeptical (怀疑的) / critical (批评的) / doubtful (存疑的)",
-        "objective (客观的) / cautious (谨慎的) / neutral (中立的)"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "英二阅读四大题型铁律：① 细节题正确选项本质是定位句的{{0}}；② 例证题答案永远不在例子内部，而在例子{{1}}的论点句；③ 态度题必排词包括 {{2}}（漠不关心）、prejudiced（偏见）、puzzled（困惑）；④ 篇章主旨题必含各题题干反复出现的{{3}}。",
-      answers: ["同义改写", "前一句", "indifferent", "中心词"]
-    },
-    rubric: [
-      "掌握细节题『题干双词定位 + 定位句同义替换比对 + 排除偷换概念/过度推理』三步法",
-      "熟记态度题正向(approving/favorable)、负向(skeptical/critical)、客观(objective)与必排词清单",
-      "掌握例证题找前句论点、主旨题串联段首转折句及题干中心词的秒杀技巧"
-    ],
-    answerHtml: "<strong>【2022-2026英语二阅读理解 Part A 满分方法论】</strong><div class='formula-card'>1. <strong>细节题（占 65%）三大同义替换模式</strong>：<br>• 同义词/近义词替换（如 <code>surge</code> → <code>dramatic increase</code>，<code>curb</code> → <code>limit/restrict</code>）<br>• 词性转换与主动被动转换<br>• 双重否定与正话反说（如 <code>hardly seen as a plus</code> → <code>not beneficial</code>）</div><div class='formula-card'>2. <strong>作者态度题秒杀词表</strong>：<br>• ✅ <strong>常选正向</strong>：<code>supportive</code>, <code>favorable</code>, <code>approving</code>, <code>optimistic</code><br>• ✅ <strong>常选负向</strong>：<code>skeptical</code>, <code>critical</code>, <code>doubtful</code>, <code>concerned</code><br>• ❌ <strong>必排干扰</strong>：<code>indifferent</code>（漠不关心）, <code>prejudiced/biased</code>（偏见）, <code>puzzled/confused</code>（迷惑）, <code>indulgent</code>（纵容）</div>"
-  },
-  {
-    id: "E_M3_PARTB",
-    subject: "eng2",
-    year: 2026,
-    chapter: "e_ch3",
-    type: "short",
-    typeName: "新题型真题精析",
-    pdfPage: 1,
-    title: "【2023/2024/2026英二真题·模块三】新题型 Part B (10分) 多项对应秒杀实战",
-    prompt: "结合2023年（英国房屋扩建新规）、2024年（美国高中生课外活动）、2026年（森林生态恢复）英语二新题型真题，演练『人名定位 + 观点同义转述』满分技巧：<br>• 2023真题44题 John Kelly 对应选项 [E] Many people feel that home prices are already beyond what they can afford.<br>• 2024真题42题 Sara Harberson 对应选项 [C] Undertaking too many extracurricular activities will hardly be seen as a plus by colleges.<br>• 2026真题44题 Pedro Brancalion 对应选项 [E] The supply of seeds is a tough problem that has to be dealt with.",
-    tips: "💡 新题型 8分钟拿满分 10分秘诀：① 先通读右栏 7 个选项（A~G），圈出每个选项的『主语核心词 + 谓语情感倾向 + 宾语特征词』；② 回到原文把 41~45 题的 5 个人名全部用方框框出来（特别注意：同一个人名往往在文章前半段和末尾同时出现两次，第二次出现处往往才是出题点！）；③ 逐句比对引号内外人物言论的同义改写！",
-    knowledgePoints: [
-      "2023真题同义替换：beyond what they can afford (负担不起) ⇔ priced out of the market",
-      "2024真题同义替换：hardly be seen as a plus (不算加分项) ⇔ serial joiners are not favored",
-      "2026真题同义替换：supply of seeds is a tough problem ⇔ bottleneck in native seed availability"
-    ],
-    mcq: {
-      question: "【一刷·新题型实战】在做英语二 Part B『人物—观点多项对应题』时，最高效、最不容易漏掉关键信息的定位顺序是：",
-      options: [
-        "先划出7个选项的核心名词与正负评价词 → 在全文框出5个人名出现的全部位置（含首尾复现处）→ 精读人物直接引语与间接引语匹配同义替换",
-        "从第一段第一句开始逐字逐句把整篇文章翻译成中文再做题",
-        "只看人物第一次出现的那句话，后面再出现同一人名直接忽略",
-        "看到选项里有和原文一模一样的单个单词就立刻选，不核对谓语逻辑"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "近五年英二新题型高频同义替换：① 2023真题：beyond what they can {{0}}（超出了他们的承受能力/买不起）；② 2024真题：undertaking too many {{1}} activities will hardly be seen as a {{2}} by colleges（参加过多课外活动很难被大学视为加分项）；③ 2026真题：the {{3}} of seeds is a tough problem（种子的供应是个棘手难题）。",
-      answers: ["afford", "extracurricular", "plus", "supply"]
-    },
-    rubric: [
-      "掌握新题型『先划7个选项关键词 → 全文框出所有人名（含二次出现处）』标准流程",
-      "熟记2023/2024/2026三年新题型真题选项中的高频表达（beyond what they can afford / seen as a plus / tough problem）",
-      "警惕『原词拼凑但逻辑相反』的干扰项，必须核对主谓宾整体含义一致"
-    ],
-    answerHtml: "<strong>【2022-2026英语二新题型 Part B 真题复盘】</strong><div class='formula-card'>1. <strong>近五年新题型题型统计</strong>：多项对应（5个人名匹配7个观点）与小标题题型交替出现，属于整张试卷<strong>性价比最高、必须拿满 10 分</strong>的模块。</div><div class='formula-card'>2. <strong>真题经典同义改写对照</strong>：<br>• <strong>2023年（房屋扩建新规）</strong>：<code>beyond what they can afford</code> 对应原文房价过高、人们无力承担。<br>• <strong>2024年（高中课外活动）</strong>：<code>Undertaking too many extracurricular activities will hardly be seen as a plus</code> 对应原文盲目参加过多活动并不受招生官青睐。<br>• <strong>2026年（森林生态恢复）</strong>：<code>The supply of seeds is a tough problem</code> 对应原文树种供应短缺难题。</div>"
-  },
-  {
-    id: "E_M4_TRANS_22_26",
-    subject: "eng2",
-    year: 2026,
-    chapter: "e_ch4",
-    type: "short",
-    typeName: "翻译真题汇总(22-26)",
-    pdfPage: 1,
-    title: "【2022-2026英二真题分类·模块四】近五年英译汉 Section III (15分) 全真长难句拆分与精译",
-    prompt: "分类精析近五年英语二 Section III Translation（15分）五大主题与核心长难句：<br>• <strong>2022年（绘画中的意外收获）</strong>：<i>Unexpected results have two benefits: you pretty quickly learn to deal with disappointment and realise that when one door closes, another opens.</i><br>• <strong>2023年（华兹华斯与自然诗歌）</strong>：<i>It is closely related to song and even when written it is usually created to be performed out loud.</i><br>• <strong>2025年（交谈中的尴尬沉默）</strong>：<i>...the fear of awkward silences can be so extreme that people avoid talking to strangers, even though doing so is likely to be an enjoyable experience.</i><br>• <strong>2026年（穿戴服饰对心理的影响）</strong>：<i>Whether we opt for bold, colorful outfits or prefer more understated styles, our dress choices convey messages about who we are and how we want to be perceived.</i>",
-    tips: "💡 英二翻译拿 12~14 分四步法：① 拆分语法意群（在连词 that/which/when/although/whether、介词及非谓语前画斜线 `/` 断句）；② 定语从句『短前长后』（短定语放名词前加“的”，长定语后置独立成句）；③ 被动语态转主动或加『被/由/得以』（如 2026 真题 how we want to be perceived 译为『我们希望别人如何看待自己』）；④ 切忌留空白，遇到生词用上下文词根逻辑顺译！",
-    knowledgePoints: [
-      "2022核心词伙：turn out (结果是), think outside the box (跳出固有思维模式), second nature (第二天性/本能)",
-      "2023核心词伙：Romanticism (浪漫主义), pass down history (传承历史), come to life (变得鲜活生动)",
-      "2025核心词伙：awkward silence (尴尬的沉默), markedly dip (明显下降), reflection (反思/深思)",
-      "2026核心词伙：self-perception (自我认知), opt for (选择), understated styles (低调内敛的风格), be perceived (被看待)"
-    ],
-    mcq: {
-      question: "【一刷·2026英二翻译真题精析】2026真题句子 'Whether we opt for bold, colorful outfits or prefer more understated styles, our dress choices convey messages about who we are and how we want to be perceived.' 中，opt for、understated styles 与 how we want to be perceived 的最准确译法是：",
-      options: [
-        "opt for 译为『选择』；understated styles 译为『低调/内敛的风格』；how we want to be perceived 译为『我们希望自己如何被他人看待』",
-        "opt for 译为『反对』；understated styles 译为『地下的风格』；perceived 译为『欺骗』",
-        "opt for 译为『乐观』；understated styles 译为『未说明的样式』",
-        "opt for 译为『操作』；understated styles 译为『低估的款式』"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "近五年英二翻译高频采分短语：① 2022年：thinking outside the box 译为『{{0}}』；② 2023年：Poems really come to life when they are recited 译为『当诗歌被朗诵出来时，它们才真正变得{{1}}』；③ 2025年：such feelings of connection markedly dip 译为『这种亲密联结感会明显{{2}}』；④ 2026年：shaping our self-perception 译为『塑造我们的{{3}}』。",
-      answers: ["跳出固有思维", "鲜活生动", "下降", "自我认知"]
-    },
-    rubric: [
-      "2022翻译通关：准确译出 turn out as originally planned（如原计划那样）、thinking outside the box（跳出思维定式）",
-      "2023翻译通关：准确译出 celebrate the wonders of the natural world（礼赞自然界的奇观）、performed out loud（大声朗诵/吟诵）",
-      "2025翻译通关：准确拆分 previous studies which indicate that... so extreme that... even though... 三层从句",
-      "2026翻译通关：准确译出 self-perception（自我认知）、bold colorful outfits（大胆鲜艳的穿搭）与 understated styles（低调内敛的风格）"
-    ],
-    answerHtml: "<strong>【2022-2026英语二翻译真题（Section III）全文核心长难句对照精译】</strong><div class='formula-card'><strong>【2026年真题：穿搭心理学】</strong><br><i>Whether we opt for bold, colorful outfits or prefer more understated styles, our dress choices convey messages about who we are and how we want to be perceived.</i><br>👉 <strong>标准译文</strong>：无论我们选择大胆鲜艳的穿搭，还是偏爱更加低调内敛的风格，我们的着装选择都在传递关于“我们是谁”以及“我们希望别人如何看待自己”的信息。</div><div class='formula-card'><strong>【2025年真题：交谈中的沉默间隙】</strong><br><i>During conversations with short gaps, people feel more connected to their conversation partners. But such feelings of connection markedly dip when entering a long gap.</i><br>👉 <strong>标准译文</strong>：在停顿时间较短的交谈中，人们会觉得与交谈对象更加亲近；但当出现长时间的沉默停顿时，这种联结感就会明显下降。</div><div class='formula-card'><strong>【2023年真题：华兹华斯与诗歌】</strong><br><i>It is closely related to song and even when written it is usually created to be performed out loud. Poems really come to life when they are recited.</i><br>👉 <strong>标准译文</strong>：诗歌与歌曲密切相关，即便写成文字，通常也是为了大声朗诵而创作的。当诗歌被吟诵出来时，它们才真正变得鲜活生动。</div><div class='formula-card'><strong>【2022年真题：绘画的意外收获】</strong><br><i>You also quickly learn to adapt and come up with creative solutions to the problems the painting presents, and thinking outside the box will become your second nature.</i><br>👉 <strong>标准译文</strong>：你还能很快学会适应，并针对绘画过程中出现的问题想出富有创意的解决办法，而跳出固有思维模式将成为你的本能（第二天性）。</div>"
-  },
-  {
-    id: "E_M5_WRITING_22_26",
-    subject: "eng2",
-    year: 2026,
-    chapter: "e_ch5",
-    type: "short",
-    typeName: "写作真题模板(22-26)",
-    pdfPage: 1,
-    title: "【2022-2026英二真题分类·模块五】近五年小作文 Part A (10分) 审题汇总与大作文 Part B (15分) 万能模板",
-    prompt: "汇总2022—2026年英语二小作文（Part A）真题指令与大作文（Part B）高分框架，并进行三刷默写：<br>• <strong>2022小作文</strong>：筹办校园美食节（campus food festival），给留学生写邮件：①介绍美食节；②邀请参加。<br>• <strong>2023小作文</strong>：周日有艺术展（art exhibition）和机器人展（robot show），给朋友 David 写信：①提出建议去哪一个；②给出理由。<br>• <strong>2024小作文</strong>：古建筑保护项目，给外国朋友写信：①提出你的计划（put forward your plan）；②征求他的意见。<br>• <strong>2025小作文</strong>：筹划改编自中国古典名著的短剧（a short play based on a classic Chinese novel），给朋友 John 写信：①介绍短剧；②邀请他参演。<br>• <strong>2026小作文</strong>：朋友 Jack 分享了他一家人中国旅行的视频（a video of his family's travel in China），写邮件告诉他：①你看完视频的感受；②希望了解更多旅行细节。",
-    tips: "💡 考场写作 25分稳拿 20+ 秘诀：① 小作文（100词）注意看清前5年全部都是给朋友或留学生写 Email！第一段 2 句话直接点题（问候+写信目的），第二段用 To begin with / What's more 严格对应题干的两个小问（1和2缺一不可！），第三段一句话期待回复，落款必写 Yours sincerely, Li Ming！② 大作文（150词）永远是『第一段描图（极值/变化趋势）+ 第二段析因（经济/意识/科技3选2）+ 第三段总结展望』！",
-    knowledgePoints: [
-      "活动介绍与邀请万能句：Suppose you are planning... → The event is scheduled to be held at... aiming to...",
-      "建议与理由万能句：I strongly recommend that you choose..., mainly for the following two reasons.",
-      "图表大作文第一段起手式：As is vividly illustrated in the chart above, remarkable changes have taken place in...",
-      "图表大作文第二段因果过渡：Several key factors account for this phenomenon. First and foremost,... In addition,..."
-    ],
-    mcq: {
-      question: "【一刷·近五年小作文规律快筛】观察 2022—2026 年英语二 Part A 小作文的 5 道真题，下列关于其文体与结构要求的说法完全正确的是：",
-      options: [
-        "近五年全部考查电子邮件(Email)，且均包含2个明确的要点指令（如介绍+邀请、建议+理由、感受+愿望），落款统一要求署名为 Li Ming",
-        "近五年全部考查正式学术投诉信，字数要求 300 词以上",
-        "小作文可以使用考生自己的真实姓名落款",
-        "大作文 Part B 不需要描述图表数据，只需写议论文"
-      ],
-      answer: 0
-    },
-    cloze: {
-      text: "大小作文必背黄金功能句：① 小作文开头点题：I am writing this email to {{0}} my suggestions / invite you to participate in...；② 大作文第一段描图：As is {{1}} illustrated in the chart above, the proportion of... surged {{2}} from X% to Y%；③ 大作文第二段析因：Several factors {{3}} for this remarkable phenomenon. First and foremost, people {{4}} increasing importance to...",
-      answers: ["share", "vividly", "dramatically", "account", "attach"]
-    },
-    rubric: [
-      "熟练背诵小作文『活动介绍+邀请信』（适配2022美食节/2025名著短剧）与『建议/分享信』（适配2023展会建议/2024计划/2026旅行视频）两套模板",
-      "熟练默写大作文第一段图表数据描述句型（surged dramatically / witnessed a steady rise / accounted for the largest proportion）",
-      "熟练默写大作文第二段原因分析句型（Several factors account for... / attach great importance to...）与第三段总结句"
-    ],
-    answerHtml: "<strong>【2022-2026英语二写作 Section IV 考场直接套用满分模板】</strong><div class='formula-card'><strong>一、小作文 Part A（10分，适配 2022/2023/2024/2025/2026 全部真题）</strong><br><code>Dear [John / David / Jack / International Students],</code><br><strong>[第一段·目的]</strong> I am writing this email to <em>[introduce our upcoming short play based on a classic Chinese novel and warmly invite you to take part in it / share my feelings after watching the wonderful video of your family's travel in China]</em>.<br><strong>[第二段·展开要点1&2]</strong> To begin with, <em>[展开第1问：时间、地点、核心内容或观后感]</em>. What's more, <em>[展开第2问：受邀角色、推荐理由或希望进一步了解的细节]</em>, which will undoubtedly be an unforgettable experience.<br><strong>[第三段·结尾]</strong> I would be delighted if you could join us / share more details with me. Looking forward to your early reply.<br><code>Yours sincerely,</code><br><code>Li Ming</code></div><div class='formula-card'><strong>二、大作文 Part B（15分，图表作文三段式 150词黄金骨架）</strong><br><strong>[第一段·描图]</strong> As is vividly illustrated in the chart above, remarkable changes have taken place in <em>[主题词]</em> in recent years. Specifically, the proportion/number of <em>[数据A]</em> surged dramatically from X% to Y%, whereas that of <em>[数据B]</em> experienced a slight decline / remained stable.<br><strong>[第二段·析因]</strong> Several key factors account for this notable phenomenon. First and foremost, with the rapid advancement of living standards, people attach increasing importance to <em>[原因1：健康/精神文化/生态环保]</em>. In addition, the widespread popularity of <em>[原因2：数字技术/政策支持/公共设施]</em> also plays an indispensable role in driving this trend.<br><strong>[第三段·评论]</strong> Taking all these factors into account, we may reasonably predict that this positive trend will continue in the foreseeable future. From my perspective, we should actively embrace this change to promote sustainable development.</div>"
-  }
-);
-
-// ============================================================================
-// 高频需大量重复记忆知识点 & AI 批量生成提示词中心数据（供网页直接展示与一键复制）
-// ============================================================================
-window.AI_PROMPTS = {
-  math2: `你现在是考研数学二（302）顶级命题研究专家与前端题库数据工程师。我将向你提供考研数学二的真题内容（或指定年份与题号）。请你将其按考点分类拆解，并严格输出为可直接接入我本地《考研全科三刷通关系统》的纯 JSON 数组格式 [...]（不要带额外解释文字）。
-
-⚠️ 极重要格式要求（必须 100% 遵守）：
-1. 严禁输出未渲染的 LaTeX 代码串（禁止出现 \\frac、\\int、$$、\\lambda 等反斜杠源码）！
-2. 所有数学公式必须使用纯 HTML 直观标签与 Unicode 数学符号：
-   - 上下分式：<span class='frac'><span class='frac-num'>分子</span><span class='frac-den'>分母</span></span>
-   - 独立公式块：<div class='formula-card'>...</div>
-   - 上标 <sup>...</sup>，下标 <sub>...</sub>，斜体变量 <i>...</i>
-   - 符号直接使用 Unicode：∫、∑、→、∞、≤、≥、≠、≈、×、±、√、∂、π、λ、μ、α、β、Δ。
-3. 每道题必须包含：
-   - id (如 "M24_01"), subject: "math2", year (年份数字), chapter ("m_ch1"至"m_ch6"之一: m_ch1极限, m_ch2一元微分, m_ch3一元积分, m_ch4微分方程, m_ch5多元微分与二重积分, m_ch6线性代数), type: "short"或"calc", typeName: "真题精析"
-   - title, prompt, tips (💡考场破题秒杀技巧/避坑指南), knowledgePoints (关联高频知识点数组)
-   - mcq: { question, options: [4个选项], answer: 正确下标0-3 }
-   - cloze: { text: "含 {{0}} {{1}} 挖空的文本", answers: ["答案0", "答案1"] }
-   - rubric: ["三刷采分点1", "三刷采分点2", "三刷采分点3"]
-   - answerHtml: "带 <div class='formula-card'> 和 <span class='frac'> 的详细步骤解析"`,
-
-  eng2: `你现在是考研英语二（204）资深阅卷人与教研专家。我将向你提供考研英语二的真题材料（完形、阅读Part A、新题型Part B、翻译Section III或写作Section IV）。请你将其按题型模块拆解，并严格输出为可直接接入我本地《考研全科三刷通关系统》的纯 JSON 数组格式 [...]。
-
-⚠️ 格式与字段要求：
-1. subject 固定填 "eng2"，chapter 填以下 5 个模块 ID 之一：
-   - "e_ch1"：模块一：完形填空
-   - "e_ch2"：模块二：阅读理解 Part A
-   - "e_ch3"：模块三：新题型 Part B
-   - "e_ch4"：模块四：翻译 Section III
-   - "e_ch5"：模块五：写作 Section IV
-2. 每道题必须包含高价值的 tips（💡考场定位技巧/同义替换拆解/长难句切分公式）与 knowledgePoints（核心必背词汇/词组/语法点数组）。
-3. 包含三刷结构：
-   - mcq: { question, options: [4个选项], answer: 0 }
-   - cloze: { text: "含 {{0}}, {{1}} 的同义替换或译文填空", answers: ["词1", "词2"] }
-   - rubric: ["三刷复盘要点1", "要点2", "要点3"]
-   - answerHtml: "使用 <div class='formula-card'> 分块排版的详细真题解析与参考译文/范文"`
+// 2022-2026 考研数学二 (110题) & 考研英语二 (240题) 全真题库 (共350道真题)
+window.KAOYAN_PASSAGES = {
+  "E2022_CLOZE": "<strong>【2022年英语二 完形填空原文（中英对照）】</strong><br>Harlan Coben believes that if you're a writer, you'll find the time; and that if you can't find the<br>time, then writing isn't a priority and you're not a writer. For him, writing is a <br> job—a job like<br>any other. He has <br> it with plumbing, pointing out that a plumber doesn't wake up and say that<br>he can't work with pipes today.<br>Harlan Coben认为，如果你是一位作家，你就会找到时间；如果你找不到时间，那么写作就不是你的优<br>先事项，你也就不是一位作家。对他来说,写作是一份普通的工作——一份和其他任何工作一样的工作。<br>他曾把写作比作管道工，指出管道工不会在早上醒来后说他今天无法处理管道。<br> , like most writers these days, you're holding down a job to pay the bills, it's not <br>to find the time to write. But it's not impossible. It requires determination and single-mindedness. <br> that most bestselling authors began writing when they were doing other things to earn a living.<br>And today, even writers who are fairly <br> often have to do other work to <br> their writing<br>income.<br>如果你像如今大多数作家一样，正在做一份工作来支付账单，那么找时间写作并不容易。但这并非不可<br>能。这需要决心和专注。请记住，大多数畅销书作家在开始写作时都在做其他事情来谋生。而如今，即使<br>是相当知名的作家也常常不得不做其他工作来补充他们的写作收入。<br>As Harlan Coben has suggested, it's a <br> of priorities. To make writing a priority, you'll have<br>to <br> some of your day-to-day activities and some things you really enjoy. Depending on your <br> and your lifestyle, that might mean spending less time watching television or listening to music,<br>though some people can write <br> they listen to music. You might have to <br> the amount<br>of exercise or sport you do. You'll have to make social media an <br> activity rather than a daily,<br>time-consuming <br> . There'll probably have to be less socialising with your friends and less time<br>with your family. It's a <br> learning curve and it won't always make you popular.<br>正如Harlan Coben所建议的，这是一个优先级的问题。要让写作成为优先事项，你就必须牺牲一些日常<br>活动和一些你真正喜欢的事情。根据你的兴趣和生活方式，这可能意味着减少看电视或听音乐的时间，尽<br>    1   <br>    2   <br>    3   <br>    4   <br>   <br>5   <br>    6   <br>    7   <br>    8   <br>    9   <br>   <br>10   <br>    11   <br>    12   <br>    13   <br>    14   <br>    15<br><br>管有些人可以一边听音乐一边写作。你可能不得不减少锻炼或运动的时间。你必须把社交媒体变成偶尔进<br>行的活动，而不是每天耗时的习惯。你可能不得不减少与朋友的社交活动以及与家人相处的时间。这是一<br>条艰难的学习曲线，不会总是让你受欢迎。<br>There's just one thing you should try to keep at least some time for, <br> your writing—and<br>that's reading. Any writer needs to read as much and as widely as they can; it's the one <br>supporter—something you can't do without.<br>除了写作之外，只有一件事你应该尝试至少保留一些时间，那就是阅读。任何作家都需要尽可能多、尽可<br>能广泛地阅读；这是唯一不可或缺的支撑——是你不能缺少的东西。<br>Time is finite. The older you get, the <br> it seems to go. We need to use it as carefully and<br>as <br> as we can, that means prioritising our activities so that we spend most time on the things<br>we really want to do. If you're a writer, that means— <br> writing.<br>时间是有限的。你年龄越大，时间似乎过得越快。我们需要尽可能谨慎和高效地利用时间，这意味着要对<br>我们的活动进行优先排序，以便把大部分时间花在我们真正想做的事情上。如果你是一位作家，这意味着<br>——首先是写作。<br>    16   <br>    17   <br>    18   <br>    19   <br>    20",
+  "E2022_TEXT1": "<strong>【2022年英语二 阅读理解 Text 1 原文与段落译文】</strong><br>P1 On a recent sunny day, 13,000 chickens roam over Larry Brown's 40 windswept acres in Shiner,<br>Texas. Some rest in the shade of a parked car. Others drink water with the cows. This all seems random,<br>but it's by design, part of what the $6.1 billion U.S. egg industry bets will be its next big thing: climate-<br>friendly eggs.<br>在最近一个阳光明媚的日子里,13000只鸡在德克萨斯州Shiner的Larry Brown那片40英亩的多风土地上漫<br>步。一些鸡在停放的汽车阴影下休息。另一些则和奶牛一起喝水。这一切看似随意,但实际上是经过设计<br>的,是这个价值61亿美元的美国鸡蛋产业押注的下一个大趋势的一部分:气候友好型鸡蛋。<br>P2 These eggs, which are making their debut now on shelves for as much as $8 a dozen, are still<br>labeled organic and animal-friendly, but they're also from birds that live on farms using regenerative<br>agriculture—special techniques to cultivate rich soils that can trap greenhouse gases. Such eggs could be<br>marketed as helping to fight climate change.<br>这些鸡蛋目前正在货架上首次亮相,售价高达每打8美元,它们仍然标有有机和动物友好的标签,但它们也来<br>自生活在使用再生农业的农场上的鸟类——这种特殊技术培育能够捕获温室气体的肥沃土壤。这类鸡蛋可<br>以作为帮助对抗气候变化的产品进行营销。<br>P3 \"I'm excited about our progress,\" says Brown, who harvests eggs for Denver-based Nest Fresh<br>Eggs and is adding more cover crops that draw worms and crickets for the chickens to eat. The birds'<br>waste then fertilizes fields. Such improvements \"allow our hens to forage for higher-quality natural feed<br>that will be good for the land, the hens, and the eggs that we supply to our customers.\"<br>\"我对我们的进展感到兴奋,\"为位于丹佛的Nest Fresh Eggs收获鸡蛋的Brown说,他正在增加更多覆盖作物,<br>以吸引蚯蚓和蟋蟀供鸡食用。然后鸟类的粪便为田地施肥。这些改进\"使我们的母鸡能够觅食更高质量的<br>Text 1<br><br>天然饲料,这对土地、母鸡以及我们供应给客户的鸡蛋都有好处。\"<br>P4 The egg industry's push is the first major test of whether animal products from regenerative<br>farms can become the next premium offering. In barely more than a decade, organic eggs went from<br>being dismissed as a niche product in natural foods stores to being sold at Walmart. More recently there<br>were similar doubts about probiotics and plant-based meats, but both have exploded into major<br>supermarket categories. If the sustainable-egg rollout is successful, it could open the floodgates for<br>regenerative beef, broccoli, and beyond.<br>鸡蛋行业的推动是对来自再生农场的动物产品能否成为下一个高端产品的首次重大考验。在短短十多年里,<br>有机鸡蛋从被视为天然食品商店的小众产品发展到在沃尔玛销售。最近,益生菌和植物基肉类也曾遭遇类似<br>质疑,但两者都已爆发式增长成为超市的主要品类。如果可持续鸡蛋的推出取得成功,它可能为再生牛肉、<br>西兰花及更多产品打开闸门。<br>P5 Regenerative products could be a hard sell, because the concept is tough to define quickly, says<br>Julie Stanton, associate professor of agricultural economics at Pennsylvania State University Brandywine.<br>Such farming also brings minimal, if any, improvement to the food products (though some producers say<br>their eggs have more protein).<br>宾夕法尼亚州立大学Brandywine分校农业经济学副教授Julie Stanton说,再生产品可能难以销售,因为这个<br>概念很难快速定义。这种农业方式对食品本身的改善也极少,甚至没有(尽管一些生产商声称他们的鸡蛋含<br>有更多蛋白质)。<br>P6 The industry is betting that the same consumers paying more for premium attributes such as<br>free-range, non-GMO, and pasture-raised eggs will embrace sustainability. Surveys show that younger<br>generations are more concerned about climate change, and some of the success of plant-based meat can<br>be chalked up to shoppers wanting to signal their desire to protect the environment. Young adults \"really<br>care about the planet,\" says John Brunnquell, president of Egg Innovations. \"They are absolutely altering<br>the food chain beyond what I think even they understand what they're doing.\"<br>该行业押注那些愿意为自由放养、非转基因和牧场饲养等优质属性支付更多费用的消费者将会接受可持续<br>性。调查显示,年轻一代更关注气候变化,植物基肉类的部分成功可以归因于购物者希望表明他们保护环境<br>的愿望。Egg Innovations总裁John Brunnquell说,年轻人\"真的很关心地球\",\"他们正在彻底改变食物链,<br>其影响甚至超出了我认为他们自己所理解的程度。\"",
+  "E2022_TEXT2": "<strong>【2022年英语二 阅读理解 Text 2 原文与段落译文】</strong><br>P1 More Americans are opting to work well into retirement, a growing trend that threatens to upend<br>the old workforce model.<br>越来越多的美国人选择工作到退休后很久，这一日益增长的趋势可能会颠覆旧有的劳动力模式。<br>P2 One in three Americans who are at least 40 have or plan to have a job in retirement to prepare<br>for a longer life, according to a survey conducted by Harris Poll for TD Ameritrade. Even more<br>surprising is that more than half of \"unretirees\"—those who plan to work in retirement or went back to<br>work after retiring—said they would be employed in their later years even if they had enough money to<br>settle down, the survey showed.<br>根据Harris Poll为TD Ameritrade进行的一项调查，年龄至少40岁的美国人中有三分之一已经或计划在<br>退休后找一份工作，为更长的寿命做准备。更令人惊讶的是，调查显示，超过半数的\"不退休者\"——那<br>些计划在退休后工作或退休后重返工作岗位的人——表示即使有足够的钱安顿下来,他们也会在晚年继续<br>工作。<br>P3 Financial needs aren't the only culprit for the \"unretirement\" trend. Other reasons, according to<br>the study, include personal fulfillment such as staying mentally fit, preventing boredom or avoiding<br>depression. About 72% of \"unretiree\" respondents said that they would return to work once retired to<br>keep mentally fit while 59% said it would be tied to making ends meet.<br>经济需求并非\"不退休\"趋势的唯一原因。根据该研究，其他原因包括个人成就感,如保持精神健康、防止无<br>聊或避免抑郁。约72%的\"不退休者\"受访者表示,他们会在退休后重返工作以保持精神健康,而59%的人表<br>示这与维持生计有关。<br>Text 2<br><br>P4 \"The concept of retirement is evolving,\" said Christine Russell, senior manager of retirement at<br>TD Ameritrade. \"It's not just about finances. The value of work is also driving folks to continue working<br>past retirement.\"<br>TD Ameritrade退休业务高级经理Christine Russell表示:\"退休的概念正在演变。这不仅仅关乎财务。工<br>作的价值也在驱使人们在退休后继续工作。\"<br>P5 One reason for the change in retirement patterns: Americans are living longer. The share of the<br>population 65 and older was 16% in 2018, up 32% from the prior year, according to the U.S. Census<br>Bureau. That's also up 30.2% since 2010. Older Americans are also the fastest-growing segment of the<br>US workforce, and boomers are expected to live longer than previous generations. The percentage of<br>retirement-age people in the labor force has doubled over the past three decades. About 20% of people<br>65 and older were in the workforce in February, up from an all-time low of 10% in January 1985,<br>according to money manager United Income.<br>退休模式改变的一个原因是:美国人的寿命更长了。根据美国人口普查局的数据,2018年65岁及以上人口占<br>总人口的16%,比前一年增长32%。这也比2010年增长了30.2%。老年美国人也是美国劳动力中增长最快<br>的群体,婴儿潮一代预计比前几代人更长寿。过去三十年中,退休年龄人口在劳动力中的比例翻了一番。根<br>据资产管理公司United Income的数据,2月份约有20%的65岁及以上人口在劳动力队伍中,高于1985年1月<br>10%的历史最低水平。<br>P6 Because of longer life spans, Americans are also boosting their savings to preserve their nest<br>eggs, the TD Ameritrade study showed, which surveyed 2000 adults between 40 and 79. Six in 10<br>\"unretirees\" are increasing their savings in anticipation of a longer life, according to the survey. Among<br>the most popular ways they are doing this, the company said, is by reducing their overall expenses,<br>securing life insurance or maximizing their contributions to retirement accounts.<br>TD Ameritrade的研究显示,由于寿命延长,美国人也在增加储蓄以保护他们的养老金,该研究调查了2000名<br>年龄在40至79岁之间的成年人。根据调查,十分之六的\"不退休者\"正在增加储蓄以应对更长的寿命。该公<br>司表示,他们这样做的最流行方式包括减少总体开支、购买人寿保险或最大化他们对退休账户的缴款。<br>P7 Unfortunately, many people who are opting to work in retirement are preparing to do so because<br>they are worried about making ends meet in their later years, said Brent Weiss, a co-founder at<br>Baltimore-based financial-planning firm Facet Wealth. He suggested that preretirees should speak with a<br>financial adviser to set long-term financial goals.<br>位于Baltimore的财务规划公司Facet Wealth的联合创始人Brent Weiss表示,不幸的是,许多选择在退休后<br>工作的人准备这样做是因为他们担心晚年无法维持生计。他建议即将退休的人应该与财务顾问交谈以设定<br>长期财务目标。<br>P8 \"The most challenging moments in life are getting married, starting a family and ultimately<br>retiring,\" Weiss said. \"It's not just a financial decision, but an emotional one. Many people believe they<br>can't retire.\"<br>Weiss说:\"人生中最具挑战性的时刻是结婚、组建家庭以及最终退休。这不仅仅是一个财务决定,而且是一<br>个情感决定。许多人认为他们无法退休。\"",
+  "E2022_TEXT3": "<strong>【2022年英语二 阅读理解 Text 3 原文与段落译文】</strong><br>P1 We have all encountered them, in both our personal and professional lives. Think about the<br>times you felt tricked or frustrated by a membership or subscription that had a seamless sign-up process<br>but was later difficult to cancel. Something that should be simple and transparent can be complicated,<br>intentionally or unintentionally, in ways that impair consumer choice. These are examples of dark<br>patterns.<br>我们在个人生活和职业生涯中都遇到过它们。想想那些让你感到被欺骗或沮丧的会员资格或订阅服务，它<br>们注册过程无缝顺畅，但后来却很难取消。本应简单透明的事情却可能被有意或无意地复杂化，从而损害<br>消费者的选择权。这些就是暗黑模式的例子。<br>P2 First coined in 2010 by user experience expert Harry Brignull, \"dark patterns\" is a catch-all term<br>for practices that manipulate user interfaces to influence the decision-making ability of users. Brignull<br>identifies 12 types of common dark patterns, ranging from misdirection and hidden costs to \"roach<br>motel\", where a user experience seems easy and intuitive at the start, but turns difficult when the user<br>tries to get out.<br>2010年由用户体验专家Harry Brignull首次提出，\"暗黑模式\"是一个概括性术语，指操纵用户界面以影响<br>用户决策能力的做法。Brignull识别出12种常见的暗黑模式类型，从误导和隐藏成本到\"蟑螂旅馆\"，即用<br>户体验在开始时看起来简单直观，但当用户试图退出时却变得困难。<br>P3 In a 2019 study of 53,000 product pages and 11,000 websites, researchers found that about one<br>in 10 employs these design practices. Though widely prevalent, the concept of dark patterns is still not<br>Text 3<br><br>well understood. Business and nonprofit leaders should be aware of dark patterns and try to avoid the<br>gray areas they engender.<br>在2019年一项对53000个产品页面和11000个网站的研究中，研究人员发现约十分之一采用了这些设计做<br>法。尽管广泛流行，暗黑模式的概念仍未被充分理解。企业和非营利组织领导者应该意识到暗黑模式，并<br>努力避免它们所产生的灰色地带。<br>P4 Where is the line between ethical, persuasive design and dark patterns? Businesses should<br>engage in conversations with IT, compliance, risk, and legal teams to review their privacy policy, and<br>include in the discussion the customer/user experience designers and coders responsible for the company's<br>user interface, as well as the marketers and advertisers responsible for sign-ups, checkout baskets,<br>pricing, and promotions. Any or all these teams can play a role in creating or avoiding \"digital<br>deception.\"<br>道德的、具有说服力的设计与暗黑模式之间的界限在哪里?企业应该与IT、合规、风险和法律团队展开对<br>话，审查其隐私政策，并将负责公司用户界面的客户/用户体验设计师和编码人员，以及负责注册、结账<br>篮、定价和促销的营销人员和广告商纳入讨论。这些团队中的任何一个或全部都可能在创造或避免\"数字<br>欺骗\"中发挥作用。<br>P5 Lawmakers and regulators are slowly starting to address the ambiguity around dark patterns,<br>most recently at the state level. In March, the California Attorney General announced the approval of<br>additional regulations under the California Consumer Privacy Act (CCPA) that \"ensure that consumers<br>will not be confused or misled when seeking to exercise their data privacy rights. The regulations aim to<br>ban dark patterns—this means prohibiting companies from using confusing language or unnecessary steps<br>such as forcing them to click through multiple screens or listen to reasons why they shouldn't opt out.\"<br>立法者和监管机构正在缓慢开始解决暗黑模式周围的模糊性问题，最近主要在州一级。3月，加州总检察<br>长宣布批准California Consumer Privacy Act (CCPA)下的附加法规，\"确保消费者在寻求行使其数据隐私<br>权时不会感到困惑或被误导。这些法规旨在禁止暗黑模式——这意味着禁止公司使用令人困惑的语言或不<br>必要的步骤，例如强迫他们点击多个屏幕或听取他们不应该选择退出的理由。\"<br>P6 As more states consider promulgating additional regulations, there is a need for greater<br>accountability from within the business community. Dark patterns also can be addressed on a self-<br>regulatory basis, but only if organizations hold themselves accountable, not just to legal requirements but<br>also to industry best practices and standards.<br>随着更多州考虑颁布额外的法规，商业界需要更大的问责制。暗黑模式也可以在自律的基础上得到解决，<br>但前提是组织不仅要对法律要求负责，还要对行业最佳实践和标准负责。",
+  "E2022_TEXT4": "<strong>【2022年英语二 阅读理解 Text 4 原文与段落译文】</strong><br>P1 Although ethics classes are common around the world, scientists are unsure if their lessons can<br>actually change behavior; evidence either way is weak, relying on contrived laboratory tests or sometimes<br>unreliable self-reports. But a new study published in Cognition found that, in at least one real-world<br>situation, a single ethics lesson may have had lasting effects.<br>尽管伦理课程在世界各地很常见,但科学家们不确定这些课程是否真的能改变行为;无论哪种方向的证据都<br>很薄弱,依赖于人为设计的实验室测试或有时不可靠的自我报告。但发表在《认知》期刊上的一项新研究发<br>现,至少在一种真实世界的情况下,一堂伦理课可能产生了持久的影响。<br>P2 The researchers investigated one class session's impact on eating meat. They chose this particular<br>behavior for three reasons, according to study co-author Eric Schwitzgebel, a philosopher at the<br>University of California, Riverside: students' attitudes on the topic are variable and unstable, behavior is<br>easily measurable, and ethics literature largely agrees that eating less meat is good because it reduces<br>environmental harm and animal suffering. Half of the students in four large philosophy classes read an<br>article on the ethics of factory-farmed meat, optionally watched an 11-minute video on the topic and<br>joined a 50-minute discussion. The other half focused on charitable giving instead. Then, unknown to the<br>students, the researchers studied their anonymized meal-card purchases for that semester—nearly 14,000<br>receipts for almost 500 students.<br>研究人员调查了一堂课对吃肉行为的影响。根据该研究的共同作者、加州大学河滨分校哲学家Eric<br>Schwitzgebel的说法,他们选择这一特定行为有三个原因:学生对该话题的态度是可变且不稳定的,行为易于<br>测量,伦理学文献在很大程度上认同少吃肉是好的,因为它减少了环境危害和动物痛苦。在四个大型哲学课<br>堂中,一半学生阅读了一篇关于工厂化养殖肉类伦理的文章,自愿观看了一个11分钟的相关视频,并参加了50<br>Text 4<br><br>分钟的讨论。另一半则专注于慈善捐赠。然后,在学生不知情的情况下,研究人员研究了他们那个学期的匿<br>名餐卡购买记录——近500名学生的近14000张收据。<br>P3 Schwitzgebel predicted the intervention would have no effect; he had previously found that<br>ethics professors do not differ from other professors on a range of behaviors, including voting rates,<br>blood donation and returning library books. But among student subjects who discussed meat ethics, meal<br>purchases containing meat decreased from 52 to 45 percent—and this effect held steady for the study's<br>duration of several weeks. Purchases from the other group remained at 52 percent.<br>Schwitzgebel预测这一干预不会产生效果;他此前发现伦理学教授在一系列行为上与其他教授没有差异,包<br>括投票率、献血和归还图书馆书籍。但在讨论了肉类伦理的学生受试者中,含肉的餐食购买从52%下降到<br>45%——而且这一效果在研究持续的几周内保持稳定。另一组的购买则保持在52%。<br>P4 \"That's actually a pretty large effect for a pretty small intervention,\" Schwitzgebel says.<br>Psychologist Nina Strohminger at the University of Pennsylvania, who was not involved in the study,<br>says she wants the effect to be real but cannot rule out some unknown confounding variable. And if real,<br>she notes, it might be reversible by another nudge: \"Easy come, easy go.\"<br>Schwitzgebel说:\"对于一个相当小的干预来说,这实际上是一个相当大的效果。\"未参与该研究的宾夕法尼<br>亚大学心理学家Nina Strohminger说,她希望这个效果是真实的,但不能排除某些未知的混淆变量。她指出,<br>如果是真实的,它可能会被另一个推动而逆转:\"来得容易,去得也快。\"<br>P5 Schwitzgebel suspects the greatest impact came from social influence—classmates or teaching<br>assistants leading the discussions may have shared their own vegetarianism, showing it as achievable or<br>more common. Second, the video may have had an emotional impact. Least rousing, he thinks, was<br>rational argument, although his co-authors say reason might play a bigger role. Now the researchers are<br>probing the specific effects of teaching style, teaching assistants' eating habits and students' video<br>exposure. Meanwhile, Schwitzgebel—who had predicted no effect—will be eating his words.<br>Schwitzgebel怀疑最大的影响来自社会影响——主持讨论的同学或助教可能分享了他们自己的素食主义,<br>表明这是可实现的或更常见的。其次,视频可能产生了情感影响。他认为,理性论证的激励作用最小,尽管他<br>的共同作者们说理性可能发挥更大的作用。现在研究人员正在探究教学风格、助教的饮食习惯和学生观看<br>视频的具体效果。与此同时,曾预测不会有效果的Schwitzgebel将要食言了。",
+  "E2022_PARTB": "<strong>【2022年英语二 新题型 Part B 原文与候选项 A–G】</strong><br>Read the following text and answer the questions by choosing the most suitable subheading from the list<br>A-G for each of the numbered paragraphs (41-45). There are two extra subheadings which you do not<br>need to use. Mark your answers on the ANSWER SHEET. (10 points)<br>Getting back into exercise can be a challenge in the best of times, but with gyms and in-person<br>exercise classes off-limits to many people these days, it can be tricky to know where to start. And it's<br>important to get the right dose of activity. \"Too much too soon either results in injury or burnout,\" says<br>Mary Yoke, PhD, a faculty member in the kinesiology department at Indiana University in Bloomington.<br>The following simple strategies will help you return to exercise safely after a break.<br>在最好的时期,重新开始锻炼都可能是一项挑战,但如今许多人无法去健身房和参加面对面的健身课程,知道<br>从哪里开始可能会很棘手。获得适量的运动很重要。印第安纳大学布卢明顿分校运动机能学系教员Mary<br>Yoke博士说:\"过多过快要么导致受伤,要么导致精疲力竭。\"以下简单策略将帮助你在中断后安全地恢复<br>锻炼。<br>(41)____________________<br>从低起步,缓慢进行。<br>Don't try to go back to what you were doing before your break. If you were walking 3 miles a day,<br>playing 18 holes of golf three times a week, or lifting 10-pound dumbbells for three sets of 10 reps,<br>reduce activity to half a mile every other day, or nine holes of golf once a week with short walks on<br>other days, or use 5-pound dumbbells for one set of 10 reps. Increase time, distance, and intensity<br>gradually. \"This isn't something you can do overnight,\" says Keri L. Denay, MD, lead author of a recent<br>American College of Sports Medicine advisory that encourages Americans to not overlook the benefits of<br>activity during the pandemic. But you will reap benefits such as less anxiety and improve sleep right<br>away.<br>不要试图回到中断前的状态。如果你之前每天走3英里,每周打三次18洞高尔夫球,或者举10磅哑铃做三组<br>每组10次,那就把运动量减少到隔天半英里,或者每周打一次9洞高尔夫球并在其他日子短距离散步,或者使<br><br>用5磅哑铃做一组10次。逐渐增加时间、距离和强度。美国运动医学会近期发布的一份建议的主要作者<br>Keri L. Denay医学博士说:\"这不是一夜之间就能做到的事情。\"该建议鼓励美国人不要忽视疫情期间运动<br>的益处。但你会立即收获诸如减少焦虑和改善睡眠等好处。<br>(42)____________________<br>倾听你的身体。<br>If you're breathing too hard to talk in complete sentences, back off. If you feel good, go a little<br>longer or faster. Feeling wiped out after a session? Go easier next time. And stay alert to serious<br>symptoms, such as chest pain or pressure, severe shortness of breath or dizziness, or faintness, and seek<br>medical attention immediately.<br>如果你呼吸太急促以至于无法说完整的句子,就放慢速度。如果你感觉良好,就稍微延长时间或加快速度。<br>一次锻炼后感到精疲力竭?下次就放松一些。并对严重症状保持警觉,如胸痛或胸闷、严重呼吸急促或头晕,<br>或晕厥,并立即寻求医疗救助。<br>(43)____________________<br>养成习惯。<br>Consistency is the key to getting stronger and building endurance and stamina. Ten minutes of<br>activity per day is a good start, says Marcus Jackovitz, DPT, a physical therapist at the University of<br>Miami Hospital. All the experts we spoke with highly recommend walking because it's the easiest, most<br>accessible form of exercise. Although it can be a workout on its own, if your goal is to get back to<br>Zumba classes, tennis, cycling, or any other activity, walking is also a great first step.<br>迈阿密大学医院的物理治疗师Marcus Jackovitz表示,坚持是变得更强壮以及增强耐力和持久力的关键。每<br>天10分钟的运动是一个好的开始。我们采访的所有专家都强烈推荐步行,因为它是最简单、最容易获得的<br>运动形式。虽然它本身可以作为一项锻炼,但如果你的目标是重新参加Zumba课程、网球、骑行或任何其<br>他活动,步行也是一个很好的第一步。<br>(44)____________________<br>做动作练习。<br>Even if you can't yet do a favorite activity, you can practice the moves. With or without a club or<br>racket, swing like you're hitting the ball. Paddle like you're in a kayak or canoe. Mimic your favorite<br>swimming strokes. The action will remind you of the joy the activity brought you and prime your<br>muscles for when you can get out there again.<br>即使你还不能做最喜欢的活动,你也可以练习这些动作。无论有没有球杆或球拍,都像击球一样挥动。像在<br>皮划艇或独木舟里一样划桨。模仿你最喜欢的游泳姿势。这些动作会让你想起该活动带给你的快乐,并为你<br>能再次出去活动时让肌肉做好准备。<br>(45)____________________<br>不要独自进行。<br>Exercising with others \"can keep you accountable and make it more fun, so you're more likely to<br>do it again,\" Jackovitz says. You can do activities such as golf and tennis or take a walk with others and<br>still be socially distant. But when you can't connect in person, consider using technology. Chat on the<br>phone with a friend while you walk around your neighborhood. FaceTime with a relative as you strength<br>train or stretch at home. You can also join a livestream or on-demand exercise class.<br>Jackovitz说,与他人一起锻炼\"可以让你保持自律,并使锻炼更有趣,所以你更有可能再次去做。\"你可以与他<br>人一起进行高尔夫和网球等活动或散步,同时仍然保持社交距离。但当你无法面对面交流时,可以考虑使用<br><br>技术手段。在你围绕社区散步时与朋友通电话聊天。在家进行力量训练或拉伸时与亲戚进行FaceTime视<br>频通话。你还可以参加直播或点播健身课程。",
+  "E2023_CLOZE": "<strong>【2023年英语二 完形填空原文（中英对照）】</strong><br>Here's a common scenario that any number of entrepreneurs face today: you're the CEO of a small<br>business, and though you're making a nice <br> , you need to find a way to take it to the next level.<br>What you need to do is <br> growth by establishing a growth team. A growth team is made up of<br>members from different departments within your company, and it harnesses the power of collaboration to<br>focus <br> on finding ways to grow.<br>以下是当今许多创业者面临的常见情景：你是一家小企业的首席执行官，虽然你盈利不错,但你需要找到一<br>种方法将其提升到更高水平。你需要做的是通过建立增长团队来优先考虑增长。增长团队由来自公司内不<br>同部门的成员组成，它利用协作的力量专注于寻找增长的方法。<br>Let's look at a real-world <br> . Prior to forming a growth team, the software company<br>BitTorrent had 50 employees working in the <br> departments of engineering, marketing and product<br>development. This brought them good results until 2012, when their growth plateaued. The <br> was<br>that too many customers were using the basic, free version of their product. And <br> improvements<br>to the premium, paid version, few people were making the upgrade.<br>让我们看一个真实案例。在组建增长团队之前，软件公司BitTorrent有50名员工在传统的工程、营销和产<br>品开发部门工作。这为他们带来了良好的成果，直到2012年，他们的增长陷入停滞。问题在于太多客户<br>使用的是基础免费版本的产品。尽管对高级付费版本进行了改进，但很少有人升级。<br>Things changed, <br> , when an innovative project-marketing manager came aboard, <br> a<br>growth team and sparked the kind of <br> perspective they needed. By looking at engineering<br>issues from a marketing point of view, it became clear that the <br> of upgrades wasn't due to a<br>quality issue. Most customers were simply unaware of the premium version and what it offered.<br>然而，当一位创新的项目营销经理加入、创建了增长团队并激发了他们所需的新视角时，情况发生了变<br>化。通过从营销角度审视工程问题，很明显升级不足并非由于质量问题。大多数客户只是不了解高级版本<br>及其提供的功能。<br>    1   <br>    2   <br>    3   <br>    4   <br>    5   <br>    6   <br>    7   <br>    8   <br>    9   <br>    10   <br>    11<br><br>Armed with this <br> , the marketing and engineering teams joined forces to raise awareness<br>by prominently <br> the premium version to users of the free version. <br> , upgrades<br>skyrocketed, and revenue increased by 92 percent.<br>有了这一洞察，营销和工程团队联手通过向免费版本用户显著推广高级版本来提高知晓度。结果，升级量<br>激增，收入增长了92%。<br>But in order for your growth team to succeed, it needs to have a strong leader. It needs someone<br>who can <br> the interdisciplinary team and keep them on course for improvement. This leader will<br> the target area, set clear goals and establish a time frame for the <br> of these goals.<br>但是为了让你的增长团队取得成功，它需要有一位强有力的领导者。它需要一个能够团结跨学科团队并使<br>他们保持改进方向的人。这位领导者将确定目标领域、设定明确目标并为实现这些目标建立时间框架。<br>The growth leader is also <br> for keeping the team focused on moving forward and steering<br>them clear of distractions. <br> attractive, new ideas can be distracting; the team leader must<br>recognize when these ideas don't <br> the current goal and need to be put on the back burner.<br>增长领导者还负责让团队专注于前进并引导他们避开干扰。虽然具有吸引力，但新想法可能会分散注意<br>力；团队领导者必须识别何时这些想法不服务于当前目标并需要暂时搁置。<br>    12   <br>    13   <br>    14   <br>    15   <br>    16   <br>    17   <br>    18   <br>    19   <br>    20",
+  "E2023_TEXT1": "<strong>【2023年英语二 阅读理解 Text 1 原文与段落译文】</strong><br>P1 In the quest for the perfect lawn, homeowners across the country are taking a shortcut—and it is<br>the environment that is paying the price. About eight million square metres of plastic grass is sold each<br>year but opposition has now spread to the highest gardening circles. The Chelsea Flower Show has<br>banned fake grass from this year's event, declaring it to be not part of its ethos. The Royal Horticultural<br>Society (RHS), which runs the annual show in west London, says it has introduced the ban because of<br>the damage plastic grass does to the environment and biodiversity.<br>在追求完美草坪的过程中,全国各地的房主正在走捷径——而为此付出代价的却是环境。每年约有八百万<br>平方米的塑料草坪被售出,但反对声音现已蔓延至最高园艺圈层。切尔西花展已从今年的活动中禁止人造<br>草,宣称其不符合该展会的理念。主办这一伦敦西部年度展览的英国皇家园艺学会表示,之所以实施这一禁<br>令,是因为塑料草坪对环境和生物多样性造成的破坏。<br>P2 Ed Home, of the RHS, said: \"We launched our sustainability strategy last year and fake grass is<br>just not in line with our ethos and views on plastic. We recommend using real grass because of its<br>environmental benefits, which include supporting wildlife, alleviating flooding and cooling the<br>environment.\"<br>英国皇家园艺学会的Ed Home说:\"我们去年发布了可持续发展战略,而人造草与我们在塑料问题上的理念<br>和观点完全不符。我们建议使用真草,因为它具有环境效益,包括支持野生动物、缓解洪涝以及冷却环境。\"<br>P3 The RHS's decision comes as campaigners try to raise awareness of the problems fake grass<br>causes. A Twitter account, which claims to \"cut through the greenwash\" of artificial grass, already has<br>more than 20,000 followers. It is trying to encourage people to sign two petitions, one calling for a ban<br>Text 1<br><br>on the sale of plastic grass and another calling for an \"ecological damage\" tax on such lawns. They have<br>gathered 7,276 and 11,282 signatures.<br>英国皇家园艺学会的这一决定正值活动人士试图提高人们对人造草所造成问题的认识之际。一个声称<br>要\"揭穿\"人造草\"漂绿行为\"的Twitter账号已经拥有超过两万名关注者。该账号正试图鼓励人们签署两份请<br>愿书,一份呼吁禁止销售塑料草坪,另一份呼吁对此类草坪征收\"生态破坏\"税。这两份请愿书已分别征集到<br>7276和11282个签名。<br>P4 However, supporters of fake grass point out that there is also an environmental impact with<br>natural lawns, which need mowing and therefore usually consume electricity or petrol. The industry also<br>points out that real grass requires considerable amounts of water, weed killer or other treatments and that<br>people who lay fake grass tend to use their garden more. The industry also claims that people who lay<br>fake grass spend an average of £500 on trees or shrubs for their garden, which provides habitat for<br>insects.<br>然而,人造草的支持者指出,天然草坪也会产生环境影响,因为需要修剪,因此通常会消耗电力或汽油。该行业<br>还指出,真草需要大量的水、除草剂或其他处理,而铺设人造草的人往往会更多地使用他们的花园。该行业<br>还声称,铺设人造草的人平均会花费500英镑购买树木或灌木来装点花园,这为昆虫提供了栖息地。<br>P5 In response to another petition last year about banning fake lawns, which gathered 30,000<br>signatures, the government responded that it has \"no plans to ban the use of artificial grass\".<br>去年,另一份关于禁止人造草坪的请愿书征集到三万个签名,政府对此回应称\"没有禁止使用人造草的<br>计划\"。<br>P6 It added: \"We prefer to help people and organisations make the right choice rather than<br>legislating on such matters. However, the use of artificial grass must comply with the legal and policy<br>safeguards in place to protect biodiversity and ensure sustainable drainage, while measures such as the<br>strengthened biodiversity duty should serve to encourage public authorities to consider sustainable<br>alternatives.\"<br>政府补充道:\"我们更倾向于帮助个人和组织做出正确选择,而非就此类事项立法。然而,人造草的使用必须遵<br>守现行的法律和政策保障措施,以保护生物多样性并确保可持续排水,同时诸如强化的生物多样性义务等措<br>施应有助于鼓励公共机构考虑可持续的替代方案。\"",
+  "E2023_TEXT2": "<strong>【2023年英语二 阅读理解 Text 2 原文与段落译文】</strong><br>P1 It's easy to dismiss as absurd the federal government's ideas for plugging the chronic funding<br>gap of our national parks. Can anyone really think it's a good idea to allow Amazon deliveries to your<br>tent in Yosemite or food trucks to line up under the redwood trees at Sequoia National Park?<br>联邦政府为弥补我们国家公园长期资金缺口而提出的想法很容易被视为荒谬。真的有人认为允许亚马逊将<br>货物送到你在约塞米蒂的帐篷里，或者让餐车在红杉国家公园的红杉树下排成行是个好主意吗？<br>P2 But the government is right about one thing: U.S. national parks are in crisis. Collectively, they<br>have a maintenance backlog of more than $12 billion. Roads, trails, restrooms, visitor centers and other<br>infrastructure are crumbling.<br>但政府在一件事上是对的：美国国家公园正处于危机之中。它们总共积压了超过120亿美元的维护费用。<br>道路、小径、卫生间、游客中心和其他基础设施正在破败。<br>P3 But privatizing and commercializing the campgrounds would not be a cure-all. Campgrounds are<br>a tiny portion of the overall infrastructure backlog, and businesses in the parks hand over, on average,<br>only about 5% of their revenues to the National Park Service.<br>但将露营地私有化和商业化并不是万能药。露营地只占整体基础设施积压的很小一部分，而且公园内的企<br>业平均只向国家公园管理局上交其收入的约5%。<br>P4 Moreover, increased privatization would certainly undercut one of the major reasons why 300<br>million visitors come to the parks each year: to enjoy nature and get a break from the commercial<br>drumbeat that overwhelms daily life.<br>此外，私有化程度的提高肯定会削弱每年3亿游客来公园的一个主要原因：享受自然，从充斥日常生活的<br>商业鼓噪中得到喘息。<br>Text 2<br><br>P5 The real problem is that the parks have been chronically starved of funding. An economic<br>survey of 700 U.S. taxpayers found that people would be willing to pay a significant amount of money<br>to make sure the parks and their programs are kept intact. Some 81% of respondents said they would be<br>willing to pay additional taxes for the next 10 years to avoid any cuts to the national parks.<br>真正的问题是公园长期以来一直资金匮乏。一项针对700名美国纳税人的经济调查发现，人们愿意支付大<br>量金钱以确保公园及其项目保持完整。约81%的受访者表示，他们愿意在未来10年缴纳额外税款，以避免<br>国家公园遭受任何削减。<br>P6 The national parks provide great value to U.S. residents both as places to escape and as symbols<br>of nature. On top of this, they produce value from their extensive educational programs, their positive<br>impact on the climate through carbon sequestration, their contribution to our cultural and artistic life, and<br>of course through tourism. The parks also help keep America's past alive, working with thousands of<br>local jurisdictions around the country to protect historical sites and to bring the stories of these places to<br>life.<br>国家公园作为逃离之地和自然象征，为美国居民提供了巨大价值。除此之外，它们还通过广泛的教育项<br>目、通过碳封存对气候产生的积极影响、对我们文化和艺术生活的贡献，当然还有旅游业，创造价值。这<br>些公园还帮助保持美国历史的鲜活，与全国数千个地方司法管辖区合作保护历史遗址，并让这些地方的故<br>事生动起来。<br>P7 The parks do all this on a shoestring. Congress allocates only $3 billion a year to the national<br>park system—an amount that has been flat since 2001 (in inflation-adjusted dollars) with the exception<br>of a onetime boost in 2009. Meanwhile, the number of annual visitors has increased by more than 50%<br>since 1980, and now stands at 330 million visitors per year.<br>公园以极少的预算完成所有这些工作。国会每年只拨款30亿美元给国家公园系统——这一数额自2001年<br>以来一直持平（按通胀调整后的美元计算），除了2009年的一次性增加。与此同时，年游客数量自1980<br>年以来增长了50%以上，现在达到每年3.3亿游客。",
+  "E2023_TEXT3": "<strong>【2023年英语二 阅读理解 Text 3 原文与段落译文】</strong><br>P1 The Internet may be changing merely what we remember, not our capacity to do so, suggests<br>Columbia University psychology professor Betsy Sparrow. In 2011, Sparrow led a study in which<br>participants were asked to record 40 factoids in a computer (\"an ostrich's eye is bigger than its brain,\"<br>for example). Half of the participants were told the information would be erased, while the other half<br>were told it would be saved. Guess what? The latter group made no effort to recall the information when<br>quizzed on it later, because they knew they could find it on their computers. In the same study, a group<br>was asked to remember both the information and the folders it was stored in. They didn't remember the<br>information, but they remembered how to find the folders. In other words, human memory is not<br>deteriorating but \"adapting to new communications technology,\" Sparrow says.<br>互联网也许只是改变了我们记忆的内容，而非我们的记忆能力，Columbia University心理学教授Betsy<br>Sparrow如此认为。2011年，Sparrow主持了一项研究，参与者被要求在计算机中记录40条小知识(例<br>如\"鸵鸟的眼睛比它的大脑还大\")。一半参与者被告知这些信息将被删除,而另一半被告知信息会被保存。<br>结果如何?后一组在随后被测试时完全没有努力回忆这些信息,因为他们知道可以在电脑上找到它们。在同<br>一研究中,另一组被要求同时记住信息和存储信息的文件夹。他们没有记住信息,但记住了如何找到文件<br>夹。换句话说,Sparrow表示,人类记忆并非在退化,而是\"在适应新的通信技术\"。<br>P2 In a very practical way, the Internet is becoming an external hard drive for our memories, a<br>process known as \"cognitive offloading.\" Traditionally, this role was fulfilled by data banks, libraries, and<br>other humans. Your father may never remember birthdays because your mother does, for instance. Some<br>worry that this is having a destructive effect on society, but Sparrow sees an upside. Perhaps, she<br>suggests, the trend will change our approach to learning from a focus on individual facts and<br>memorization to an emphasis on more conceptual thinking—something that is not available on the<br>Text 3<br><br>Internet. \"I personally have never seen all that much intellectual value in memorizing things,\" Sparrow<br>says, adding that we haven't lost our ability to do it.<br>从非常实际的角度来说,互联网正在成为我们记忆的外部硬盘,这一过程被称为\"认知卸载\"。传统上,这一角<br>色由数据库、图书馆和其他人来承担。例如,你的父亲可能永远记不住生日,因为你的母亲会记得。一些人<br>担心这对社会产生破坏性影响,但Sparrow看到了积极的一面。她认为,这一趋势也许会改变我们的学习方<br>式,从关注个别事实和记忆转向强调更具概念性的思维——这是互联网上无法获得的东西。Sparrow说:\"我<br>个人从未认为记忆事物有多大的智力价值\",并补充说我们并未失去记忆的能力。<br>P3 Still other experts say it's too soon to understand how the Internet affects our brains. There is no<br>experimental evidence showing that it interferes with our ability to focus, for instance, wrote<br>psychologists Christopher Chabris and Daniel J. Simons. And surfing the web exercised the brain more<br>than reading did among computer-savvy older adults in a 2008 study involving 24 participants at the<br>Semel Institute for Neuroscience and Human Behavior at the University of California, Los Angeles.<br>还有其他专家表示,现在就理解互联网如何影响我们的大脑还为时过早。心理学家Christopher Chabris和<br>Daniel J. Simons写道,没有实验证据表明互联网会干扰我们的专注能力。而且在2008年一项涉及<br>University of California, Los Angeles的Semel Institute for Neuroscience and Human Behavior的24<br>名参与者的研究中,在精通计算机的老年人群体中,浏览网页比阅读更能锻炼大脑。<br>P4 \"There may be costs associated with our increased reliance on the Internet, but I'd have to<br>imagine that overall the benefits are going to outweigh those costs,\" observes psychology professor<br>Benjamin Storm. \"It seems pretty clear that memory is changing, but is it changing for the better? At<br>this point, we don't know.\"<br>心理学教授Benjamin Storm指出:\"我们日益依赖互联网可能会带来一些代价,但我必须认为总体而言收益<br>将超过这些代价。记忆似乎确实在发生变化,但它是在向好的方向变化吗?目前,我们还不知道。\"",
+  "E2023_TEXT4": "<strong>【2023年英语二 阅读理解 Text 4 原文与段落译文】</strong><br>P1 Teenagers are paradoxical. That's a mild and detached way of saying something that parents<br>often express with considerably stronger language. But the paradox is scientific as well as personal. In<br>adolescence, helpless and dependent children who have relied on grown-ups for just about everything<br>become independent people who can take care of themselves and help each other. At the same time,<br>once cheerful and compliant children become rebellious teenage risk-takers.<br>青少年是矛盾的。这是一种温和而超然的说法,而父母们在表达同样的意思时往往会使用强烈得多的语言。<br>但这种矛盾既是科学的,也是个人的。在青春期,几乎所有事情都依赖成年人的无助和依赖的儿童变成了能<br>够照顾自己并互相帮助的独立个体。与此同时,曾经快乐顺从的孩子变成了叛逆的冒险少年。<br>P2 A new study published in the journal Child Development, by Eveline Crone of the University of<br>Leiden and colleagues, suggests that the positive and negative sides of teenagers go hand in hand. The<br>study is part of a new wave of thinking about adolescence. For a long time, scientists and policy makers<br>concentrated on the idea that teenagers were a problem that needed to be solved. The new work<br>emphasizes that adolescence is a time of opportunity as well as risk.<br>莱顿大学的Eveline Crone及其同事在《儿童发展》期刊上发表的一项新研究表明,青少年的积极面和消极<br>面是相伴而生的。这项研究是关于青春期思考新浪潮的一部分。长期以来,科学家和政策制定者专注于青少<br>年是一个需要解决的问题这一观念。新的研究强调青春期既是机遇期也是风险期。<br>P3 The researchers studied \"prosocial\" and rebellious traits in more than 200 children and young<br>adults, ranging from 11 to 28 years old. The participants filled out questionnaires about how often they<br>Text 4<br><br>did things that were altruistic and positive, like sacrificing their own interests to help a friend, or<br>rebellious and negative, like getting drunk or staying out late.<br>研究人员对200多名年龄从11岁到28岁的儿童和年轻成人的亲社会特质和叛逆特质进行了研究。参与者填<br>写了关于他们做利他和积极的事情(如牺牲自己的利益去帮助朋友)或叛逆和消极的事情(如喝醉或深夜不<br>归)频率的问卷。<br>P4 Other studies have shown that rebellious behavior increases as you become a teenager and then<br>fades away as you grow older. But the new study shows that, interestingly, the same pattern holds for<br>prosocial behavior. Teenagers were more likely than younger children or adults to report that they did<br>things like unselfishly helping a friend.<br>其他研究表明,叛逆行为在进入青少年时期时增加,然后随着年龄增长而减弱。但这项新研究显示,有趣的是,<br>亲社会行为也呈现出同样的模式。青少年比年幼的儿童或成年人更有可能报告他们会做无私地帮助朋友之<br>类的事情。<br>P5 Most significantly, there was a positive correlation between prosociality and rebelliousness. The<br>teenagers who were more rebellious were also more likely to help others. The good and bad sides of<br>adolescence seem to develop together.<br>最重要的是,亲社会性和叛逆性之间存在正相关关系。越叛逆的青少年也越有可能帮助他人。青春期的好坏<br>两面似乎是共同发展的。<br>P6 Is there some common factor that underlies these apparently contradictory developments? One<br>idea is that teenage behavior is related to what researchers call \"reward sensitivity.\" Decision-making<br>always involves balancing rewards and risks, benefits and costs. \"Reward sensitivity\" measures how<br>much reward it takes to outweigh risk.<br>是否存在某种共同因素作为这些看似矛盾的发展的基础?一种观点认为青少年行为与研究人员所说的奖赏<br>敏感性有关。决策总是涉及平衡奖赏与风险、收益与成本。奖赏敏感性衡量的是需要多大的奖赏才能超过<br>风险。<br>P7 Teenagers are particularly sensitive to social rewards—winning the game, impressing a new<br>friend, getting that boy to notice you. Reward sensitivity, like prosocial behavior and risk-taking, seems<br>to go up in adolescence and then down again as we age. Somehow, when you hit 30, the chance that<br>something exciting and new will happen at that party just doesn't seem to outweigh the effort of getting<br>up off the couch.<br>青少年对社会奖赏特别敏感——赢得比赛、给新朋友留下深刻印象、让那个男孩注意到你。奖赏敏感性和<br>亲社会行为及冒险行为一样,似乎在青春期上升,然后随着我们年龄增长而再次下降。不知何故,当你到了30<br>岁,那个聚会上可能会发生令人兴奋的新鲜事的机会似乎就不足以抵消从沙发上起身的努力了。",
+  "E2023_PARTB": "<strong>【2023年英语二 新题型 Part B 原文与候选项 A–G】</strong><br>Read the following text and match each of the numbered items in the left column to its corresponding<br>information in the right column. There are two extra choices in the right column. Mark your answers on<br>the ANSWER SHEET. (10 points)<br>New building regulations aimed at improving energy efficiency are set to increase the price of new<br>homes, as well as those of extensions and loft conversions on existing ones.<br>旨在提高能源效率的新建筑法规将提高新房价格,以及现有住房的扩建和阁楼改造价格。<br>The rules, which came into effect on Wednesday in England, are part of government plans to reduce<br>the UK's carbon emissions to net zero by 2050. They set new standards for ventilation, energy efficiency<br>and heating, and state that new residential buildings must have charging points for electric vehicles.<br>这些法规于周三在英格兰生效,是政府到2050年将英国碳排放降至净零排放计划的一部分。它们为通风、<br>能源效率和供暖设定了新标准,并规定新住宅建筑必须配备电动汽车充电桩。<br>The moves are the most significant change to building regulations in years, and industry experts say<br>they will inevitably lead to higher prices at a time when a shortage of materials and high labour costs<br>are already driving up bills.<br>这些举措是多年来建筑法规最重大的变化,行业专家表示,在材料短缺和高昂人工成本已经推高账单的时期,<br>这些变化将不可避免地导致价格上涨。<br>Brian Berry, chief executive of the Federation of Master Builders, says the measures will require<br>new materials, testing methods, products and systems to be installed. \"All this comes at an increased cost<br>during a time when prices are already sky high. Inevitably, consumers will have to pay more,\" he says.<br>Federation of Master Builders首席执行官Brian Berry表示,这些措施将需要安装新材料、测试方法、<br>产品和系统。\"所有这些都会在价格已经高企的时期增加成本。消费者不可避免地将不得不支付更多费<br>Net-Zero Rules Set to Send Cost of New Homes and Extensions Soaring<br><br>用,\"他说。<br>Gareth Belsham, of surveyors Naismiths, says people who are upgrading, or extending their home,<br>will be directly affected. \"The biggest changes relate to heating and insulation,\" he explains. \"There are<br>new rules concerning the amount of glazing used in extensions, and any new windows or doors must be<br>highly insulated.\"<br>测量师事务所Naismiths的Gareth Belsham表示,升级或扩建房屋的人将直接受到影响。\"最大的变化与供<br>暖和隔热有关,\"他解释道。\"关于扩建中使用的玻璃量有新规定,任何新窗户或门都必须高度隔热。\"<br>Windows and doors will have to adhere to higher standards, while there are new limits on the<br>amount of glazing you can have to reduce unwanted heat from the sun.<br>窗户和门将必须遵守更高标准,同时对玻璃使用量设有新限制,以减少来自太阳的不必要热量。<br>Thomas Goodman, of MyJobQuote, says this will bring in new restrictions for extensions. \"Glazing<br>on windows, doors and roof lights must cover no more than 25% of the floor area to prevent heat loss,\"<br>he says.<br>MyJobQuote的Thomas Goodman表示,这将为扩建带来新限制。\"窗户、门和天窗上的玻璃覆盖面积不<br>得超过地板面积的25%,以防止热量流失,\"他说。<br>As the rules came into effect last Wednesday, property developers were rushing to file plans just<br>before the deadline. Any plans submitted before that date are considered to be under the previous rules,<br>and can go ahead as long as work starts before 15 June next year.<br>随着法规于上周三生效,房地产开发商正赶在截止日期前提交计划。在该日期之前提交的任何计划都被视为<br>按照先前规则执行,只要在明年6月15日之前开工即可继续进行。<br>Builders which have costed projects, but have not filed the paperwork, may need to go back and<br>submit fresh estimates, says Marcus Jefford of Build Aviator.<br>Build Aviator的Marcus Jefford表示,已经完成项目成本核算但尚未提交文件的建筑商可能需要重新提交<br>新的估价。<br>Materials prices are already up 25% in the last two years. How much overall prices will increase as<br>a result of the rule changes is not clear. \"Whilst admirable in their intentions, they will add to the cost<br>of housebuilding at a time when many already feel that they are priced out of homeownership,\" says<br>Jonathan Rolande of the National Association of Property Buyers. \"An average extension will probably<br>see around £3,000 additional cost thanks to the new regs.\"<br>材料价格在过去两年已经上涨了25%。规则变化将导致整体价格上涨多少尚不清楚。\"尽管其意图值得称<br>赞,但它们将增加住房建设成本,而此时许多人已经觉得自己买不起房,\"National Association of Property<br>Buyers的Jonathan Rolande说。\"由于新法规,一个普通扩建项目可能会增加约3000英镑的额外成本。\"<br>John Kelly, a construction lawyer at Freeths law firm, believes prices will eventually come down.<br>But not in the immediate future. \"As the marketplace adapts to the new requirements, and the<br>technologies that support them, the scaling up of these technologies will eventually bring costs down, but<br>in the short term, we will all have to pay the price of the necessary transition,\" he says.<br>Freeths律师事务所的建筑律师John Kelly认为价格最终会下降。但不是在近期。\"随着市场适应新要求以<br>及支持这些要求的技术,这些技术的规模化最终会降低成本,但在短期内,我们都将不得不为必要的转型付出<br>代价,\"他说。<br><br>However, the long-term effects of the changes will be more comfortable and energy-efficient homes,<br>adds Andrew Mellor, of PRP architects. \"Homeowners will probably recoup that cost over time in energy<br>bill savings. It will obviously be very volatile at the moment, but they will have that benefit over time.\"<br>然而,PRP建筑师事务所的Andrew Mellor补充说,这些变化的长期影响将是更舒适、更节能的住宅。\"房主<br>可能会随着时间推移通过节省能源账单来收回这笔成本。目前显然会非常不稳定,但随着时间推移他们将获<br>得这一好处。\"<br>[ A ] The rise of home prices is a temporary<br>matter.",
+  "E2024_CLOZE": "<strong>【2024年英语二 完形填空原文（中英对照）】</strong><br>Your social life is defined as \"the activities you do with other people, for pleasure, when you are<br>not working\". It's important to have a social life, but what's right for one person won't be right for<br>another. Some of us feel energised by spending lots of time with others, <br> some of us may feel<br>drained, even if it's doing something we enjoy.<br>你的社交生活被定义为\"当你不工作时，为了娱乐而与他人一起做的活动\"。拥有社交生活很重要,但适合一<br>个人的方式不一定适合另一个人。我们中的一些人会因为与他人共度大量时间而感到精力充沛,而我们中的<br>另一些人可能会感到疲惫,即使是在做自己喜欢的事情。<br>This is why finding a <br> in your social life is key. Spending too much time on your own, not<br> others, can make you feel lonely and <br> . Loneliness is known to impact on your mental<br>health and <br> a low mood. Anyone can feel lonely at any time. This might be especially true if,<br> , you are working from home and you are <br> on the usual social conversations that<br>happen in an office. Other life changes can <br> periods of loneliness too, such as retirement,<br>changing jobs or becoming a parent.<br>这就是为什么在社交生活中找到平衡是关键。独自度过太多时间,不与他人见面,会让你感到孤独和疏离。<br>众所周知,孤独会影响你的心理健康并导致情绪低落。任何人在任何时候都可能感到孤独。例如,如果你在<br>家工作,错过了办公室里通常发生的社交对话,这种情况可能尤其真实。其他生活变化也可能引发孤独时期,<br>比如退休、换工作或成为父母。<br>It's important to recognise these feelings of loneliness. There are ways to <br> a social life, but<br>it can feel overwhelming <br> . It's a great idea to start by thinking about hobbies you enjoy. You<br>can then find groups and activities related to those where you will be able to meet <br> people.<br>There are groups aimed at new parents, at those who want to <br> a new sport for the first time,<br>or networking events for those in the same profession to meet up and <br> ideas.<br>认识到这些孤独感很重要。有一些方法可以重建社交生活,但一开始可能会让人感到难以应对。从思考你喜<br>欢的爱好开始是个好主意。然后你可以找到与这些爱好相关的群体和活动,在那里你将能够遇到志同道合的<br>    1   <br>    2   <br>    3   <br>    4   <br>    5   <br>    6   <br>    7   <br>    8   <br>    9   <br>    10   <br>    11   <br>    12   <br>    13<br><br>人。有针对新手父母的群体,针对想首次尝试新运动的人的群体,或者针对同一职业的人聚会和分享想法的<br>社交活动。<br>On the other hand, it's <br> possible to have too much of a social life. If you feel like you're<br>always doing something and there is never any <br> in your calendar for downtime, you could<br>suffer social burnout or social <br> . We all have our own social limit and it's important to<br>recognise when you're feeling like it's all too much. Low mood, low energy, irritability and trouble<br>sleeping could all be <br> of poor social health. Make sure you <br> some time in your diary<br>when you're <br> for socialising and use this time to relax, <br> and recover.<br>另一方面,社交生活也可能过度。如果你觉得自己总是在做某事,日程表上永远没有任何休息时间,你可能会<br>遭受社交倦怠或社交疲劳。我们每个人都有自己的社交极限,重要的是要认识到何时你感觉这一切太多了。<br>情绪低落、精力不足、易怒和睡眠困难都可能是社交健康不良的迹象。确保在你的日程表中标出一些无法<br>参加社交活动的时间,利用这段时间来放松、休息和恢复。<br>    14   <br>    15   <br>    16   <br>    17   <br>    18   <br>    19   <br>    20",
+  "E2024_TEXT1": "<strong>【2024年英语二 阅读理解 Text 1 原文与段落译文】</strong><br>P1 In her new book Cogs and Monsters: What Economics Is, and What It Should Be, Diane Coyle,<br>an economist at Cambridge University, argues that the digital economy requires new ways of thinking<br>about progress. \"Whatever we mean by the economy growing, by things getting better, the gains will<br>have to be more evenly shared than in the recent past,\" she writes. \"An economy of tech millionaires or<br>billionaires and gig workers, with middle-income jobs undercut by automation, will not be politically<br>sustainable.\"<br>在她的新书《齿轮与怪兽：经济学是什么，以及它应该是什么》中，剑桥大学经济学家Diane Coyle认<br>为，数字经济需要关于进步的新思维方式。她写道：\"无论我们所说的经济增长、事物变得更好是什么意<br>思,收益都必须比近期更加均匀地分享。一个由科技百万富翁或亿万富翁和零工工人组成的经济体,其中等<br>收入工作被自动化削弱,将无法在政治上持续。\"<br>P2 Improving living standards and increasing prosperity for more people will require greater use of<br>digital technologies to boost productivity in various sectors, including health care and construction, says<br>Coyle. But people can't be expected to embrace the changes if they're not seeing the benefits—if they're<br>just seeing good jobs being destroyed.<br>Coyle说,提高生活水平和让更多人增加繁荣将需要更多地使用数字技术来提高包括医疗保健和建筑在内的<br>各个部门的生产力。但如果人们看不到好处——如果他们只是看到好工作被摧毁,就不能期望他们接受这<br>些变化。<br>P3 In a recent interview, Coyle said she fears that tech's inequality problem could be a roadblock to<br>deploying AI. \"We're talking about disruption,\" she says. \"These are transformative technologies that<br>Text 1<br><br>change the ways we spend our time every day, that change business models that succeed.\" To make such<br>\"tremendous changes,\" she adds, you need social buy-in.<br>在最近的一次采访中,Coyle说她担心科技的不平等问题可能成为部署人工智能的障碍。她说:\"我们谈论的<br>是颠覆。这些是变革性技术,改变了我们每天度过时间的方式,改变了成功的商业模式。\"她补充说,要做出这<br>样的\"巨大变化\",你需要社会认同。<br>P4 Instead, says Coyle, resentment is simmering among many as the benefits are perceived to go to<br>elites in a handful of prosperous cities.<br>Coyle说,相反,随着收益被认为流向少数繁荣城市的精英,许多人的怨恨正在酝酿。<br>P5 According to the Brookings Institution, a short list of eight American cities that included San<br>Francisco, San Jose, Boston, and Seattle had roughly 38% of all tech jobs by 2019. New AI technologies<br>are particularly concentrated: Brookings's Mark Muro and Sifan Liu estimate that just 15 cities account<br>for two-thirds of the AI assets and capabilities in the United States.<br>根据Brookings Institution的数据,到2019年,包括旧金山、圣何塞、波士顿和西雅图在内的八个美国城市<br>的简短名单拥有大约38%的科技工作岗位。新的人工智能技术尤其集中:Brookings的Mark Muro和Sifan<br>Liu估计,仅15个城市就占据了美国三分之二的人工智能资产和能力。<br>P6 The dominance of a few cities in the invention and commercialization of AI means that<br>geographical disparities in wealth will continue to soar. Not only will this foster political and social<br>unrest, but it could, as Coyle suggests, hold back the sorts of AI technologies needed for regional<br>economies to grow.<br>少数城市在人工智能发明和商业化方面的主导地位意味着地理上的财富差距将继续飙升。这不仅会助长政<br>治和社会动荡,而且正如Coyle所说,它可能阻碍区域经济增长所需的各种人工智能技术。<br>P7 Part of the solution could lie in somehow loosening the stranglehold that Big Tech has on<br>defining the AI agenda. That will likely take increased federal funding for research independent of the<br>tech giants.<br>解决方案的一部分可能在于以某种方式放松大型科技公司对定义人工智能议程的控制。这可能需要增加联<br>邦资金,用于独立于科技巨头的研究。<br>P8 A more immediate response is to broaden our digital imaginations to conceive of AI technologies<br>that don't simply replace jobs but expand opportunities in the sectors that different parts of the country<br>care most about, like health care, education, and manufacturing.<br>一个更直接的应对措施是拓宽我们的数字想象力,构想不是简单地取代工作而是在国家不同地区最关心的部<br>门(如医疗保健、教育和制造业)扩大机会的人工智能技术。",
+  "E2024_TEXT2": "<strong>【2024年英语二 阅读理解 Text 2 原文与段落译文】</strong><br>P1 The UK is facing a future construction crisis because of a failure to plant trees to produce<br>wood, Confor has warned. The forestry and wood trade body has called for urgent action to reduce the<br>country's reliance on timber imports and provide a stable supply of wood for future generations.<br>Currently only 20 percent of the UK's wood requirement is home-grown while it remains the second-<br>largest net importer of timber in the world.<br>Confor警告称,由于未能种植树木以生产木材,英国正面临未来的建筑危机。这家林业和木材贸易机构呼吁<br>采取紧急行动,减少国家对木材进口的依赖,并为子孙后代提供稳定的木材供应。目前英国木材需求中仅有<br>20%来自国内生产,而英国仍然是世界上第二大木材净进口国。<br>P2 Coming at a time of fresh incentives from the UK government for landowners to grow more<br>trees, the trade body says these don't go far enough and fail to promote the benefits of planting them to<br>boost timber supplies. \"Not only are we facing a carbon crisis now, but we will also be facing a future<br>construction crisis because of a failure to plant trees to produce wood,\" said Stuart Goodall, chief<br>executive of Confor. \"For decades we have not taken responsibility for investing in our domestic wood<br>supply, leaving us exposed to fluctuating prices and fighting for future supplies of wood as global<br>demand rises and our own supplies fall.\"<br>在英国政府为土地所有者提供更多种树激励措施之际,该贸易机构表示这些措施力度不够,未能宣传种植树<br>木以增加木材供应的好处。Confor首席执行官Stuart Goodall说:\"我们现在不仅面临碳危机,而且由于未能<br>种植树木以生产木材,我们还将面临未来的建筑危机。几十年来,我们没有承担起投资国内木材供应的责任,<br>这使我们面临价格波动的风险,并在全球需求上升而我们自身供应下降之际争夺未来的木材供应。\"<br>P3 The UK has ideal conditions for growing wood to build low-carbon homes and is a global<br>leader in certifying that its forests are sustainably managed, Confor says. While around three quarters of<br>Text 2<br><br>Scottish homes are built from Scottish timber, the use of home-grown wood in England is only around<br>25 percent. The causes of the UK's current position are complex and range from outdated perceptions of<br>productive forestry to the decimation of trees by grey squirrels. It also encompasses significant hesitation<br>on behalf of farmers and other landowners to invest in longer-term planting projects.<br>Confor表示,英国拥有种植木材以建造低碳住宅的理想条件,并且在认证其森林可持续管理方面处于全球领<br>先地位。虽然约四分之三的苏格兰住宅使用苏格兰木材建造,但英格兰使用国产木材的比例仅约25%。英<br>国当前处境的原因是复杂的,既包括对生产性林业的过时认知,也包括灰松鼠对树木的大量破坏。这还涉及<br>农民和其他土地所有者对投资长期种植项目的明显犹豫。<br>P4 While productive tree planting can deliver real financial benefits to rural economies and<br>contribute to the UK's net-zero strategy, the focus of government support continues to be on food<br>production and the rewilding and planting of native woodland solely for biodiversity. Goodall added:<br>\"While food production and biodiversity health are clearly of critical importance, we need our land to<br>also provide secure supplies of wood for construction, manufacturing and contribute to net zero.\"<br>虽然生产性树木种植可以为农村经济带来实际的经济效益,并有助于英国的净零排放战略,但政府支持的重<br>点仍然集中在粮食生产以及仅为生物多样性而进行的野化和本土林地种植。Goodall补充说:\"虽然粮食生<br>产和生物多样性健康显然至关重要,但我们需要土地也能提供用于建筑、制造的可靠木材供应,并为实现净<br>零排放做出贡献。\"<br>P5 \"While the UK government has stated its ambition for more tree planting, there has been little<br>action on the ground. Confor is now calling for much greater impetus behind those aspirations to ensure<br>we have enough wood to meet increasing demand.\"<br>\"虽然英国政府已表明其扩大植树的雄心,但实际行动却很少。Confor现在呼吁为这些愿景注入更大的推动<br>力,以确保我们有足够的木材来满足不断增长的需求。\"",
+  "E2024_TEXT3": "<strong>【2024年英语二 阅读理解 Text 3 原文与段落译文】</strong><br>P1 One of the biggest challenges in keeping unsafe aging drivers off the road is convincing them<br>that it's time to turn over the keys. \"It's a complete life-changer\" when someone stops—or is forced to<br>stop—driving, said former risk manager Anne M. Menke.<br>让不安全的老年驾驶员远离道路的最大挑战之一是说服他们是时候交出钥匙了。前风险管理人员Anne M.<br>Menke说,当有人停止驾驶或被迫停止驾驶时,\"这完全改变了生活\"。<br>P2 \"The American Medical Association advises physicians that 'in situations where clear evidence of<br>substantial driving impairment implies a strong threat to patient and public safety, and where the<br>physician's advice to discontinue driving privileges is ignored, it is desirable and ethical to notify the<br>Department of Motor Vehicles,'\" Menke wrote. \"Some states require physicians to report, others allow but<br>do not mandate reports, while a few consider a report a breach of confidentiality. There could be liability<br>and penalties if a physician does not act in accordance with state laws on reporting and confidentiality,\"<br>she counseled.<br>Menke写道:\"美国医学会建议医生,'在有明确证据表明存在严重驾驶障碍,对患者和公共安全构成重大威胁,<br>且医生建议停止驾驶特权而被忽视的情况下,通知机动车辆管理部门是可取且合乎道德的。'一些州要求医<br>生报告,另一些州允许但不强制要求报告,而少数州认为报告属于违反保密义务。如果医生的行为不符合州<br>法律关于报告和保密的规定,可能会承担责任和处罚。\"她建议道。<br>P3 Part of the problem in keeping older drivers safe is that the difficulties are addressed piecemeal<br>by different professions with different focuses, including gerontologists, highway administration officials,<br>automotive engineers and others, said gerontologist Elizabeth Dugan. \"There's not a National Institute of<br>Text 3<br><br>Older Driver Studies,\" she said. \"We need better evidence on what makes drivers unsafe\" and what can<br>help, said Dugan.<br>老年学家Elizabeth Dugan说,保护老年驾驶员安全的部分问题在于,这些困难被不同专业、不同关注点的人<br>员零散地处理,包括老年学家、公路管理官员、汽车工程师等。\"没有一个国家老年驾驶员研究所。\"她说。<br>Dugan说:\"我们需要更好的证据来说明是什么让驾驶员不安全\"以及什么能有所帮助。<br>P4 One thing that does seem to work is requiring drivers to report in person for license renewal.<br>Mandatory in-person renewal was associated with a 31 percent reduction in fatal crashes involving<br>drivers 85 or older, according to one study. Passing vision tests also produced a similar decline in fatal<br>crashes for those drivers, although there appeared to be no benefit from combining the two.<br>一项研究显示,有一件事似乎确实有效,那就是要求驾驶员亲自到场更新驾照。强制性亲自更新与85岁或以<br>上驾驶员涉及的致命车祸减少31%相关。通过视力测试也使这些驾驶员的致命车祸出现了类似的下降,尽<br>管将两者结合起来似乎没有什么益处。<br>P5 Many older drivers don't see eye doctors or can't afford to. Primary care providers have their<br>hands full and may not be able to follow through with patients who have trouble driving because they<br>can't turn their heads or remember where they are going—or have gotten shorter and haven't changed<br>their seat settings sufficiently to reach car pedals easily.<br>许多老年驾驶员不去看眼科医生或负担不起。初级保健提供者手头工作繁重,可能无法跟进那些因无法转头<br>或记不住要去哪里而驾驶困难的患者,或者那些身高变矮却没有充分调整座椅设置以便轻松够到汽车踏板的<br>患者。<br>P6 As long as there are other cars on the roads, self-driving cars won't solve the problems of<br>crashes, said Dugan. Avoiding dangers posed by all those human drivers would require too many<br>algorithms, she said. But we need to do more to improve safety, said Dugan. \"If we're going to have<br>100-year lives, we need cars that a 90-year-old can drive comfortably.\"<br>Dugan说,只要路上还有其他汽车,自动驾驶汽车就无法解决车祸问题。她说,避免所有那些人类驾驶员造成<br>的危险需要太多算法。但Dugan说,我们需要做更多工作来提高安全性。\"如果我们要活到100岁,我们需要<br>90岁的人能够舒适驾驶的汽车。",
+  "E2024_TEXT4": "<strong>【2024年英语二 阅读理解 Text 4 原文与段落译文】</strong><br>P1 If you look at the apps on your phone, chances are you have at least one related to your health<br>—and probably several. Whether it is a mental health app, a fitness tracker, a connected health device or<br>something else, many of us are taking advantage of this technology to keep better track of our health in<br>some shape or form. Recent research from the Organization for the Review of Care and Health<br>Applications found that 350,000 health apps were available on the market, 90,000 of which launched in<br>2020 alone.<br>如果你查看手机上的应用程序,很可能至少有一个与健康相关的应用——而且可能有好几个。无论是心理<br>健康应用、健身追踪器、联网健康设备还是其他什么,我们中的许多人都在利用这项技术以某种形式更好地<br>追踪自己的健康状况。健康与护理应用审查组织最近的研究发现,市场上有35万个健康应用程序,其中仅<br>2020年就推出了9万个。<br>P2 While these apps have a great deal to offer, it is not always clear how the personal information<br>we input is collected, safeguarded and shared online. Existing health privacy law, such as the Health<br>Insurance Portability and Accountability Act, is primarily focused on the way hospitals, doctors' offices,<br>clinics and insurance companies store health records online. The health information these apps and health<br>data tracking wearables are collecting typically does not receive the same legal protections.<br>虽然这些应用程序有很多好处,但我们输入的个人信息如何被收集、保护和在线共享并不总是清楚的。现有<br>的健康隐私法律,如《健康保险携带和责任法案》,主要关注医院、诊所、门诊部和保险公司在线存储健康<br>记录的方式。这些应用程序和健康数据追踪可穿戴设备收集的健康信息通常不会受到同样的法律保护。<br>P3 Without additional protections in place, companies may share (and potentially monetize) personal<br>health information in a way consumers may not have authorized or anticipated. In 2021, Flo Health<br>faced a Federal Trade Commission (FTC) investigation. The FTC alleged in a complaint that \"despite<br>Text 4<br><br>express privacy claims, the company took control of users' sensitive fertility data and shared it with third<br>parties.\" Flo Health and the FTC settled the matter with a Consent Order requiring the company to get<br>app users' express affirmative consent before sharing their health information as well as to instruct the<br>third parties to delete the data they had obtained.<br>在没有额外保护措施的情况下,公司可能会以消费者未授权或未预料到的方式共享(并可能将其货币化)个人<br>健康信息。2021年,Flo Health面临联邦贸易委员会的调查。联邦贸易委员会在一项投诉中指控\"尽管有明<br>确的隐私声明,该公司还是控制了用户的敏感生育数据并将其与第三方共享\"。Flo Health与联邦贸易委员<br>会通过一项同意令解决了此事,要求该公司在共享用户健康信息之前获得应用程序用户的明确肯定同意,并<br>指示第三方删除他们已获得的数据。<br>P4 Section 5 of the FTC Act empowers the FTC to initiate enforcement action against unfair or<br>deceptive acts, meaning the FTC can only act after the fact if a company's privacy practices are<br>misleading or cause unjustified consumer harm. While the FTC is doing what it can to ensure apps are<br>keeping their promises to consumers around the handling of their sensitive health information, the rate at<br>which these health apps are hitting the market demonstrates just how immense of a challenge this is.<br>《联邦贸易委员会法》第5条授权联邦贸易委员会对不公平或欺骗性行为采取执法行动,这意味着联邦贸易<br>委员会只能在公司的隐私做法具有误导性或造成不正当消费者损害之后采取行动。虽然联邦贸易委员会正<br>在尽其所能确保应用程序信守对消费者关于处理其敏感健康信息的承诺,但这些健康应用程序进入市场的速<br>度表明这是一个多么巨大的挑战。<br>P5 As to the prospects for federal legislation, commentators suggest that comprehensive federal<br>privacy legislation seems unlikely in the short term. States have begun implementing their own solutions<br>to shore up protections for consumer-generated health data. California has been at the forefront of state<br>privacy efforts with the California Consumer Privacy Act of 2018. Virginia, Colorado and Utah have also<br>recently passed state consumer data privacy legislation.<br>至于联邦立法的前景,评论人士认为短期内似乎不太可能出台全面的联邦隐私立法。各州已开始实施自己的<br>解决方案,以加强对消费者生成的健康数据的保护。加利福尼亚州一直处于州隐私努力的前沿,制定了2018<br>年《加利福尼亚州消费者隐私法》。弗吉尼亚州、科罗拉多州和犹他州最近也通过了州消费者数据隐私<br>立法。",
+  "E2024_PARTB": "<strong>【2024年英语二 新题型 Part B 原文与候选项 A–G】</strong><br>Read the following text and match each of the numbered items in the left column to its corresponding<br>information in the right column. There are two extra choices in the right column. Mark your answers on<br>the ANSWER SHEET. (10 points)<br>High school students eager to stand out in the college application process often participate in a<br>litany of extracurricular activities hoping to bolster their chances of admission to a selective<br>undergraduate institution.<br>渴望在大学申请过程中脱颖而出的高中生往往参加一系列课外活动,希望提高被精英本科院校录取的机会。<br>However, college admissions experts say that the quality of a college hopeful's extracurricular<br>activities matters more than the number of activities he or she participates in.<br>然而,大学招生专家表示,大学申请者课外活动的质量比他或她参加的活动数量更重要。<br>Sue Rexford, the director of college guidance at the Charles E. Smith Jewish Day School, says it is<br>not necessary for a student filling out the Common Application to list 10 activities in the application.<br>Charles E. Smith Jewish Day School的大学升学指导主任Sue Rexford说,学生在填写Common<br>Application时没有必要列出10项活动。<br>\"No college will expect that a student has a huge laundry list of extracurriculars that they have been<br>passionately involved in each for an extended period of time,\" Rexford wrote in an email.<br>Rexford在一封电子邮件中写道:\"没有哪所大学会期望学生有一长串课外活动清单,并且每项活动都长期充<br>满激情地参与其中。\"<br>Experts say it is tougher to distinguish oneself in a school-affiliated extracurricular activity that is<br>common among high school students than it is to stand out while doing an uncommon activity.<br>专家表示,在高中生中常见的校内课外活动中脱颖而出,比在不常见的活动中突出自己更困难。<br><br>\"The competition to stand out and make an impact is going to be much stiffer, and so if they're<br>going to do a popular activity, I'd say, be the best at it,\" says Sara Harberson, a college admissions<br>consultant.<br>大学招生顾问Sara Harberson说:\"脱颖而出并产生影响的竞争会激烈得多,所以如果他们要做一项热门活<br>动,我会说,做到最好。\"<br>High school students who have an impressive personal project they are working on independently<br>often impress colleges, experts say.<br>专家表示,正在独立开展令人印象深刻的个人项目的高中生往往能打动大学。<br>\"For example, a student with an interest in entrepreneurship could demonstrate skill and potential by<br>starting a profitable small business,\" Olivia Valdes, the founder of Zen Admissions consulting firm, wrote<br>in an email.<br>Zen Admissions咨询公司创始人Olivia Valdes在一封电子邮件中写道:\"例如,对创业感兴趣的学生可以通<br>过创办一家盈利的小企业来展示技能和潜力。\"<br>Joseph Adegboyega-Edun, a Maryland high school guidance counselor, says unconventional<br>extracurricular activities can help students impress college admissions offices, assuming they<br>demonstrated serious commitment. \"Again, since one of the big questions high school seniors must<br>consider is 'What makes you unique?,' having an uncommon extracurricular activity vs. a conventional<br>one is an advantage,\" he wrote in an email.<br>马里兰州高中升学顾问Joseph Adegboyega-Edun说,非传统的课外活动可以帮助学生给大学招生办公室<br>留下深刻印象,前提是他们表现出认真的投入。他在一封电子邮件中写道:\"再次强调,由于高中毕业生必须考<br>虑的一个重要问题是'是什么让你与众不同?',拥有一项不常见的课外活动相比传统活动是一种优势。\"<br>Experts say demonstrating talent in at least one extracurricular activity can help in the college<br>admissions process, especially at top-tier undergraduate institutions.<br>专家表示,在至少一项课外活动中展示才能有助于大学录取过程,尤其是在顶尖本科院校。<br>\"Distinguishing yourself in one focused type of extracurricular activity can be a positive in the<br>admissions process, especially for highly selective institutions, where having top grades and test scores is<br>not enough,\" Katie Kelley, admissions counselor at IvyWise admissions consultancy, wrote in an email.<br>\"Students need to have that quality or hook that will appeal to admissions officers and allow them to<br>visualize how the student might come and enrich their campus community.\"<br>IvyWise招生咨询公司的招生顾问Katie Kelley在一封电子邮件中写道:\"在一种专注的课外活动类型中使自<br>己脱颖而出,在录取过程中可能是一个积极因素,尤其是对于高度精英化的院校,在这些院校,仅有顶尖成绩和<br>考试分数是不够的。学生需要有那种能吸引招生官的品质或亮点,让他们能够想象学生可能如何来丰富他们<br>的校园社区。\"<br>Extracurricular activities related to the college major declared on a college application are beneficial,<br>experts suggest. \"If you already know your major, having an extracurricular that fits into that major can<br>be a big plus,\" says Mayghin Levine, the manager of educational opportunities with The Cabbage Patch<br>Settlement House, a Louisville, Kentucky, nonprofit community center.<br>专家建议,与大学申请中申报的专业相关的课外活动是有益的。路易斯维尔市肯塔基州非营利社区中心The<br>Cabbage Patch Settlement House的教育机会主管Mayghin Levine说:\"如果你已经知道自己的专业,拥<br>有一项符合该专业的课外活动可能是一大优势。\"<br><br>High school students who have had a strong positive influence on their community through an<br>extracurricular activity may impress a college and win a scholarship, says Erica Gwyn, a former math<br>and science magnet program assistant at a public high school who is now executive director of the<br>Kaleidoscope Careers Academy in Atlanta, a nonprofit organization.<br>曾任公立高中数学和科学磁石项目助理、现为亚特兰大非营利组织Kaleidoscope Careers Academy执行<br>主任的Erica Gwyn说,通过课外活动对社区产生强烈积极影响的高中生可能会给大学留下深刻印象并赢得<br>奖学金。<br>[ A ] Students who stand out in a specific<br>extracurricular activity will be favored by<br>top-tier institutions.",
+  "E2025_CLOZE": "<strong>【2025年英语二 完形填空原文（中英对照）】</strong><br>There are many understandable reasons why you might find it difficult to ask for help when you<br>need it. Psychologists have been interested in this <br> for decades, not least because people's<br>widespread <br> to ask for help has led to some high-profile failures.<br>当你需要帮助时却发现难以开口求助，这有许多可以理解的原因。几十年来,心理学家一直对这个问题很感<br>兴趣,尤其是因为人们普遍不愿求助已经导致了一些备受瞩目的失败案例。<br>Asking for help takes <br> . It involves communicating a need on your part—there's something<br>you can't do. <br> you're broadcasting your own weaknesses, which can be <br> . You might<br>worry about coming across as incompetent. You might have <br> about losing control of whatever it<br>is you're asking for help with. <br> someone starts to help, perhaps they'll take over, or get credit<br>for your earlier efforts. Yet another <br> that you might be worried about is being a nuisance or <br> the person you go to for help.<br>寻求帮助需要勇气。这涉及到传达你自身的需求——有些事情你做不到。换句话说,你在暴露自己的弱点,<br>这可能会让人不舒服。你可能会担心给人留下无能的印象。你可能会担心失去对所求助事项的控制权。一<br>旦有人开始帮忙,也许他们会接管一切,或者把你之前的努力归功于自己。你可能担心的另一个因素是给你<br>求助的人添麻烦或带来不便。<br>If you struggle with low self-esteem, you might find it especially difficult to <br> for help<br>because you have the added worry of the other person <br> your request. You might see such<br>refusals as implying something <br> about the status of your relationship with them. To <br>these difficulties, try to remind yourself that everyone needs help sometimes. Nobody knows everything<br>and can do everything all by themselves. And while you might <br> coming across as incompetent,<br>there's actually research that shows that advice-seekers are <br> as more competent, not less.<br>如果你在自尊心低落方面有困扰,你可能会发现寻求帮助特别困难,因为你还要额外担心对方会拒绝你的请<br>求。你可能会将这种拒绝视为暗示你与他们的关系存在某种负面问题。为了克服这些困难,试着提醒自己每<br>    1   <br>    2   <br>    3   <br>    4   <br>    5   <br>    6   <br>    7   <br>    8   <br>   <br>9   <br>    10   <br>    11   <br>    12   <br>    13   <br>    14   <br>    15<br><br>个人有时都需要帮助。没有人无所不知、无所不能。虽然你可能担心给人留下无能的印象,但实际上有研究<br>表明,寻求建议的人被认为更有能力,而非更无能。<br>Perhaps most encouraging of all is a paper from 2022 by researchers at Stanford University that<br>involved a mix of contrived help-seeking interactions and asking people to <br> times they'd sought<br>help in the past. The findings showed that help-seekers generally underestimate how <br> other<br>people will be to help and how good it'll make the help-giver feel (for most people, having the chance<br>to help someone is highly <br> ).<br>也许最令人鼓舞的是Stanford University研究人员2022年发表的一篇论文,该研究结合了精心设计的求助<br>互动和让人们回忆过去求助经历的方式。研究结果显示,求助者通常会低估他人愿意提供帮助的程度,以及<br>这会让帮助者感觉有多好(对大多数人来说,有机会帮助他人是非常有价值的回报)。<br>So, bear all this in mind the next time you need to ask for help. <br> take care over who you<br>ask and when you ask them. And if someone can't help right now, avoid taking it personally. They might<br>just be too <br> , or they might not feel confident about their ability to help.<br>因此,下次你需要寻求帮助时,请记住所有这些。同时要注意你向谁求助以及何时求助。如果有人现在无法<br>提供帮助,不要往心里去。他们可能只是太忙了,或者他们可能对自己提供帮助的能力不够自信。<br>    16   <br>    17   <br>    18   <br>    19   <br>    20",
+  "E2025_TEXT1": "<strong>【2025年英语二 阅读理解 Text 1 原文与段落译文】</strong><br>P1 U.S. customers historically tipped people they assumed were earning most of their income via<br>tips, such as restaurant servers earning less than the minimum wage. In the early 2010s, a wide range of<br>businesses started processing purchases with iPads and other digital payment systems. These systems<br>often prompted customers to tip for services that were not previously tipped.<br>美国顾客历来会给那些他们认为主要靠小费谋生的人支付小费,比如收入低于最低工资的餐厅服务员。<br>2010年代初,各类商家开始使用iPad和其他数字支付系统处理交易。这些系统经常提示顾客为以前不需要<br>支付小费的服务支付小费。<br>P2 Today's tip requests are often not connected to the salary and service norms that used to<br>determine when and how people tip. Customers in the past nearly always paid tips after receiving a<br>service, such as at the conclusion of a restaurant meal, after getting a haircut or once a pizza was<br>delivered. That timing could reward high-quality service and give workers an incentive to provide it.<br>如今的小费要求往往与过去决定何时以及如何支付小费的薪资和服务规范脱节。过去顾客几乎总是在接受<br>服务后支付小费,比如在用完餐后、理完发后或披萨送达后。这种时机可以奖励高质量的服务,并激励员工<br>提供优质服务。<br>P3 It's becoming more common for tips to be requested beforehand. And new tipping technology<br>may even automatically add tips.<br>事先要求支付小费的情况正变得越来越普遍。而新的小费技术甚至可能自动添加小费。<br>P4 The prevalence of digital payment devices has made it easier to ask customers for a tip. That<br>helps explain why tip requests are creeping into new kinds of services. Customers now routinely see<br>menus of suggested default options—often well above 20% of what they owe. The amounts have risen<br>Text 1<br><br>from 10% or less in the 1950s to 15% around the year 2000 to 20% or higher today. This increase is<br>sometimes called tipflation—the expectation of ever-higher tip amounts.<br>数字支付设备的普及使向顾客索要小费变得更加容易。这有助于解释为什么小费要求正在渗透到新的服务<br>类型中。顾客现在经常看到建议的默认选项菜单——通常远高于其消费金额的20%。小费金额已从1950<br>年代的10%或更低上升到2000年左右的15%,再到如今的20%或更高。这种增长有时被称为小费通胀——<br>即对越来越高的小费金额的预期。<br>P5 Tipping has always been a vital source of income for workers in historically tipped services, like<br>restaurants, where the tipped minimum wage can be as low as US$2.13 an hour. Tip creep and tipflation<br>are now further supplementing the income of many low-wage service workers.<br>对于传统上依赖小费的服务行业员工,如餐厅员工,小费一直是重要的收入来源,这些行业的最低小费工资可<br>低至每小时2.13美元。小费蔓延和小费通胀现在进一步补充了许多低薪服务业员工的收入。<br>P6 Notably, tipping primarily benefits some of these workers, such as waiters, but not others, such<br>as cooks and dishwashers. To ensure that all employees were paid fair wages, some restaurants banned<br>tipping and increased prices, but this movement toward no-tipping services has largely fizzled out.<br>值得注意的是,小费主要惠及其中一些员工,如服务员,但不惠及其他员工,如厨师和洗碗工。为确保所有员工<br>获得公平工资,一些餐厅禁止收小费并提高了价格,但这种取消小费服务的运动基本上已经失败。<br>P7 So, to increase employee wages without raising prices, more employers are succumbing to the<br>temptations of tip creep and tipflation. However, many customers are frustrated because they feel they<br>are being asked for too high of a tip, too often. And, as our research emphasizes, tipping now seems to<br>be more coercive, less generous and often completely dissociated from service quality.<br>因此,为了在不提高价格的情况下增加员工工资,越来越多的雇主屈服于小费蔓延和小费通胀的诱惑。然而,<br>许多顾客感到沮丧,因为他们觉得自己被要求支付过高的小费,而且频率过高。而且,正如我们的研究所强调<br>的,小费现在似乎更具强制性、更缺乏慷慨性,并且往往与服务质量完全脱节。",
+  "E2025_TEXT2": "<strong>【2025年英语二 阅读理解 Text 2 原文与段落译文】</strong><br>P1 When it was established, the National Health Service (NHS) was visionary: offering high-quality,<br>timely care to meet the dominant needs of the population it served. Nearly 75 years on, with the UK<br>facing very different health challenges, it is clear that model is out of date.<br>国民健康服务体系(NHS)建立之初颇具远见：提供高质量、及时的医疗服务以满足其所服务人群的主要需<br>求。近75年过去了,英国面临着截然不同的健康挑战,这一模式显然已经过时。<br>P2 From life expectancy to cancer and infant mortality rates, we are lagging behind many of our<br>peers. With more than 6.8 million on waitlists, healthcare is becoming increasingly inaccessible for those<br>who cannot opt to pay for private treatment; and the cost of providing healthcare is increasingly<br>squeezing out investment in other public services. As demand for healthcare continues to grow, pressures<br>on the workforce—which is already near breaking point—will only become more acute.<br>从预期寿命到癌症和婴儿死亡率,我们都落后于许多同类国家。超过680万人在候诊名单上,医疗服务对那些<br>无力选择支付私人治疗费用的人来说越来越难以获得;提供医疗服务的成本也日益挤压其他公共服务的投<br>资。随着医疗需求持续增长,本已接近崩溃边缘的医疗队伍所面临的压力只会变得更加严峻。<br>P3 Many of the answers to the crisis in health and care are well rehearsed. We need to be much<br>better at reducing and diverting demand on health services, rather than simply managing it. Much more<br>needs to be invested in communities and primary care to reduce our reliance on hospitals. And capacity<br>in social care needs to be greater, to support the growing number of people living with long-term<br>conditions.<br>解决健康和护理危机的许多答案都已被反复讨论。我们需要在减少和分流医疗服务需求方面做得更好,而不<br>是仅仅对其进行管理。需要在社区和基层医疗方面投入更多资金,以减少我们对医院的依赖。社会护理的能<br>力需要更大,以支持日益增长的长期病患者数量。<br>Text 2<br><br>P4 Yet despite two decades of strategies and a number of major health reforms, we have failed to<br>make meaningful progress on any of these aims. That is why the Reform think tank is launching a new<br>programme of work entitled \"Reimagining health\", supported by ten former health ministers. Together,<br>we are calling for a much more open and honest conversation about the future of health in the UK, and<br>an \"urgent rethink\" of the hospital-centric model we retain.<br>然而,尽管经历了二十年的战略规划和多次重大卫生改革,我们在任何这些目标上都未能取得实质性进展。<br>这就是为什么Reform智库在十位前卫生大臣的支持下启动了一项名为\"重新构想健康\"的新工作计划。<br>我们共同呼吁就英国健康的未来进行更加开放和诚实的对话,并\"紧急反思\"我们所保留的以医院为中心的<br>模式。<br>P5 This must begin with the question of how we maximise the health of the nation, rather than<br>\"fix\" the NHS. It is estimated, for example, that healthcare accounts for only about 20% of health<br>outcomes. Much more important are the places we live, work and socialise—yet there is no clear cross-<br>government strategy for improving these social determinants of health. Worse, when policies like the<br>national obesity strategy are scrapped, taxpayers are left with the heavy price tag of treating the illnesses,<br>like diabetes, that result.<br>这必须从如何最大化国民健康这一问题开始,而不是\"修复\"NHS。例如,据估计,医疗服务仅占健康结果的约<br>20%。更重要的是我们生活、工作和社交的场所——然而政府并没有明确的跨部门战略来改善这些健康的<br>社会决定因素。更糟糕的是,当像国家肥胖战略这样的政策被废弃时,纳税人就要承担治疗由此导致的疾病<br>(如糖尿病)的沉重代价。<br>P6 Reform wants to ask how power and resources should be distributed in our health system. What<br>health functions should remain at the centre, and what should be given to local leaders, often responsible<br>for services that create health, and with a much better understanding of the needs of their populations?<br>Reform希望探讨权力和资源应该如何在我们的卫生系统中分配。哪些卫生职能应该保留在中央,哪些应该<br>交给地方领导者——他们通常负责创造健康的服务,并且对其人群的需求有更好的了解?",
+  "E2025_TEXT3": "<strong>【2025年英语二 阅读理解 Text 3 原文与段落译文】</strong><br>P1 Heat action plans, or HAPs, have been proliferating in India in the past few years. In general,<br>an HAP spells out when and how officials should issue heat warnings and alert hospitals and other<br>institutions. Nagpur's plan, for instance, calls for hospitals to set aside \"cold wards\" in the summer for<br>treating heatstroke patients, and advises builders to give construction laborers a break from work on very<br>hot days.<br>近年来，高温行动计划(HAPs)在印度迅速普及。一般来说，高温行动计划明确规定了官员应何时以及如何<br>发布高温警报并提醒医院和其他机构。例如,那格浦尔的计划要求医院在夏季预留\"降温病房\"用于治疗中暑<br>患者,并建议建筑商在酷热天气让建筑工人停工休息。<br>P2 But implementation of existing HAPs has been uneven, according to a report from the Centre<br>for Policy Research. Many lack adequate funding, it found. And their triggering thresholds often are not<br>customized to the local climate. In some areas, high daytime temperatures alone might serve as an<br>adequate trigger for alerts. But in other places, nighttime temperatures or humidity might be as important<br>a gauge of risk as daytime highs.<br>但根据政策研究中心的一份报告,现有高温行动计划的实施情况参差不齐。报告发现,许多计划缺乏充足的<br>资金。而且它们的触发阈值往往没有根据当地气候进行定制。在某些地区,仅白天的高温就可以作为发布警<br>报的充分触发条件。但在其他地方,夜间温度或湿度可能与白天高温一样,都是风险的重要衡量指标。<br>P3 Mumbai's April heatstroke deaths highlighted the need for more nuanced and localized warnings,<br>researchers say. That day's high temperature of roughly 36°C was 1°C shy of the heat wave alert<br>threshold for coastal cities set by national meteorological authorities. But the effects of the heat were<br>Text 3<br><br>amplified by humidity—an often neglected factor in heat alert systems—and the lack of shade at the<br>late-morning outdoor ceremony.<br>研究人员表示,孟买四月份的中暑死亡事件凸显了制定更细致和本地化预警的必要性。当天约36°C的最高<br>气温比国家气象部门为沿海城市设定的热浪警报阈值低1°C。但高温的影响因湿度而被放大——这是高温<br>警报系统中经常被忽视的因素——以及上午晚些时候户外仪式缺乏遮阴。<br>P4 To help improve HAPs, urban planner Rajashree Kotharkar's team is working on a model plan<br>that outlines best practices and could be adapted to local conditions. Among other things, she says, all<br>cities should create a vulnerability map to help focus responses on the populations most at risk.<br>为了帮助改进高温行动计划,城市规划师Rajashree Kotharkar的团队正在制定一个示范计划,概述最佳实践<br>并可根据当地条件进行调整。她说,除其他事项外,所有城市都应该绘制脆弱性地图,以帮助将应对措施集中<br>在风险最高的人群上。<br>P5 Such mapping doesn't need to be complex, Kotharkar says. \"A useful map can be created by<br>looking at even a few key parameters.\" For example, neighborhoods with a large elderly population or<br>informal dwellings that cope poorly with heat could get special warnings or be bolstered with cooling<br>centers. The Nagpur project has already created a risk and vulnerability map, which enabled Kotharkar to<br>tell officials which neighborhoods to focus on in the event of a heat wave this summer.<br>Kotharkar说,这种地图绘制不需要很复杂。\"只需查看几个关键参数就可以创建一张有用的地图。\"例如,老<br>年人口较多或非正式住所不能很好应对高温的社区可以获得特别警报或通过设立降温中心得到加强。那格<br>浦尔项目已经创建了一张风险和脆弱性地图,这使Kotharkar能够告诉官员在今年夏季发生热浪时应关注哪<br>些社区。<br>P6 HAPs shouldn't just include short-term emergency responses, researchers say, but also<br>recommend medium- to long-term measures that could make communities cooler. In Nagpur, for<br>example, Kotharkar's team has been able to advise city officials about where to plant trees to provide<br>shade. HAPs could also guide efforts to retrofit homes or modify building regulations. \"Reducing deaths<br>in an emergency is a good target to have, but it's the lowest target,\" says climate researcher Chandni<br>Singh.<br>研究人员表示,高温行动计划不应仅包括短期应急响应,还应推荐可使社区更凉爽的中长期措施。例如在那<br>格浦尔,Kotharkar的团队已能够就在哪里种植树木以提供遮阴向市政官员提供建议。高温行动计划还可以<br>指导房屋改造或修改建筑法规的工作。气候研究员Chandni Singh说:\"在紧急情况下减少死亡是一个值得<br>追求的目标,但这是最低目标。",
+  "E2025_TEXT4": "<strong>【2025年英语二 阅读理解 Text 4 原文与段落译文】</strong><br>P1 Navigating beyond the organised pavements and parks of our urban spaces, desire paths are the<br>unofficial footprints of a community, revealing the unspoken preferences, shared shortcuts and collective<br>choices of humans. Often appearing as trodden dirt tracks through otherwise neat green spaces, these<br>routes of collective disobedience cut corners, bisect lawns and cross hills, representing the natural<br>capability of people (and animals) to go from point A to point B most effectively.<br>在我们城市空间中有序的人行道和公园之外，欲望路径是社区的非官方足迹,揭示了人类未言明的偏好、共<br>同的捷径和集体的选择。这些路径常常表现为穿过整洁绿地的踩踏泥土小径,这些集体违规的路线抄近路、<br>横穿草坪、翻越小山,代表了人类(和动物)从A点到B点最有效移动的自然能力。<br>P2 Urban planners interpret desire paths as more than just convenient shortcuts; they offer valuable<br>insights into the dynamics between planning and behaviour. Ohio State University allowed its students to<br>navigate the Oval, a lawn in the centre of campus, freely, then proceeded to pave the desire paths,<br>creating a web of effective routes students had established.<br>城市规划者将欲望路径解读为不仅仅是便捷的捷径;它们提供了关于规划与行为之间动态关系的宝贵见解。<br>俄亥俄州立大学允许其学生自由穿行校园中心的椭圆形草坪,然后铺设这些欲望路径,创建了学生已经建立<br>的有效路线网络。<br>P3 Yet, reluctance persists among other planners to integrate desire paths into formal plans, citing<br>concerns about safety, environmental impact, or primarily, aesthetics. A Reddit webpage devoted to the<br>phenomenon, boasting nearly 50,000 members, showcases images of local desire paths adorned with<br>signs instructing pedestrians to adhere to designated walkways, underscoring the rebellious nature<br>inherent in these human-made tracks. This clash highlights an ongoing struggle between the organic,<br>Text 4<br><br>user-driven evolution of public spaces and the desire for a visually curated and controlled urban<br>environment.<br>然而,其他规划者仍然不愿将欲望路径纳入正式规划,理由是对安全、环境影响,或主要是美观的担忧。一个<br>专门讨论这一现象的Reddit网页拥有近5万名成员,展示了当地欲望路径的图片,这些路径上装饰着指示行人<br>遵守指定人行道的标志,凸显了这些人造小径固有的叛逆性质。这种冲突凸显了公共空间有机的、用户驱动<br>的演变与对视觉上精心策划和控制的城市环境的渴望之间的持续斗争。<br>P4 The Wickquasgeck Trail is an example of a historical desire path, created by Native Americans<br>to cross the forests of Manhattan and move between settlements quickly. This trail, when Dutch colonists<br>arrived, was widened and made into one of the main trade roads across the island, known at the time as<br>de Heere Straat, or Gentlemen's Street. Following the British assumption of control in New York, the<br>street was renamed Broadway. Notably, Broadway stands out as one of the few areas in NYC that defies<br>the grid-based system applied to the rest of the city, cutting a diagonal across parts of the city.<br>Wickquasgeck小径是历史欲望路径的一个例子,由美洲原住民创建,用于穿越曼哈顿的森林并在定居点之<br>间快速移动。当荷兰殖民者到达时,这条小径被拓宽并建成横跨该岛的主要贸易道路之一,当时被称为de<br>Heere Straat,即绅士街。在英国控制纽约后,这条街被重新命名为Broadway。值得注意的是,Broadway是<br>纽约市少数几个违背应用于城市其他地区的网格系统的区域之一,在城市的部分地区斜穿而过。<br>P5 In online spaces, desire paths have sparked a fascination that can approach obsession, with the<br>Reddit page serving as a hub. Contributors offer a wide array of stories, from little-known new shortcuts<br>to long-established alternate routes.<br>在网络空间中,欲望路径激发了一种可能接近痴迷的迷恋,Reddit页面成为一个中心。贡献者提供了各种各<br>样的故事,从鲜为人知的新捷径到长期存在的替代路线。<br>P6 Animal desire paths, such as ducks forging trails through frozen ponds or dogs carving direct<br>routes in gardens, highlight the adaptability of these trails in both human and animal experiences. As<br>desire paths criss-cross through both physical and virtual landscapes, they stand as a proof of the<br>collective insistence on forging unconventional routes and embracing the spirit of communal choice.<br>动物欲望路径,如鸭子在结冰的池塘上开辟小径或狗在花园中开辟直接路线,突显了这些小径在人类和动物<br>体验中的适应性。随着欲望路径在物理和虚拟景观中纵横交错,它们证明了集体坚持开辟非常规路线和拥抱<br>共同选择精神的决心。",
+  "E2025_PARTB": "<strong>【2025年英语二 新题型 Part B 原文与候选项 A–G】</strong><br>Read the following text and answer the questions by choosing the most suitable subheading from the list<br>A-G for each of the numbered paragraphs (41-45). There are two extra subheadings which you do not<br>need to use. Mark your answers on the ANSWER SHEET. (10 points)<br>Everyone wants to be that person—the one who looks at the same information as everyone else, but<br>who sees a fresh, innovative solution. However, it takes more than simply having a good idea. How you<br>share it is as important as the suggestion itself. Why? Because writing a new script—literally or<br>figuratively—means that other team members will have to adapt to something new. Not to mention, if<br>the process you're scrapping is one someone else suggested, there's the possibility of hurt feelings. To<br>gain buy-in on an innovative, new idea, follow these steps:<br>每个人都想成为那样的人——能够看到与其他人相同的信息，却能看出新颖创新的解决方案。然而，这不<br>仅仅需要有一个好主意。你如何分享它与建议本身同样重要。为什么？因为编写新脚本——无论是字面意<br>义上还是比喻意义上——意味着其他团队成员将不得不适应新事物。更不用说，如果你要废弃的流程是别<br>人提出的，就有可能伤害感情。要让人们认可一个创新的新想法，请遵循以下步骤：<br>(41)____________________<br>做一名推销员。<br>Great ideas don't stand alone. In other words, you can't mention your suggestion once and expect it<br>to be adopted. To see a change, you'll need to champion your plan and sell its merits. In addition, you<br>need to be willing to stand up to scrutiny and criticism and be prepared to explain your innovation in<br>different ways for various audiences.<br>好主意不会独立存在。换句话说，你不能只提一次建议就期望它被采纳。要看到改变，你需要为你的计划<br>摇旗呐喊并推销其优点。此外，你需要愿意经受审查和批评，并准备好以不同方式向不同受众解释你的<br>创新。<br><br>(42)____________________<br>利用渠道。<br>Sometimes it makes sense to go to your boss first. But other times, it's useful to build a coalition<br>among your co-workers or other stakeholders. When it works, it works great—because you're ready for<br>your stubborn supervisor's pushback with answers like, \"Actually, I connected with a few people in our<br>tech department to discuss how much time these kinds of website updates would take, and they<br>suggested they have the bandwidth.\"<br>有时先去找老板是有道理的。但在其他时候，在同事或其他利益相关者中建立联盟是有用的。当这种方法<br>奏效时，效果会很好——因为你已经准备好应对固执上司的反对,可以这样回答：\"事实上,我联系了技术部<br>门的几个人,讨论了这类网站更新需要多少时间,他们表示有时间处理。\"<br>(43)____________________<br>保持谦逊。<br>One of the biggest barriers to gaining buy-in occurs when the owner of an idea is viewed as<br>argumentative, defensive, or close-minded. Because, let's be honest: No one likes a know-it-all. So, if<br>people disagree with you, don't be indignant. Instead, listen to their concerns fully, try to understand<br>their perspective, and include their concerns (and possible remedies) in future discussions. So, instead of<br>saying, \"Martha, our current slogan is confusing and should be updated,\" you could try, \"Martha raises a<br>great point that our current slogan has a long history for our stakeholders, but I wonder if we might be<br>able to brainstorm a tagline that could build on that—and be clearer for new customers.\"<br>获得认可的最大障碍之一是当想法的提出者被视为好争辩、防御性强或思想封闭时。因为,说实话:没有人<br>喜欢万事通。所以,如果人们不同意你的观点,不要愤愤不平。相反,充分倾听他们的担忧,试着理解他们的观<br>点,并在未来的讨论中纳入他们的担忧(以及可能的补救措施)。因此,与其说\"Martha,我们目前的口号令人<br>困惑,应该更新\",你可以尝试说\"Martha提出了一个很好的观点,我们目前的口号对利益相关者来说有着悠<br>久的历史,但我想知道我们是否可以集思广益,想出一个能在此基础上发展的标语——并且对新客户来说更<br>清晰。\"<br>(44)____________________<br>尊重过去。<br>New ideas are the grandchildren of old ones. In other words, don't throw old solutions under the<br>bus to make your improvement stand out. Remember that in light of whatever the problem the old<br>system solved—or, maybe, has failed to solve in recent memory—it was a great idea at the time.<br>Appreciating the older contributions as you suggest future innovations helps bolster the credibility of<br>your idea.<br>新想法是旧想法的孙辈。换句话说,不要为了让你的改进脱颖而出而贬低旧的解决方案。请记住,鉴于旧系<br>统解决的任何问题——或者也许是近期未能解决的问题——它在当时是一个好主意。在你提出未来创新<br>时赞赏以往的贡献有助于增强你想法的可信度。<br>(45)____________________<br>保持积极。<br>When pitching a new idea, it's important to use the language of abundance instead of the language<br>of deficit. Instead of saying what is wrong, broken, or suboptimal, talk about what is right, fixable, or<br><br>ideal. For example, try, \"I can see lots of applications for this new approach\" rather than, \"This<br>innovation is the only way.\" Be optimistic but realistic, and you will stand out.<br>在提出新想法时,使用富足的语言而不是缺陷的语言很重要。与其说什么是错误的、破碎的或不理想的,不<br>如谈论什么是正确的、可修复的或理想的。例如,试着说\"我能看到这种新方法有很多应用\",而不是\"这个创<br>新是唯一的方法\"。保持乐观但现实,你就会脱颖而出。",
+  "E2026_CLOZE": "<strong>【2026年英语二 完形填空原文（中英对照）】</strong><br>Most of us strive for self-respect — to see ourselves in a positive light, to be <br> of who we<br>are. Any comments or experiences that undermine those feelings of self-worth can be uncomfortable and<br>it's only <br> to want to avoid them. But the thing is, <br> your self-worth really is being<br>undermined is, to a large degree, subjective. Much of it comes down to your <br> of what someone<br>said or did.<br>我们大多数人都追求自尊——以积极的眼光看待自己,为自己感到自豪。任何削弱这些自我价值感的评论<br>或经历都会让人不舒服,想要避免它们是很自然的。但问题在于,你的自我价值是否真的受到了削弱,在很大<br>程度上是主观的。这在很大程度上取决于你对某人所说或所做之事的理解。<br>When you take things personally, you're interpreting these situations as saying something significant<br>and negative about you as a person. Say your boss picks holes in your sales report, and you come away<br>feeling like this means she thinks you're a <br> member of staff. Or, two of your friends cancel your<br> get-together at the pub and you interpret this as meaning they're bored of you. Psychologists<br>have a <br> for this way of thinking: personalisation.<br>当你把事情往心里去时,你是在将这些情况理解为关于你这个人的某种重要且负面的东西。比如你的老板在<br>你的销售报告中挑毛病,你离开时感觉这意味着她认为你是个糟糕的员工。或者,你的两个朋友取消了你们<br>计划好的酒吧聚会,你将此理解为他们对你感到厌倦了。心理学家对这种思维方式有一个术语:个人化。<br>But the <br> is that your boss might view you very highly. It's just you made some <br> in<br>the report and she wanted to point these out so that you do better next time. <br> , in the case of<br>your friends cancelling, perhaps they both felt unwell that weekend or they just <br> their minds.<br>但现实是,你的老板可能对你评价很高。只是你在报告中犯了一些错误,她想指出这些错误,以便你下次做得<br>更好。同样,在你朋友取消聚会的情况下,也许他们俩那个周末都感觉不舒服,或者他们只是改变了主意。<br>In both <br> — and others that we all experience — there's another <br> at work that<br>psychologists call mind reading. This is when you assume to know what other people are thinking about<br>    1   <br>    2   <br>    3   <br>    4   <br>    5   <br>    6   <br>    7   <br>    8   <br>    9   <br>    10   <br>    11   <br>    12   <br>    13<br><br>you, when you can't really know without <br> them directly.<br>在这两个例子中——以及我们都会经历的其他例子中——还有另一个心理学家称之为读心术的过程在起<br>作用。这是指你假设自己知道别人对你的想法,而实际上如果不直接询问他们,你是无法真正知道的。<br>One simple way to avoid <br> personalisation and mind reading is to challenge your negative<br>assumptions of what's <br> . When you find yourself taking a situation personally, try to think of<br>other interpretations that are less focused on you — especially in the sense of saying anything deep or<br> about you.<br>避免陷入个人化和读心术的一个简单方法是质疑你对所发生事情的负面假设。当你发现自己把某个情况往<br>心里去时,试着想想其他不那么关注你的解释——尤其是在说关于你任何深层或根本性东西的意义上。<br>When you do this, it might help to try to put yourself in other people's shoes. The fact your boss<br>took the time to give you <br> at all means they care enough to want to help you <br> .<br>When it comes to your friends — maybe it's because your friendship is so <br> that they felt able<br>to cancel at late notice.<br>当你这样做时,试着设身处地为他人着想可能会有所帮助。你的老板花时间给你反馈这一事实本身就意味着<br>他们足够在意,想要帮助你进步。至于你的朋友——也许正是因为你们的友谊如此牢固,他们才觉得可以在<br>最后时刻取消。<br>    14   <br>    15   <br>    16   <br>    17   <br>    18   <br>    19   <br>    20",
+  "E2026_TEXT1": "<strong>【2026年英语二 阅读理解 Text 1 原文与段落译文】</strong><br>P1 Ask people about public libraries and a certain image springs to mind: dusty, old-fashioned, the<br>sort of place you enjoyed as a child but, rather like a British seaside town, would you go there now?<br>And anyway — aren't they all closing?<br>问人们关于公共图书馆的看法,某种印象便会浮现在脑海中:尘封的、过时的,那种你小时候喜欢的地方,但就<br>像英国的海滨小镇一样,你现在还会去那里吗?而且不管怎样——它们不是都在关闭吗?<br>P2 The reality is startlingly different, as I discovered when the culture department commissioned me<br>to conduct an independent review of English public libraries, published yesterday. As I visited libraries<br>up and down the country, I was surprised to learn there are more than twice the number of libraries<br>(2,892) as there are branches of McDonald's.<br>现实情况截然不同,正如我在文化部委托我对英格兰公共图书馆进行独立审查时所发现的那样,该审查于<br>昨日发布。当我走访全国各地的图书馆时,我惊讶地了解到图书馆的数量(2892家)是麦当劳分店数量的两<br>倍多。<br>P3 Enter any one of them and you will find a hive of activity. While books are, and should always<br>be, at the heart of any library, a multitude of other services are offered: employment advice, language<br>classes or digital access and support.<br>走进其中任何一家,你都会发现一片繁忙的景象。虽然书籍现在是、而且应该永远是任何图书馆的核心,但<br>图书馆还提供众多其他服务:就业咨询、语言课程或数字访问和支持。<br>P4 There are libraries with business and intellectual property centres, which can help business<br>owners and entrepreneurs. Many have nurses on site to carry out basic health checks, with a link to the<br>Text 1<br><br>GP's surgery. There are libraries where young people can borrow a Fifa-standard football free.<br>有些图书馆设有商业和知识产权中心,可以帮助企业主和创业者。许多图书馆有护士现场进行基本的健康检<br>查,并与全科医生诊所建立联系。有些图书馆年轻人可以免费借用符合国际足联标准的足球。<br>P5 In return for all of this, you'll be asked for precisely nothing. There will be no charge and you<br>will never be asked to justify or explain yourself; you will simply be welcomed in, offered help if you<br>need it, and left alone if you do not. There is no other institution, public or private, that can say the<br>same. Yet still our libraries are often overlooked and underappreciated. There is an overall decline in<br>visits and many are struggling as local authorities come under continued financial pressure.<br>作为这一切的回报,你不会被要求付出任何东西。不会有任何收费,你也永远不会被要求证明或解释自己;你<br>只会受到欢迎,需要帮助时会得到帮助,不需要时也不会被打扰。没有其他机构,无论是公共的还是私人的,能<br>做出同样的承诺。然而我们的图书馆仍然常常被忽视和低估。访问量总体下降,许多图书馆由于地方当局持<br>续面临财政压力而陷入困境。<br>P6 The number of libraries that have closed since 2010 is disputed. An annual survey by the<br>Chartered Institute of Public Finance and Accountancy puts it at nearly 800 across the UK; official<br>statistics held by the Arts Council record 230 in England. It is, of course, 230 libraries too many. So if<br>we are to protect our libraries for future generations, we must raise awareness of them and the work<br>they do.<br>自2010年以来关闭的图书馆数量存在争议。英国特许公共财政与会计协会的年度调查显示全英国有近800<br>家;艺术委员会保存的官方统计数据记录英格兰有230家。当然,这230家图书馆已经太多了。因此,如果我们<br>要为子孙后代保护图书馆,就必须提高人们对图书馆及其工作的认识。<br>P7 The review recommends a national branding campaign to give libraries a stronger physical<br>presence, the reintroduction of a scheme to enable members to use their card in any library in the<br>country, and automatic memberships for children. If we don't use them, we will end up losing them. And<br>for those who haven't been to a library for some time, they may be surprised by what they find.<br>该审查报告建议开展一项全国性的品牌宣传活动,以增强图书馆的实体存在感,重新推行一项计划使会员能<br>够在全国任何图书馆使用其借书证,以及为儿童提供自动会员资格。如果我们不使用它们,最终就会失去它<br>们。对于那些有一段时间没去过图书馆的人来说,他们可能会对所发现的情况感到惊讶。",
+  "E2026_TEXT2": "<strong>【2026年英语二 阅读理解 Text 2 原文与段落译文】</strong><br>P1 According to our research, around one in five workers in the UK talk to AI like a friend,<br>looking for guidance on personal and professional problems. Our data shows that engaging with AI like<br>this can leave us feeling heard and less isolated. But, with this newfound connection, many of us share<br>sensitive, sometimes highly confidential information, even though over a third of people don't realise that<br>AI platforms may not be very good at keeping our secrets…secret.<br>根据我们的研究，英国约有五分之一的员工像朋友一样与AI交谈，在个人和职业问题上寻求指导。我们的<br>数据显示，以这种方式与AI互动可以让我们感到被倾听，减少孤独感。但是，随着这种新建立的联系，我<br>们中的许多人分享了敏感的、有时是高度机密的信息，尽管超过三分之一的人没有意识到AI平台可能并不<br>擅长保守我们的秘密……秘密。<br>P2 For businesses, the implications are worrying. Consider Microsoft Copilot, for example. It gains<br>Microsoft broad rights to the data inputted or outputted by any user — rights to use this data in any<br>way it sees fit; it can even share it with third parties. This means that any sensitive business information<br>could potentially be exposed to the world. Employers are taking note and taking action. According to our<br>research, 25% have decided to either outright ban AI or regulate its use within their organisations. But<br>even with these policies in place, some employees choose to break the rules. They have their reasons —<br>around 63% of them report that using AI increases their productivity, and some even feel AI offers more<br>help than their human colleagues.<br>对企业而言，这种影响令人担忧。以Microsoft Copilot为例，它使Microsoft获得对任何用户输入或输出<br>数据的广泛权利——以其认为合适的任何方式使用这些数据的权利；它甚至可以与第三方分享这些数据。<br>这意味着任何敏感的商业信息都可能暴露给全世界。雇主们注意到了这一点并采取了行动。根据我们的研<br>究，25%的雇主决定完全禁止AI或规范其在组织内的使用。但即使有这些政策，一些员工仍选择违反规<br>Text 2<br><br>定。他们有自己的理由——约63%的员工报告称使用AI提高了他们的生产力，有些人甚至觉得AI比他们的<br>人类同事提供更多帮助。<br>P3 The situation presents a delicate balance between leveraging AI for its productivity gains and<br>risking confidential data exposure. Employers need to manage AI tools with the same level of care as<br>any other form of data sharing or storage. There's also a knowledge gap that needs to be addressed —<br>40% of individuals surveyed are unsure about who retains ownership over the content produced by AI.<br>By instilling best practices in AI engagement and creating policies that evolve with the technology,<br>businesses can positively shift the AI landscape.<br>这种情况需要在利用AI提高生产力和冒机密数据泄露风险之间保持微妙的平衡。雇主需要像管理任何其他<br>形式的数据共享或存储一样谨慎地管理AI工具。还有一个知识差距需要解决——受访者中有40%不确定谁<br>保留AI生成内容的所有权。通过灌输AI使用的最佳实践并制定随技术发展而演变的政策，企业可以积极改<br>变AI格局。<br>P4 With AI's potential to simplify our professional lives, do the admin and enhance the work<br>experience, it's up to us to navigate its usage cautiously so it supports us without compromising our<br>privacy. There's no need to back away from progress, as long as we're equipped with the knowledge and<br>tools to make sure AI remains a friend. And this is where the challenge lies. There are so many products<br>out there, being promoted with huge advertising and marketing budgets, that it's easy to fall victim. But<br>by building a culture of digital responsibility within our businesses, we can create a future where AI can<br>help us without spilling the beans.<br>鉴于AI简化我们职业生活、处理行政事务并提升工作体验的潜力，我们有责任谨慎使用它，使其在不损害<br>我们隐私的情况下为我们提供支持。没有必要退避进步，只要我们具备确保AI保持友好的知识和工具。而<br>这正是挑战所在。市场上有如此多的产品，用巨额的广告和营销预算进行推广，很容易成为受害者。但通<br>过在我们的企业中建立数字责任文化，我们可以创造一个AI能够在不泄露秘密的情况下帮助我们的未来。",
+  "E2026_TEXT3": "<strong>【2026年英语二 阅读理解 Text 3 原文与段落译文】</strong><br>P1 Since the 2008 launch of the high-speed rail network between Rome and Milan, trains have<br>become the preferred means of travel across Italy for locals and tourists alike. Fast trains can cover the<br>500km between the two cities in three hours. The network also connects Naples, Bologna, Florence and<br>Turin. In many cases, it is the best option — in terms of travel time and cost — for both leisure and<br>business travellers.<br>自2008年罗马与米兰之间的高速铁路网络开通以来,火车已成为意大利本地人和游客在全国各地出行的首<br>选方式。快速列车可以在三小时内完成两座城市之间500公里的行程。该铁路网还连接那不勒斯、博洛尼<br>亚、佛罗伦萨和都灵。在许多情况下,无论对休闲旅客还是商务旅客而言,它都是在旅行时间和成本方面的<br>最佳选择。<br>P2 This is why the recent severe delays caused by numerous maintenance works have thrown the<br>rail industry into chaos at a time when most people head on holiday, which matters for business in a<br>country where tourism accounts for 10 percent of GDP.<br>这就是为什么最近由大量维护工程造成的严重延误使铁路行业在大多数人外出度假的时期陷入混乱,这对一<br>个旅游业占GDP百分之十的国家的商业活动至关重要。<br>P3 Disruptions have become increasingly frequent with train delays now a fixture in Italian media<br>coverage. Ferrovie dello Stato Italiane, the publicly controlled group that owns train operator Trenitalia<br>and the national train network RFI, said 23 percent of all high-speed trains it operated were late in 2023.<br>中断变得越来越频繁,列车延误现在已成为意大利媒体报道的固定内容。Ferrovie dello Stato Italiane是<br>一家公共控股集团,拥有列车运营商Trenitalia和国家铁路网络RFI,该集团表示其运营的所有高速列车中有百<br>分之二十三在2023年出现晚点。<br>Text 3<br><br>P4 The huge improvements in Italy's obsolete infrastructure partly explained the disruption, said<br>Ferrovie. RFI, the network operator, is the single largest European recovery fund beneficiary with<br>planned investments of €24bn by 2026. Ferrovie will invest a total of €124bn in infrastructure over the<br>next 10 years.<br>Ferrovie表示,意大利陈旧基础设施的巨大改善在一定程度上解释了中断的原因。网络运营商RFI是欧洲复<br>苏基金的最大单一受益方,计划到2026年投资240亿欧元。Ferrovie将在未来10年内对基础设施投资总计<br>1240亿欧元。<br>P5 But lack of capacity is another problem. Transport economist Andrea Giuricin said the planned<br>investments would bring improvements but disruptions in the meantime were inevitable. \"We have a<br>mixed system, there is no spare capacity and as soon as there's a hiccup on the line, the situation<br>becomes highly complex,\" he said. A mixed system means that high-speed trains must travel on the<br>regular tracks on certain routes or when passing through large cities. If there's congestion or, for<br>example, a local train breaks down, the entire high-speed network is affected.<br>但运力不足是另一个问题。交通经济学家Andrea Giuricin表示,计划中的投资将带来改善,但期间的中断是<br>不可避免的。他说:\"我们有一个混合系统,没有备用运力,一旦线路上出现小问题,情况就会变得高度复<br>杂。\"混合系统意味着高速列车在某些路线上或通过大城市时必须在普通轨道上行驶。如果出现拥堵或者<br>例如一辆地方列车发生故障,整个高速铁路网都会受到影响。<br>P6 One of the most important changes the upgrades will bring is the segregation of the high-speed<br>line from the regular one in certain urban centres through the construction of underground rail links.<br>升级将带来的最重要变化之一是通过建设地下铁路连接线,在某些城市中心将高速线路与普通线路分离。<br>P7 Improvements will also come from the high-density technology and satellite signalling that RFI<br>has been investing in for years, say experts. It will allow for a reduction of the distance between high-<br>speed trains travelling on the same line at any given time, which should mean a significant increase in<br>capacity and traffic fluidity, according to Giuricin.<br>专家表示,改善还将来自RFI多年来一直在投资的高密度技术和卫星信号系统。Giuricin认为,这将使在任何<br>给定时间在同一线路上行驶的高速列车之间的距离得以缩短,这应该意味着运力和交通流畅性的显著提升。",
+  "E2026_TEXT4": "<strong>【2026年英语二 阅读理解 Text 4 原文与段落译文】</strong><br>P1 In 2023, Chicago lost one of its most beloved street festivals. The Silver Room Block Party,<br>staged by Hyde Park community leader Eric Williams, announced it would not return in 2024. What<br>began as a small neighborhood gathering blossomed into a massive cultural event, welcoming tens of<br>thousands of people each year over nearly two decades before abruptly shutting down.<br>2023年,芝加哥失去了最受欢迎的街头节日之一。由Hyde Park社区领袖Eric Williams举办的Silver Room<br>街区派对宣布不会在2024年回归。这个节日最初只是一个小型社区聚会,后来发展成为一项大规模文化活<br>动,在近二十年间每年迎接数万人,然后突然停办。<br>P2 Williams pointed to rising production costs and declining attendee donations as primary reasons<br>the Silver Room Block Party could not continue, highlighting a reality that all street festival organizers<br>face right now. The cost of producing a street festival in Chicago has skyrocketed. Security,<br>entertainment, portable restrooms, insurance and even basics such as fencing and staffing have all<br>become significantly more expensive. At the same time, donations at festival gates have dropped<br>dramatically.<br>Williams指出,不断上涨的制作成本和不断下降的参与者捐款是Silver Room街区派对无法继续举办的主要<br>原因,这凸显了所有街头节日组织者目前面临的现实。在芝加哥举办街头节日的成本已经飙升。安保、娱<br>乐、便携式卫生间、保险甚至围栏和人员配备等基本费用都变得显著昂贵。与此同时,节日入口处的捐款却<br>大幅下降。<br>Text 4<br><br>P3 Chicago's summer festivals are about more than just entertainment; they are economic engines<br>that directly benefit the neighborhoods they're in and the city of Chicago as a whole. Street festivals<br>drive foot traffic to local businesses and foster the kind of cultural vibrancy that makes our city special.<br>芝加哥的夏季节日不仅仅是娱乐活动,它们是经济引擎,直接惠及所在社区和整个芝加哥市。街头节日为本<br>地商业带来客流量,培育使我们城市与众不同的文化活力。<br>P4 We often hear people ask why we solicit donations at our entry points, especially when the city's<br>largest festivals like the Chicago Jazz Festival do not request donations. The fact is, unlike those large,<br>city-produced music festivals, your neighborhood street festivals receive no city funding and rely on a<br>combination of sponsorships, vendor fees and gate donations to cover their costs.<br>我们经常听到人们问为什么我们在入口处请求捐款,尤其是当芝加哥爵士音乐节等该市最大型节日不要求捐<br>款时。事实是,与那些由市政府制作的大型音乐节不同,你们社区的街头节日没有得到市政拨款,依靠赞助、<br>摊位费和入口捐款的组合来支付成本。<br>P5 Wicker Park Fest has long been one of Chicago's most anticipated summer festivals, drawing<br>upward of 70,000 attendees for a full weekend of live indie music, local art, small business vendors and,<br>most importantly, community connection. In 2024, Wicker Park Fest saw record-breaking attendance.<br>Despite the turnout, gate donations reached their lowest point in our history. This year, we've been forced<br>to scale back the footprint of the fest. We are eliminating a stage, booking fewer performers and making<br>additional cuts to reduce our costs, all while striving to keep the festival as vibrant as ever, as supportive<br>of local artists and businesses, and as true to Wicker Park's unique spirit and reputation as festgoers have<br>come to expect.<br>Wicker Park音乐节长期以来一直是芝加哥最受期待的夏季节日之一,在整个周末吸引超过7万名参与者,呈<br>现现场独立音乐、本地艺术、小型商业摊位,以及最重要的社区联结。2024年,Wicker Park音乐节的参与<br>人数创下纪录。尽管参与人数众多,入口捐款却降至我们历史上的最低点。今年,我们被迫缩小节日的规<br>模。我们取消了一个舞台,预订了更少的表演者,并进行了额外削减以降低成本,同时努力保持节日一如既<br>往的活力,一如既往地支持本地艺术家和商业,并一如既往地忠于参与者所期待的Wicker Park独特精神和<br>声誉。<br>P6 This summer, as you enjoy your favorite neighborhood street festival, I hope you'll remember<br>that they exist because of community support. A thriving summer festival season doesn't happen by<br>accident; it happens when we all chip in.<br>今年夏天,当你享受你最喜爱的社区街头节日时,我希望你会记得它们的存在源于社区支持。一个繁荣的夏<br>季节日季不会偶然发生,它的实现需要我们所有人共同出力。",
+  "E2026_PARTB": "<strong>【2026年英语二 新题型 Part B 原文与候选项 A–G】</strong><br>Read the following text and match each of the numbered items in the left column to its corresponding<br>information in the right column. There are two extra choices in the right column. Mark your answers on<br>the ANSWER SHEET. (10 points)<br>In an effort to support restoration programmes, specialists are developing supplies of seeds and<br>seedlings, maintaining gene banks and sequencing the genomes of indigenous trees and other crops. Their<br>work deals with one of the problems that could block major restoration efforts in different parts of the<br>world.<br>为了支持恢复项目,专家们正在开发种子和幼苗的供应,维护基因库,并对本土树木和其他作物的基因组进行<br>测序。他们的工作解决了可能在世界不同地区阻碍重大恢复工作的问题之一。<br>\"Where's the planting material going to come from? That's one big bottleneck,\" says genetic-<br>resources specialist Ramni Jamnadass.<br>遗传资源专家Ramni Jamnadass说:\"种植材料从哪里来?这是一个大瓶颈。\"<br>Asia is arguably the region most neglected by global efforts to increase diversity in restoration and<br>to study native species. Christopher Kettle, Biodiversity International's director for forest genetic<br>resources and restoration in Rome, says that the need for infrastructure — things such as mechanisms for<br>collecting and storing seeds, and nurseries to raise seedlings — might be most desperate here because<br>many trees are 'masting' species, which don't produce seeds every year. People need to be ready.<br>\"Otherwise, you miss the boat, you lose all the seed and you've got to wait another seven years,\" says<br>Kettle. \"This is a really, really critical issue for restoration in Southeast Asia, because many of the most<br>important timber species and tree species — the ones that will lock up the most carbon — they're all<br>masting species.\"<br>亚洲可以说是全球增加恢复多样性和研究本土物种工作中最被忽视的地区。Biodiversity International驻<br>罗马的森林遗传资源和恢复主任Christopher Kettle表示,对基础设施的需求——诸如收集和储存种子的机<br><br>制,以及培育幼苗的苗圃——在这里可能最为迫切,因为许多树木是\"间歇结实\"物种,它们不是每年都产生种<br>子。人们需要做好准备。\"否则,你就错过了机会,失去了所有种子,你得再等七年,\"Kettle说。\"这对东南亚的<br>恢复来说是一个真正非常关键的问题,因为许多最重要的木材树种和树种——那些能固定最多碳的树种<br>——它们都是间歇结实物种。\"<br>Climate change is a driving factor in the push to restore forests, but it also raises questions, such as<br>where trees can thrive in the future. Climate change is also expected to alter relationships between trees,<br>insects, diseases and other forest species. \"Insects that today are a minor problem may become a major<br>problem if they can produce three or four generations in a year,\" says forest ecologist John Stanturf. This<br>remains a significant knowledge gap. \"We know enough to know that this is a concern, but we don't<br>know enough about how to respond to it yet. That's a great area to be doing research.\" So is soil, says<br>Cindy Prescott, a forest ecologist at the University of British Columbia in Vancouver. \"If you don't look<br>at the soil at the start, you can spend a lot of money and time putting in species that aren't going to<br>survive there.\"<br>气候变化是推动森林恢复的驱动因素,但它也引发了一些问题,比如树木未来能在哪里茁壮生长。气候变化<br>还预计会改变树木、昆虫、疾病和其他森林物种之间的关系。森林生态学家John Stanturf说:\"今天是小问<br>题的昆虫,如果它们一年能繁殖三四代,可能会成为大问题。\"这仍然是一个重大的知识空白。\"我们知道得<br>足够多,知道这是一个值得关注的问题,但我们还不够了解如何应对它。这是一个很好的研究领域。\"温哥华<br>不列颠哥伦比亚大学的森林生态学家Cindy Prescott说,土壤也是如此。\"如果你一开始不关注土壤,你可能<br>会花费大量金钱和时间种植无法在那里存活的物种。\"<br>With so much research left to do, leaders in the field have been doing some soul-searching, and<br>acknowledging that restoration can be motivated by — and designed to meet — different needs. \"When<br>you talk about conservation or restoration, the first question has to be restoration by whom, for whom?\"<br>says Daniel Janzen, a biologist at the University of Pennsylvania.<br>由于还有如此多的研究要做,该领域的领导者们一直在进行一些反思,并承认恢复可能是由不同的需求驱动<br>的,并被设计来满足不同的需求。宾夕法尼亚大学的生物学家Daniel Janzen说:\"当你谈论保护或恢复时,第<br>一个问题必须是由谁恢复,为谁恢复?\"<br>The question can have more than one answer. Much of the global funding for restoration is<br>dedicated to developing it as a tool to mitigate climate change, notes restoration ecologist Pedro<br>Brancalion. \"But if you ask a farmer in Brazil if he or she is concerned about climate change, they<br>would say, 'No, I am concerned about water,'\" he says. Their interests as stewards of the land need to be<br>better integrated with those who have the money to support restoration.<br>这个问题可以有不止一个答案。恢复生态学家Pedro Brancalion指出,全球用于恢复的大部分资金致力于<br>将其发展为缓解气候变化的工具。\"但如果你问巴西的一个农民他或她是否关心气候变化,他们会说,'不,我<br>关心的是水,'\"他说。作为土地管理者,他们的利益需要与那些有资金支持恢复的人更好地整合。<br>That has been the strongest lesson of all for forest ecologist Robin Chazdon. Restoration is about<br>more than what gets planted in the ground, she says. \"Yes, it's about forests, but it's really about people.<br>They are the agents of restoration.\"<br>这对森林生态学家Robin Chazdon来说是最深刻的教训。她说,恢复不仅仅是在地里种什么。\"是的,它关乎<br>森林,但它真正关乎的是人。他们是恢复的主体。\"<br><br>[ A ] People must pay attention to the fact that<br>some kinds of trees do not produce seeds<br>annually."
 };
+
+window.KAOYAN_QUESTIONS = [
+  {
+    "id": "M2026_01",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2026数二 第1题（选择题 5分）",
+    "stem": "已知当 <i>x</i> → 0 时，<i>ax</i><sup>2</sup> + <i>bx</i> + arcsin <i>x</i> 与 (1 + <i>x</i><sup>2</sup>)<sup>1/3</sup> − 1 是等价无穷小，则 ( &nbsp; )",
+    "options": [
+      "A. <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>, <i>b</i> = −1",
+      "B. <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>, <i>b</i> = 1",
+      "C. <i>a</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>3</span></span>, <i>b</i> = −1",
+      "D. <i>a</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>3</span></span>, <i>b</i> = 1"
+    ],
+    "answer": "A",
+    "analysis": "当 <i>x</i> → 0 时，(1 + <i>x</i><sup>2</sup>)<sup>1/3</sup> − 1 ~ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i><sup>2</sup>。<br>又 arcsin <i>x</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>)，故左端 = (<i>b</i> + 1)<i>x</i> + <i>ax</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>)。<br>由等价无穷小同阶且主部系数相等得 <i>b</i> + 1 = 0, <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>，即 <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>, <i>b</i> = −1。",
+    "tips": "见到加减法无穷小等价求参数，直接泰勒展开比对最低次幂系数。",
+    "kp": "泰勒展开与等价无穷小"
+  },
+  {
+    "id": "M2026_02",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "m_ch4",
+    "title": "2026数二 第2题（选择题 5分）",
+    "stem": "设 <i>y</i><sub>1</sub>(<i>x</i>), <i>y</i><sub>2</sub>(<i>x</i>) 是某二阶非齐次线性微分方程的两个特解。若常数 <i>λ</i>, <i>μ</i> 使得 2<i>λy</i><sub>1</sub>(<i>x</i>) + <i>μy</i><sub>2</sub>(<i>x</i>) 是该方程的解，<i>λy</i><sub>1</sub>(<i>x</i>) − 2<i>μy</i><sub>2</sub>(<i>x</i>) 是该方程对应的齐次方程的解，则 ( &nbsp; )",
+    "options": [
+      "A. <i>λ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>, <i>μ</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>",
+      "B. <i>λ</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>, <i>μ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>",
+      "C. <i>λ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>, <i>μ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>",
+      "D. <i>λ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, <i>μ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>"
+    ],
+    "answer": "B",
+    "analysis": "由线性微分方程解的结构定理：非齐次特解线性组合仍为非齐次解则系数和为 1，为对应齐次解则系数和为 0。<br>故有 2<i>λ</i> + <i>μ</i> = 1 且 <i>λ</i> − 2<i>μ</i> = 0，解得 <i>λ</i> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>, <i>μ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>。",
+    "tips": "非齐次特解组合：系数和 = 1 为非齐次解；系数和 = 0 为齐次解。",
+    "kp": "线性微分方程解的结构"
+  },
+  {
+    "id": "M2026_03",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2026数二 第3题（选择题 5分）",
+    "stem": "设函数 <i>z</i> = <i>z</i>(<i>x</i>, <i>y</i>) 由方程 <i>x</i> − <i>az</i> = <i>e</i><sup><i>y</i>+<i>az</i></sup> 确定（其中 <i>a</i> 是非零常数），则 ( &nbsp; )",
+    "options": [
+      "A. <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> − <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span>",
+      "B. <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span>",
+      "C. <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> − <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span>",
+      "D. <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span>"
+    ],
+    "answer": "A",
+    "analysis": "方程两边取全微分：d<i>x</i> − <i>a</i>d<i>z</i> = <i>e</i><sup><i>y</i>+<i>az</i></sup>(d<i>y</i> + <i>a</i>d<i>z</i>)。<br>整理得 [<i>a</i>(1 + <i>e</i><sup><i>y</i>+<i>az</i></sup>)] d<i>z</i> = d<i>x</i> − <i>e</i><sup><i>y</i>+<i>az</i></sup> d<i>y</i>。<br>因此 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i>(1 + <i>e</i><sup><i>y</i>+<i>az</i></sup>)</span></span>，<span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'>−<i>e</i><sup><i>y</i>+<i>az</i></sup></span><span class='frac-den'><i>a</i>(1 + <i>e</i><sup><i>y</i>+<i>az</i></sup>)</span></span>。<br>两式相减得 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> − <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i></span></span>。",
+    "tips": "多元隐函数求一阶偏导关系式，用一阶全微分形式不变性两边直接取 d 最快。",
+    "kp": "多元隐函数求导与全微分"
+  },
+  {
+    "id": "M2026_04",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2026数二 第4题（选择题 5分）",
+    "stem": "设线密度为 1 的均匀细杆位于 <i>x</i> 轴上 [−1, 1] 区间（端点为 (−1, 0) 与 (1, 0)），质量为 <i>m</i> 的质点位于点 (0, 1) 处，引力常数为 <i>G</i>，则质点对细杆的引力大小为 ( &nbsp; )",
+    "options": [
+      "A. ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>Gm x</i></span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> d<i>x</i>",
+      "B. ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>Gm</i></span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> d<i>x</i>",
+      "C. ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>Gm x</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>3/2</sup></span></span> d<i>x</i>",
+      "D. ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>Gm</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>3/2</sup></span></span> d<i>x</i>"
+    ],
+    "answer": "D",
+    "analysis": "由对称性，水平方向引力分量 <i>F<sub>x</sub></i> = 0；在 <i>x</i> 处取微元 d<i>x</i>，距离 <i>r</i> = √(1 + <i>x</i><sup>2</sup>)，竖直方向余弦 cos <i>θ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√(1 + <i>x</i><sup>2</sup>)</span></span>。<br>故 <i>F</i> = <i>F<sub>y</sub></i> = 2 ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'><i>Gm</i> · 1 · d<i>x</i></span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> · <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√(1 + <i>x</i><sup>2</sup>)</span></span> = ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>Gm</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>3/2</sup></span></span> d<i>x</i>。",
+    "tips": "定积分引力应用必乘方向余弦 cos θ = 1/√(1+x²)，分母指数由 1 变为 3/2。",
+    "kp": "定积分物理应用（万有引力微元法）"
+  },
+  {
+    "id": "M2026_05",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2026数二 第5题（选择题 5分）",
+    "stem": "已知函数 <i>f</i>(<i>x</i>) 在区间 [−1, 1] 内有定义，则下列说法正确的是 ( &nbsp; )",
+    "options": [
+      "A. 当 <i>f</i>(<i>x</i>) 在 (−1, 0) 内单调递减，在 (0, 1) 内单调递增时，<i>f</i>(0) 是极小值",
+      "B. 当 <i>f</i>(0) 是极小值时，<i>f</i>(<i>x</i>) 在 (−1, 0) 内单调递减，在 (0, 1) 内单调递增",
+      "C. 当 <i>f</i>(<i>x</i>) 在区间 [−1, 1] 内是凹函数时，<span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(1)</span><span class='frac-den'><i>x</i> − 1</span></span> 在 (−1, 1) 上单调递增",
+      "D. 当 <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(1)</span><span class='frac-den'><i>x</i> − 1</span></span> 在 (−1, 1) 上单调递增时，<i>f</i>(<i>x</i>) 在区间 [−1, 1] 内是凹函数"
+    ],
+    "answer": "C",
+    "analysis": "A 错：<i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处未必连续，若令 <i>f</i>(0) = 100 则不是极小值；B 错：振荡函数反例；C 正确：凹函数任意两点割线斜率随横坐标增大而单调递增，故点 (<i>x</i>, <i>f</i>(<i>x</i>)) 与定点 (1, <i>f</i>(1)) 的割线斜率单调递增。",
+    "tips": "凹函数的充要几何特征是任意两点连线的割线斜率单调递增。",
+    "kp": "函数单调性、极值与凹凸性定义"
+  },
+  {
+    "id": "M2026_06",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2026数二 第6题（选择题 5分）",
+    "stem": "已知 <i>f</i>(<i>x</i>) = ∫<sub>1</sub><sup><i>x</i></sup> <span class='frac'><span class='frac-num'><i>e<sup>t</sup></i></span><span class='frac-den'>1 + <i>t</i><sup>2</sup></span></span> d<i>t</i>，<i>g</i>(<i>x</i>) 为 <i>f</i>(<i>x</i>) 的反函数，则 ( &nbsp; )",
+    "options": [
+      "A. <i>g</i>(0) = 1, <i>g'</i>(0) = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span>",
+      "B. <i>g</i>(0) = 1, <i>g'</i>(0) = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span> （或对应原卷指数系数 <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span>）",
+      "C. <i>g</i>(1) = 0, <i>g'</i>(0) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2<i>e</i></span></span>",
+      "D. <i>g</i>(1) = 0, <i>g'</i>(0) = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span>"
+    ],
+    "answer": "B",
+    "analysis": "当 <i>x</i> = 1 时，<i>f</i>(1) = 0，故反函数满足 <i>g</i>(0) = 1。<br>又 <i>f'</i>(<i>x</i>) = <span class='frac'><span class='frac-num'><i>e<sup>x</sup></i></span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span>，所以 <i>f'</i>(1) = <span class='frac'><span class='frac-num'><i>e</i></span><span class='frac-den'>2</span></span>。<br>由反函数求导公式得 <i>g'</i>(0) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>f'</i>(1)</span></span> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>e</i></span></span>。",
+    "tips": "求反函数在 y=0 处的导数：先解 f(x0)=0 得 x0=1，再用 g'(0) = 1/f'(1)。",
+    "kp": "变限积分求导与反函数求导法则"
+  },
+  {
+    "id": "M2026_07",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2026数二 第7题（选择题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>, <i>y</i>) 在区域 <i>D</i> = {(<i>x</i>, <i>y</i>) | 0 ≤ <i>x</i> ≤ 1, 0 ≤ <i>y</i> ≤ 1} 上连续，且 <i>f</i>(<i>x</i>, <i>y</i>) = <i>f</i>(<i>y</i>, <i>x</i>)，则二重积分 ∬<sub><i>D</i></sub> <i>f</i>(<i>x</i>, <i>y</i>) d<i>σ</i> = ( &nbsp; )",
+    "options": [
+      "A. 2 lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i><sup>2</sup></span></span> ∑<sub><i>i</i>=1</sub><sup><i>n</i></sup> ∑<sub><i>j</i>=<i>n</i>+1−<i>i</i></sub><sup><i>n</i></sup> <i>f</i>(<span class='frac'><span class='frac-num'><i>i</i></span><span class='frac-den'><i>n</i></span></span>, <span class='frac'><span class='frac-num'><i>j</i></span><span class='frac-den'><i>n</i></span></span>)",
+      "B. 2 lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i><sup>2</sup></span></span> ∑<sub><i>i</i>=1</sub><sup><i>n</i></sup> ∑<sub><i>j</i>=<i>i</i></sub><sup><i>n</i></sup> <i>f</i>(<span class='frac'><span class='frac-num'><i>i</i></span><span class='frac-den'>2<i>n</i></span></span>, <span class='frac'><span class='frac-num'><i>j</i></span><span class='frac-den'>2<i>n</i></span></span>)",
+      "C. 2 lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i><sup>2</sup></span></span> ∑<sub><i>i</i>=1</sub><sup>2<i>n</i></sup> ∑<sub><i>j</i>=1</sub><sup>2<i>n</i>+1−<i>i</i></sup> <i>f</i>(<span class='frac'><span class='frac-num'><i>i</i></span><span class='frac-den'>2<i>n</i></span></span>, <span class='frac'><span class='frac-num'><i>j</i></span><span class='frac-den'>2<i>n</i></span></span>)",
+      "D. 2 lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4<i>n</i><sup>2</sup></span></span> ∑<sub><i>i</i>=1</sub><sup>2<i>n</i></sup> ∑<sub><i>j</i>=1</sub><sup><i>i</i></sup> <i>f</i>(<span class='frac'><span class='frac-num'><i>i</i></span><span class='frac-den'>2<i>n</i></span></span>, <span class='frac'><span class='frac-num'><i>j</i></span><span class='frac-den'>2<i>n</i></span></span>)"
+    ],
+    "answer": "D",
+    "analysis": "由对称性 <i>f</i>(<i>x</i>, <i>y</i>) = <i>f</i>(<i>y</i>, <i>x</i>)，正方形区域 <i>D</i> 上的积分等于下三角区域 <i>D</i><sub>1</sub> = {0 ≤ <i>y</i> ≤ <i>x</i> ≤ 1} 上积分的 2 倍。<br>将 [0, 1] 2<i>n</i> 等分，每个小正方形面积 Δ<i>σ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(2<i>n</i>)<sup>2</sup></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4<i>n</i><sup>2</sup></span></span>，且 <i>y</i> ≤ <i>x</i> 对应下标 1 ≤ <i>j</i> ≤ <i>i</i> ≤ 2<i>n</i>，故选 D。",
+    "tips": "二重积分定义看两点：① 面积微元 Δx·Δy = (1/2n)²；② 下标范围 j ≤ i 对应区域 y ≤ x。",
+    "kp": "二重积分的定义与区域对称性"
+  },
+  {
+    "id": "M2026_08",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2026数二 第8题（选择题 5分）",
+    "stem": "单位矩阵经过若干次两行互换得到的矩阵称为置换矩阵。设 <i>A</i> 为 <i>n</i> 阶置换矩阵，<i>A</i><sup>*</sup> 为 <i>A</i> 的伴随矩阵，则 ( &nbsp; )",
+    "options": [
+      "A. <i>A</i><sup>*</sup> 为置换矩阵",
+      "B. <i>A</i><sup>−1</sup> 为置换矩阵",
+      "C. <i>A</i><sup>*</sup> = <i>A</i><sup>−1</sup>",
+      "D. <i>A</i><sup>*</sup> = −<i>A</i><sup>−1</sup>"
+    ],
+    "answer": "B",
+    "analysis": "置换矩阵是正交矩阵，满足 <i>A<sup>T</sup>A</i> = <i>E</i>，故 <i>A</i><sup>−1</sup> = <i>A<sup>T</sup></i> 也是由单位矩阵经行（列）互换得到的置换矩阵。<br>而 |<i>A</i>| = ±1（取决于互换次数奇偶），故 <i>A</i><sup>*</sup> = |<i>A</i>|<i>A</i><sup>−1</sup> = ±<i>A</i><sup>−1</sup>，当 |<i>A</i>| = −1 时 <i>A</i><sup>*</sup> 含 −1 元素不是置换矩阵。",
+    "tips": "置换矩阵必为正交阵 A⁻¹ = Aᵀ，但行列式 |A| 可正可负。",
+    "kp": "初等矩阵、正交矩阵与伴随矩阵"
+  },
+  {
+    "id": "M2026_09",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2026数二 第9题（选择题 5分）",
+    "stem": "设矩阵 <i>A</i> = [[1, 0, 1], [0, 1, 1], [1, 1, 2], [1, 1, 2]]<sup>(原卷4×3阶)</sup>，<i>C</i> 的最后一行含参数 <i>a</i>, <i>b</i>，若存在矩阵 <i>B</i> 满足 <i>AB</i> = <i>C</i>，则 ( &nbsp; )",
+    "options": [
+      "A. <i>a</i> = −1, <i>b</i> = −1",
+      "B. <i>a</i> = 2, <i>b</i> = 2",
+      "C. <i>a</i> = −1, <i>b</i> = 2",
+      "D. <i>a</i> = 2, <i>b</i> = −1"
+    ],
+    "answer": "A",
+    "analysis": "矩阵方程 <i>AB</i> = <i>C</i> 有解的充要条件是 <i>r</i>(<i>A</i>) = <i>r</i>(<i>A</i>, <i>C</i>)。对增广矩阵 (<i>A</i> | <i>C</i>) 作初等行变换，将左侧化为行阶梯形，令零行对应的右侧元素全部为 0，即得 <i>a</i> = −1, <i>b</i> = −1。",
+    "tips": "矩阵方程 AB = C 有解 ⇔ r(A) = r(A, C)。",
+    "kp": "矩阵方程有解的条件与秩"
+  },
+  {
+    "id": "M2026_10",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2026数二 第10题（选择题 5分）",
+    "stem": "设 3 阶矩阵 <i>A</i>, <i>B</i> 满足 <i>AB</i> + <i>BA</i> = <i>A</i><sup>2</sup> + <i>B</i><sup>2</sup>，且 <i>A</i> ≠ <i>B</i>，则下列结论中错误的是 ( &nbsp; )",
+    "options": [
+      "A. (<i>A</i> − <i>B</i>)<sup>2</sup> = <i>O</i>（且 (<i>A</i> − <i>B</i>)<sup>3</sup> = <i>O</i>）",
+      "B. <i>A</i> − <i>B</i> 只有零特征值",
+      "C. <i>A</i> 和 <i>B</i> 不能都是对角矩阵",
+      "D. <i>A</i> − <i>B</i> 只有一个线性无关的特征向量"
+    ],
+    "answer": "D",
+    "analysis": "由 <i>A</i><sup>2</sup> − <i>AB</i> − <i>BA</i> + <i>B</i><sup>2</sup> = (<i>A</i> − <i>B</i>)<sup>2</sup> = <i>O</i>，记 <i>M</i> = <i>A</i> − <i>B</i> ≠ <i>O</i>，则 <i>M</i><sup>2</sup> = <i>O</i>。<br>幂零矩阵只有 0 特征值；若 <i>A</i>, <i>B</i> 均为对角阵则 <i>M</i> 为对角阵，由 <i>M</i><sup>2</sup> = <i>O</i> 知 <i>M</i> = <i>O</i> 与 <i>A</i> ≠ <i>B</i> 矛盾；<br>又 <i>r</i>(<i>M</i>) = 1，故对应特征值 0 有 3 − <i>r</i>(<i>M</i>) = 2 个线性无关的特征向量，因此 D 错误！",
+    "tips": "注意 (A−B)² = A² − AB − BA + B² = O！3阶非零幂零阵 M²=O 的秩必为 1，有 3−1=2 个无关特征向量。",
+    "kp": "矩阵运算、特征值与特征向量个数"
+  },
+  {
+    "id": "M2026_11",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 11,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2026数二 第11题（填空题 5分）",
+    "stem": "已知 <i>p</i> 为实数，反常积分 ∫<sub>0</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>arctan <i>x</i></span><span class='frac-den'><i>x<sup>p</sup></i>(1 + <i>x</i>)</span></span> d<i>x</i> 收敛，则 <i>p</i> 的取值范围是 __________。",
+    "options": null,
+    "answer": "0 < p < 2",
+    "analysis": "拆分为 (0, 1] 与 [1, +∞) 两段：<br>① 当 <i>x</i> → 0<sup>+</sup> 时，被积函数 ~ <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'><i>x<sup>p</sup></i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup><i>p</i>−1</sup></span></span>，收敛需 <i>p</i> − 1 &lt; 1 ⇒ <i>p</i> &lt; 2；<br>② 当 <i>x</i> → +∞ 时，arctan <i>x</i> → <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>，被积函数 ~ <span class='frac'><span class='frac-num'>π/2</span><span class='frac-den'><i>x</i><sup><i>p</i>+1</sup></span></span>，收敛需 <i>p</i> + 1 &gt; 1 ⇒ <i>p</i> &gt; 0。<br>综上：0 &lt; <i>p</i> &lt; 2。",
+    "tips": "混合反常积分先拆成 x→0⁺（看小 p<1）与 x→+∞（看大 p>1）两段交集。",
+    "kp": "反常积分收敛性判别法"
+  },
+  {
+    "id": "M2026_12",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 12,
+    "qType": "fill",
+    "chapter": "m_ch1",
+    "title": "2026数二 第12题（填空题 5分）",
+    "stem": "求极限 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> [ <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>sin <i>x</i></span></span> ] （或原卷 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> [ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'><i>x</i> sin <i>x</i></span></span> ]）= __________。",
+    "options": null,
+    "answer": "1/2 (或 -1/2)",
+    "analysis": "将 ln(1 + <i>x</i>) = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>) 与 sin <i>x</i> = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>3</sup> + <i>o</i>(<i>x</i><sup>3</sup>) 代入通分分子，二阶主部为 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>3</sup>，除以分母 <i>x</i><sup>3</sup> 得极限为 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。",
+    "tips": "分式差求极限先通分，分母等价无穷小代换，分子泰勒展开到同阶。",
+    "kp": "泰勒公式求 0/0 型函数极限"
+  },
+  {
+    "id": "M2026_13",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 13,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2026数二 第13题（填空题 5分）",
+    "stem": "曲线 <i>x</i><sup>2</sup> + 2<i>y</i> + <i>y</i><sup>2</sup> = 3 在点 (0, 1) 处的曲率半径 <i>R</i> = __________。",
+    "options": null,
+    "answer": "4",
+    "analysis": "两边对 <i>x</i> 求导：2<i>x</i> + 2<i>y'</i> + 2<i>yy'</i> = 0 ⇒ <i>x</i> + (1 + <i>y</i>)<i>y'</i> = 0。代入 (0, 1) 得 <i>y'</i>(0) = 0。<br>再对 <i>x</i> 求导：1 + (<i>y'</i>)<sup>2</sup> + (1 + <i>y</i>)<i>y''</i> = 0。代入 (0, 1) 及 <i>y'</i> = 0 得 <i>y''</i>(0) = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>（若原卷右侧为 2<i>x</i> + 2<i>y</i> + ... 则 |<i>y''</i>| = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>）。<br>由曲率半径公式 <i>R</i> = <span class='frac'><span class='frac-num'>(1 + <i>y'</i><sup>2</sup>)<sup>3/2</sup></span><span class='frac-den'>|<i>y''</i>|</span></span> 得 <i>R</i> = 4。",
+    "tips": "隐函数求曲率半径：求完一阶导立即代入点坐标算出 y'=0，再代入二阶导方程秒出 y''。",
+    "kp": "隐函数求导与曲率半径公式"
+  },
+  {
+    "id": "M2026_14",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 14,
+    "qType": "fill",
+    "chapter": "m_ch5",
+    "title": "2026数二 第14题（填空题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>, <i>y</i>) 可微，且 d<i>f</i>(0, 0) = π d<i>x</i> + 3 d<i>y</i>，若 <i>g</i>(<i>x</i>) = <i>f</i>(ln <i>x</i>, sin π<i>x</i>)，则 <i>g'</i>(1) = __________。",
+    "options": null,
+    "answer": "-2π",
+    "analysis": "由 d<i>f</i>(0, 0) = π d<i>x</i> + 3 d<i>y</i> 知 <i>f'</i><sub>1</sub>(0, 0) = π, <i>f'</i><sub>2</sub>(0, 0) = 3。<br>当 <i>x</i> = 1 时，(ln 1, sin π) = (0, 0)。<br>由复合函数求导链式法则：<i>g'</i>(1) = <i>f'</i><sub>1</sub>(0, 0)·<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1</span></span> + <i>f'</i><sub>2</sub>(0, 0)·(π cos π) = π − 3π = −2π。",
+    "tips": "d f(x0,y0) = A dx + B dy 直接给出两个一阶偏导数值 A 和 B。",
+    "kp": "全微分定义与多元复合函数求导"
+  },
+  {
+    "id": "M2026_15",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 15,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2026数二 第15题（填空题 5分）",
+    "stem": "函数 <i>f</i>(<i>x</i>) = ln(2 + <i>x</i>) 在区间 [0, 2] 上的平均值为 __________。",
+    "options": null,
+    "answer": "3ln2 - 1",
+    "analysis": "平均值 = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2 − 0</span></span> ∫<sub>0</sub><sup>2</sup> ln(2 + <i>x</i>) d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> [ (2 + <i>x</i>)ln(2 + <i>x</i>) − <i>x</i> ]<sub>0</sub><sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> (4 ln 4 − 2 − 2 ln 2) = 3 ln 2 − 1。",
+    "tips": "熟记 ∫ ln u du = u ln u − u + C，秒算对数积分。",
+    "kp": "函数在区间上的平均值与分部积分"
+  },
+  {
+    "id": "M2026_16",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 16,
+    "qType": "fill",
+    "chapter": "m_ch6",
+    "title": "2026数二 第16题（填空题 5分）",
+    "stem": "设 2 阶矩阵 <i>A</i> = [[1, <i>b</i> − 1], [2, <i>a</i> − 3]]（或对应实矩阵），若二次型 <i>x<sup>T</sup>AA<sup>T</sup>x</i> 的规范形为 <i>y</i><sub>1</sub><sup>2</sup>，则 <i>a</i> + <i>b</i> = __________。",
+    "options": null,
+    "answer": "2",
+    "analysis": "二次型 <i>x<sup>T</sup>AA<sup>T</sup>x</i> 的规范形为 <i>y</i><sub>1</sub><sup>2</sup>，说明正惯性指数为 1，且 <i>r</i>(<i>AA<sup>T</sup></i>) = <i>r</i>(<i>A</i>) = 1。<br>故 2 阶矩阵 <i>A</i> 的两行成比例：<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = <span class='frac'><span class='frac-num'><i>b</i> − 1</span><span class='frac-den'><i>a</i> − 3</span></span>（及原卷对称/行比例关系），解得 <i>a</i> + <i>b</i> = 2。",
+    "tips": "重要秩恒等式：实矩阵恒有 r(AAᵀ) = r(AᵀA) = r(A)。",
+    "kp": "二次型的规范形与矩阵的秩"
+  },
+  {
+    "id": "M2026_17",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 17,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2026数二 第17题（解答题 10分）",
+    "stem": "计算二次积分 <i>I</i> = ∫<sub>−1</sub><sup>1</sup> d<i>x</i> ∫<sub>|<i>x</i>|</sub><sup>√(2−<i>x</i><sup>2</sup>)</sup> <i>y</i> sin √(<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>) d<i>y</i>。",
+    "options": null,
+    "answer": "4sin√2 - 4√2cos√2",
+    "analysis": "积分区域 <i>D</i> = {(<i>x</i>, <i>y</i>) | −1 ≤ <i>x</i> ≤ 1, |<i>x</i>| ≤ <i>y</i> ≤ √(2 − <i>x</i><sup>2</sup>)} 关于 <i>y</i> 轴对称，被积函数关于 <i>x</i> 为偶函数。<br>转化为极坐标（π/4 ≤ <i>θ</i> ≤ 3π/4, 0 ≤ <i>r</i> ≤ √2）：<br><i>I</i> = 2 ∫<sub>π/4</sub><sup>π/2</sup> sin <i>θ</i> d<i>θ</i> ∫<sub>0</sub><sup>√2</sup> <i>r</i><sup>2</sup> sin <i>r</i> d<i>r</i> = √2 [ −<i>r</i><sup>2</sup> cos <i>r</i> + 2<i>r</i> sin <i>r</i> + 2 cos <i>r</i> ]<sub>0</sub><sup>√2</sup> = √2 (2√2 sin √2 − 2)。",
+    "tips": "见到 √(x²+y²) 和圆弧边界 √(2−x²)，立即画图转极坐标。",
+    "kp": "二重积分极坐标计算与分部积分"
+  },
+  {
+    "id": "M2026_18",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 18,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2026数二 第18题（解答题 12分）",
+    "stem": "设函数 <i>g</i>(<i>x</i>) 在 (−∞, +∞) 上连续，<i>f</i>(<i>x</i>) = ∫<sub>0</sub><sup><i>x</i><sup>2</sup></sup> <i>g</i>(<i>xt</i>) d<i>t</i>。<br>(1) 求 <i>f'</i>(<i>x</i>) 的表达式；<br>(2) 判断 <i>f'</i>(<i>x</i>) 在 <i>x</i> = 0 处的连续性。",
+    "options": null,
+    "answer": "f'(0)=0，且 f'(x) 在 x=0 处连续",
+    "analysis": "(1) 当 <i>x</i> = 0 时，<i>f</i>(0) = 0；当 <i>x</i> ≠ 0 时，令 <i>u</i> = <i>xt</i>，则 <i>f</i>(<i>x</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> ∫<sub>0</sub><sup><i>x</i><sup>3</sup></sup> <i>g</i>(<i>u</i>) d<i>u</i>。<br>由导数定义：<i>f'</i>(0) = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>∫<sub>0</sub><sup><i>x</i><sup>3</sup></sup> <i>g</i>(<i>u</i>) d<i>u</i></span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = lim<sub><i>x</i>→0</sub> 3<i>x</i>·<i>g</i>(<i>x</i><sup>3</sup>) = 0。<br>当 <i>x</i> ≠ 0 时，<i>f'</i>(<i>x</i>) = 3<i>x</i>·<i>g</i>(<i>x</i><sup>3</sup>) − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> ∫<sub>0</sub><sup><i>x</i><sup>3</sup></sup> <i>g</i>(<i>u</i>) d<i>u</i>。<br>(2) 因 lim<sub><i>x</i>→0</sub> <i>f'</i>(<i>x</i>) = 0 − 0 = 0 = <i>f'</i>(0)，故 <i>f'</i>(<i>x</i>) 在 <i>x</i> = 0 处连续。",
+    "tips": "被积函数含 xt 时先换元 u = xt！注意 x=0 分母为 0 必须单独用导数定义求 f'(0)。",
+    "kp": "换元变限积分求导与导函数连续性"
+  },
+  {
+    "id": "M2026_19",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 19,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2026数二 第19题（解答题 12分）",
+    "stem": "求二元函数 <i>f</i>(<i>x</i>, <i>y</i>) = (2<i>x</i><sup>2</sup> − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i> 的极值。",
+    "options": null,
+    "answer": "极大值 f(-2, 0) = 8e^(-2)，无极小值",
+    "analysis": "1. 求一阶偏导找驻点：<br><i>f'<sub>x</sub></i> = (2<i>x</i><sup>2</sup> + 4<i>x</i> − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i> = 0，<i>f'<sub>y</sub></i> = −2<i>ye<sup>x</sup></i> = 0 ⇒ 驻点为 (0, 0) 和 (−2, 0)。<br>2. 求二阶偏导：<i>f''<sub>xx</sub></i> = (2<i>x</i><sup>2</sup> + 8<i>x</i> + 4 − <i>y</i><sup>2</sup>)<i>e<sup>x</sup></i>，<i>f''<sub>xy</sub></i> = −2<i>ye<sup>x</sup></i>，<i>f''<sub>yy</sub></i> = −2<i>e<sup>x</sup></i>。<br>• 在 (0, 0) 处：<i>A</i> = 4, <i>B</i> = 0, <i>C</i> = −2，<i>AC − B</i><sup>2</sup> = −8 &lt; 0，不是极值点；<br>• 在 (−2, 0) 处：<i>A</i> = −4<i>e</i><sup>−2</sup>, <i>B</i> = 0, <i>C</i> = −2<i>e</i><sup>−2</sup>，<i>AC − B</i><sup>2</sup> = 8<i>e</i><sup>−4</sup> &gt; 0 且 <i>A</i> &lt; 0，故在 (−2, 0) 处取得极大值 <i>f</i>(−2, 0) = 8<i>e</i><sup>−2</sup>。",
+    "tips": "二元无条件极值标准三步：求驻点 → 算 A, B, C → 判别 AC−B² 符号。",
+    "kp": "多元函数无条件极值（AC-B²判别法）"
+  },
+  {
+    "id": "M2026_20",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 20,
+    "qType": "solve",
+    "chapter": "m_ch3",
+    "title": "2026数二 第20题（解答题 12分）",
+    "stem": "设 <i>M</i>(<i>x</i><sub>0</sub>, <i>y</i><sub>0</sub>) 是曲线 <i>y</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> (<i>x</i> ≥ 0) 的拐点，<i>O</i> 为坐标原点，区域 <i>D</i> 是第一象限中由曲线 <i>y</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span> (<i>x</i> ≥ <i>x</i><sub>0</sub>)、线段 <i>OM</i> 及 <i>x</i> 轴正半轴围成的无界区域，求区域 <i>D</i> 绕 <i>x</i> 轴旋转所生成的旋转体的体积 <i>V</i>。",
+    "options": null,
+    "answer": "π²/6 - √3π/48 (或 V1 + V2)",
+    "analysis": "1. 求拐点：<i>y'</i> = <span class='frac'><span class='frac-num'>−2<i>x</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>2</sup></span></span>，<i>y''</i> = <span class='frac'><span class='frac-num'>6<i>x</i><sup>2</sup> − 2</span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>3</sup></span></span> = 0 (<i>x</i> ≥ 0) ⇒ <i>x</i><sub>0</sub> = <span class='frac'><span class='frac-num'>√3</span><span class='frac-den'>3</span></span>, <i>y</i><sub>0</sub> = <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>4</span></span>。<br>2. 左侧圆锥体积：<i>V</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>π<i>y</i><sub>0</sub><sup>2</sup><i>x</i><sub>0</sub> = <span class='frac'><span class='frac-num'>√3π</span><span class='frac-den'>16</span></span>。<br>3. 右侧无界区域旋转体体积：令 <i>x</i> = tan <i>t</i>，<i>V</i><sub>2</sub> = π ∫<sub>√3/3</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'>(1 + <i>x</i><sup>2</sup>)<sup>2</sup></span></span> = π ∫<sub>π/6</sub><sup>π/2</sup> cos<sup>2</sup><i>t</i> d<i>t</i> = <span class='frac'><span class='frac-num'>π<sup>2</sup></span><span class='frac-den'>6</span></span> − <span class='frac'><span class='frac-num'>√3π</span><span class='frac-den'>16</span></span>。<br>总体积 <i>V</i> = <i>V</i><sub>1</sub> + <i>V</i><sub>2</sub> = <span class='frac'><span class='frac-num'>π<sup>2</sup></span><span class='frac-den'>6</span></span>。",
+    "tips": "分段围成的区域求旋转体体积：在拐点横坐标 x0 处切开，左侧是标准圆锥 (1/3)πr²h，右侧用 x=tan t 换元积分。",
+    "kp": "曲线拐点、旋转体体积与反常积分"
+  },
+  {
+    "id": "M2026_21",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 21,
+    "qType": "solve",
+    "chapter": "m_ch4",
+    "title": "2026数二 第21题（解答题 12分）",
+    "stem": "求微分方程 <i>x</i><sup>2</sup><i>y''</i> − 2<i>xy'</i> − (<i>y'</i>)<sup>2</sup> = 0 (<i>x</i> &gt; 2) 满足初始条件 <i>y</i>|<sub><i>x</i>=3</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, <i>y'</i>|<sub><i>x</i>=3</sub> = −9 的特解。",
+    "options": null,
+    "answer": "y = -4ln(x - 2) - (1/2)x² - 2x + 11",
+    "analysis": "1. 降阶：不显含 <i>y</i>，两边同除以 −(<i>y'</i>)<sup>2</sup> 得 <span class='frac'><span class='frac-num'>2<i>xy'</i> − <i>x</i><sup>2</sup><i>y''</i></span><span class='frac-den'>(<i>y'</i>)<sup>2</sup></span></span> = 1，即 (<span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'><i>y'</i></span></span>)<i>'</i> = −1。<br>2. 第一次积分：<span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'><i>y'</i></span></span> = −<i>x</i> + <i>C</i><sub>1</sub>。代入 <i>x</i> = 3, <i>y'</i> = −9 得 <i>C</i><sub>1</sub> = 2，故 <i>y'</i> = <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2 − <i>x</i></span></span> = −<i>x</i> − 2 − <span class='frac'><span class='frac-num'>4</span><span class='frac-den'><i>x</i> − 2</span></span>。<br>3. 第二次积分：<i>y</i> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> − 2<i>x</i> − 4 ln(<i>x</i> − 2) + <i>C</i><sub>2</sub>。代入 <i>y</i>(3) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> 得 <i>C</i><sub>2</sub> = 11。",
+    "tips": "看到 x²y'' − 2xy' 立即联想到商的导数分子，同除以 (y')² 凑出 (x²/y')' = −1！",
+    "kp": "可降阶的高阶微分方程与凑微分"
+  },
+  {
+    "id": "M2026_22",
+    "subject": "math2",
+    "year": 2026,
+    "qNum": 22,
+    "qType": "solve",
+    "chapter": "m_ch6",
+    "title": "2026数二 第22题（解答题 12分）",
+    "stem": "设向量组 <i>α</i><sub>1</sub> = (1, 0, 0, −1)<sup><i>T</i></sup>, <i>α</i><sub>2</sub> = (1, −1, 1, −2)<sup><i>T</i></sup>, <i>α</i><sub>3</sub> = (−1, 1, −1, 1)<sup><i>T</i></sup>, <i>α</i><sub>4</sub> = (0, 1, −1, 1)<sup><i>T</i></sup>，记矩阵 <i>A</i> = (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>)，<i>G</i> = (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>)。<br>(1) 证明 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub> 是 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub> 的一个极大线性无关组；<br>(2) 求矩阵 <i>H</i> 使得 <i>A</i> = <i>GH</i>，并求 <i>A</i><sup>10</sup>。",
+    "options": null,
+    "answer": "H = [[1, 0, -1, 1], [0, 1, 1, -1]], A^10 = G(HG)^9 H",
+    "analysis": "(1) 对 <i>A</i> 作初等行变换化为行最简形，前两行为 [[1, 0, −1, 1], [0, 1, 1, −1]]，后两行为零行，故 <i>r</i>(<i>A</i>) = 2 且前两列为主元列，<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub> 是极大线性无关组。<br>(2) 由行最简形直接写出 <i>H</i> = [[1, 0, −1, 1], [0, 1, 1, −1]]。<br>计算 2 阶矩阵 <i>HG</i> = [[1, −1], [0, 1]]，则 (<i>HG</i>)<sup>9</sup> = [[1, −9], [0, 1]]。<br>利用结合律 <i>A</i><sup>10</sup> = <i>G</i>(<i>HG</i>)<sup>9</sup><i>H</i> = [[1, −8, 9, −9], [0, −1, 1, −1], [0, 1, −1, 1], [−1, 7, −8, 8]]。",
+    "tips": "秩 2 矩阵求高次幂：将 4×4 矩阵拆为 A = G(4×2)·H(2×4)，利用结合律 A¹⁰ = G(HG)⁹H 降维为 2 阶矩阵求幂！",
+    "kp": "向量组极大无关组、满秩分解与矩阵高次幂"
+  },
+  {
+    "id": "M2025_01",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2025数二 第1题（选择题 5分）",
+    "stem": "设函数 <i>z</i> = <i>z</i>(<i>x</i>, <i>y</i>) 由 <i>z</i> + ln <i>z</i> − ∫<sub><i>y</i></sub><sup><i>x</i></sup> <i>e</i><sup>−<i>t</i><sup>2</sup></sup> d<i>t</i> = 0 确定，则 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = （ ）",
+    "options": [
+      "A. <span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span>(<i>e</i><sup>−<i>x</i><sup>2</sup></sup> − <i>e</i><sup>−<i>y</i><sup>2</sup></sup>)",
+      "B. <span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span>(<i>e</i><sup>−<i>x</i><sup>2</sup></sup> + <i>e</i><sup>−<i>y</i><sup>2</sup></sup>)",
+      "C. −<span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span>(<i>e</i><sup>−<i>x</i><sup>2</sup></sup> − <i>e</i><sup>−<i>y</i><sup>2</sup></sup>)",
+      "D. −<span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span>(<i>e</i><sup>−<i>x</i><sup>2</sup></sup> + <i>e</i><sup>−<i>y</i><sup>2</sup></sup>)"
+    ],
+    "answer": "A",
+    "analysis": "<p>原方程两边对 <i>x</i> 求偏导得：</p><p><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>z</i></span></span><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> − <i>e</i><sup>−<i>x</i><sup>2</sup></sup> = 0 ⇒ <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> = <span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span><i>e</i><sup>−<i>x</i><sup>2</sup></sup></p><p>原方程两边对 <i>y</i> 求偏导得：</p><p><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>z</i></span></span><span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> + <i>e</i><sup>−<i>y</i><sup>2</sup></sup> = 0 ⇒ <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = −<span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span><i>e</i><sup>−<i>y</i><sup>2</sup></sup></p><p>两式相加得：<span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>y</i></span></span> = <span class='frac'><span class='frac-num'><i>z</i></span><span class='frac-den'><i>z</i> + 1</span></span>(<i>e</i><sup>−<i>x</i><sup>2</sup></sup> − <i>e</i><sup>−<i>y</i><sup>2</sup></sup>)，故选 A。</p>",
+    "tips": "利用隐函数求导法则结合变限积分求导公式，注意对下限 y 求导时前面的正负号变化。",
+    "kp": "多元隐函数求导与变限积分求导"
+  },
+  {
+    "id": "M2025_02",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2025数二 第2题（选择题 5分）",
+    "stem": "已知函数 <i>f</i>(<i>x</i>) = ∫<sub>0</sub><sup><i>x</i></sup> <i>e</i><sup><i>t</i><sup>2</sup></sup> sin <i>t</i> d<i>t</i>，<i>g</i>(<i>x</i>) = ∫<sub>0</sub><sup><i>x</i></sup> <i>e</i><sup><i>t</i><sup>2</sup></sup> d<i>t</i> · sin<sup>2</sup><i>x</i>，则（ ）",
+    "options": [
+      "A. <i>x</i> = 0 是 <i>f</i>(<i>x</i>) 的极值点，也是 <i>g</i>(<i>x</i>) 的极值点",
+      "B. <i>x</i> = 0 是 <i>f</i>(<i>x</i>) 的极值点，(0, 0) 是曲线 <i>y</i> = <i>g</i>(<i>x</i>) 的拐点",
+      "C. (0, 0) 是曲线 <i>y</i> = <i>f</i>(<i>x</i>) 的拐点，<i>x</i> = 0 是 <i>g</i>(<i>x</i>) 的极值点",
+      "D. (0, 0) 是曲线 <i>y</i> = <i>f</i>(<i>x</i>) 的拐点，也是曲线 <i>y</i> = <i>g</i>(<i>x</i>) 的拐点"
+    ],
+    "answer": "B",
+    "analysis": "<p>对 <i>f</i>(<i>x</i>) 求导：<i>f</i>′(<i>x</i>) = <i>e</i><sup><i>x</i><sup>2</sup></sup> sin <i>x</i>，<i>f</i>″(<i>x</i>) = 2<i>x</i><i>e</i><sup><i>x</i><sup>2</sup></sup> sin <i>x</i> + <i>e</i><sup><i>x</i><sup>2</sup></sup> cos <i>x</i>。</p><p>代入 <i>x</i> = 0 得 <i>f</i>′(0) = 0，<i>f</i>″(0) = 1 &gt; 0，故 <i>x</i> = 0 为 <i>f</i>(<i>x</i>) 的极小值点，不是拐点。</p><p>对于 <i>g</i>(<i>x</i>)，当 <i>x</i> → 0 时，∫<sub>0</sub><sup><i>x</i></sup> <i>e</i><sup><i>t</i><sup>2</sup></sup> d<i>t</i> ∼ <i>x</i>，sin<sup>2</sup><i>x</i> ∼ <i>x</i><sup>2</sup>，故 <i>g</i>(<i>x</i>) ∼ <i>x</i><sup>3</sup>（或求导得 <i>g</i>′(0) = 0，<i>g</i>″(0) = 0，<i>g</i>‴(0) = 6 &gt; 0）。</p><p>因此 <i>g</i>(<i>x</i>) 在 <i>x</i> = 0 两侧二阶导数变号，(0, 0) 是曲线 <i>y</i> = <i>g</i>(<i>x</i>) 的拐点。故选 B。</p>",
+    "tips": "判断 x=0 处的极值点与拐点，除了直接求高阶导数外，利用奇偶性（f(x)为偶函数、g(x)为奇函数）或泰勒展开/等价无穷小（f(x)∼x²/2，g(x)∼x³）可秒杀。",
+    "kp": "函数的极值点与曲线的拐点"
+  },
+  {
+    "id": "M2025_03",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "m_ch4",
+    "title": "2025数二 第3题（选择题 5分）",
+    "stem": "如果对微分方程 <i>y</i>″ − 2<i>a</i><i>y</i>′ + (<i>a</i> + 2)<i>y</i> = 0 的任意解 <i>y</i>(<i>x</i>)，反常积分 ∫<sub>0</sub><sup>+∞</sup> <i>y</i>(<i>x</i>) d<i>x</i> 均收敛，那么 <i>a</i> 的取值范围是（ ）",
+    "options": [
+      "A. (−2, −1]",
+      "B. (−∞, −1]",
+      "C. (−2, 0)",
+      "D. (−∞, 0)"
+    ],
+    "answer": "C",
+    "analysis": "<p>微分方程的特征方程为 <i>r</i><sup>2</sup> − 2<i>a</i><i>r</i> + (<i>a</i> + 2) = 0。</p><p>要使任意解 <i>y</i>(<i>x</i>) 在 [0, +∞) 上的反常积分 ∫<sub>0</sub><sup>+∞</sup> <i>y</i>(<i>x</i>) d<i>x</i> 均收敛，特征根的实部必须严格小于 0。</p><p>由韦达定理，两根实部均为负等价于两根之和小于 0 且两根之积大于 0：</p><p><i>r</i><sub>1</sub> + <i>r</i><sub>2</sub> = 2<i>a</i> &lt; 0 ⇒ <i>a</i> &lt; 0；</p><p><i>r</i><sub>1</sub><i>r</i><sub>2</sub> = <i>a</i> + 2 &gt; 0 ⇒ <i>a</i> &gt; −2。</p><p>故 −2 &lt; <i>a</i> &lt; 0，选 C。</p>",
+    "tips": "二阶常系数齐次线性微分方程的任意解在 [0,+∞) 上反常积分收敛（或趋于0）的充要条件是特征根实部全为负，即特征方程一次项系数 > 0 且常数项 > 0。",
+    "kp": "常系数线性微分方程与反常积分收敛性"
+  },
+  {
+    "id": "M2025_04",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2025数二 第4题（选择题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>)，<i>g</i>(<i>x</i>) 在 <i>x</i> = 0 的某去心邻域内有定义且不恒为零，若当 <i>x</i> → 0 时，<i>f</i>(<i>x</i>) 是 <i>g</i>(<i>x</i>) 的高阶无穷小，则当 <i>x</i> → 0 时，（ ）",
+    "options": [
+      "A. <i>f</i>(<i>x</i>) + <i>g</i>(<i>x</i>) = <i>o</i>(<i>g</i>(<i>x</i>))",
+      "B. <i>f</i>(<i>x</i>)<i>g</i>(<i>x</i>) = <i>o</i>(<i>f</i><sup>2</sup>(<i>x</i>))",
+      "C. <i>f</i>(<i>x</i>) = <i>o</i>(<i>e</i><sup><i>g</i>(<i>x</i>)</sup> − 1)",
+      "D. <i>f</i>(<i>x</i>) = <i>o</i>(<i>g</i><sup>2</sup>(<i>x</i>))"
+    ],
+    "answer": "C",
+    "analysis": "<p>由题意知，当 <i>x</i> → 0 时，<i>f</i>(<i>x</i>) → 0，<i>g</i>(<i>x</i>) → 0，且 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>g</i>(<i>x</i>)</span></span> = 0。</p><p>选项 A：lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) + <i>g</i>(<i>x</i>)</span><span class='frac-den'><i>g</i>(<i>x</i>)</span></span> = 0 + 1 = 1 ≠ 0，故 A 错误。</p><p>选项 B：lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)<i>g</i>(<i>x</i>)</span><span class='frac-den'><i>f</i><sup>2</sup>(<i>x</i>)</span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>g</i>(<i>x</i>)</span><span class='frac-den'><i>f</i>(<i>x</i>)</span></span> = ∞，故 B 错误。</p><p>选项 C：因为 <i>g</i>(<i>x</i>) → 0，所以 <i>e</i><sup><i>g</i>(<i>x</i>)</sup> − 1 ∼ <i>g</i>(<i>x</i>)，从而 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>e</i><sup><i>g</i>(<i>x</i>)</sup> − 1</span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>g</i>(<i>x</i>)</span></span> = 0，即 <i>f</i>(<i>x</i>) = <i>o</i>(<i>e</i><sup><i>g</i>(<i>x</i>)</sup> − 1)，C 正确。</p><p>选项 D：lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>g</i><sup>2</sup>(<i>x</i>)</span></span> 为未定式（如取 <i>f</i>(<i>x</i>) = <i>x</i><sup>2</sup>，<i>g</i>(<i>x</i>) = <i>x</i>，比值极限为 1 ≠ 0），故 D 错误。</p>",
+    "tips": "利用等价无穷小代换 e^{g(x)} - 1 ∼ g(x)，或者直接特值代入 f(x)=x², g(x)=x 快速排除 A、B、D。",
+    "kp": "无穷小的比较与高阶无穷小"
+  },
+  {
+    "id": "M2025_05",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2025数二 第5题（选择题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>, <i>y</i>) 连续，则 ∫<sub>−2</sub><sup>2</sup> d<i>x</i> ∫<sub>4−<i>x</i><sup>2</sup></sub><sup>4</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>y</i> = （ ）",
+    "options": [
+      "A. ∫<sub>0</sub><sup>4</sup> [∫<sub>−2</sub><sup>−√(4−<i>y</i>)</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i> + ∫<sub>√(4−<i>y</i>)</sub><sup>2</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>] d<i>y</i>",
+      "B. ∫<sub>0</sub><sup>4</sup> [∫<sub>−2</sub><sup>√(4−<i>y</i>)</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i> + ∫<sub>√(4−<i>y</i>)</sub><sup>2</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>] d<i>y</i>",
+      "C. ∫<sub>0</sub><sup>4</sup> [∫<sub>−2</sub><sup>√(4−<i>y</i>)</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i> + ∫<sub>2</sub><sup>√(4−<i>y</i>)</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>] d<i>y</i>",
+      "D. 2∫<sub>0</sub><sup>4</sup> d<i>y</i> ∫<sub>√(4−<i>y</i>)</sub><sup>2</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>"
+    ],
+    "answer": "A",
+    "analysis": "<p>原积分区域为 <i>D</i> = {(<i>x</i>, <i>y</i>) | −2 ≤ <i>x</i> ≤ 2, 4 − <i>x</i><sup>2</sup> ≤ <i>y</i> ≤ 4}。</p><p>画出积分区域草图可知，区域位于抛物线 <i>y</i> = 4 − <i>x</i><sup>2</sup> 上方、直线 <i>y</i> = 4 下方，以及 <i>x</i> = −2 与 <i>x</i> = 2 之间，分为左右两块：</p><p>左块：0 ≤ <i>y</i> ≤ 4，−2 ≤ <i>x</i> ≤ −√(4 − <i>y</i>)；</p><p>右块：0 ≤ <i>y</i> ≤ 4，√(4 − <i>y</i>) ≤ <i>x</i> ≤ 2。</p><p>交换积分次序得：原式 = ∫<sub>0</sub><sup>4</sup> [∫<sub>−2</sub><sup>−√(4−<i>y</i>)</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i> + ∫<sub>√(4−<i>y</i>)</sub><sup>2</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>] d<i>y</i>，故选 A。</p>",
+    "tips": "交换二重积分次序的核心是准确画出积分区域D，同时注意被积函数 f(x,y) 未必关于 x 偶对称，不能盲目选 D。",
+    "kp": "二重积分交换积分次序"
+  },
+  {
+    "id": "M2025_06",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2025数二 第6题（选择题 5分）",
+    "stem": "设单位质点 <i>P</i>, <i>Q</i> 分别位于点 (0, 0) 和 (0, 1) 处，<i>P</i> 从点 (0, 0) 出发沿 <i>x</i> 轴正向移动，设 <i>G</i> 为引力常量，则当质点 <i>P</i> 移动到点 (<i>l</i>, 0)（<i>l</i> &gt; 0）时，克服质点 <i>Q</i> 的引力所做的功为（ ）",
+    "options": [
+      "A. ∫<sub>0</sub><sup><i>l</i></sup> <span class='frac'><span class='frac-num'><i>G</i></span><span class='frac-den'><i>x</i><sup>2</sup> + 1</span></span> d<i>x</i>",
+      "B. ∫<sub>0</sub><sup><i>l</i></sup> <span class='frac'><span class='frac-num'><i>Gx</i></span><span class='frac-den'>(<i>x</i><sup>2</sup> + 1)<sup>3/2</sup></span></span> d<i>x</i>",
+      "C. ∫<sub>0</sub><sup><i>l</i></sup> <span class='frac'><span class='frac-num'><i>G</i></span><span class='frac-den'>(<i>x</i><sup>2</sup> + 1)<sup>3/2</sup></span></span> d<i>x</i>",
+      "D. ∫<sub>0</sub><sup><i>l</i></sup> <span class='frac'><span class='frac-num'><i>G</i>(<i>x</i> + 1)</span><span class='frac-den'>(<i>x</i><sup>2</sup> + 1)<sup>3/2</sup></span></span> d<i>x</i>"
+    ],
+    "answer": "B",
+    "analysis": "<p>当质点 <i>P</i> 位于 (<i>x</i>, 0) 处时，<i>P</i> 与 <i>Q</i>(0, 1) 之间的距离为 <i>r</i> = √(<i>x</i><sup>2</sup> + 1)。</p><p>由于两质点均为单位质量（<i>m</i><sub>1</sub> = <i>m</i><sub>2</sub> = 1），万有引力大小为 <i>F</i> = <span class='frac'><span class='frac-num'><i>G</i></span><span class='frac-den'><i>x</i><sup>2</sup> + 1</span></span>。</p><p>引力方向由 <i>P</i> 指向 <i>Q</i>，与 <i>x</i> 轴负向夹角 <i>θ</i> 满足 cos <i>θ</i> = <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>√(<i>x</i><sup>2</sup> + 1)</span></span>。</p><p>故沿 <i>x</i> 轴正向移动 d<i>x</i> 时，克服引力所做的功微元为：</p><p>d<i>W</i> = <i>F</i> cos <i>θ</i> d<i>x</i> = <span class='frac'><span class='frac-num'><i>G</i></span><span class='frac-den'><i>x</i><sup>2</sup> + 1</span></span> · <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>√(<i>x</i><sup>2</sup> + 1)</span></span> d<i>x</i> = <span class='frac'><span class='frac-num'><i>Gx</i></span><span class='frac-den'>(<i>x</i><sup>2</sup> + 1)<sup>3/2</sup></span></span> d<i>x</i>。</p><p>积分得 <i>W</i> = ∫<sub>0</sub><sup><i>l</i></sup> <span class='frac'><span class='frac-num'><i>Gx</i></span><span class='frac-den'>(<i>x</i><sup>2</sup> + 1)<sup>3/2</sup></span></span> d<i>x</i>，故选 B。</p>",
+    "tips": "变力沿直线做功时，若力的方向与位移方向不一致，必须将力向位移方向投影（乘以 cos θ = x / √(x²+1)）。",
+    "kp": "定积分的物理应用（变力做功）"
+  },
+  {
+    "id": "M2025_07",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2025数二 第7题（选择题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 连续，给出下列四个条件：<br>① lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>|<i>f</i>(<i>x</i>)| − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> 存在；② lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − |<i>f</i>(0)|</span><span class='frac-den'><i>x</i></span></span> 存在；<br>③ lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>|<i>f</i>(<i>x</i>)|</span><span class='frac-den'><i>x</i></span></span> 存在；④ lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>|<i>f</i>(<i>x</i>)| − |<i>f</i>(0)|</span><span class='frac-den'><i>x</i></span></span> 存在；<br>其中能得到“<i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处可导”的条件个数是（ ）",
+    "options": [
+      "A. 1",
+      "B. 2",
+      "C. 3",
+      "D. 4"
+    ],
+    "answer": "D",
+    "analysis": "<p>① 极限存在则分子极限为 0，由 <i>f</i>(<i>x</i>) 连续知 |<i>f</i>(0)| − <i>f</i>(0) = 0 ⇒ <i>f</i>(0) ≥ 0。若 <i>f</i>(0) &gt; 0，由保号性知在 <i>x</i> = 0 某邻域内 <i>f</i>(<i>x</i>) &gt; 0，故 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> 存在，可导；若 <i>f</i>(0) = 0，转化为条件③，亦可得 <i>f</i>′(0) = 0，故①正确。</p><p>② 极限存在且 <i>f</i>(<i>x</i>) 连续 ⇒ <i>f</i>(0) − |<i>f</i>(0)| = 0 ⇒ <i>f</i>(0) = |<i>f</i>(0)| ≥ 0，原极限即为 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> 存在，故②正确。</p><p>③ 设 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>|<i>f</i>(<i>x</i>)|</span><span class='frac-den'><i>x</i></span></span> = <i>A</i>，由连续性知 <i>f</i>(0) = 0。当 <i>x</i> → 0<sup>+</sup> 时 <i>A</i> ≥ 0，当 <i>x</i> → 0<sup>−</sup> 时 <i>A</i> ≤ 0，故 <i>A</i> = 0，从而 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> = 0，故③正确。</p><p>④ 分三种情况讨论：当 <i>f</i>(0) &gt; 0 时同①；当 <i>f</i>(0) = 0 时同③；当 <i>f</i>(0) &lt; 0 时，由保号性在 <i>x</i> = 0 邻域内 <i>f</i>(<i>x</i>) &lt; 0，从而 <span class='frac'><span class='frac-num'>|<i>f</i>(<i>x</i>)| − |<i>f</i>(0)|</span><span class='frac-den'><i>x</i></span></span> = −<span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> 极限存在，故 <i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处可导，④正确。综上，4 个条件均成立，选 D。</p>",
+    "tips": "注意题干给出了“f(x)连续”这一关键前提！利用分母趋于0则分子必趋于0，结合连续函数的局部保号性即可去绝对值号。",
+    "kp": "导数的定义与连续函数保号性"
+  },
+  {
+    "id": "M2025_08",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2025数二 第8题（选择题 5分）",
+    "stem": "设矩阵 <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 2 &nbsp; 0 ⎞<br>⎜ 2 &nbsp; <i>a</i> &nbsp; 0 ⎟<br>⎝ 0 &nbsp; 0 &nbsp; <i>b</i> ⎠</span> 有一个正特征值和两个负特征值，则（ ）",
+    "options": [
+      "A. <i>a</i> &gt; 4, <i>b</i> &gt; 0",
+      "B. <i>a</i> &lt; 4, <i>b</i> &gt; 0",
+      "C. <i>a</i> &gt; 4, <i>b</i> &lt; 0",
+      "D. <i>a</i> &lt; 4, <i>b</i> &lt; 0"
+    ],
+    "answer": "D",
+    "analysis": "<p>记该分块对角矩阵为 <i>A</i>，其特征多项式为：</p><p>|<i>λE</i> − <i>A</i>| = (<i>λ</i> − <i>b</i>)[<i>λ</i><sup>2</sup> − (<i>a</i> + 1)<i>λ</i> + (<i>a</i> − 4)]。</p><p>故 <i>A</i> 的一个特征值为 <i>λ</i><sub>3</sub> = <i>b</i>，其余两个特征值 <i>λ</i><sub>1</sub>, <i>λ</i><sub>2</sub> 为左上角二阶子块 <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 2 ⎞<br>⎝ 2 &nbsp; <i>a</i> ⎠</span> 的特征值。</p><p>观察二阶子块的主对角元 1 &gt; 0，其不可能负定（即不可能有两个负特征值），因此 <i>λ</i><sub>1</sub>, <i>λ</i><sub>2</sub> 必为一正一负（或由两根之积 <i>λ</i><sub>1</sub><i>λ</i><sub>2</sub> = <i>a</i> − 4 &lt; 0 保证一正一负，即 <i>a</i> &lt; 4）。</p><p>既然 <i>λ</i><sub>1</sub>, <i>λ</i><sub>2</sub> 已有一正一负，要使 <i>A</i> 有一个正特征值和两个负特征值，第三个特征值 <i>λ</i><sub>3</sub> = <i>b</i> 必须为负，即 <i>b</i> &lt; 0。</p><p>综上，<i>a</i> &lt; 4, <i>b</i> &lt; 0，故选 D。</p>",
+    "tips": "利用分块矩阵的特征值性质：左上角二阶实对称矩阵左上角元素为 1 > 0，故至少有一个正特征值，从而 b 必为负特征值，且左上角二阶行列式 a-4 < 0。",
+    "kp": "矩阵的特征值与正负惯性指数"
+  },
+  {
+    "id": "M2025_09",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2025数二 第9题（选择题 5分）",
+    "stem": "下列矩阵中，可以经过若干初等行变换得到矩阵 <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 0 &nbsp; 0 &nbsp; 1 &nbsp; 2 ⎟<br>⎝ 0 &nbsp; 0 &nbsp; 0 &nbsp; 0 ⎠</span> 的是（ ）",
+    "options": [
+      "A. <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 1 &nbsp; 2 &nbsp; 1 &nbsp; 2 ⎟<br>⎝ 2 &nbsp; 3 &nbsp; 1 &nbsp; 0 ⎠</span>",
+      "B. <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 1 &nbsp; 1 &nbsp; 2 &nbsp; 5 ⎟<br>⎝ 1 &nbsp; 1 &nbsp; 1 &nbsp; 3 ⎠</span>",
+      "C. <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 0 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 0 &nbsp; 1 &nbsp; 0 &nbsp; 3 ⎟<br>⎝ 0 &nbsp; 1 &nbsp; 0 &nbsp; 0 ⎠</span>",
+      "D. <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 2 &nbsp; 3 ⎞<br>⎜ 1 &nbsp; 2 &nbsp; 2 &nbsp; 3 ⎟<br>⎝ 2 &nbsp; 3 &nbsp; 4 &nbsp; 6 ⎠</span>"
+    ],
+    "answer": "B",
+    "analysis": "<p>两矩阵行等价（可通过初等行变换互相转化）的充要条件是它们对应的齐次线性方程组同解，即列向量之间的线性关系完全相同。</p><p>观察目标矩阵 <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 0 &nbsp; 0 &nbsp; 1 &nbsp; 2 ⎟<br>⎝ 0 &nbsp; 0 &nbsp; 0 &nbsp; 0 ⎠</span>，其第 1 列与第 2 列完全相等（<i>α</i><sub>1</sub> = <i>α</i><sub>2</sub>）。</p><p>四个选项中，只有 B 选项的第 1 列与第 2 列相等，对 B 进行初等行变换（第 2、3 行减去第 1 行）：</p><p><span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 1 &nbsp; 1 &nbsp; 2 &nbsp; 5 ⎟<br>⎝ 1 &nbsp; 1 &nbsp; 1 &nbsp; 3 ⎠</span> → <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 0 &nbsp; 1 ⎞<br>⎜ 0 &nbsp; 0 &nbsp; 1 &nbsp; 2 ⎟<br>⎝ 0 &nbsp; 0 &nbsp; 0 &nbsp; 0 ⎠</span>，故选 B。</p>",
+    "tips": "初等行变换不改变矩阵列向量之间的线性关系！目标矩阵前两列完全相同，那么原矩阵的前两列也必然完全相同，一眼秒选 B。",
+    "kp": "初等行变换与矩阵行等价"
+  },
+  {
+    "id": "M2025_10",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2025数二 第10题（选择题 5分）",
+    "stem": "设 3 阶矩阵 <i>A</i>, <i>B</i> 满足 <i>r</i>(<i>AB</i>) = <i>r</i>(<i>BA</i>) + 1，则（ ）",
+    "options": [
+      "A. 方程组 (<i>A</i> + <i>B</i>)<i>x</i> = 0 只有零解",
+      "B. 方程组 <i>Ax</i> = 0 与方程组 <i>Bx</i> = 0 均只有零解",
+      "C. 方程组 <i>Ax</i> = 0 与方程组 <i>Bx</i> = 0 没有公共非零解",
+      "D. 方程组 <i>ABAx</i> = 0 与方程组 <i>BABx</i> = 0 有公共非零解"
+    ],
+    "answer": "D",
+    "analysis": "<p>方法一（特殊矩阵排除法）：令 <i>A</i> = <span style='display:inline-block;vertical-align:middle'>⎛ &nbsp;1 &nbsp; &nbsp;1 &nbsp; &nbsp;1 ⎞<br>⎜ −1 &nbsp;−1 &nbsp;−1 ⎟<br>⎝ &nbsp;0 &nbsp; &nbsp;0 &nbsp; &nbsp;0 ⎠</span>，<i>B</i> = <span style='display:inline-block;vertical-align:middle'>⎛ 1 &nbsp; 1 &nbsp; 1 ⎞<br>⎜ 1 &nbsp; 1 &nbsp; 1 ⎟<br>⎝ 1 &nbsp; 1 &nbsp; 1 ⎠</span>，则 <i>AB</i> = <span style='display:inline-block;vertical-align:middle'>⎛ &nbsp;3 &nbsp; &nbsp;3 &nbsp; &nbsp;3 ⎞<br>⎜ −3 &nbsp;−3 &nbsp;−3 ⎟<br>⎝ &nbsp;0 &nbsp; &nbsp;0 &nbsp; &nbsp;0 ⎠</span>，<i>BA</i> = <i>O</i>。</p><p>此时 <i>r</i>(<i>AB</i>) = 1，<i>r</i>(<i>BA</i>) = 0，满足 <i>r</i>(<i>AB</i>) = <i>r</i>(<i>BA</i>) + 1。</p><p>但 <i>r</i>(<i>A</i> + <i>B</i>) &lt; 3，故 (<i>A</i> + <i>B</i>)<i>x</i> = 0 有非零解，A 错；<i>Ax</i> = 0 与 <i>Bx</i> = 0 均有非零解且同解，故 B、C 均错，从而选 D。</p><p>方法二（理论推导）：由 <i>r</i>(<i>AB</i>) = <i>r</i>(<i>BA</i>) + 1 知 <i>A</i>, <i>B</i> 均不可逆，且 <i>r</i>(<i>BA</i>) ≤ 1，故 <i>r</i>(<i>ABA</i>) ≤ <i>r</i>(<i>BA</i>) ≤ 1，<i>r</i>(<i>BAB</i>) ≤ <i>r</i>(<i>BA</i>) ≤ 1。又因为 <i>Ax</i> = 0 与 <i>Bx</i> = 0 的解必然分别是 <i>ABAx</i> = 0 与 <i>BABx</i> = 0 的解，且分块矩阵 <span style='display:inline-block;vertical-align:middle'>⎛ <i>ABA</i> ⎞<br>⎝ <i>BAB</i> ⎠</span> 的秩 ≤ <i>r</i>(<i>ABA</i>) + <i>r</i>(<i>BAB</i>) ≤ 2 &lt; 3，故必有公共非零解，选 D。</p>",
+    "tips": "考场上遇到抽象矩阵秩与齐次方程组解的关系，构造满足 r(AB)=1, r(BA)=0 的简单低秩矩阵（或基础矩阵 E_{ij}）可瞬间排除错误选项。",
+    "kp": "矩阵的秩与齐次线性方程组的公共解"
+  },
+  {
+    "id": "M2025_11",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 11,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2025数二 第11题（填空题 5分）",
+    "stem": "设 ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'><i>a</i></span><span class='frac-den'><i>x</i>(2<i>x</i> + <i>a</i>)</span></span> d<i>x</i> = ln 2，则 <i>a</i> = ________.",
+    "options": null,
+    "answer": "2",
+    "analysis": "<p>将有理分式拆项积分：</p><p>∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'><i>a</i></span><span class='frac-den'><i>x</i>(2<i>x</i> + <i>a</i>)</span></span> d<i>x</i> = ∫<sub>1</sub><sup>+∞</sup> (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>2<i>x</i> + <i>a</i></span></span>) d<i>x</i> = [ln |<span class='frac'><span class='frac-num'>2<i>x</i></span><span class='frac-den'>2<i>x</i> + <i>a</i></span></span>|]<sub>1</sub><sup>+∞</sup> = ln |<span class='frac'><span class='frac-num'>2 + <i>a</i></span><span class='frac-den'>2</span></span>| = ln 2。</p><p>所以 |<span class='frac'><span class='frac-num'>2 + <i>a</i></span><span class='frac-den'>2</span></span>| = 2，解得 <i>a</i> = 2 或 <i>a</i> = −6。</p><p>若 <i>a</i> = −6，则被积函数在 <i>x</i> = 3 处有无穷间断点（瑕点），此时反常积分 ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>−6</span><span class='frac-den'><i>x</i>(2<i>x</i> − 6)</span></span> d<i>x</i> 发散，故舍去 <i>a</i> = −6。</p><p>综上，<i>a</i> = 2。</p>",
+    "tips": "解出参数后务必检验反常积分在积分区间 [1, +∞) 内是否存在使分母为 0 的瑕点！a = -6 时 x = 3 ∈ [1, +∞) 导致积分发散。",
+    "kp": "反常积分的计算与敛散性检验"
+  },
+  {
+    "id": "M2025_12",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 12,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2025数二 第12题（填空题 5分）",
+    "stem": "曲线 <i>y</i> = <sup>3</sup>√(<i>x</i><sup>3</sup> − 3<i>x</i><sup>2</sup> + 1) 的渐近线方程是 ________.",
+    "options": null,
+    "answer": "y = x - 1",
+    "analysis": "<p>函数定义域为 (−∞, +∞) 且连续，故无铅直渐近线；又 lim<sub><i>x</i>→∞</sub> <i>y</i> = ∞，无水平渐近线。</p><p>考察斜渐近线：</p><p><i>k</i> = lim<sub><i>x</i>→∞</sub> <span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'><i>x</i></span></span> = lim<sub><i>x</i>→∞</sub> <sup>3</sup>√(1 − <span class='frac'><span class='frac-num'>3</span><span class='frac-den'><i>x</i></span></span> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup>3</sup></span></span>) = 1。</p><p><i>b</i> = lim<sub><i>x</i>→∞</sub> (<i>y</i> − <i>x</i>) = lim<sub><i>x</i>→∞</sub> [<sup>3</sup>√(<i>x</i><sup>3</sup> − 3<i>x</i><sup>2</sup> + 1) − <i>x</i>]</p><p>= lim<sub><i>x</i>→∞</sub> <span class='frac'><span class='frac-num'>(<i>x</i><sup>3</sup> − 3<i>x</i><sup>2</sup> + 1) − <i>x</i><sup>3</sup></span><span class='frac-den'>(<sup>3</sup>√(<i>x</i><sup>3</sup> − 3<i>x</i><sup>2</sup> + 1))<sup>2</sup> + <i>x</i> · <sup>3</sup>√(<i>x</i><sup>3</sup> − 3<i>x</i><sup>2</sup> + 1) + <i>x</i><sup>2</sup></span></span></p><p>= lim<sub><i>x</i>→∞</sub> <span class='frac'><span class='frac-num'>−3<i>x</i><sup>2</sup> + 1</span><span class='frac-den'>3<i>x</i><sup>2</sup></span></span> = −1。</p><p>故斜渐近线方程为 <i>y</i> = <i>x</i> − 1。</p>",
+    "tips": "遇到三次根式 ³√(x³ + ax² + ...) 求斜渐近线，可提取 x 得 x(1 - 3/x + 1/x³)^{1/3} = x(1 - 1/x + o(1/x)) = x - 1 + o(1)，直接读出 y = x - 1。",
+    "kp": "曲线的渐近线"
+  },
+  {
+    "id": "M2025_13",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 13,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2025数二 第13题（填空题 5分）",
+    "stem": "lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i><sup>2</sup></span></span>[ln <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i></span></span> + 2 ln <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>n</i></span></span> + ⋯ + (<i>n</i> − 1) ln <span class='frac'><span class='frac-num'><i>n</i> − 1</span><span class='frac-den'><i>n</i></span></span>] = ________.",
+    "options": null,
+    "answer": "-1/4",
+    "analysis": "<p>利用定积分的定义（将和式极限转化为定积分）：</p><p>原式 = lim<sub><i>n</i>→∞</sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>n</i></span></span> ∑<sub><i>k</i>=1</sub><sup><i>n</i>−1</sup> <span class='frac'><span class='frac-num'><i>k</i></span><span class='frac-den'><i>n</i></span></span> ln <span class='frac'><span class='frac-num'><i>k</i></span><span class='frac-den'><i>n</i></span></span></p><p>= ∫<sub>0</sub><sup>1</sup> <i>x</i> ln <i>x</i> d<i>x</i></p><p>由分部积分法：</p><p>∫<sub>0</sub><sup>1</sup> <i>x</i> ln <i>x</i> d<i>x</i> = [<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> ln <i>x</i>]<sub>0</sub><sup>1</sup> − ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i> d<i>x</i> = 0 − [<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span><i>x</i><sup>2</sup>]<sub>0</sub><sup>1</sup> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>。</p>",
+    "tips": "凑出 1/n 和 k/n 的形式后直接化为 [0,1] 上的反常积分 ∫₀¹ x ln x dx，利用分部积分即可。",
+    "kp": "定积分定义求极限與分部积分法"
+  },
+  {
+    "id": "M2025_14",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 14,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2025数二 第14题（填空题 5分）",
+    "stem": "已知函数 <i>y</i> = <i>y</i>(<i>x</i>) 由 <span style='display:inline-block;vertical-align:middle'>{ <i>x</i> = ln(1 + 2<i>t</i>)<br>{ 2<i>t</i> − ∫<sub>1</sub><sup><i>y</i>+<i>t</i><sup>2</sup></sup> <i>e</i><sup>−<i>u</i><sup>2</sup></sup> d<i>u</i> = 0</span> 确定，则 <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>x</i></span></span>|<sub><i>t</i>=0</sub> = ________.",
+    "options": null,
+    "answer": "e",
+    "analysis": "<p>将 <i>t</i> = 0 代入第二个方程得：0 − ∫<sub>1</sub><sup><i>y</i>(0)</sup> <i>e</i><sup>−<i>u</i><sup>2</sup></sup> d<i>u</i> = 0 ⇒ <i>y</i>|<sub><i>t</i>=0</sub> = 1。</p><p>第二个方程两边对 <i>t</i> 求导：</p><p>2 − <i>e</i><sup>−(<i>y</i>+<i>t</i><sup>2</sup>)<sup>2</sup></sup> · (<span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span> + 2<i>t</i>) = 0。</p><p>代入 <i>t</i> = 0，<i>y</i> = 1 得：2 − <i>e</i><sup>−1</sup> · <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span>|<sub><i>t</i>=0</sub> = 0 ⇒ <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span>|<sub><i>t</i>=0</sub> = 2<i>e</i>。</p><p>又 <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'>d<i>t</i></span></span>|<sub><i>t</i>=0</sub> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>1 + 2<i>t</i></span></span>|<sub><i>t</i>=0</sub> = 2。</p><p>故 <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>x</i></span></span>|<sub><i>t</i>=0</sub> = <span class='frac'><span class='frac-num'>d<i>y</i> / d<i>t</i></span><span class='frac-den'>d<i>x</i> / d<i>t</i></span></span>|<sub><i>t</i>=0</sub> = <span class='frac'><span class='frac-num'>2<i>e</i></span><span class='frac-den'>2</span></span> = <i>e</i>。</p>",
+    "tips": "先将 t=0 代入变限积分方程求出对应的 y(0)=1，再利用参数方程求导公式结合复合变限积分求导。",
+    "kp": "参数方程与隐函数求导"
+  },
+  {
+    "id": "M2025_15",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 15,
+    "qType": "fill",
+    "chapter": "m_ch4",
+    "title": "2025数二 第15题（填空题 5分）",
+    "stem": "微分方程 (2<i>y</i> − 3<i>x</i>)d<i>x</i> + (2<i>x</i> − 5<i>y</i>)d<i>y</i> = 0 满足条件 <i>y</i>(1) = 1 的解为 ________.",
+    "options": null,
+    "answer": "5y² - 4xy + 3x² = 4",
+    "analysis": "<p>方法一（齐次微分方程换元法）：</p><p>原方程可化为 <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>x</i></span></span> = <span class='frac'><span class='frac-num'>2<i>y</i> − 3<i>x</i></span><span class='frac-den'>5<i>y</i> − 2<i>x</i></span></span> = <span class='frac'><span class='frac-num'>2(<i>y</i>/<i>x</i>) − 3</span><span class='frac-den'>5(<i>y</i>/<i>x</i>) − 2</span></span>。</p><p>令 <i>u</i> = <span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'><i>x</i></span></span>，则 <i>u</i> + <i>x</i><span class='frac'><span class='frac-num'>d<i>u</i></span><span class='frac-den'>d<i>x</i></span></span> = <span class='frac'><span class='frac-num'>2<i>u</i> − 3</span><span class='frac-den'>5<i>u</i> − 2</span></span>，分离变量得 −<span class='frac'><span class='frac-num'>5<i>u</i> − 2</span><span class='frac-den'>5<i>u</i><sup>2</sup> − 4<i>u</i> + 3</span></span> d<i>u</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> d<i>x</i>。</p><p>两边积分整理得 5<i>y</i><sup>2</sup> − 4<i>xy</i> + 3<i>x</i><sup>2</sup> = <i>C</i>。</p><p>方法二（凑全微分法）：</p><p>原方程展开为 2(<i>y</i>d<i>x</i> + <i>x</i>d<i>y</i>) − 3<i>x</i>d<i>x</i> − 5<i>y</i>d<i>y</i> = 0 ⇒ d(2<i>xy</i> − <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> − <span class='frac'><span class='frac-num'>5</span><span class='frac-den'>2</span></span><i>y</i><sup>2</sup>) = 0。</p><p>代入初始条件 <i>y</i>(1) = 1 得 <i>C</i> = 4，故特解为 5<i>y</i><sup>2</sup> − 4<i>xy</i> + 3<i>x</i><sup>2</sup> = 4。</p>",
+    "tips": "虽然这是标准的齐次微分方程（令 u=y/x），但观察到 2y dx + 2x dy = d(2xy)，直接用凑全微分法只需 10 秒即可写出通解！",
+    "kp": "齐次微分方程与全微分方程"
+  },
+  {
+    "id": "M2025_16",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 16,
+    "qType": "fill",
+    "chapter": "m_ch6",
+    "title": "2025数二 第16题（填空题 5分）",
+    "stem": "设矩阵 <i>A</i> = (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>)，若 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub> 线性无关，且 <i>α</i><sub>1</sub> + <i>α</i><sub>2</sub> = <i>α</i><sub>3</sub> + <i>α</i><sub>4</sub>，则方程组 <i>Ax</i> = <i>α</i><sub>1</sub> + 4<i>α</i><sub>4</sub> 的通解 <i>x</i> = ________.",
+    "options": null,
+    "answer": "k(1, 1, -1, -1)^T + (1, 0, 0, 4)^T（k为任意常数）",
+    "analysis": "<p>由 <i>α</i><sub>1</sub> + <i>α</i><sub>2</sub> = <i>α</i><sub>3</sub> + <i>α</i><sub>4</sub> 知 <i>α</i><sub>1</sub> + <i>α</i><sub>2</sub> − <i>α</i><sub>3</sub> − <i>α</i><sub>4</sub> = 0，且 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub> 线性无关，故 <i>r</i>(<i>A</i>) = 3。</p><p>因此齐次线性方程组 <i>Ax</i> = 0 的基础解系含 4 − 3 = 1 个线性无关的解向量，即 <i>ξ</i> = (1, 1, −1, −1)<sup>T</sup>。</p><p>又由 <i>Ax</i> = <i>α</i><sub>1</sub> + 4<i>α</i><sub>4</sub> 可知 <i>η</i> = (1, 0, 0, 4)<sup>T</sup> 为非齐次方程组的一个特解。</p><p>故方程组的通解为 <i>x</i> = <i>k</i><span style='display:inline-block;vertical-align:middle'>⎛ &nbsp;1 ⎞<br>⎜ &nbsp;1 ⎟<br>⎜ −1 ⎟<br>⎝ −1 ⎠</span> + <span style='display:inline-block;vertical-align:middle'>⎛ 1 ⎞<br>⎜ 0 ⎟<br>⎜ 0 ⎟<br>⎝ 4 ⎠</span>（其中 <i>k</i> 为任意常数）。</p>",
+    "tips": "直接将列向量的线性组合关系改写为分块矩阵与列向量的乘法 Aξ = 0 和 Aη = b，注意标注 k 为任意常数。",
+    "kp": "非齐次线性方程组的通解结构"
+  },
+  {
+    "id": "M2025_17",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 17,
+    "qType": "solve",
+    "chapter": "m_ch3",
+    "title": "2025数二 第17题（解答题 10分）",
+    "stem": "计算定积分 ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(<i>x</i> + 1)(<i>x</i><sup>2</sup> − 2<i>x</i> + 2)</span></span> d<i>x</i>.",
+    "options": null,
+    "answer": "(3/10)ln 2 + π/10",
+    "analysis": "<p>【解析】利用有理真分式的部分分式展开法，设：</p><p><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1 + <i>x</i>)(<i>x</i><sup>2</sup> − 2<i>x</i> + 2)</span></span> = <span class='frac'><span class='frac-num'><i>a</i></span><span class='frac-den'>1 + <i>x</i></span></span> + <span class='frac'><span class='frac-num'><i>bx</i> + <i>c</i></span><span class='frac-den'><i>x</i><sup>2</sup> − 2<i>x</i> + 2</span></span> = <span class='frac'><span class='frac-num'>(<i>a</i> + <i>b</i>)<i>x</i><sup>2</sup> + (−2<i>a</i> + <i>b</i> + <i>c</i>)<i>x</i> + 2<i>a</i> + <i>c</i></span><span class='frac-den'>(1 + <i>x</i>)(<i>x</i><sup>2</sup> − 2<i>x</i> + 2)</span></span></p><p>比较分子对应项系数得：<span style='display:inline-block;vertical-align:middle'>{ <i>a</i> + <i>b</i> = 0<br>{ −2<i>a</i> + <i>b</i> + <i>c</i> = 0<br>{ 2<i>a</i> + <i>c</i> = 1</span> ⇒ <span style='display:inline-block;vertical-align:middle'>{ <i>a</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span><br>{ <i>b</i> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span><br>{ <i>c</i> = <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>5</span></span></span></p><p>于是原积分化为：</p><p>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1 + <i>x</i>)(<i>x</i><sup>2</sup> − 2<i>x</i> + 2)</span></span> d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i></span></span> d<i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'><i>x</i> − 3</span><span class='frac-den'><i>x</i><sup>2</sup> − 2<i>x</i> + 2</span></span> d<i>x</i></p><p>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>[ln(1 + <i>x</i>)]<sub>0</sub><sup>1</sup> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>[<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup>2</sup> − 2<i>x</i> + 2</span></span> d(<i>x</i><sup>2</sup> − 2<i>x</i> + 2) − ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>(<i>x</i> − 1)<sup>2</sup> + 1</span></span> d<i>x</i>]</p><p>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>ln 2 − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>10</span></span>[ln(<i>x</i><sup>2</sup> − 2<i>x</i> + 2)]<sub>0</sub><sup>1</sup> + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>[arctan(<i>x</i> − 1)]<sub>0</sub><sup>1</sup></p><p>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span>ln 2 − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>10</span></span>(0 − ln 2) + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span>(0 − (−<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>)) = <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>10</span></span>ln 2 + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>10</span></span>。</p>",
+    "tips": "有理函数积分的标准套路：先待定系数拆分为一次因式与二次不可约因式之和，再对二次项凑微分出 d(x²-2x+2) 和完全平方 (x-1)²+1。",
+    "kp": "有理函数的定积分计算"
+  },
+  {
+    "id": "M2025_18",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 18,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2025数二 第18题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处连续，且 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>xf</i>(<i>x</i>) − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'>ln(1 + <i>x</i>) + ln(1 − <i>x</i>)</span></span> = −3，证明 <i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处可导，并求 <i>f</i>′(0).",
+    "options": null,
+    "answer": "f'(0) = 5",
+    "analysis": "<p>【证明与解析】因为 ln(1 + <i>x</i>) + ln(1 − <i>x</i>) = ln(1 − <i>x</i><sup>2</sup>) ∼ −<i>x</i><sup>2</sup>（<i>x</i> → 0），所以：</p><p>−3 = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>xf</i>(<i>x</i>) − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'>−<i>x</i><sup>2</sup></span></span> &nbsp;⋯⋯①</p><p>由此可得 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>xf</i>(<i>x</i>) − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'><i>x</i></span></span> = lim<sub><i>x</i>→0</sub> [<i>f</i>(<i>x</i>) − <span class='frac'><span class='frac-num'><i>e</i><sup>2sin <i>x</i></sup> − 1</span><span class='frac-den'><i>x</i></span></span>] = 0。</p><p>因为 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>e</i><sup>2sin <i>x</i></sup> − 1</span><span class='frac-den'><i>x</i></span></span> = 2，且 <i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处连续，所以 <i>f</i>(0) = lim<sub><i>x</i>→0</sub> <i>f</i>(<i>x</i>) = 2。</p><p>将 <i>f</i>(0) = 2 代入①式并拆项：</p><p>−3 = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>x</i>[<i>f</i>(<i>x</i>) − <i>f</i>(0)] + 2<i>x</i> − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'>−<i>x</i><sup>2</sup></span></span></p><p>= −lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> + lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>2<i>x</i> − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'>−<i>x</i><sup>2</sup></span></span></p><p>对第二项极限使用洛必达法则（或泰勒展开）：</p><p>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>2<i>x</i> − <i>e</i><sup>2sin <i>x</i></sup> + 1</span><span class='frac-den'>−<i>x</i><sup>2</sup></span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>2 − 2cos <i>x</i> · <i>e</i><sup>2sin <i>x</i></sup></span><span class='frac-den'>−2<i>x</i></span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>1 − cos <i>x</i> + cos <i>x</i>(1 − <i>e</i><sup>2sin <i>x</i></sup>)</span><span class='frac-den'>−<i>x</i></span></span> = 2。</p><p>故 −3 = −lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> + 2，从而 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(0)</span><span class='frac-den'><i>x</i></span></span> = 5。</p><p>因此 <i>f</i>(<i>x</i>) 在 <i>x</i> = 0 处可导，且 <i>f</i>′(0) = 5。</p>",
+    "tips": "先将分母 ln(1+x)+ln(1-x) = ln(1-x²) 等价替换为 -x²，再将 e^{2sin x} 展开到 x² 项：e^{2sin x} = 1 + 2x + 2x² + o(x²)，一步即可看出 f(0)=2 且 f'(0)=5。",
+    "kp": "导数定义、等价无穷小与泰勒展开"
+  },
+  {
+    "id": "M2025_19",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 19,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2025数二 第19题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>, <i>y</i>) 可微且满足 d<i>f</i>(<i>x</i>, <i>y</i>) = −2<i>xe</i><sup>−<i>y</i></sup>d<i>x</i> + <i>e</i><sup>−<i>y</i></sup>(<i>x</i><sup>2</sup> − <i>y</i> − 1)d<i>y</i>，<i>f</i>(0, 0) = 2，求 <i>f</i>(<i>x</i>, <i>y</i>)，并求 <i>f</i>(<i>x</i>, <i>y</i>) 的极值.",
+    "options": null,
+    "answer": "f(x, y) = -x²e^{-y} + (y + 2)e^{-y}，极大值为 f(0, -1) = e",
+    "analysis": "<p>【解析】（1）求 <i>f</i>(<i>x</i>, <i>y</i>) 的表达式：</p><p>由全微分定义知：<i>f</i><sub><i>x</i></sub>′(<i>x</i>, <i>y</i>) = −2<i>xe</i><sup>−<i>y</i></sup>，<i>f</i><sub><i>y</i></sub>′(<i>x</i>, <i>y</i>) = <i>e</i><sup>−<i>y</i></sup>(<i>x</i><sup>2</sup> − <i>y</i> − 1)。</p><p>对 <i>x</i> 偏积分得：<i>f</i>(<i>x</i>, <i>y</i>) = ∫ −2<i>xe</i><sup>−<i>y</i></sup> d<i>x</i> = −<i>x</i><sup>2</sup><i>e</i><sup>−<i>y</i></sup> + <i>C</i>(<i>y</i>)。</p><p>两边对 <i>y</i> 求偏导得：<i>f</i><sub><i>y</i></sub>′(<i>x</i>, <i>y</i>) = <i>x</i><sup>2</sup><i>e</i><sup>−<i>y</i></sup> + <i>C</i>′(<i>y</i>) = <i>e</i><sup>−<i>y</i></sup>(<i>x</i><sup>2</sup> − <i>y</i> − 1)，</p><p>故 <i>C</i>′(<i>y</i>) = −(<i>y</i> + 1)<i>e</i><sup>−<i>y</i></sup>，积分得 <i>C</i>(<i>y</i>) = (<i>y</i> + 2)<i>e</i><sup>−<i>y</i></sup> + <i>C</i>。</p><p>由 <i>f</i>(0, 0) = 2 得 2 + <i>C</i> = 2 ⇒ <i>C</i> = 0，故 <i>f</i>(<i>x</i>, <i>y</i>) = −<i>x</i><sup>2</sup><i>e</i><sup>−<i>y</i></sup> + (<i>y</i> + 2)<i>e</i><sup>−<i>y</i></sup>。</p><p>（2）求 <i>f</i>(<i>x</i>, <i>y</i>) 的极值：</p><p>令 <span style='display:inline-block;vertical-align:middle'>{ <i>f</i><sub><i>x</i></sub>′(<i>x</i>, <i>y</i>) = −2<i>xe</i><sup>−<i>y</i></sup> = 0<br>{ <i>f</i><sub><i>y</i></sub>′(<i>x</i>, <i>y</i>) = <i>e</i><sup>−<i>y</i></sup>(<i>x</i><sup>2</sup> − <i>y</i> − 1) = 0</span>，解得唯一驻点 (0, −1)。</p><p>求二阶偏导数：<i>f</i><sub><i>xx</i></sub>″ = −2<i>e</i><sup>−<i>y</i></sup>，<i>f</i><sub><i>xy</i></sub>″ = 2<i>xe</i><sup>−<i>y</i></sup>，<i>f</i><sub><i>yy</i></sub>″ = −<i>e</i><sup>−<i>y</i></sup>(<i>x</i><sup>2</sup> − <i>y</i> − 2)。</p><p>在驻点 (0, −1) 处：<i>A</i> = −2<i>e</i>，<i>B</i> = 0，<i>C</i> = −<i>e</i>。</p><p>因为 <i>AC</i> − <i>B</i><sup>2</sup> = 2<i>e</i><sup>2</sup> &gt; 0 且 <i>A</i> &lt; 0，故 <i>f</i>(<i>x</i>, <i>y</i>) 在 (0, −1) 处取得极大值，极大值为 <i>f</i>(0, −1) = <i>e</i>。</p>",
+    "tips": "利用偏积分法（或凑全微分法）恢复原函数 f(x,y) 后，用无条件极值的充分条件 AC - B² > 0 判定极值。",
+    "kp": "全微分求原函数与多元函数无条件极值"
+  },
+  {
+    "id": "M2025_20",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 20,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2025数二 第20题（解答题 12分）",
+    "stem": "已知平面有界区域 <i>D</i> = {(<i>x</i>, <i>y</i>) | <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> ≤ 4<i>x</i>, <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> ≤ 4<i>y</i>}，计算二重积分 ∬<sub><i>D</i></sub> (<i>x</i> − <i>y</i>)<sup>2</sup> d<i>x</i>d<i>y</i>.",
+    "options": null,
+    "answer": "12π - 112/3",
+    "analysis": "<p>【解析】积分区域 <i>D</i> 为两圆 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> ≤ 4<i>x</i> 与 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> ≤ 4<i>y</i> 的公共部分，关于直线 <i>y</i> = <i>x</i> 对称。</p><p>记 <i>D</i><sub>1</sub> 为 <i>D</i> 在直线 <i>y</i> = <i>x</i> 下方的部分（对应极角 0 ≤ <i>θ</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>，极径 0 ≤ <i>r</i> ≤ 4sin <i>θ</i>），由对称性及极坐标变换得：</p><p>∬<sub><i>D</i></sub> (<i>x</i> − <i>y</i>)<sup>2</sup> d<i>x</i>d<i>y</i> = 2∬<sub><i>D</i><sub>1</sub></sub> (<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> − 2<i>xy</i>) d<i>x</i>d<i>y</i></p><p>= 2∫<sub>0</sub><sup>π/4</sup> d<i>θ</i> ∫<sub>0</sub><sup>4sin <i>θ</i></sup> (<i>r</i><sup>2</sup> − 2<i>r</i><sup>2</sup>cos <i>θ</i> sin <i>θ</i>)<i>r</i> d<i>r</i></p><p>= 128∫<sub>0</sub><sup>π/4</sup> (sin<sup>4</sup><i>θ</i> − 2cos <i>θ</i> sin<sup>5</sup><i>θ</i>) d<i>θ</i></p><p>= 128[∫<sub>0</sub><sup>π/4</sup> (<span class='frac'><span class='frac-num'>1 − cos 2<i>θ</i></span><span class='frac-den'>2</span></span>)<sup>2</sup> d<i>θ</i> − [<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>sin<sup>6</sup><i>θ</i>]<sub>0</sub><sup>π/4</sup>]</p><p>= 128[<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>∫<sub>0</sub><sup>π/4</sup> (1 − 2cos 2<i>θ</i> + cos<sup>2</sup>2<i>θ</i>) d<i>θ</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>24</span></span>]</p><p>= 128[<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>(<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span> − 1 + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>8</span></span>) − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>24</span></span>] = 128(<span class='frac'><span class='frac-num'>3π</span><span class='frac-den'>32</span></span> − <span class='frac'><span class='frac-num'>7</span><span class='frac-den'>24</span></span>) = 12π − <span class='frac'><span class='frac-num'>112</span><span class='frac-den'>3</span></span>。</p>",
+    "tips": "区域 D 关于 y=x 对称且被积函数 (x-y)² 对称，必ず先拆成两半利用对称性化简为 2∬_{D₁}，在 0 ≤ θ ≤ π/4 内边界由圆 x²+y²=4y（即 r=4sin θ）唯一确定。",
+    "kp": "二重积分的极坐标计算与对称性"
+  },
+  {
+    "id": "M2025_21",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 21,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2025数二 第21题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 在区间 (<i>a</i>, <i>b</i>) 可导，证明导函数 <i>f</i>′(<i>x</i>) 在 (<i>a</i>, <i>b</i>) 内严格单调递增的充分必要条件是：对 (<i>a</i>, <i>b</i>) 内任意 <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>，当 <i>x</i><sub>1</sub> &lt; <i>x</i><sub>2</sub> &lt; <i>x</i><sub>3</sub> 时，有 <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>2</sub>) − <i>f</i>(<i>x</i><sub>1</sub>)</span><span class='frac-den'><i>x</i><sub>2</sub> − <i>x</i><sub>1</sub></span></span> &lt; <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>3</sub>) − <i>f</i>(<i>x</i><sub>2</sub>)</span><span class='frac-den'><i>x</i><sub>3</sub> − <i>x</i><sub>2</sub></span></span>.",
+    "options": null,
+    "answer": "见解析",
+    "analysis": "<p>【证明】（1）必要性：设 <i>f</i>′(<i>x</i>) 在 (<i>a</i>, <i>b</i>) 内严格单调递增。</p><p>任取 <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub> ∈ (<i>a</i>, <i>b</i>) 且 <i>x</i><sub>1</sub> &lt; <i>x</i><sub>2</sub> &lt; <i>x</i><sub>3</sub>，在 [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>] 与 [<i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>] 上分别应用拉格朗日中值定理，存在 <i>ξ</i><sub>1</sub> ∈ (<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>)，<i>ξ</i><sub>2</sub> ∈ (<i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) 使得：</p><p><span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>2</sub>) − <i>f</i>(<i>x</i><sub>1</sub>)</span><span class='frac-den'><i>x</i><sub>2</sub> − <i>x</i><sub>1</sub></span></span> = <i>f</i>′(<i>ξ</i><sub>1</sub>)，<span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>3</sub>) − <i>f</i>(<i>x</i><sub>2</sub>)</span><span class='frac-den'><i>x</i><sub>3</sub> − <i>x</i><sub>2</sub></span></span> = <i>f</i>′(<i>ξ</i><sub>2</sub>)。</p><p>因为 <i>ξ</i><sub>1</sub> &lt; <i>x</i><sub>2</sub> &lt; <i>ξ</i><sub>2</sub> 且 <i>f</i>′(<i>x</i>) 严格单调递增，所以 <i>f</i>′(<i>ξ</i><sub>1</sub>) &lt; <i>f</i>′(<i>ξ</i><sub>2</sub>)，即 <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>2</sub>) − <i>f</i>(<i>x</i><sub>1</sub>)</span><span class='frac-den'><i>x</i><sub>2</sub> − <i>x</i><sub>1</sub></span></span> &lt; <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i><sub>3</sub>) − <i>f</i>(<i>x</i><sub>2</sub>)</span><span class='frac-den'><i>x</i><sub>3</sub> − <i>x</i><sub>2</sub></span></span>。</p><p>（2）充分性：任取 <i>c</i><sub>1</sub>, <i>c</i><sub>2</sub> ∈ (<i>a</i>, <i>b</i>) 且 <i>c</i><sub>1</sub> &lt; <i>c</i><sub>2</sub>，在 (<i>c</i><sub>1</sub>, <i>c</i><sub>2</sub>) 内取 <i>u</i> &lt; <i>v</i>，使得 <i>c</i><sub>1</sub> &lt; <i>u</i> &lt; <i>v</i> &lt; <i>c</i><sub>2</sub>。</p><p>对任意 <i>x</i> ∈ (<i>c</i><sub>1</sub>, <i>u</i>)，由题设不等式知：<span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>) − <i>f</i>(<i>c</i><sub>1</sub>)</span><span class='frac-den'><i>x</i> − <i>c</i><sub>1</sub></span></span> &lt; <span class='frac'><span class='frac-num'><i>f</i>(<i>u</i>) − <i>f</i>(<i>x</i>)</span><span class='frac-den'><i>u</i> − <i>x</i></span></span>，令 <i>x</i> → <i>c</i><sub>1</sub><sup>+</sup> 取极限得 <i>f</i>′(<i>c</i><sub>1</sub>) ≤ <span class='frac'><span class='frac-num'><i>f</i>(<i>u</i>) − <i>f</i>(<i>c</i><sub>1</sub>)</span><span class='frac-den'><i>u</i> − <i>c</i><sub>1</sub></span></span>。</p><p>同理，对任意 <i>y</i> ∈ (<i>v</i>, <i>c</i><sub>2</sub>)，令 <i>y</i> → <i>c</i><sub>2</sub><sup>−</sup> 取极限得 <span class='frac'><span class='frac-num'><i>f</i>(<i>c</i><sub>2</sub>) − <i>f</i>(<i>v</i>)</span><span class='frac-den'><i>c</i><sub>2</sub> − <i>v</i></span></span> ≤ <i>f</i>′(<i>c</i><sub>2</sub>)。</p><p>而由 <i>c</i><sub>1</sub> &lt; <i>u</i> &lt; <i>v</i> &lt; <i>c</i><sub>2</sub> 及题设不等式有：</p><p><i>f</i>′(<i>c</i><sub>1</sub>) ≤ <span class='frac'><span class='frac-num'><i>f</i>(<i>u</i>) − <i>f</i>(<i>c</i><sub>1</sub>)</span><span class='frac-den'><i>u</i> − <i>c</i><sub>1</sub></span></span> &lt; <span class='frac'><span class='frac-num'><i>f</i>(<i>v</i>) − <i>f</i>(<i>u</i>)</span><span class='frac-den'><i>v</i> − <i>u</i></span></span> &lt; <span class='frac'><span class='frac-num'><i>f</i>(<i>c</i><sub>2</sub>) − <i>f</i>(<i>v</i>)</span><span class='frac-den'><i>c</i><sub>2</sub> − <i>v</i></span></span> ≤ <i>f</i>′(<i>c</i><sub>2</sub>)。</p><p>故 <i>f</i>′(<i>c</i><sub>1</sub>) &lt; <i>f</i>′(<i>c</i><sub>2</sub>)，即 <i>f</i>′(<i>x</i>) 在 (<i>a</i>, <i>b</i>) 内严格单调递增。</p>",
+    "tips": "必要性直接用两次拉格朗日中值定理即可；充分性证明严格不等号 f'(c₁) < f'(c₂) 时，注意取极限会将 < 变为 ≤，因此在 (c₁, c₂) 中间插入两点 u < v 来保留严格小于号！",
+    "kp": "拉格朗日中值定理与凸函数弦斜率单调性"
+  },
+  {
+    "id": "M2025_22",
+    "subject": "math2",
+    "year": 2025,
+    "qNum": 22,
+    "qType": "solve",
+    "chapter": "m_ch6",
+    "title": "2025数二 第22题（解答题 12分）",
+    "stem": "已知矩阵 <i>A</i> = <span style='display:inline-block;vertical-align:middle'>⎛ &nbsp;4 &nbsp; 1 &nbsp;−2 ⎞<br>⎜ &nbsp;1 &nbsp; 1 &nbsp; 1 ⎟<br>⎝ −2 &nbsp; 1 &nbsp; <i>a</i> ⎠</span> 与 <i>B</i> = <span style='display:inline-block;vertical-align:middle'>⎛ <i>k</i> &nbsp; 0 &nbsp; 0 ⎞<br>⎜ 0 &nbsp; 6 &nbsp; 0 ⎟<br>⎝ 0 &nbsp; 0 &nbsp; 0 ⎠</span> 合同.<br>（1）求 <i>a</i> 的值及 <i>k</i> 的取值范围；<br>（2）若存在正交矩阵 <i>Q</i>，使得 <i>Q</i><sup>T</sup><i>AQ</i> = <i>B</i>，求 <i>k</i> 及 <i>Q</i>.",
+    "options": null,
+    "answer": "(1) a = 4, k > 0；(2) k = 3，Q = [[1/√3, -1/√2, 1/√6], [1/√3, 0, -2/√6], [1/√3, 1/√2, 1/√6]]",
+    "analysis": "<p>【解析】（1）因为 <i>A</i> 与 <i>B</i> 合同，所以 <i>r</i>(<i>A</i>) = <i>r</i>(<i>B</i>) ≤ 2，从而 |<i>A</i>| = 0。</p><p>计算行列式 |<i>A</i>| = 3(<i>a</i> − 4) = 0，解得 <i>a</i> = 4。</p><p>当 <i>a</i> = 4 时，由 |<i>λE</i> − <i>A</i>| = <i>λ</i>(<i>λ</i> − 3)(<i>λ</i> − 6) = 0 得 <i>A</i> 的特征值为 <i>λ</i><sub>1</sub> = 3，<i>λ</i><sub>2</sub> = 6，<i>λ</i><sub>3</sub> = 0。</p><p>由于 <i>A</i> 与 <i>B</i> 合同，正负惯性指数相同，<i>A</i> 有两个正特征值和一个零特征值，故 <i>k</i> &gt; 0。</p><p>（2）若存在正交矩阵 <i>Q</i> 使得 <i>Q</i><sup>T</sup><i>AQ</i> = <i>B</i>，则 <i>A</i> 与 <i>B</i> 相似，故 <i>k</i> = 3。</p><p>当 <i>λ</i><sub>1</sub> = 3 时，解 (3<i>E</i> − <i>A</i>)<i>x</i> = 0 得特征向量 <i>ξ</i><sub>1</sub> = (1, 1, 1)<sup>T</sup>；</p><p>当 <i>λ</i><sub>2</sub> = 6 时，解 (6<i>E</i> − <i>A</i>)<i>x</i> = 0 得特征向量 <i>ξ</i><sub>2</sub> = (−1, 0, 1)<sup>T</sup>；</p><p>当 <i>λ</i><sub>3</sub> = 0 时，解 (0<i>E</i> − <i>A</i>)<i>x</i> = 0 得特征向量 <i>ξ</i><sub>3</sub> = (1, −2, 1)<sup>T</sup>。</p><p>将 <i>ξ</i><sub>1</sub>, <i>ξ</i><sub>2</sub>, <i>ξ</i><sub>3</sub> 单位化，得正交矩阵 <i>Q</i> = <span style='display:inline-block;vertical-align:middle'>⎛ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√3</span></span> &nbsp; −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span> &nbsp; &nbsp;<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span> ⎞<br>⎜ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√3</span></span> &nbsp; &nbsp; 0 &nbsp; &nbsp; −<span class='frac'><span class='frac-num'>2</span><span class='frac-den'>√6</span></span> ⎟<br>⎝ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√3</span></span> &nbsp; &nbsp;<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span> &nbsp; &nbsp;<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span> ⎠</span>。</p>",
+    "tips": "注意区分“合同”与“正交相似”：合同只要求正负惯性指数相同（故第1问 k>0 即可），而正交矩阵 Q^T A Q = B 意味着相似对角化（故第2问 k 必须等于特征值 3），且 Q 的列向量顺序必须与 B 主对角元 3, 6, 0 一一对应。",
+    "kp": "实对称矩阵的合同与正交相似对角化"
+  },
+  {
+    "id": "M2024_01",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2024数二 第1题（选择题 5分）",
+    "stem": "函数 <i>f</i>(<i>x</i>) = |<i>x</i>|<sup><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1 − <i>x</i>)(<i>x</i> − 2)</span></span></sup> 的第一类间断点的个数为（　　）",
+    "options": [
+      "A. 3",
+      "B. 2",
+      "C. 1",
+      "D. 0"
+    ],
+    "answer": "C",
+    "analysis": "无定义点（间断点）为 <i>x</i> = 0，<i>x</i> = 1，<i>x</i> = 2。<br>对于 <i>x</i> = 0，lim<sub><i>x</i>→0</sub> |<i>x</i>|<sup><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>ln|<i>x</i>|</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>+∞</sup> = +∞，故 <i>x</i> = 0 是第二类间断点。<br>对于 <i>x</i> = 1，lim<sub><i>x</i>→1</sub> |<i>x</i>|<sup><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>lim<sub><i>x</i>→1</sub> <span class='frac'><span class='frac-num'>ln|<i>x</i>|</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>lim<sub><i>x</i>→1</sub> <span class='frac'><span class='frac-num'><i>x</i>−1</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e，故 <i>x</i> = 1 是可去间断点（第一类间断点）。<br>对于 <i>x</i> = 2，lim<sub><i>x</i>→2</sub> |<i>x</i>|<sup><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>lim<sub><i>x</i>→2</sub> <span class='frac'><span class='frac-num'>ln|<i>x</i>|</span><span class='frac-den'>(1−<i>x</i>)(<i>x</i>−2)</span></span></sup> = e<sup>+∞</sup> = +∞，故 <i>x</i> = 2 是第二类间断点。<br>综上，第一类间断点的个数是 1，选 C。",
+    "tips": "先找无定义点，再将幂指函数化为指数形式 e<sup><i>g</i>(<i>x</i>)ln|<i>x</i>|</sup> 分别考察指数部分的极限：<i>x</i>→1 时是 0/0 型未定式，用等价无穷小 ln <i>x</i> ~ <i>x</i>−1 即可秒出极限。",
+    "kp": "函数的间断点及其分类"
+  },
+  {
+    "id": "M2024_02",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2024数二 第2题（选择题 5分）",
+    "stem": "设函数 <i>y</i> = <i>f</i>(<i>x</i>) 由参数方程 <i>x</i> = <i>t</i><sup>3</sup> + 1，<i>y</i> = <i>t</i><sup>2</sup>e<sup><i>t</i></sup> (<i>t</i> &gt; 0) 确定，则 lim<sub><i>x</i>→+∞</sub> <i>x</i>[<i>f</i>(2 + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>x</i></span></span>) − <i>f</i>(2)] =（　　）",
+    "options": [
+      "A. <span class='frac'><span class='frac-num'>2e</span><span class='frac-den'>3</span></span>",
+      "B. <span class='frac'><span class='frac-num'>4e</span><span class='frac-den'>3</span></span>",
+      "C. 2e",
+      "D. 4e"
+    ],
+    "answer": "B",
+    "analysis": "当 <i>x</i> = 2 时，由 <i>t</i><sup>3</sup> + 1 = 2 解得 <i>t</i> = 1。<br>由导数定义知：lim<sub><i>x</i>→+∞</sub> <i>x</i>[<i>f</i>(2 + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>x</i></span></span>) − <i>f</i>(2)] = lim<sub><i>x</i>→+∞</sub> <span class='frac'><span class='frac-num'><i>f</i>(2 + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>x</i></span></span>) − <i>f</i>(2)</span><span class='frac-den'><span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>x</i></span></span></span></span> · 2 = 2<i>f</i>′<sub>+</sub>(2) = 2 · <span class='frac'><span class='frac-num'>d<i>y</i> / d<i>t</i></span><span class='frac-den'>d<i>x</i> / d<i>t</i></span></span>|<sub><i>t</i>=1</sub> = 2 · <span class='frac'><span class='frac-num'>(2<i>t</i> + <i>t</i><sup>2</sup>)e<sup><i>t</i></sup></span><span class='frac-den'>3<i>t</i><sup>2</sup></span></span>|<sub><i>t</i>=1</sub>（或参数方程 <i>y</i>′(<i>t</i>) = 2<i>t</i>e<sup><i>t</i></sup> 时为 2 · <span class='frac'><span class='frac-num'>2<i>t</i>e<sup><i>t</i></sup></span><span class='frac-den'>3<i>t</i><sup>2</sup></span></span>|<sub><i>t</i>=1</sub>）= <span class='frac'><span class='frac-num'>4e</span><span class='frac-den'>3</span></span>。选 B。",
+    "tips": "先通过导数定义将极限转化为 2<i>f</i>′(2)，再根据 <i>x</i> = 2 反解出对应的参数值 <i>t</i> = 1，切忌把 <i>x</i> = 2 直接当成 <i>t</i> = 2 代入参数方程求导公式。",
+    "kp": "导数定义与参数方程求导"
+  },
+  {
+    "id": "M2024_03",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2024数二 第3题（选择题 5分）",
+    "stem": "已知函数 <i>f</i>(<i>x</i>) = ∫<sub>0</sub><sup>sin <i>x</i></sup> sin <i>t</i><sup>3</sup> d<i>t</i>，<i>g</i>(<i>x</i>) = ∫<sub>0</sub><sup><i>x</i></sup> <i>f</i>(<i>t</i>) d<i>t</i>，则（　　）",
+    "options": [
+      "A. <i>f</i>(<i>x</i>) 是奇函数，<i>g</i>(<i>x</i>) 是奇函数",
+      "B. <i>f</i>(<i>x</i>) 是奇函数，<i>g</i>(<i>x</i>) 是偶函数",
+      "C. <i>f</i>(<i>x</i>) 是偶函数，<i>g</i>(<i>x</i>) 是偶函数",
+      "D. <i>f</i>(<i>x</i>) 是偶函数，<i>g</i>(<i>x</i>) 是奇函数"
+    ],
+    "answer": "D",
+    "analysis": "<i>f</i>(−<i>x</i>) = ∫<sub>0</sub><sup>sin(−<i>x</i>)</sup> sin <i>t</i><sup>3</sup> d<i>t</i> = ∫<sub>0</sub><sup>−sin <i>x</i></sup> sin <i>t</i><sup>3</sup> d<i>t</i>。令 <i>t</i> = −<i>u</i>，则<br><i>f</i>(−<i>x</i>) = ∫<sub>0</sub><sup>sin <i>x</i></sup> sin(−<i>u</i>)<sup>3</sup>(−d<i>u</i>) = ∫<sub>0</sub><sup>sin <i>x</i></sup> sin <i>u</i><sup>3</sup> d<i>u</i> = <i>f</i>(<i>x</i>)。<br>于是 <i>f</i>(<i>x</i>) 为偶函数，此时 <i>g</i>(<i>x</i>) = ∫<sub>0</sub><sup><i>x</i></sup> <i>f</i>(<i>t</i>) d<i>t</i> 为奇函数。<br>注：<i>f</i>(<i>x</i>) = ∫<sub>0</sub><sup>sin <i>x</i></sup> sin <i>t</i><sup>3</sup> d<i>t</i> 可以看作由 <i>y</i>(<i>u</i>) = ∫<sub>0</sub><sup><i>u</i></sup> sin <i>t</i><sup>3</sup> d<i>t</i>（偶函数）和 <i>u</i>(<i>x</i>) = sin <i>x</i>（奇函数）复合而成，复合后 <i>f</i>(<i>x</i>) 是偶函数。选 D。",
+    "tips": "牢记结论：奇函数从 0 到 <i>u</i> 的变上限积分是偶函数，偶函数从 0 到 <i>x</i> 的变上限积分是奇函数；复合函数奇偶性满足“内偶则偶，内奇同外”。",
+    "kp": "变限积分函数的奇偶性"
+  },
+  {
+    "id": "M2024_04",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2024数二 第4题（选择题 5分）",
+    "stem": "已知数列 {<i>a</i><sub><i>n</i></sub>} 满足 <i>a</i><sub><i>n</i></sub> ≠ 0 (<i>n</i> = 1, 2, …)，若 {<i>a</i><sub><i>n</i></sub>} 发散，则（　　）",
+    "options": [
+      "A. {<i>a</i><sub><i>n</i></sub> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sub><i>n</i></sub></span></span>} 发散",
+      "B. {<i>a</i><sub><i>n</i></sub> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sub><i>n</i></sub></span></span>} 发散",
+      "C. {e<sup><i>a</i><sub><i>n</i></sub></sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e<sup><i>a</i><sub><i>n</i></sub></sup></span></span>} 发散",
+      "D. {e<sup><i>a</i><sub><i>n</i></sub></sup> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e<sup><i>a</i><sub><i>n</i></sub></sup></span></span>} 发散"
+    ],
+    "answer": "D",
+    "analysis": "选项 A：取 <i>a</i><sub><i>n</i></sub> = 2, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, 2, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, …，则 {<i>a</i><sub><i>n</i></sub> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sub><i>n</i></sub></span></span>} 收敛于 2 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。<br>选项 B：取 <i>a</i><sub><i>n</i></sub> = 1, −1, 1, −1, …，则 {<i>a</i><sub><i>n</i></sub> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sub><i>n</i></sub></span></span>} 收敛于 0。<br>选项 C：取 <i>a</i><sub><i>n</i></sub> = 1, −1, 1, −1, …，则 {e<sup><i>a</i><sub><i>n</i></sub></sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e<sup><i>a</i><sub><i>n</i></sub></sup></span></span>} 收敛于 e + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>。<br>选项 D：函数 <i>φ</i>(<i>x</i>) = e<sup><i>x</i></sup> − e<sup>−<i>x</i></sup> 在 (−∞, +∞) 上严格单调递增且连续，反函数也连续，若 {e<sup><i>a</i><sub><i>n</i></sub></sup> − e<sup>−<i>a</i><sub><i>n</i></sub></sup>} 收敛，则 {<i>a</i><sub><i>n</i></sub>} 必收敛，与题设矛盾，故必发散。选 D。",
+    "tips": "对于数列发散问题，优先利用周期交替摆动数列（如 1, −1, 1, −1 或 2, 1/2, 2, 1/2）举反例排除；本质上是因为 D 选项对应的函数 <i>y</i> = e<sup><i>x</i></sup> − e<sup>−<i>x</i></sup> 是全局严格单调的双射。",
+    "kp": "数列极限与敛散性判定"
+  },
+  {
+    "id": "M2024_05",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2024数二 第5题（选择题 5分）",
+    "stem": "已知函数 <i>f</i>(<i>x</i>, <i>y</i>) 在 <i>xy</i> ≠ 0 时为 (<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>) sin <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>xy</i></span></span>，在 <i>xy</i> = 0 时为 0，则在点 (0, 0) 处（　　）",
+    "options": [
+      "A. <i>f</i>(<i>x</i>, <i>y</i>) 不可微",
+      "B. <i>f</i>(<i>x</i>, <i>y</i>) 可微，且 <span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>x</i></span></span>，<span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>y</i></span></span> 均连续",
+      "C. <i>f</i>(<i>x</i>, <i>y</i>) 可微，但 <span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>x</i></span></span>，<span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>y</i></span></span> 均不连续",
+      "D. <i>f</i>(<i>x</i>, <i>y</i>) 可微，<span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>x</i></span></span> 连续但 <span class='frac'><span class='frac-num'>∂<i>f</i></span><span class='frac-den'>∂<i>y</i></span></span> 不连续"
+    ],
+    "answer": "C",
+    "analysis": "<i>f</i>′<sub><i>x</i></sub>(0, 0) = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>, 0) − <i>f</i>(0, 0)</span><span class='frac-den'><i>x</i></span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>0 − 0</span><span class='frac-den'><i>x</i></span></span> = 0，同理 <i>f</i>′<sub><i>y</i></sub>(0, 0) = 0。<br>此时 lim<sub>(<i>x</i>,<i>y</i>)→(0,0)</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>, <i>y</i>) − <i>f</i>(0, 0) − <i>f</i>′<sub><i>x</i></sub>(0, 0)<i>x</i> − <i>f</i>′<sub><i>y</i></sub>(0, 0)<i>y</i></span><span class='frac-den'>√(<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>)</span></span> = lim<sub>(<i>x</i>,<i>y</i>)→(0,0)</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>√(<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>)</span></span>。<br>当 <i>xy</i> ≠ 0 时，lim<sub>(<i>x</i>,<i>y</i>)→(0,0)</sub> √(<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>) sin <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>xy</i></span></span> = 0；当 <i>xy</i> = 0 时该式恒为 0。于是 <i>f</i>(<i>x</i>, <i>y</i>) 在 (0, 0) 处可微。<br>而当 <i>xy</i> ≠ 0 时，<span class='frac'><span class='frac-num'>∂<i>f</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> = 2<i>x</i> sin <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>xy</i></span></span> − <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup> + <i>y</i><sup>2</sup></span><span class='frac-den'><i>x</i><sup>2</sup><i>y</i></span></span> cos <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>xy</i></span></span>，注意到 lim<sub>(<i>x</i>,<i>y</i>)→(0,0), <i>xy</i>≠0</sub> <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> 不存在，从而 <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> 在 (0, 0) 处不连续，由对称性知 <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>y</i></span></span> 也不连续。选 C。",
+    "tips": "这是多元微分学经典题型：形如 (<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>)<sup><i>α</i></sup> sin(1/<i>xy</i>) 在原点处，当 <i>α</i> &gt; 1/2 时可微，但因为 1/<i>xy</i> 求导会产生高阶分母 1/(<i>x</i><sup>2</sup><i>y</i>)，偏导数在原点通常不连续。",
+    "kp": "多元函数的偏导数、可微性与偏导数连续性"
+  },
+  {
+    "id": "M2024_06",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2024数二 第6题（选择题 5分）",
+    "stem": "设 <i>f</i>(<i>x</i>, <i>y</i>) 是连续函数，则累次积分 ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> d<i>x</i> ∫<sub>sin <i>x</i></sub><sup>1</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>y</i> =（　　）",
+    "options": [
+      "A. ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span></sub><sup>1</sup> d<i>y</i> ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup>arcsin <i>y</i></sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>",
+      "B. ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span></sub><sup>1</sup> d<i>y</i> ∫<sub>arcsin <i>y</i></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>",
+      "C. ∫<sub>0</sub><sup>1</sup> d<i>y</i> ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup>arcsin <i>y</i></sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>",
+      "D. ∫<sub>0</sub><sup>1</sup> d<i>y</i> ∫<sub>arcsin <i>y</i></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>"
+    ],
+    "answer": "A",
+    "analysis": "积分区域 <i>D</i> 由 <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span> ≤ <i>x</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>，sin <i>x</i> ≤ <i>y</i> ≤ 1 确定。<br>画出积分区域 <i>D</i> 可知，<i>y</i> 的范围是 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ≤ <i>y</i> ≤ 1，左边界为直线 <i>x</i> = <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span>，右边界为曲线 <i>y</i> = sin <i>x</i> 即 <i>x</i> = arcsin <i>y</i>。<br>因此交换积分次序得：∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> d<i>x</i> ∫<sub>sin <i>x</i></sub><sup>1</sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>y</i> = ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span></sub><sup>1</sup> d<i>y</i> ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup>arcsin <i>y</i></sup> <i>f</i>(<i>x</i>, <i>y</i>) d<i>x</i>。选 A。",
+    "tips": "交换积分次序三步法：根据原上下限列出不等式、画出积分区域草图、按“后积先定限，限内画条线，先交写下限，后交写上限”重新定限。",
+    "kp": "二重积分交换积分次序"
+  },
+  {
+    "id": "M2024_07",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2024数二 第7题（选择题 5分）",
+    "stem": "设非负函数 <i>f</i>(<i>x</i>) 在 [0, +∞) 上连续，给出以下三个命题：<br>① 若 ∫<sub>0</sub><sup>+∞</sup> <i>f</i><sup>2</sup>(<i>x</i>) d<i>x</i> 收敛，则 ∫<sub>0</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> 收敛；<br>② 若存在 <i>p</i> &gt; 1，使得 lim<sub><i>x</i>→+∞</sub> <i>x</i><sup><i>p</i></sup><i>f</i>(<i>x</i>) 存在，则 ∫<sub>0</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> 收敛；<br>③ 若 ∫<sub>0</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> 收敛，则存在 <i>p</i> &gt; 1，使得 lim<sub><i>x</i>→+∞</sub> <i>x</i><sup><i>p</i></sup><i>f</i>(<i>x</i>) 存在。<br>其中真命题的个数为（　　）",
+    "options": [
+      "A. 0",
+      "B. 1",
+      "C. 2",
+      "D. 3"
+    ],
+    "answer": "B",
+    "analysis": "① 取 <i>f</i>(<i>x</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> + 1</span></span>，∫<sub>0</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(<i>x</i> + 1)<sup>2</sup></span></span> d<i>x</i> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i></span></span>|<sub>0</sub><sup>+∞</sup> = 1，收敛；而 ∫<sub>0</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> + 1</span></span> d<i>x</i> = ln(<i>x</i> + 1)|<sub>0</sub><sup>+∞</sup> = +∞，发散，故①错误。<br>② lim<sub><i>x</i>→+∞</sub> <i>x</i><sup><i>p</i></sup><i>f</i>(<i>x</i>) = lim<sub><i>x</i>→+∞</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'>1 / <i>x</i><sup><i>p</i></sup></span></span> = <i>A</i>。当 <i>A</i> ≠ 0 时 <i>f</i>(<i>x</i>) 与 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup><i>p</i></sup></span></span> 同阶；当 <i>A</i> = 0 时 <i>f</i>(<i>x</i>) 是比 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup><i>p</i></sup></span></span> 高阶的无穷小。注意到 ∫<sub>0</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> = ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> + ∫<sub>1</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i>，若 <i>p</i> &gt; 1，则 ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup><i>p</i></sup></span></span> d<i>x</i> 收敛，不论 <i>A</i> ≠ 0 还是 <i>A</i> = 0，都有 ∫<sub>1</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> 收敛，进而 ∫<sub>0</sub><sup>+∞</sup> <i>f</i>(<i>x</i>) d<i>x</i> 收敛，故②正确。<br>③ 反常积分极限形式的比较判别法只是一种充分判别法而非必要条件（如取 <i>f</i>(<i>x</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(<i>x</i> + 2) ln<sup>2</sup>(<i>x</i> + 2)</span></span>），故③错误。<br>真命题个数为 1，选 B。",
+    "tips": "无穷区间反常积分比较判别法：在 +∞ 处高于 1 阶（<i>p</i> &gt; 1）即收敛，但它只是充分不必要条件（经典反例是 1/(<i>x</i> ln<sup>2</sup><i>x</i>) 收敛但比任意 <i>p</i> &gt; 1 的 1/<i>x</i><sup><i>p</i></sup> 阶数都低）。",
+    "kp": "反常积分的敛散性判别"
+  },
+  {
+    "id": "M2024_08",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2024数二 第8题（选择题 5分）",
+    "stem": "设矩阵 <i>P</i> = [1, 0, 0; 0, 1, 0; 1, 0, 1]，<i>A</i> 为三阶矩阵，若 <i>P</i><sup>T</sup><i>AP</i><sup>2</sup> = [<i>a</i> + 2<i>c</i>, 0, <i>c</i>; 0, <i>b</i>, 0; 2<i>c</i>, 0, <i>c</i>]，则 <i>A</i> =（　　）",
+    "options": [
+      "A. [<i>a</i>, 0, −<i>c</i>; 0, <i>b</i>, 0; 0, 0, <i>c</i>]",
+      "B. [<i>a</i>, 0, <i>c</i>; 0, <i>b</i>, 0; 0, 0, <i>c</i>]",
+      "C. [<i>a</i>, 0, 0; 0, <i>b</i>, 0; 0, 0, <i>c</i>]",
+      "D. [<i>a</i>, 0, 0; 0, <i>b</i>, 0; −2<i>c</i>, 0, <i>c</i>]"
+    ],
+    "answer": "C",
+    "analysis": "记 <i>P</i><sup>T</sup><i>AP</i><sup>2</sup> = <i>B</i>，且 <i>P</i> = <i>E</i><sub>31</sub>(1)（将单位矩阵第 1 行的 1 倍加到第 3 行所得初等矩阵），故<br><i>A</i> = (<i>P</i><sup>T</sup>)<sup>−1</sup><i>B</i>(<i>P</i><sup>2</sup>)<sup>−1</sup> = [<i>E</i><sub>31</sub><sup>T</sup>(1)]<sup>−1</sup><i>B</i>[<i>E</i><sub>31</sub><sup>2</sup>(1)]<sup>−1</sup> = <i>E</i><sub>13</sub>(−1)<i>BE</i><sub>31</sub>(−2)。<br>即对矩阵 <i>B</i> 先将第 3 行的 (−1) 倍加到第 1 行，再将第 3 列的 (−2) 倍加到第 1 列：<br>先做行变换得 [<i>a</i>, 0, 0; 0, <i>b</i>, 0; 2<i>c</i>, 0, <i>c</i>]，再做列变换得 [<i>a</i>, 0, 0; 0, <i>b</i>, 0; 0, 0, <i>c</i>]。选 C。",
+    "tips": "看到形如单位矩阵只多一个非零元素的矩阵 <i>P</i>，立即识别为倍加初等矩阵 <i>E</i><sub><i>ij</i></sub>(<i>k</i>)，利用“左行右列”及 <i>E</i><sub><i>ij</i></sub><sup>−1</sup>(<i>k</i>) = <i>E</i><sub><i>ij</i></sub>(−<i>k</i>) 直接做初等变换，避免繁琐的矩阵乘法。",
+    "kp": "初等矩阵与初等变换"
+  },
+  {
+    "id": "M2024_09",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2024数二 第9题（选择题 5分）",
+    "stem": "设 <i>A</i> 为 4 阶矩阵，<i>A</i><sup>*</sup> 为 <i>A</i> 的伴随矩阵，若 <i>A</i>(<i>A</i> − <i>A</i><sup>*</sup>) = <i>O</i> 且 <i>A</i> ≠ <i>A</i><sup>*</sup>，则 <i>r</i>(<i>A</i>) 的可能取值为（　　）",
+    "options": [
+      "A. 1 或 3",
+      "B. 2 或 3",
+      "C. 1 或 2 或 3",
+      "D. 1 或 2"
+    ],
+    "answer": "D",
+    "analysis": "由题意可知 <i>A</i>(<i>A</i> − <i>A</i><sup>*</sup>) = <i>O</i>，故 <i>r</i>(<i>A</i>) + <i>r</i>(<i>A</i> − <i>A</i><sup>*</sup>) ≤ 4。<br>又 <i>A</i> ≠ <i>A</i><sup>*</sup>，故 <i>A</i> − <i>A</i><sup>*</sup> ≠ <i>O</i>，即 <i>r</i>(<i>A</i> − <i>A</i><sup>*</sup>) ≥ 1，因此 <i>r</i>(<i>A</i>) ≤ 3，从而 |<i>A</i>| = 0。<br>又 <i>A</i>(<i>A</i> − <i>A</i><sup>*</sup>) = <i>A</i><sup>2</sup> − <i>AA</i><sup>*</sup> = <i>A</i><sup>2</sup> − |<i>A</i>|<i>E</i> = <i>A</i><sup>2</sup> = <i>O</i>，则 <i>r</i>(<i>A</i>) + <i>r</i>(<i>A</i>) ≤ 4，于是 <i>r</i>(<i>A</i>) ≤ 2。<br>此时 <i>r</i>(<i>A</i><sup>*</sup>) = 0 ⇒ <i>A</i><sup>*</sup> = <i>O</i>，又 <i>A</i> ≠ <i>A</i><sup>*</sup> ⇒ <i>A</i> ≠ <i>O</i> ⇒ <i>r</i>(<i>A</i>) ≥ 1，故 <i>r</i>(<i>A</i>) = 1 或 2。选 D。",
+    "tips": "核心突破口：先由乘积为零矩阵及 <i>A</i> ≠ <i>A</i><sup>*</sup> 推出 <i>r</i>(<i>A</i>) ≤ 3 即 |<i>A</i>| = 0，再代入伴随矩阵核心恒等式 <i>AA</i><sup>*</sup> = |<i>A</i>|<i>E</i> = <i>O</i> 化简得 <i>A</i><sup>2</sup> = <i>O</i>，立刻锁死 <i>r</i>(<i>A</i>) ≤ 2。",
+    "kp": "伴随矩阵的性质与矩阵的秩"
+  },
+  {
+    "id": "M2024_10",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2024数二 第10题（选择题 5分）",
+    "stem": "设 <i>A</i>，<i>B</i> 为 2 阶矩阵，且 <i>AB</i> = <i>BA</i>，则“<i>A</i> 有两个不相等的特征值”是“<i>B</i> 可相似对角化”的（　　）",
+    "options": [
+      "A. 充分必要条件",
+      "B. 充分不必要条件",
+      "C. 必要不充分条件",
+      "D. 既不充分也不必要条件"
+    ],
+    "answer": "B",
+    "analysis": "充分性：2 阶矩阵 <i>A</i> 有两个不相等的特征值，故 <i>A</i> 必可相似对角化，且每个特征值对应的线性无关特征向量唯一。<br>又 <i>AB</i> = <i>BA</i>（即 <i>ABα</i> = <i>BAα</i> = <i>λBα</i>），且 <i>A</i> 有 2 个不同特征值，则 <i>A</i> 的特征向量都是 <i>B</i> 的特征向量。<br>又 <i>A</i> 有 2 个线性无关特征向量，故 <i>B</i> 也有 2 个线性无关特征向量，于是 <i>B</i> 可相似对角化，充分性成立。<br>必要性：若 <i>B</i> 可相似对角化，不妨取 <i>B</i> = <i>E</i>，<i>A</i> = <i>E</i>，则满足 <i>AB</i> = <i>BA</i>，但 <i>A</i> 的特征值都是 1（相等），必要性不成立。<br>故选 B。",
+    "tips": "重要二级结论：若 <i>n</i> 阶矩阵 <i>A</i> 有 <i>n</i> 个互异特征值且 <i>AB</i> = <i>BA</i>，则 <i>A</i> 的特征向量必是 <i>B</i> 的特征向量，从而 <i>B</i> 必可与 <i>A</i> 同时相似对角化。",
+    "kp": "矩阵相似对角化与可交换矩阵的性质"
+  },
+  {
+    "id": "M2024_11",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 11,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2024数二 第11题（填空题 5分）",
+    "stem": "曲线 <i>y</i><sup>2</sup> = <i>x</i> 在点 (0, 0) 处的曲率圆方程为 ________。",
+    "options": null,
+    "answer": "(x - 1/2)² + y² = 1/4",
+    "analysis": "将 <i>y</i><sup>2</sup> = <i>x</i> 写作 <i>x</i> = <i>y</i><sup>2</sup>（以 <i>y</i> 为自变量），因为 <i>x</i>′<sub><i>y</i></sub> = 2<i>y</i>，<i>x</i>″<sub><i>y</i></sub> = 2，所以曲线在点 (0, 0) 处的曲率半径为：<br><i>R</i> = <span class='frac'><span class='frac-num'>[1 + (<i>x</i>′<sub><i>y</i></sub>)<sup>2</sup>]<sup>3/2</sup></span><span class='frac-den'>|<i>x</i>″<sub><i>y</i></sub>|</span></span>|<sub>(0,0)</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。<br>注意到曲线 <i>x</i> = <i>y</i><sup>2</sup> 在 (0, 0) 处的法线是 <i>x</i> 轴且开口向右（凹向 <i>x</i> 轴正半轴），圆心为 (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>, 0)，故曲率圆方程为 (<i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>)<sup>2</sup> + <i>y</i><sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>。",
+    "tips": "在 (0, 0) 处对 <i>x</i> 求导会出现分母为 0（切线垂直于 <i>x</i> 轴），此时只需将 <i>x</i> 看作 <i>y</i> 的函数 <i>x</i> = <i>y</i><sup>2</sup> 来求曲率半径，结合图形开口方向即可秒定圆心。",
+    "kp": "曲率、曲率半径与曲率圆方程"
+  },
+  {
+    "id": "M2024_12",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 12,
+    "qType": "fill",
+    "chapter": "m_ch5",
+    "title": "2024数二 第12题（填空题 5分）",
+    "stem": "函数 <i>f</i>(<i>x</i>, <i>y</i>) = 2<i>x</i><sup>3</sup> − 9<i>x</i><sup>2</sup> + 12<i>x</i> − 6<i>y</i><sup>4</sup> + 24<i>y</i> 的极值点为 ________。",
+    "options": null,
+    "answer": "(1, 1)",
+    "analysis": "令一阶偏导数为零：<br><i>f</i>′<sub><i>x</i></sub> = 6<i>x</i><sup>2</sup> − 18<i>x</i> + 12 = 0，<i>f</i>′<sub><i>y</i></sub> = −24<i>y</i><sup>3</sup> + 24 = 0，<br>解得驻点为 (1, 1) 和 (2, 1)。<br>又二阶偏导数 <i>A</i> = <i>f</i>″<sub><i>xx</i></sub> = 12<i>x</i> − 18，<i>B</i> = <i>f</i>″<sub><i>xy</i></sub> = 0，<i>C</i> = <i>f</i>″<sub><i>yy</i></sub> = −72<i>y</i><sup>2</sup>。<br>代入点 (1, 1) 得 <i>AC</i> − <i>B</i><sup>2</sup> = (−6)×(−72) − 0 = 432 &gt; 0，且 <i>A</i> = −6 &lt; 0，故 (1, 1) 是极大值点；<br>代入点 (2, 1) 得 <i>AC</i> − <i>B</i><sup>2</sup> = 6×(−72) − 0 = −432 &lt; 0，故 (2, 1) 不是极值点。<br>因此极值点为 (1, 1)。",
+    "tips": "注意审题区分“极值点”与“极值”：极值点必须写成坐标形式 (1, 1)；解出驻点后务必用 <i>AC</i> − <i>B</i><sup>2</sup> &gt; 0 检验以剔除鞍点。",
+    "kp": "二元函数的无条件极值"
+  },
+  {
+    "id": "M2024_13",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 13,
+    "qType": "fill",
+    "chapter": "m_ch4",
+    "title": "2024数二 第13题（填空题 5分）",
+    "stem": "微分方程 <i>y</i>′ = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(<i>x</i> + <i>y</i>)<sup>2</sup></span></span> 满足条件 <i>y</i>(1) = 0 的特解为 ________。",
+    "options": null,
+    "answer": "arctan(x + y) = y + π/4",
+    "analysis": "令 <i>u</i> = <i>x</i> + <i>y</i>，则 <i>y</i> = <i>u</i> − <i>x</i>，<i>y</i>′ = <span class='frac'><span class='frac-num'>d<i>u</i></span><span class='frac-den'>d<i>x</i></span></span> − 1。代入原方程得：<br><span class='frac'><span class='frac-num'>d<i>u</i></span><span class='frac-den'>d<i>x</i></span></span> − 1 = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>u</i><sup>2</sup></span></span>，于是 <span class='frac'><span class='frac-num'>d<i>u</i></span><span class='frac-den'>d<i>x</i></span></span> = <span class='frac'><span class='frac-num'>1 + <i>u</i><sup>2</sup></span><span class='frac-den'><i>u</i><sup>2</sup></span></span>。<br>分离变量得 <span class='frac'><span class='frac-num'><i>u</i><sup>2</sup></span><span class='frac-den'>1 + <i>u</i><sup>2</sup></span></span> d<i>u</i> = d<i>x</i>，两边积分得 ∫ (1 − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>u</i><sup>2</sup></span></span>) d<i>u</i> = ∫ d<i>x</i>，于是 <i>u</i> − arctan <i>u</i> = <i>x</i> + <i>C</i>。<br>回代 <i>u</i> = <i>x</i> + <i>y</i>，得 <i>x</i> + <i>y</i> − arctan(<i>x</i> + <i>y</i>) = <i>x</i> + <i>C</i>，即 <i>y</i> − arctan(<i>x</i> + <i>y</i>) = <i>C</i>。<br>代入 <i>x</i> = 1，<i>y</i> = 0，得 <i>C</i> = −<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>，于是特解为 arctan(<i>x</i> + <i>y</i>) = <i>y</i> + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>。",
+    "tips": "遇到形如 <i>y</i>′ = <i>f</i>(<i>ax</i> + <i>by</i> + <i>c</i>) 的一阶微分方程，固定套路是令 <i>u</i> = <i>ax</i> + <i>by</i> + <i>c</i> 化为可分离变量方程求解。",
+    "kp": "可化为变量分离方程的一阶微分方程"
+  },
+  {
+    "id": "M2024_14",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 14,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2024数二 第14题（填空题 5分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) = (e<sup><i>x</i></sup> + 1)<i>x</i><sup>2</sup>，则 <i>f</i><sup>(5)</sup>(1) = ________。",
+    "options": null,
+    "answer": "31e",
+    "analysis": "解法 1（莱布尼茨公式）：<br>[(e<sup><i>x</i></sup> + 1)<i>x</i><sup>2</sup>]<sup>(5)</sup> = (e<sup><i>x</i></sup> + 1)<sup>(5)</sup><i>x</i><sup>2</sup> + 5 · (e<sup><i>x</i></sup> + 1)<sup>(4)</sup> · (<i>x</i><sup>2</sup>)′ + C<sub>5</sub><sup>2</sup>(e<sup><i>x</i></sup> + 1)<sup>(3)</sup> · (<i>x</i><sup>2</sup>)″<br>= e<sup><i>x</i></sup> · <i>x</i><sup>2</sup> + 5 · e<sup><i>x</i></sup> · 2<i>x</i> + 10 · e<sup><i>x</i></sup> · 2。<br>代入 <i>x</i> = 1，得 <i>f</i><sup>(5)</sup>(1) = e + 10e + 20e = 31e。<br>解法 2（泰勒展开）：在 <i>x</i> = 1 处将 <i>f</i>(<i>x</i>) 展开为 (<i>x</i> − 1) 的幂级数，(<i>x</i> − 1)<sup>5</sup> 的系数为 <span class='frac'><span class='frac-num'>31e</span><span class='frac-den'>120</span></span> = <span class='frac'><span class='frac-num'><i>f</i><sup>(5)</sup>(1)</span><span class='frac-den'>5!</span></span>，故 <i>f</i><sup>(5)</sup>(1) = 31e。",
+    "tips": "多项式（尤其是低次幂如 <i>x</i><sup>2</sup>）与指数、三角函数相乘求高阶导数时，直接用莱布尼茨公式展开，超过 2 阶的多项式导数项全部为 0，仅需算前 3 项即可。",
+    "kp": "高阶导数与莱布尼茨公式"
+  },
+  {
+    "id": "M2024_15",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 15,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2024数二 第15题（填空题 5分）",
+    "stem": "已知函数 <i>f</i>(<i>t</i>) = <i>t</i> + <i>k</i> sin π<i>t</i> 在区间 [0, 3] 上的平均值为 <span class='frac'><span class='frac-num'>5</span><span class='frac-den'>2</span></span>，则 <i>k</i> = ________。",
+    "options": null,
+    "answer": "3π/2",
+    "analysis": "由函数在区间 [0, 3] 上的平均值定义得：<br><span class='frac'><span class='frac-num'>∫<sub>0</sub><sup>3</sup> (<i>t</i> + <i>k</i> sin π<i>t</i>) d<i>t</i></span><span class='frac-den'>3</span></span> = <span class='frac'><span class='frac-num'>5</span><span class='frac-den'>2</span></span>，则 ∫<sub>0</sub><sup>3</sup> (<i>t</i> + <i>k</i> sin π<i>t</i>) d<i>t</i> = <span class='frac'><span class='frac-num'>15</span><span class='frac-den'>2</span></span>。<br>计算积分得：[<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>t</i><sup>2</sup> − <span class='frac'><span class='frac-num'><i>k</i></span><span class='frac-den'>π</span></span> cos π<i>t</i>]|<sub>0</sub><sup>3</sup> = <span class='frac'><span class='frac-num'>9</span><span class='frac-den'>2</span></span> − <span class='frac'><span class='frac-num'><i>k</i></span><span class='frac-den'>π</span></span>(cos 3π − cos 0) = <span class='frac'><span class='frac-num'>9</span><span class='frac-den'>2</span></span> − <span class='frac'><span class='frac-num'><i>k</i></span><span class='frac-den'>π</span></span>(−1 − 1) = <span class='frac'><span class='frac-num'>9</span><span class='frac-den'>2</span></span> + <span class='frac'><span class='frac-num'>2<i>k</i></span><span class='frac-den'>π</span></span> = <span class='frac'><span class='frac-num'>15</span><span class='frac-den'>2</span></span>，<br>解得 <span class='frac'><span class='frac-num'>2<i>k</i></span><span class='frac-den'>π</span></span> = 3，故 <i>k</i> = <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span>π。",
+    "tips": "直接套用连续函数在 [<i>a</i>, <i>b</i>] 上的平均值公式 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>b</i> − <i>a</i></span></span> ∫<sub><i>a</i></sub><sup><i>b</i></sup> <i>f</i>(<i>t</i>) d<i>t</i> 即可，注意三角函数积分后的正负号及 cos 3π = −1。",
+    "kp": "定积分的计算与函数的平均值"
+  },
+  {
+    "id": "M2024_16",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 16,
+    "qType": "fill",
+    "chapter": "m_ch6",
+    "title": "2024数二 第16题（填空题 5分）",
+    "stem": "已知向量 <i>α</i><sub>1</sub> = (<i>a</i>, 1, −1, 1)<sup>T</sup>，<i>α</i><sub>2</sub> = (1, 1, <i>b</i>, <i>a</i>)<sup>T</sup>，<i>α</i><sub>3</sub> = (1, <i>a</i>, −1, 1)<sup>T</sup> 线性相关，且其中任意两个向量均线性无关，则 <i>ab</i> = ________。",
+    "options": null,
+    "answer": "-4",
+    "analysis": "对矩阵 (<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>) 作初等行变换：<br>[<i>a</i>, 1, 1; 1, 1, <i>a</i>; −1, <i>b</i>, −1; 1, <i>a</i>, 1] → [1, 1, <i>a</i>; 0, 1 − <i>a</i>, 1 − <i>a</i><sup>2</sup>; 0, <i>b</i> + 1, <i>a</i> − 1; 0, <i>a</i> − 1, 1 − <i>a</i>] → [1, 1, <i>a</i>; 0, 1 − <i>a</i>, 1 − <i>a</i><sup>2</sup>; 0, <i>b</i> + 1, <i>a</i> − 1; 0, 0, 2 − <i>a</i><sup>2</sup> − <i>a</i>]。<br>因为 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub> 线性相关，且其中任意两个向量均线性无关，故 <i>r</i>(<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>) = 2。<br>① 当 <i>a</i> = 1 时，<i>α</i><sub>1</sub> = <i>α</i><sub>3</sub>，两者线性相关，不满足题意。<br>② 当 <i>a</i> ≠ 1 时，进一步行变换化为：<br>[1, 1, <i>a</i>; 0, 1, 1 + <i>a</i>; 0, 0, −<i>b</i>(<i>a</i> + 1) − 2; 0, 0, <i>a</i> + 2]。<br>要使秩为 2，则 <i>a</i> + 2 = 0 且 −<i>b</i>(<i>a</i> + 1) − 2 = 0，解得 <i>a</i> = −2，<i>b</i> = 2，则 <i>ab</i> = −4。",
+    "tips": "“三个向量线性相关，且任意两个向量线性无关”等价于向量组的秩为 2 且任意两列不成比例；观察发现 <i>α</i><sub>1</sub> 和 <i>α</i><sub>3</sub> 的第 3、4 分量相同，直接验证 <i>a</i> = 1 会导致 <i>α</i><sub>1</sub> = <i>α</i><sub>3</sub> 从而排除 <i>a</i> = 1。",
+    "kp": "向量组的线性相关性与矩阵的秩"
+  },
+  {
+    "id": "M2024_17",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 17,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2024数二 第17题（解答题 10分）",
+    "stem": "设平面有界区域 <i>D</i> 位于第一象限，由曲线 <i>xy</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>，<i>xy</i> = 3 与直线 <i>y</i> = 3<i>x</i>，<i>y</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span><i>x</i> 围成，计算二重积分 ∬<sub><i>D</i></sub> (1 + <i>x</i> − <i>y</i>) d<i>x</i>d<i>y</i>。",
+    "options": null,
+    "answer": "8ln3 / 3",
+    "analysis": "解：由于积分区域 <i>D</i> 的边界方程关于 <i>x</i>，<i>y</i> 对称（即关于直线 <i>y</i> = <i>x</i> 对称），因此 ∬<sub><i>D</i></sub> <i>x</i> d<i>x</i>d<i>y</i> = ∬<sub><i>D</i></sub> <i>y</i> d<i>x</i>d<i>y</i>，即 ∬<sub><i>D</i></sub> (<i>x</i> − <i>y</i>) d<i>x</i>d<i>y</i> = 0。<br>将区域 <i>D</i> 分为 <i>D</i><sub>1</sub> = {(<i>x</i>, <i>y</i>) | <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3<i>x</i></span></span> ≤ <i>y</i> ≤ 3<i>x</i>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> ≤ <i>x</i> ≤ 1} 与 <i>D</i><sub>2</sub> = {(<i>x</i>, <i>y</i>) | <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> ≤ <i>y</i> ≤ <span class='frac'><span class='frac-num'>3</span><span class='frac-den'><i>x</i></span></span>, 1 ≤ <i>x</i> ≤ 3}。<br>于是：<br>∬<sub><i>D</i></sub> (1 + <i>x</i> − <i>y</i>) d<i>x</i>d<i>y</i> = ∬<sub><i>D</i></sub> d<i>x</i>d<i>y</i> = ∬<sub><i>D</i><sub>1</sub></sub> d<i>x</i>d<i>y</i> + ∬<sub><i>D</i><sub>2</sub></sub> d<i>x</i>d<i>y</i><br>= ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span></sub><sup>1</sup> d<i>x</i> ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3<i>x</i></span></span></sub><sup>3<i>x</i></sup> d<i>y</i> + ∫<sub>1</sub><sup>3</sup> d<i>x</i> ∫<sub><span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span></sub><sup><span class='frac'><span class='frac-num'>3</span><span class='frac-den'><i>x</i></span></span></sup> d<i>y</i><br>= ∫<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span></sub><sup>1</sup> (3<i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3<i>x</i></span></span>) d<i>x</i> + ∫<sub>1</sub><sup>3</sup> (<span class='frac'><span class='frac-num'>3</span><span class='frac-den'><i>x</i></span></span> − <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span>) d<i>x</i><br>= (<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> ln <i>x</i>)|<sub><span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span></sub><sup>1</sup> + (3 ln <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span><i>x</i><sup>2</sup>)|<sub>1</sub><sup>3</sup><br>= <span class='frac'><span class='frac-num'>8</span><span class='frac-den'>3</span></span> ln 3。",
+    "tips": "计算二重积分前务必先看对称性！本题区域 <i>D</i> 关于 <i>y</i> = <i>x</i> 轮换对称，直接消去被积函数中的 <i>x</i> − <i>y</i>，瞬间化简为求区域 <i>D</i> 的面积。",
+    "kp": "二重积分的对称性与计算"
+  },
+  {
+    "id": "M2024_18",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 18,
+    "qType": "solve",
+    "chapter": "m_ch4",
+    "title": "2024数二 第18题（解答题 12分）",
+    "stem": "已知微分方程 <i>x</i><sup>2</sup><i>y</i>″ + <i>xy</i>′ − 9<i>y</i> = 0 (<i>x</i> &gt; 0)。<br>(1) 利用变换 <i>x</i> = e<sup><i>t</i></sup> 将原方程化为关于 <i>t</i> 的常系数线性微分方程，并求满足 <i>y</i>|<sub><i>x</i>=1</sub> = 2，<i>y</i>′|<sub><i>x</i>=1</sub> = 6 的特解 <i>y</i>(<i>x</i>)；<br>(2) 计算定积分 ∫<sub>1</sub><sup>2</sup> <i>y</i>(<i>x</i>)√(4 − <i>x</i><sup>2</sup>) d<i>x</i>。",
+    "options": null,
+    "answer": "(1) y(x) = 2x³；(2) 22√3 / 5",
+    "analysis": "解：(1) 令 <i>x</i> = e<sup><i>t</i></sup>，即 <i>t</i> = ln <i>x</i>，则：<br><i>y</i>′ = <span class='frac'><span class='frac-num'>d<i>y</i> / d<i>t</i></span><span class='frac-den'>d<i>x</i> / d<i>t</i></span></span> = e<sup>−<i>t</i></sup> <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span>，<br><i>y</i>″ = <span class='frac'><span class='frac-num'>d(e<sup>−<i>t</i></sup> <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span>) / d<i>t</i></span><span class='frac-den'>d<i>x</i> / d<i>t</i></span></span> = e<sup>−2<i>t</i></sup> <span class='frac'><span class='frac-num'>d<sup>2</sup><i>y</i></span><span class='frac-den'>d<i>t</i><sup>2</sup></span></span> − e<sup>−2<i>t</i></sup> <span class='frac'><span class='frac-num'>d<i>y</i></span><span class='frac-den'>d<i>t</i></span></span>。<br>将 <i>y</i>′，<i>y</i>″ 代入方程 <i>x</i><sup>2</sup><i>y</i>″ + <i>xy</i>′ − 9<i>y</i> = 0，化简得：<br><span class='frac'><span class='frac-num'>d<sup>2</sup><i>y</i></span><span class='frac-den'>d<i>t</i><sup>2</sup></span></span> − 9<i>y</i> = 0。<br>解得通解为 <i>y</i> = <i>C</i><sub>1</sub>e<sup>3<i>t</i></sup> + <i>C</i><sub>2</sub>e<sup>−3<i>t</i></sup> = <i>C</i><sub>1</sub><i>x</i><sup>3</sup> + <span class='frac'><span class='frac-num'><i>C</i><sub>2</sub></span><span class='frac-den'><i>x</i><sup>3</sup></span></span>。<br>由已知 <i>y</i>|<sub><i>x</i>=1</sub> = 2，<i>y</i>′|<sub><i>x</i>=1</sub> = 6，得 <i>C</i><sub>1</sub> + <i>C</i><sub>2</sub> = 2，3<i>C</i><sub>1</sub> − 3<i>C</i><sub>2</sub> = 6，解得 <i>C</i><sub>1</sub> = 2，<i>C</i><sub>2</sub> = 0，所以 <i>y</i>(<i>x</i>) = 2<i>x</i><sup>3</sup>。<br>(2) 令 <i>x</i> = 2 sin <i>θ</i> (<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span> ≤ <i>θ</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>)，则：<br>∫<sub>1</sub><sup>2</sup> <i>y</i>(<i>x</i>)√(4 − <i>x</i><sup>2</sup>) d<i>x</i> = ∫<sub>1</sub><sup>2</sup> 2<i>x</i><sup>3</sup>√(4 − <i>x</i><sup>2</sup>) d<i>x</i> = 64 ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> sin<sup>3</sup><i>θ</i> cos<sup>2</sup><i>θ</i> d<i>θ</i><br>= −64 ∫<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> (cos<sup>2</sup><i>θ</i> − cos<sup>4</sup><i>θ</i>) d(cos <i>θ</i>)<br>= −64 (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> cos<sup>3</sup><i>θ</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span> cos<sup>5</sup><i>θ</i>)|<sub><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span></sub><sup><span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span></sup> = <span class='frac'><span class='frac-num'>22√3</span><span class='frac-den'>5</span></span>。",
+    "tips": "第(2)问计算 ∫ 2<i>x</i><sup>3</sup>√(4 − <i>x</i><sup>2</sup>) d<i>x</i> 除三角换元外，也可直接令 <i>u</i> = √(4 − <i>x</i><sup>2</sup>)（则 <i>x</i><sup>2</sup> = 4 − <i>u</i><sup>2</sup>，<i>x</i> d<i>x</i> = −<i>u</i> d<i>u</i>），凑微分计算更快且不易出错。",
+    "kp": "可化为常系数微分方程的变量代换与定积分换元法"
+  },
+  {
+    "id": "M2024_19",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 19,
+    "qType": "solve",
+    "chapter": "m_ch3",
+    "title": "2024数二 第19题（解答题 12分）",
+    "stem": "设平面区域 <i>D</i> 由曲线 <i>y</i> = √<i>x</i> e<sup>−<i>x</i></sup>，直线 <i>x</i> = <i>t</i>，<i>x</i> = 2<i>t</i> (<i>t</i> &gt; 0) 及 <i>x</i> 轴围成，记 <i>D</i> 绕 <i>x</i> 轴旋转一周所得旋转体的体积为 <i>V</i>(<i>t</i>)，求 <i>V</i>(<i>t</i>) 的最大值。",
+    "options": null,
+    "answer": "(4πln2 + 3π) / 64",
+    "analysis": "解：由题设及旋转体体积公式知：<br><i>V</i>(<i>t</i>) = π ∫<sub><i>t</i></sub><sup>2<i>t</i></sup> <i>x</i>e<sup>−2<i>x</i></sup> d<i>x</i> (<i>t</i> &gt; 0)。<br>对 <i>t</i> 求导得：<br><i>V</i>′(<i>t</i>) = (2<i>t</i>e<sup>−4<i>t</i></sup> · 2 − <i>t</i>e<sup>−2<i>t</i></sup>)π = −<i>t</i>e<sup>−4<i>t</i></sup>(e<sup>2<i>t</i></sup> − 4)π。<br>令 <i>V</i>′(<i>t</i>) = 0，解得唯一驻点 <i>t</i> = ln 2。<br>当 0 &lt; <i>t</i> &lt; ln 2 时，<i>V</i>′(<i>t</i>) &gt; 0；当 <i>t</i> &gt; ln 2 时，<i>V</i>′(<i>t</i>) &lt; 0，所以 <i>V</i>(<i>t</i>) 在 (0, ln 2) 内单调递增，在 (ln 2, +∞) 内单调减少。<br>所以 <i>V</i>(<i>t</i>) 的最大值为：<br><i>V</i>(ln 2) = π ∫<sub>ln 2</sub><sup>2ln 2</sup> <i>x</i>e<sup>−2<i>x</i></sup> d<i>x</i> = −<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span><i>x</i>e<sup>−2<i>x</i></sup>|<sub>ln 2</sub><sup>2ln 2</sup> + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> ∫<sub>ln 2</sub><sup>2ln 2</sup> e<sup>−2<i>x</i></sup> d<i>x</i><br>= <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>16</span></span> ln 2 − <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>e<sup>−2<i>x</i></sup>|<sub>ln 2</sub><sup>2ln 2</sup> = <span class='frac'><span class='frac-num'>4π ln 2 + 3π</span><span class='frac-den'>64</span></span>。",
+    "tips": "在求含变限积分的体积最值时，千万不要先把定积分算出来再求导！直接对变上下限积分 <i>V</i>(<i>t</i>) 求导找到驻点 <i>t</i> = ln 2 后，只需做一次分部积分即可。",
+    "kp": "定积分几何应用（旋转体体积）与函数的最值"
+  },
+  {
+    "id": "M2024_20",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 20,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2024数二 第20题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>u</i>, <i>v</i>) 具有二阶连续偏导数，且 <i>g</i>(<i>x</i>, <i>y</i>) = <i>f</i>(2<i>x</i> − <i>y</i>, 3<i>x</i> + <i>y</i>) 满足 <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> + <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>x</i>∂<i>y</i></span></span> − 6<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span> = 1。<br>(1) 求 <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>f</i></span><span class='frac-den'>∂<i>u</i>∂<i>v</i></span></span>；<br>(2) 若 <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>u</i>, 0)</span><span class='frac-den'>∂<i>u</i></span></span> = <i>u</i>e<sup>−<i>u</i></sup>，<i>f</i>(0, <i>v</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>50</span></span><i>v</i><sup>2</sup> − 1，求 <i>f</i>(<i>u</i>, <i>v</i>) 的表达式。",
+    "options": null,
+    "answer": "(1) 1/25；(2) f(u, v) = uv/25 + v²/50 - (u + 1)e⁻ᵘ",
+    "analysis": "解：(1) 令 <i>u</i> = 2<i>x</i> − <i>y</i>，<i>v</i> = 3<i>x</i> + <i>y</i>，反解得 <i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span><i>u</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>5</span></span><i>v</i>，<i>y</i> = −<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>5</span></span><i>u</i> + <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>5</span></span><i>v</i>（或由正变换链式法则），由复合函数求导法则得：<br><span class='frac'><span class='frac-num'>∂<sup>2</sup><i>f</i></span><span class='frac-den'>∂<i>u</i>∂<i>v</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>25</span></span>(<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> + <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>x</i>∂<i>y</i></span></span> − 6<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>g</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>25</span></span>。<br>(2) 由 (1) 对 <i>u</i>，<i>v</i> 积分知：<i>f</i>(<i>u</i>, <i>v</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>25</span></span><i>uv</i> + <i>h</i><sub>1</sub>(<i>u</i>) + <i>h</i><sub>2</sub>(<i>v</i>)。<br>由题设可知 <i>h</i>′<sub>1</sub>(<i>u</i>) = <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>u</i>, 0)</span><span class='frac-den'>∂<i>u</i></span></span> = <i>u</i>e<sup>−<i>u</i></sup>，<i>h</i><sub>2</sub>(<i>v</i>) + <i>h</i><sub>1</sub>(0) = <i>f</i>(0, <i>v</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>50</span></span><i>v</i><sup>2</sup> − 1。<br>由 <i>h</i>′<sub>1</sub>(<i>u</i>) = <i>u</i>e<sup>−<i>u</i></sup> 积分得 <i>h</i><sub>1</sub>(<i>u</i>) − <i>h</i><sub>1</sub>(0) = ∫<sub>0</sub><sup><i>u</i></sup> <i>t</i>e<sup>−<i>t</i></sup> d<i>t</i> = −(<i>u</i> + 1)e<sup>−<i>u</i></sup> + 1。<br>所以 <i>h</i><sub>1</sub>(<i>u</i>) + <i>h</i><sub>2</sub>(<i>v</i>) = [<i>h</i><sub>1</sub>(<i>u</i>) − <i>h</i><sub>1</sub>(0)] + [<i>h</i><sub>2</sub>(<i>v</i>) + <i>h</i><sub>1</sub>(0)] = −(<i>u</i> + 1)e<sup>−<i>u</i></sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>50</span></span><i>v</i><sup>2</sup>。<br>综上可知，<i>f</i>(<i>u</i>, <i>v</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>25</span></span><i>uv</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>50</span></span><i>v</i><sup>2</sup> − (<i>u</i> + 1)e<sup>−<i>u</i></sup>。",
+    "tips": "反解出 <i>x</i>(<i>u</i>, <i>v</i>) 和 <i>y</i>(<i>u</i>, <i>v</i>) 后直接对 <i>u</i>, <i>v</i> 求混合偏导，比正面展开三个二阶偏导数再解方程组要简洁得多；偏微分积分时注意任意常数变成关于另一变量的任意函数 <i>h</i><sub>1</sub>(<i>u</i>), <i>h</i><sub>2</sub>(<i>v</i>)。",
+    "kp": "多元复合函数二阶偏导数与偏微分方程求解"
+  },
+  {
+    "id": "M2024_21",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 21,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2024数二 第21题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 在 [0, 1] 上具有 2 阶导数，且 <i>f</i>′(0) = <i>f</i>′(1)，|<i>f</i>″(<i>x</i>)| ≤ 1 (<i>x</i> ∈ (0, 1))。证明：<br>(1) 当 <i>x</i> ∈ (0, 1) 时，|<i>f</i>(<i>x</i>) − <i>f</i>(0)(1 − <i>x</i>) − <i>f</i>(1)<i>x</i>| ≤ <span class='frac'><span class='frac-num'><i>x</i>(1 − <i>x</i>)</span><span class='frac-den'>2</span></span>；<br>(2) |∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> − <span class='frac'><span class='frac-num'><i>f</i>(0) + <i>f</i>(1)</span><span class='frac-den'>2</span></span>| ≤ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>12</span></span>。",
+    "options": null,
+    "answer": "见解析",
+    "analysis": "证：(1) 因为 <i>f</i>(<i>x</i>) 具有 2 阶导数，当 <i>x</i> ∈ (0, 1) 时，根据泰勒公式（在 0 和 1 处展开），存在 <i>ξ</i><sub>1</sub>, <i>ξ</i><sub>2</sub> ∈ (0, 1)，使得：<br><i>f</i>(<i>x</i>) = <i>f</i>(0) + <i>f</i>′(0)<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>f</i>″(<i>ξ</i><sub>1</sub>)<i>x</i><sup>2</sup>，<br><i>f</i>(<i>x</i>) = <i>f</i>(1) + <i>f</i>′(1)(<i>x</i> − 1) + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>f</i>″(<i>ξ</i><sub>2</sub>)(<i>x</i> − 1)<sup>2</sup>。<br>第一式乘以 (1 − <i>x</i>)，第二式乘以 <i>x</i>：<br>(1 − <i>x</i>)<i>f</i>(<i>x</i>) = <i>f</i>(0)(1 − <i>x</i>) + <i>f</i>′(0)<i>x</i>(1 − <i>x</i>) + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>f</i>″(<i>ξ</i><sub>1</sub>)<i>x</i><sup>2</sup>(1 − <i>x</i>)，<br><i>x</i><i>f</i>(<i>x</i>) = <i>f</i>(1)<i>x</i> + <i>f</i>′(1)(<i>x</i> − 1)<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>f</i>″(<i>ξ</i><sub>2</sub>)(<i>x</i> − 1)<sup>2</sup><i>x</i>。<br>因为 <i>f</i>′(0) = <i>f</i>′(1)，将两式相加消去一阶导数项，得：<br><i>f</i>(<i>x</i>) = <i>f</i>(0)(1 − <i>x</i>) + <i>f</i>(1)<i>x</i> + <span class='frac'><span class='frac-num'><i>x</i>(1 − <i>x</i>)</span><span class='frac-den'>2</span></span>[<i>x</i><i>f</i>″(<i>ξ</i><sub>1</sub>) + (1 − <i>x</i>)<i>f</i>″(<i>ξ</i><sub>2</sub>)]。<br>又因为 |<i>f</i>″(<i>x</i>)| ≤ 1，所以当 <i>x</i> ∈ (0, 1) 时：<br>|<i>f</i>(<i>x</i>) − <i>f</i>(0)(1 − <i>x</i>) − <i>f</i>(1)<i>x</i>| ≤ <span class='frac'><span class='frac-num'><i>x</i>(1 − <i>x</i>)</span><span class='frac-den'>2</span></span>[<i>x</i>|<i>f</i>″(<i>ξ</i><sub>1</sub>)| + (1 − <i>x</i>)|<i>f</i>″(<i>ξ</i><sub>2</sub>)|] ≤ <span class='frac'><span class='frac-num'><i>x</i>(1 − <i>x</i>)</span><span class='frac-den'>2</span></span>。<br>(2) 因为 ∫<sub>0</sub><sup>1</sup> [<i>f</i>(<i>x</i>) − <i>f</i>(0)(1 − <i>x</i>) − <i>f</i>(1)<i>x</i>] d<i>x</i> = ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> − <span class='frac'><span class='frac-num'><i>f</i>(0) + <i>f</i>(1)</span><span class='frac-den'>2</span></span>，<br>所以由定积分的性质和 (1) 的结论可得：<br>|∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> − <span class='frac'><span class='frac-num'><i>f</i>(0) + <i>f</i>(1)</span><span class='frac-den'>2</span></span>| ≤ ∫<sub>0</sub><sup>1</sup> |<i>f</i>(<i>x</i>) − <i>f</i>(0)(1 − <i>x</i>) − <i>f</i>(1)<i>x</i>| d<i>x</i> ≤ ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'><i>x</i>(1 − <i>x</i>)</span><span class='frac-den'>2</span></span> d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>12</span></span>。",
+    "tips": "看到待证式中同时出现 <i>f</i>(<i>x</i>)、<i>f</i>(0)(1 − <i>x</i>)、<i>f</i>(1)<i>x</i> 以及二阶导数有界条件，标准动作是将 <i>f</i>(<i>x</i>) 在端点 0 和 1 处分别作一阶泰勒展开（即把 <i>f</i>(<i>x</i>) 看成展开中心或把 0、1 看成展开中心），再配凑系数 (1 − <i>x</i>) 和 <i>x</i> 消去一阶导数项。",
+    "kp": "泰勒公式与定积分不等式证明"
+  },
+  {
+    "id": "M2024_22",
+    "subject": "math2",
+    "year": 2024,
+    "qNum": 22,
+    "qType": "solve",
+    "chapter": "m_ch6",
+    "title": "2024数二 第22题（解答题 12分）",
+    "stem": "已知矩阵 <i>A</i> = [1, 0, 1; 0, 1, 1; −1, 0, <i>a</i> − 2]，<i>B</i> = [1, <i>b</i>, 2; 1, 2, <i>b</i>; 2, 4, 2<i>b</i>]，二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) = <i>x</i><sup>T</sup><i>BAx</i>。若方程组 <i>Ax</i> = 0 的解均是方程组 <i>B</i><sup>T</sup><i>x</i> = 0 的解，但这两个方程组不同解。<br>(1) 求 <i>a</i>，<i>b</i> 的值；<br>(2) 求正交变换 <i>x</i> = <i>Qy</i> 将二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) 化为标准形。",
+    "options": null,
+    "answer": "(1) a = 1, b = 2；(2) 标准形为 6y₃²",
+    "analysis": "解：(1) 由“<i>Ax</i> = 0 的解均是 <i>B</i><sup>T</sup><i>x</i> = 0 的解，但两方程组不同解”可知：<br><i>r</i>([<i>A</i>; <i>B</i><sup>T</sup>]) = <i>r</i>(<i>A</i>) &gt; <i>r</i>(<i>B</i><sup>T</sup>)。<br>由于 <i>r</i>(<i>A</i>) ≥ 2，<i>r</i>(<i>B</i>) ≥ 1，且 <i>r</i>(<i>A</i>) &gt; <i>r</i>(<i>B</i>)，若 <i>r</i>(<i>A</i>) = 3 则 <i>Ax</i> = 0 只有零解，必有 <i>r</i>(<i>A</i>) = 2，<i>r</i>(<i>B</i>) = 1。<br>对分块矩阵 [<i>A</i>; <i>B</i><sup>T</sup>] 施以初等行变换可得阶梯形矩阵：<br>[1, 0, 1; 0, 1, 1; 0, 0, <i>a</i> − 1; 0, 0, <i>b</i> − 2]，<br>故 <i>a</i> = 1，<i>b</i> = 2。<br>(2) 由 (1) 可得 <i>BA</i> = [1, 2, 3; 1, 2, 3; 2, 4, 6]，二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) 的对应对称矩阵为 <i>C</i> = <span class='frac'><span class='frac-num'><i>BA</i> + (<i>BA</i>)<sup>T</sup></span><span class='frac-den'>2</span></span> = [1, 1, 2; 1, 1, 2; 2, 2, 4]。<br>因为 |<i>λE</i> − <i>C</i>| = |<i>λ</i> − 1, −1, −2; −1, <i>λ</i> − 1, −2; −2, −2, <i>λ</i> − 4| = <i>λ</i><sup>2</sup>(<i>λ</i> − 6)，所以 <i>C</i> 的特征值为 <i>λ</i><sub>1</sub> = <i>λ</i><sub>2</sub> = 0，<i>λ</i><sub>3</sub> = 6。<br>当 <i>λ</i><sub>1</sub> = <i>λ</i><sub>2</sub> = 0 时，解方程组 (0<i>E</i> − <i>C</i>)<i>x</i> = 0（即 <i>x</i><sub>1</sub> + <i>x</i><sub>2</sub> + 2<i>x</i><sub>3</sub> = 0），得两个线性无关特征向量 <i>α</i><sub>1</sub> = (−1, 1, 0)<sup>T</sup>，<i>α</i><sub>2</sub> = (−2, 0, 1)<sup>T</sup>。<br>经施密特正交化得：<i>β</i><sub>1</sub> = <i>α</i><sub>1</sub> = (−1, 1, 0)<sup>T</sup>，<i>β</i><sub>2</sub> = <i>α</i><sub>2</sub> − <span class='frac'><span class='frac-num'>[<i>β</i><sub>1</sub>, <i>α</i><sub>2</sub>]</span><span class='frac-den'>[<i>β</i><sub>1</sub>, <i>β</i><sub>1</sub>]</span></span><i>β</i><sub>1</sub> = (−1, −1, 1)<sup>T</sup>。<br>单位化得：<i>γ</i><sub>1</sub> = (<span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√2</span></span>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>, 0)<sup>T</sup>，<i>γ</i><sub>2</sub> = (<span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√3</span></span>, <span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√3</span></span>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√3</span></span>)<sup>T</sup>。<br>当 <i>λ</i><sub>3</sub> = 6 时，解方程组 (6<i>E</i> − <i>C</i>)<i>x</i> = 0，得线性无关特征向量 <i>β</i><sub>3</sub> = (1, 1, 2)<sup>T</sup>，单位化得 <i>γ</i><sub>3</sub> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span>, <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>√6</span></span>)<sup>T</sup>。<br>令正交矩阵 <i>Q</i> = (<i>γ</i><sub>1</sub>, <i>γ</i><sub>2</sub>, <i>γ</i><sub>3</sub>) = [<span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√2</span></span>, <span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√3</span></span>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span>; <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>, <span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>√3</span></span>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√6</span></span>; 0, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√3</span></span>, <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>√6</span></span>]，则在正交变换 <i>x</i> = <i>Qy</i> 下，标准形为 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) = 6<i>y</i><sub>3</sub><sup>2</sup>。",
+    "tips": "两个易错点：① <i>f</i> = <i>x</i><sup>T</sup><i>BAx</i> 中矩阵 <i>BA</i> 不对称，必须先对称化 <i>C</i> = (<i>BA</i> + (<i>BA</i>)<sup>T</sup>)/2 才能作为二次型矩阵；② 秩为 1 的实对称矩阵 <i>C</i> 特征值必为 0, 0, tr(<i>C</i>)=6，无需硬算三阶行列式！",
+    "kp": "同解方程组、二次型对称化与正交变换化标准形"
+  },
+  {
+    "id": "M2023_01",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2023数二 第1题（选择题 5分）",
+    "stem": "曲线 <i>y</i> = <i>x</i> ln(e + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> − 1</span></span>) 的斜渐近线方程为（　　）",
+    "options": [
+      "A. <i>y</i> = <i>x</i> + e",
+      "B. <i>y</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>",
+      "C. <i>y</i> = <i>x</i>",
+      "D. <i>y</i> = <i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>"
+    ],
+    "answer": "B",
+    "analysis": "<p><strong>（方法一）标准公式法：</strong></p><p>斜率 <i>k</i> = lim<sub><i>x</i>→∞</sub> <span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'><i>x</i></span></span> = lim<sub><i>x</i>→∞</sub> ln(e + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> − 1</span></span>) = 1，</p><p>截距 <i>b</i> = lim<sub><i>x</i>→∞</sub> (<i>y</i> − <i>kx</i>) = lim<sub><i>x</i>→∞</sub> <i>x</i>[ln(e + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> − 1</span></span>) − 1] = lim<sub><i>x</i>→∞</sub> <i>x</i> ln[1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e(<i>x</i> − 1)</span></span>] = lim<sub><i>x</i>→∞</sub> <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>e(<i>x</i> − 1)</span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>，</p><p>则所求斜渐近线方程为 <i>y</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>。</p><p><strong>（方法二）代数变形与泰勒展开法：</strong></p><p><i>y</i> = <i>x</i> ln(e + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i> − 1</span></span>) = <i>x</i> + <i>x</i> ln[1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e(<i>x</i> − 1)</span></span>] = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span> + {<i>x</i> ln[1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e(<i>x</i> − 1)</span></span>] − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>}，</p><p>其中 lim<sub><i>x</i>→∞</sub> {<i>x</i> ln[1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e(<i>x</i> − 1)</span></span>] − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>} = 0，则所求斜渐近线方程为 <i>y</i> = <i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>e</span></span>。故选 B。</p>",
+    "tips": "求曲线 y = f(x) 的斜渐近线 y = kx + b 时，记住 k = lim(y/x)，b = lim(y - kx)；对于含 ln(e + u) 的结构，先提出常数 e 化为 1 + ln(1 + u/e)，再利用等价无穷小 ln(1+t) ~ t 快速口算截距。",
+    "kp": "曲线的斜渐近线与函数极限计算"
+  },
+  {
+    "id": "M2023_02",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2023数二 第2题（选择题 5分）",
+    "stem": "函数 <i>f</i>(<i>x</i>) = { <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√(1 + <i>x</i><sup>2</sup>)</span></span> (<i>x</i> ≤ 0)； (<i>x</i> + 1)cos <i>x</i> (<i>x</i> > 0) } 的一个原函数为（　　）",
+    "options": [
+      "A. <i>F</i>(<i>x</i>) = { ln(√(1 + <i>x</i><sup>2</sup>) − <i>x</i>) (<i>x</i> ≤ 0)； (<i>x</i> + 1)cos <i>x</i> − sin <i>x</i> (<i>x</i> > 0) }",
+      "B. <i>F</i>(<i>x</i>) = { ln(√(1 + <i>x</i><sup>2</sup>) − <i>x</i>) + 1 (<i>x</i> ≤ 0)； (<i>x</i> + 1)cos <i>x</i> − sin <i>x</i> (<i>x</i> > 0) }",
+      "C. <i>F</i>(<i>x</i>) = { ln(√(1 + <i>x</i><sup>2</sup>) + <i>x</i>) (<i>x</i> ≤ 0)； (<i>x</i> + 1)sin <i>x</i> + cos <i>x</i> (<i>x</i> > 0) }",
+      "D. <i>F</i>(<i>x</i>) = { ln(√(1 + <i>x</i><sup>2</sup>) + <i>x</i>) + 1 (<i>x</i> ≤ 0)； (<i>x</i> + 1)sin <i>x</i> + cos <i>x</i> (<i>x</i> > 0) }"
+    ],
+    "answer": "D",
+    "analysis": "<p>分段求不定积分：</p><p>当 <i>x</i> ≤ 0 时，∫ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√(1 + <i>x</i><sup>2</sup>)</span></span> d<i>x</i> = ln(<i>x</i> + √(<i>x</i><sup>2</sup> + 1)) + <i>C</i><sub>1</sub>；</p><p>当 <i>x</i> > 0 时，利用分部积分法得 ∫ (<i>x</i> + 1)cos <i>x</i> d<i>x</i> = (<i>x</i> + 1)sin <i>x</i> + cos <i>x</i> + <i>C</i><sub>2</sub>。</p><p>因为原函数在定义域 (−∞, +∞) 内必连续，所以在分界点 <i>x</i> = 0 处连续，即 lim<sub><i>x</i>→0<sup>−</sup></sub> <i>F</i>(<i>x</i>) = lim<sub><i>x</i>→0<sup>+</sup></sub> <i>F</i>(<i>x</i>)，</p><p>代入得 ln(0 + 1) + <i>C</i><sub>1</sub> = (0 + 1)sin 0 + cos 0 + <i>C</i><sub>2</sub>，即 <i>C</i><sub>1</sub> = 1 + <i>C</i><sub>2</sub>。</p><p>令 <i>C</i><sub>2</sub> = 0，则 <i>C</i><sub>1</sub> = 1，故 ∫ <i>f</i>(<i>x</i>)d<i>x</i> = { ln(<i>x</i> + √(<i>x</i><sup>2</sup> + 1)) + 1 + <i>C</i> (<i>x</i> ≤ 0)； (<i>x</i> + 1)sin <i>x</i> + cos <i>x</i> + <i>C</i> (<i>x</i> > 0) }，取 <i>C</i> = 0 即得选项 D。</p>",
+    "tips": "求分段函数的原函数有两大核心检查点：① 每一段求导等于原被积函数（直接排除 A、B）；② 原函数在分段点 x = 0 处必须连续（左极限等于右极限，代入 x = 0 即可秒选 D）。",
+    "kp": "分段函数的原函数与不定积分分部积分法"
+  },
+  {
+    "id": "M2023_03",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2023数二 第3题（选择题 5分）",
+    "stem": "已知数列 {<i>x<sub>n</sub></i>}，{<i>y<sub>n</sub></i>} 满足 <i>x</i><sub>1</sub> = <i>y</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>，<i>x</i><sub><i>n</i>+1</sub> = sin <i>x<sub>n</sub></i>，<i>y</i><sub><i>n</i>+1</sub> = <i>y<sub>n</sub></i><sup>2</sup> (<i>n</i> = 1, 2, …)，则当 <i>n</i> → ∞ 时，（　　）",
+    "options": [
+      "A. <i>x<sub>n</sub></i> 是 <i>y<sub>n</sub></i> 的高阶无穷小",
+      "B. <i>y<sub>n</sub></i> 是 <i>x<sub>n</sub></i> 的高阶无穷小",
+      "C. <i>x<sub>n</sub></i> 与 <i>y<sub>n</sub></i> 是等价无穷小",
+      "D. <i>x<sub>n</sub></i> 与 <i>y<sub>n</sub></i> 是同阶但非等价的无穷小"
+    ],
+    "answer": "B",
+    "analysis": "<p>由递推关系可知，{<i>x<sub>n</sub></i>}，{<i>y<sub>n</sub></i>} 均为单调递减正项数列，且均为无穷小。</p><p>由 <i>y</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>，<i>y</i><sub><i>n</i>+1</sub> = <i>y<sub>n</sub></i><sup>2</sup> 可知：</p><p><i>y</i><sub>2</sub> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>)<sup>2</sup>，<i>y</i><sub>3</sub> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>)<sup>2<sup>2</sup></sup>，…，<i>y</i><sub><i>n</i>+1</sub> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>)<sup>2<sup><i>n</i></sup></sup> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>)<sup>2<sup><i>n</i>−1</sup></sup>。</p><p>由于当 0 < <i>x</i> < <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> 时，sin <i>x</i> > <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>π</span></span><i>x</i>，则由 <i>x</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>，<i>x</i><sub><i>n</i>+1</sub> = sin <i>x<sub>n</sub></i> 可知：</p><p><i>x</i><sub><i>n</i>+1</sub> > <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>π</span></span><i>x<sub>n</sub></i> > (<span class='frac'><span class='frac-num'>2</span><span class='frac-den'>π</span></span>)<sup>2</sup><i>x</i><sub><i>n</i>−1</sub> > … > (<span class='frac'><span class='frac-num'>2</span><span class='frac-den'>π</span></span>)<sup><i>n</i></sup><i>x</i><sub>1</sub> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>(<span class='frac'><span class='frac-num'>2</span><span class='frac-den'>π</span></span>)<sup><i>n</i></sup>。</p><p>于是 0 < <span class='frac'><span class='frac-num'><i>y</i><sub><i>n</i>+1</sub></span><span class='frac-den'><i>x</i><sub><i>n</i>+1</sub></span></span> < <span class='frac'><span class='frac-num'>(1/4)<sup>2<sup><i>n</i>−1</sup></sup></span><span class='frac-den'>(1/2)(2/π)<sup><i>n</i></sup></span></span> → 0 (<i>n</i> → ∞)，故当 <i>n</i> → ∞ 时，<i>y<sub>n</sub></i> 是 <i>x<sub>n</sub></i> 的高阶无穷小。故选 B。</p>",
+    "tips": "递推数列 x_{n+1} = sin(x_n) 是考研经典结论，由 Stolz 定理可知 x_n ~ √(3/n)，是幂函数级趋于 0；而 y_{n+1} = y_n^2 每次平方，呈双指数级 (1/2)^(2^(n-1)) 极速趋于 0，因此 y_n 必然是 x_n 的高阶无穷小。",
+    "kp": "递推数列极限与无穷小阶的比较"
+  },
+  {
+    "id": "M2023_04",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "m_ch4",
+    "title": "2023数二 第4题（选择题 5分）",
+    "stem": "已知微分方程 <i>y</i>′′ + <i>ay</i>′ + <i>by</i> = 0 的解在 (−∞, +∞) 上有界，则 <i>a</i>，<i>b</i> 的取值范围为（　　）",
+    "options": [
+      "A. <i>a</i> < 0，<i>b</i> > 0",
+      "B. <i>a</i> > 0，<i>b</i> > 0",
+      "C. <i>a</i> = 0，<i>b</i> > 0",
+      "D. <i>a</i> = 0，<i>b</i> < 0"
+    ],
+    "answer": "C",
+    "analysis": "<p>微分方程的特征方程为 λ<sup>2</sup> + <i>a</i>λ + <i>b</i> = 0，特征根为 λ<sub>1,2</sub> = <span class='frac'><span class='frac-num'>−<i>a</i> ± √(<i>a</i><sup>2</sup> − 4<i>b</i>)</span><span class='frac-den'>2</span></span>。</p><p>（1）若 <i>a</i><sup>2</sup> − 4<i>b</i> > 0，则特征方程有两个不相等的实根 λ<sub>1</sub> ≠ λ<sub>2</sub>，通解为 <i>y</i> = <i>C</i><sub>1</sub>e<sup>λ<sub>1</sub><i>x</i></sup> + <i>C</i><sub>2</sub>e<sup>λ<sub>2</sub><i>x</i></sup>，由于两个不同实根至少有一个非零，当 <i>x</i> → +∞ 或 <i>x</i> → −∞ 时必在 (−∞, +∞) 上无界。</p><p>（2）若 <i>a</i><sup>2</sup> − 4<i>b</i> = 0，则 λ<sub>1</sub> = λ<sub>2</sub> = −<span class='frac'><span class='frac-num'><i>a</i></span><span class='frac-den'>2</span></span>，通解为 <i>y</i> = (<i>C</i><sub>1</sub> + <i>C</i><sub>2</sub><i>x</i>)e<sup>−(<i>a</i>/2)<i>x</i></sup>，含因子 <i>x</i> 或指数项，在 (−∞, +∞) 上无界。</p><p>（3）若 <i>a</i><sup>2</sup> − 4<i>b</i> < 0，则特征根为一对共轭复根 λ<sub>1,2</sub> = <span class='frac'><span class='frac-num'>−<i>a</i> ± √(4<i>b</i> − <i>a</i><sup>2</sup>)i</span><span class='frac-den'>2</span></span>，微分方程的通解为：</p><p><i>y</i> = e<sup>−(<i>a</i>/2)<i>x</i></sup> (<i>C</i><sub>1</sub> cos <span class='frac'><span class='frac-num'>√(4<i>b</i> − <i>a</i><sup>2</sup>)</span><span class='frac-den'>2</span></span><i>x</i> + <i>C</i><sub>2</sub> sin <span class='frac'><span class='frac-num'>√(4<i>b</i> − <i>a</i><sup>2</sup>)</span><span class='frac-den'>2</span></span><i>x</i>)。</p><p>如果此解在 (−∞, +∞) 上有界，则指数因子必须恒为 1（否则在 <i>x</i> → +∞ 或 <i>x</i> → −∞ 一侧必趋于无穷），故 −<span class='frac'><span class='frac-num'><i>a</i></span><span class='frac-den'>2</span></span> = 0，即 <i>a</i> = 0，进而由 <i>a</i><sup>2</sup> − 4<i>b</i> < 0 得 <i>b</i> > 0。故选 C。</p>",
+    "tips": "注意区分区间是 (0, +∞) 还是 (-∞, +∞)！在 (-∞, +∞) 上任意指数函数 e^(αx) (α≠0) 必然在一端趋于 +∞，因此要使全轴有界，特征根实部必须为 0 且不能有重根（除零解外），只能是纯虚单根 ±i√b，即 a = 0, b > 0。",
+    "kp": "二阶常系数齐次线性微分方程通解结构与有界性"
+  },
+  {
+    "id": "M2023_05",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2023数二 第5题（选择题 5分）",
+    "stem": "设函数 <i>y</i> = <i>f</i>(<i>x</i>) 由参数方程 { <i>x</i> = 2<i>t</i> + |<i>t</i>|， <i>y</i> = |<i>t</i>| sin <i>t</i> } 确定，则（　　）",
+    "options": [
+      "A. <i>f</i>′(<i>x</i>) 连续，<i>f</i>′′(0) 存在",
+      "B. <i>f</i>′(<i>x</i>) 连续，<i>f</i>′′(0) 不存在",
+      "C. <i>f</i>′(0) 存在，<i>f</i>′′(0) 不存在",
+      "D. <i>f</i>′(0) 不存在，<i>f</i>′′(0) 不存在"
+    ],
+    "answer": "C",
+    "analysis": "<p>消去参数 <i>t</i> 化为显函数：</p><p>当 <i>t</i> ≥ 0 时，<i>x</i> = 3<i>t</i>，<i>y</i> = <i>t</i> sin <i>t</i>，故 <i>y</i> = <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> sin <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> (<i>x</i> ≥ 0)；</p><p>当 <i>t</i> < 0 时，<i>x</i> = <i>t</i>，<i>y</i> = −<i>t</i> sin <i>t</i>，故 <i>y</i> = −<i>x</i> sin <i>x</i> (<i>x</i> < 0)。</p><p>于是 <i>y</i> = { <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> sin <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> (<i>x</i> ≥ 0)； −<i>x</i> sin <i>x</i> (<i>x</i> < 0) }。</p><p>由导数定义求 <i>y</i>′(0)：</p><p><i>y</i>′<sub>+</sub>(0) = lim<sub><i>x</i>→0<sup>+</sup></sub> <span class='frac'><span class='frac-num'>(<i>x</i>/3)sin(<i>x</i>/3) − 0</span><span class='frac-den'><i>x</i></span></span> = 0，<i>y</i>′<sub>−</sub>(0) = lim<sub><i>x</i>→0<sup>−</sup></sub> <span class='frac'><span class='frac-num'>−<i>x</i> sin <i>x</i> − 0</span><span class='frac-den'><i>x</i></span></span> = 0，得 <i>y</i>′(0) = 0。</p><p>从而一阶导函数为 <i>y</i>′(<i>x</i>) = { <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> sin <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> + <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>9</span></span> cos <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>3</span></span> (<i>x</i> > 0)； 0 (<i>x</i> = 0)； −sin <i>x</i> − <i>x</i> cos <i>x</i> (<i>x</i> < 0) }，可知 <i>y</i>′(<i>x</i>) 连续。</p><p>再由二阶导数定义：<i>y</i>′′<sub>+</sub>(0) = lim<sub><i>x</i>→0<sup>+</sup></sub> <span class='frac'><span class='frac-num'>(1/3)sin(<i>x</i>/3) + (<i>x</i>/9)cos(<i>x</i>/3) − 0</span><span class='frac-den'><i>x</i></span></span> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>9</span></span>，</p><p><i>y</i>′′<sub>−</sub>(0) = lim<sub><i>x</i>→0<sup>−</sup></sub> <span class='frac'><span class='frac-num'>−sin <i>x</i> − <i>x</i> cos <i>x</i> − 0</span><span class='frac-den'><i>x</i></span></span> = −2，左右二阶导数不相等，故 <i>y</i>′′(0) 不存在。故选 C。</p>",
+    "tips": "带绝对值的参数方程，最快的方法是按 t ≥ 0 和 t < 0 消参写出 y(x) 的分段显式表达式，并在 x = 0 两侧做泰勒展开：x ≥ 0 时 y = x²/9 + o(x²)，故 y''_{+}(0) = 2/9；x < 0 时 y = -x² + o(x²)，故 y''_{-}(0) = -2，瞬间看出 f'(0) = 0 存在而 f''(0) 不存在。",
+    "kp": "参数方程确定的函数求导与分段点高阶可导性"
+  },
+  {
+    "id": "M2023_06",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2023数二 第6题（选择题 5分）",
+    "stem": "若函数 <i>f</i>(α) = ∫<sub>2</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'><i>x</i>(ln <i>x</i>)<sup>α+1</sup></span></span> 在 α = α<sub>0</sub> 处取得最小值，则 α<sub>0</sub> =（　　）",
+    "options": [
+      "A. −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(ln 2)</span></span>",
+      "B. −ln(ln 2)",
+      "C. <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln 2</span></span>",
+      "D. ln 2"
+    ],
+    "answer": "A",
+    "analysis": "<p>反常积分 ∫<sub>2</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'><i>x</i>(ln <i>x</i>)<sup>α+1</sup></span></span> 当 α > 0 时收敛，所以 <i>f</i>(α) 的定义域为 α > 0。</p><p>当 α > 0 时，凑微分计算反常积分：</p><p><i>f</i>(α) = ∫<sub>2</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d(ln <i>x</i>)</span><span class='frac-den'>(ln <i>x</i>)<sup>α+1</sup></span></span> = [ −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>α(ln <i>x</i>)<sup>α</sup></span></span> ]<sub>2</sub><sup>+∞</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>α(ln 2)<sup>α</sup></span></span>。</p><p>记分母 <i>g</i>(α) = α(ln 2)<sup>α</sup> (α > 0)，对 α 求导得：</p><p><i>g</i>′(α) = (ln 2)<sup>α</sup> + α(ln 2)<sup>α</sup> ln(ln 2) = (ln 2)<sup>α</sup> [1 + α ln(ln 2)]。</p><p>由于 0 < ln 2 < 1，故 ln(ln 2) < 0。当 0 < α < −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(ln 2)</span></span> 时，<i>g</i>′(α) > 0；当 α > −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(ln 2)</span></span> 时，<i>g</i>′(α) < 0。</p><p>所以 <i>g</i>(α) 在 α<sub>0</sub> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(ln 2)</span></span> 处取得最大值，从而 <i>f</i>(α) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>g</i>(α)</span></span> 在 α<sub>0</sub> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>ln(ln 2)</span></span> 处取得最小值。故选 A。</p>",
+    "tips": "先由反常积分计算得到 f(α) = 1 / [α (ln 2)^α] (α > 0)。求分式 1/g(α) 的最小值等价于求分母 g(α) = α (ln 2)^α 的最大值，避免分式求导的繁琐计算！另外注意 ln 2 < 1，故 ln(ln 2) < 0，α_0 = -1/ln(ln 2) > 0。",
+    "kp": "反常积分计算与一元函数最值问题"
+  },
+  {
+    "id": "M2023_07",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2023数二 第7题（选择题 5分）",
+    "stem": "函数 <i>f</i>(<i>x</i>) = (<i>x</i><sup>2</sup> + <i>a</i>)e<sup><i>x</i></sup> 没有极值，但曲线 <i>y</i> = <i>f</i>(<i>x</i>) 有拐点，则 <i>a</i> 的取值范围是（　　）",
+    "options": [
+      "A. [0, 1)",
+      "B. (0, 1]",
+      "C. [1, 2)",
+      "D. (1, 2]"
+    ],
+    "answer": "C",
+    "analysis": "<p>由 <i>f</i>(<i>x</i>) = (<i>x</i><sup>2</sup> + <i>a</i>)e<sup><i>x</i></sup> 求一阶、二阶导数：</p><p><i>f</i>′(<i>x</i>) = (<i>x</i><sup>2</sup> + 2<i>x</i> + <i>a</i>)e<sup><i>x</i></sup>，</p><p><i>f</i>′′(<i>x</i>) = (<i>x</i><sup>2</sup> + 4<i>x</i> + <i>a</i> + 2)e<sup><i>x</i></sup>。</p><p>因为 e<sup><i>x</i></sup> > 0 恒成立：</p><p>（1）要使得 <i>f</i>(<i>x</i>) 没有极值，即 <i>f</i>′(<i>x</i>) 不变号，二次多项式 <i>x</i><sup>2</sup> + 2<i>x</i> + <i>a</i> 的判别式 Δ<sub>1</sub> = 4 − 4<i>a</i> ≤ 0，解得 <i>a</i> ≥ 1；</p><p>（2）要使得曲线 <i>y</i> = <i>f</i>(<i>x</i>) 有拐点，即 <i>f</i>′′(<i>x</i>) 有变号零点，二次多项式 <i>x</i><sup>2</sup> + 4<i>x</i> + (<i>a</i> + 2) 的判别式 Δ<sub>2</sub> = 16 − 4(<i>a</i> + 2) > 0，解得 <i>a</i> < 2。</p><p>综上所述，<i>a</i> ∈ [1, 2)。故选 C。</p>",
+    "tips": "对于多项式乘以 e^x 的求导，记住公式 [P(x)e^x]' = [P(x) + P'(x)]e^x。极值与拐点的存在性本质上是导函数是否有“穿根（变号零点）”：二次函数无变号零点 ⇔ Δ ≤ 0（含重根也不变号）；二次函数有变号零点 ⇔ Δ > 0（重根不变号，故不能取等号）。",
+    "kp": "函数的极值点与曲线拐点的判定条件"
+  },
+  {
+    "id": "M2023_08",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2023数二 第8题（选择题 5分）",
+    "stem": "设 <i>A</i>，<i>B</i> 为 <i>n</i> 阶可逆矩阵，<i>E</i> 为 <i>n</i> 阶单位矩阵，<i>M</i><sup>*</sup> 为矩阵 <i>M</i> 的伴随矩阵，则分块矩阵 [<i>A</i> <i>E</i>； <i>O</i> <i>B</i>]<sup>*</sup> =（　　）",
+    "options": [
+      "A. [ |<i>A</i>|<i>B</i><sup>*</sup>  −<i>B</i><sup>*</sup><i>A</i><sup>*</sup> ； <i>O</i>  |<i>B</i>|<i>A</i><sup>*</sup> ]",
+      "B. [ |<i>A</i>|<i>B</i><sup>*</sup>  −<i>A</i><sup>*</sup><i>B</i><sup>*</sup> ； <i>O</i>  |<i>B</i>|<i>A</i><sup>*</sup> ]",
+      "C. [ |<i>B</i>|<i>A</i><sup>*</sup>  −<i>B</i><sup>*</sup><i>A</i><sup>*</sup> ； <i>O</i>  |<i>A</i>|<i>B</i><sup>*</sup> ]",
+      "D. [ |<i>B</i>|<i>A</i><sup>*</sup>  −<i>A</i><sup>*</sup><i>B</i><sup>*</sup> ； <i>O</i>  |<i>A</i>|<i>B</i><sup>*</sup> ]"
+    ],
+    "answer": "D",
+    "analysis": "<p><strong>（方法一）利用伴随矩阵与逆矩阵的关系：</strong></p><p>设 <i>M</i> = [<i>A</i> <i>E</i>； <i>O</i> <i>B</i>]，则行列式 |<i>M</i>| = |<i>A</i>||<i>B</i>| ≠ 0。</p><p>由分块上三角矩阵求逆公式（或待定块法）知，<i>M</i><sup>−1</sup> = [<i>A</i> <i>E</i>； <i>O</i> <i>B</i>]<sup>−1</sup> = [<i>A</i><sup>−1</sup>  −<i>A</i><sup>−1</sup><i>B</i><sup>−1</sup>； <i>O</i>  <i>B</i><sup>−1</sup>]。</p><p>再由 <i>M</i><sup>*</sup> = |<i>M</i>|<i>M</i><sup>−1</sup> 及 <i>A</i><sup>*</sup> = |<i>A</i>|<i>A</i><sup>−1</sup>，<i>B</i><sup>*</sup> = |<i>B</i>|<i>B</i><sup>−1</sup> 可得：</p><p>[<i>A</i> <i>E</i>； <i>O</i> <i>B</i>]<sup>*</sup> = |<i>A</i>||<i>B</i>| [<i>A</i><sup>−1</sup>  −<i>A</i><sup>−1</sup><i>B</i><sup>−1</sup>； <i>O</i>  <i>B</i><sup>−1</sup>] = [ |<i>B</i>|(|<i>A</i>|<i>A</i><sup>−1</sup>)  −(|<i>A</i>|<i>A</i><sup>−1</sup>)(|<i>B</i>|<i>B</i><sup>−1</sup>)； <i>O</i>  |<i>A</i>|(|<i>B</i>|<i>B</i><sup>−1</sup>) ] = [ |<i>B</i>|<i>A</i><sup>*</sup>  −<i>A</i><sup>*</sup><i>B</i><sup>*</sup>； <i>O</i>  |<i>A</i>|<i>B</i><sup>*</sup> ]。</p><p><strong>（方法二）直接验证 <i>M</i> · <i>M</i><sup>*</sup> = |<i>M</i>|<i>E</i><sub>2<i>n</i></sub>：</strong></p><p>用 [<i>A</i> <i>E</i>； <i>O</i> <i>B</i>] 左乘选项 D 的矩阵，左上块为 <i>A</i>(|<i>B</i>|<i>A</i><sup>*</sup>) = |<i>A</i>||<i>B</i>|<i>E</i>，右上块为 −<i>AA</i><sup>*</sup><i>B</i><sup>*</sup> + |<i>A</i>|<i>B</i><sup>*</sup> = −|<i>A</i>|<i>B</i><sup>*</sup> + |<i>A</i>|<i>B</i><sup>*</sup> = <i>O</i>，右下块为 <i>B</i>(|<i>A</i>|<i>B</i><sup>*</sup>) = |<i>A</i>||<i>B</i>|<i>E</i>，完全符合伴随矩阵定义。故选 D。</p>",
+    "tips": "遇到分块矩阵求伴随矩阵 M*，直接用定义检验 M · M* = |A||B| E_{2n} 最快且最不易算错！看左上角块：A 乘以左上角块必须等于 |A||B|E，因此左上角块必然是 |B|A*（排除 A、B）；再看右上角块：A 乘以右上角块加上 E 乘以右下角块 (|A|B*) 必须等于 O，故右上角块只能是 -A*B*（排除 C，秒选 D）。",
+    "kp": "分块矩阵的伴随矩阵与逆矩阵运算"
+  },
+  {
+    "id": "M2023_09",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2023数二 第9题（选择题 5分）",
+    "stem": "二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) = (<i>x</i><sub>1</sub> + <i>x</i><sub>2</sub>)<sup>2</sup> + (<i>x</i><sub>1</sub> + <i>x</i><sub>3</sub>)<sup>2</sup> − 4(<i>x</i><sub>2</sub> − <i>x</i><sub>3</sub>)<sup>2</sup> 的规范形为（　　）",
+    "options": [
+      "A. <i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup>",
+      "B. <i>y</i><sub>1</sub><sup>2</sup> − <i>y</i><sub>2</sub><sup>2</sup>",
+      "C. <i>y</i><sub>1</sub><sup>2</sup> + 2<i>y</i><sub>2</sub><sup>2</sup> − 4<i>y</i><sub>3</sub><sup>2</sup>",
+      "D. <i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup> − <i>y</i><sub>3</sub><sup>2</sup>"
+    ],
+    "answer": "B",
+    "analysis": "<p><strong>（方法一）可逆线性变量代换法：</strong></p><p>观察括号内的线性组合，注意到 (<i>x</i><sub>1</sub> + <i>x</i><sub>2</sub>) − (<i>x</i><sub>1</sub> + <i>x</i><sub>3</sub>) = <i>x</i><sub>2</sub> − <i>x</i><sub>3</sub>。</p><p>令可逆线性变换 { <i>z</i><sub>1</sub> = <i>x</i><sub>1</sub> + <i>x</i><sub>2</sub>， <i>z</i><sub>2</sub> = <i>x</i><sub>1</sub> + <i>x</i><sub>3</sub>， <i>z</i><sub>3</sub> = <i>x</i><sub>3</sub> }，则 <i>x</i><sub>2</sub> − <i>x</i><sub>3</sub> = <i>z</i><sub>1</sub> − <i>z</i><sub>2</sub>，</p><p>原二次型化为 <i>f</i> = <i>z</i><sub>1</sub><sup>2</sup> + <i>z</i><sub>2</sub><sup>2</sup> − 4(<i>z</i><sub>1</sub> − <i>z</i><sub>2</sub>)<sup>2</sup> = −3<i>z</i><sub>1</sub><sup>2</sup> − 3<i>z</i><sub>2</sub><sup>2</sup> + 8<i>z</i><sub>1</sub><i>z</i><sub>2</sub>。</p><p>其对应的二阶非零子块矩阵为 [−3  4； 4  −3]，行列式为 (−3)<sup>2</sup> − 4<sup>2</sup> = −7 < 0，故特征值一正一负（分别为 1 和 −7），而 <i>z</i><sub>3</sub> 不出现（对应特征值 0）。</p><p>因此正惯性指数 <i>p</i> = 1，负惯性指数 <i>q</i> = 1，规范形为 <i>y</i><sub>1</sub><sup>2</sup> − <i>y</i><sub>2</sub><sup>2</sup>。</p><p><strong>（方法二）配方法：</strong></p><p><i>f</i> = 2<i>x</i><sub>1</sub><sup>2</sup> − 3<i>x</i><sub>2</sub><sup>2</sup> − 3<i>x</i><sub>3</sub><sup>2</sup> + 2<i>x</i><sub>1</sub><i>x</i><sub>2</sub> + 2<i>x</i><sub>1</sub><i>x</i><sub>3</sub> + 8<i>x</i><sub>2</sub><i>x</i><sub>3</sub> = 2(<i>x</i><sub>1</sub> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sub>2</sub> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sub>3</sub>)<sup>2</sup> − <span class='frac'><span class='frac-num'>7</span><span class='frac-den'>2</span></span>(<i>x</i><sub>2</sub> − <i>x</i><sub>3</sub>)<sup>2</sup>，故规范形为 <i>y</i><sub>1</sub><sup>2</sup> − <i>y</i><sub>2</sub><sup>2</sup>。故选 B。</p>",
+    "tips": "一旦发现二次型由三个平方式相加减构成，先检查三个括号内的线性形式是否线性相关！本题中 (x1+x2) - (x1+x3) = x2-x3，说明二次型的秩 r(f) ≤ 2，规范形至多只有两项（直接排除 C、D），再代一组使第一项为 0 的特值（如 x1=-1, x2=1, x3=0 得 f = 1 - 4 = -3 < 0）知必含负平方项，秒选 B。",
+    "kp": "二次型的规范形与正负惯性指数"
+  },
+  {
+    "id": "M2023_10",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2023数二 第10题（选择题 5分）",
+    "stem": "已知向量 α<sub>1</sub> = (1, 2, 3)<sup>T</sup>，α<sub>2</sub> = (2, 1, 1)<sup>T</sup>，β<sub>1</sub> = (2, 5, 9)<sup>T</sup>，β<sub>2</sub> = (1, 0, 1)<sup>T</sup>。若向量 γ 既可由 α<sub>1</sub>, α<sub>2</sub> 线性表示，也可由 β<sub>1</sub>, β<sub>2</sub> 线性表示，则 γ =（　　）",
+    "options": [
+      "A. <i>k</i>(1, 5, −8)<sup>T</sup>，<i>k</i> ∈ <b>R</b>",
+      "B. <i>k</i>(1, −5, −8)<sup>T</sup>，<i>k</i> ∈ <b>R</b>",
+      "C. <i>k</i>(1, −5, 8)<sup>T</sup>，<i>k</i> ∈ <b>R</b>",
+      "D. <i>k</i>(1, 5, 8)<sup>T</sup>，<i>k</i> ∈ <b>R</b>"
+    ],
+    "answer": "D",
+    "analysis": "<p>设 γ = <i>x</i><sub>1</sub>α<sub>1</sub> + <i>x</i><sub>2</sub>α<sub>2</sub> = <i>x</i><sub>3</sub>β<sub>1</sub> + <i>x</i><sub>4</sub>β<sub>2</sub>，移项得齐次线性方程组：</p><p><i>x</i><sub>1</sub>α<sub>1</sub> + <i>x</i><sub>2</sub>α<sub>2</sub> − <i>x</i><sub>3</sub>β<sub>1</sub> − <i>x</i><sub>4</sub>β<sub>2</sub> = <b>0</b>。　(*)</p><p>对系数矩阵作初等行变换求行最简形：</p><p>[α<sub>1</sub>, α<sub>2</sub>, −β<sub>1</sub>, −β<sub>2</sub>] = [1  2  −2  −1； 2  1  −5  0； 3  1  −9  −1] → [1  0  0  3； 0  1  0  −1； 0  0  1  1]。</p><p>故方程组 (*) 的同解方程组为 { <i>x</i><sub>1</sub> = −3<i>x</i><sub>4</sub>， <i>x</i><sub>2</sub> = <i>x</i><sub>4</sub>， <i>x</i><sub>3</sub> = −<i>x</i><sub>4</sub> }，</p><p>通解为 <i>x</i> = (<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>, <i>x</i><sub>4</sub>)<sup>T</sup> = <i>x</i><sub>4</sub>(−3, 1, −1, 1)<sup>T</sup> (<i>x</i><sub>4</sub> ∈ <b>R</b>)。</p><p>代入 γ 的表达式得：γ = <i>x</i><sub>1</sub>α<sub>1</sub> + <i>x</i><sub>2</sub>α<sub>2</sub> = −3<i>x</i><sub>4</sub>(1, 2, 3)<sup>T</sup> + <i>x</i><sub>4</sub>(2, 1, 1)<sup>T</sup> = <i>x</i><sub>4</sub>(−1, −5, −8)<sup>T</sup> = <i>k</i>(1, 5, 8)<sup>T</sup> (其中 <i>k</i> = −<i>x</i><sub>4</sub> ∈ <b>R</b>)。故选 D。</p>",
+    "tips": "求两个向量组生成子空间的交集向量 γ：除了列方程组 x1 α1 + x2 α2 = x3 β1 + x4 β2 外，在考场上直接观察 β1, β2 的简单组合（如 β1 - β2 = (1, 5, 8)^T = 3α1 - α2），一秒即可锁定 (1, 5, 8)^T 既在 span(β1, β2) 中又在 span(α1, α2) 中！",
+    "kp": "向量组的线性表示与齐次线性方程组通解"
+  },
+  {
+    "id": "M2023_11",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 11,
+    "qType": "fill",
+    "chapter": "m_ch1",
+    "title": "2023数二 第11题（填空题 5分）",
+    "stem": "当 <i>x</i> → 0 时，函数 <i>f</i>(<i>x</i>) = <i>ax</i> + <i>bx</i><sup>2</sup> + ln(1 + <i>x</i>) 与 <i>g</i>(<i>x</i>) = e<sup><i>x</i><sup>2</sup></sup> − cos <i>x</i> 是等价无穷小，则 <i>ab</i> = ________.",
+    "options": null,
+    "answer": "-2",
+    "analysis": "<p>由题设及泰勒公式展开（展开至 <i>x</i><sup>2</sup> 项）知：</p><p>1 = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>ax</i> + <i>bx</i><sup>2</sup> + ln(1 + <i>x</i>)</span><span class='frac-den'>e<sup><i>x</i><sup>2</sup></sup> − cos <i>x</i></span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>ax</i> + <i>bx</i><sup>2</sup> + <i>x</i> − <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2</span></span> + <i>o</i>(<i>x</i><sup>2</sup>)</span><span class='frac-den'>[1 + <i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>)] − [1 − <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2</span></span> + <i>o</i>(<i>x</i><sup>2</sup>)]</span></span></p><p>= lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>(<i>a</i> + 1)<i>x</i> + (<i>b</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>)<i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>)</span><span class='frac-den'><span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> + <i>o</i>(<i>x</i><sup>2</sup>)</span></span>。</p><p>由该极限等于 1 可得：分子一次项系数必为 0 且二次项系数等于 <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span>，</p><p>即 <i>a</i> + 1 = 0，<i>b</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = <span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span>，解得 <i>a</i> = −1，<i>b</i> = 2。故 <i>ab</i> = −2。</p>",
+    "tips": "先看分母 e^(x²) - cos x = (1 + x²) - (1 - x²/2) + o(x²) = (3/2)x² + o(x²)，是二阶无穷小；再将分子 ln(1+x) = x - x²/2 + o(x²) 展开对比同次幂系数即可迅速定出 a = -1, b = 2。",
+    "kp": "泰勒展开与等价无穷小反求参数"
+  },
+  {
+    "id": "M2023_12",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 12,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2023数二 第12题（填空题 5分）",
+    "stem": "曲线 <i>y</i> = ∫<sub>−√3</sub><sup><i>x</i></sup> √(3 − <i>t</i><sup>2</sup>) d<i>t</i> 的弧长为 ________.",
+    "options": null,
+    "answer": "√3 + 4π/3",
+    "analysis": "<p>首先确定曲线的定义域：由被积函数 √(3 − <i>t</i><sup>2</sup>) 有意义知 3 − <i>t</i><sup>2</sup> ≥ 0，故函数 <i>y</i> = ∫<sub>−√3</sub><sup><i>x</i></sup> √(3 − <i>t</i><sup>2</sup>) d<i>t</i> 的定义域为 [−√3, √3]。</p><p>对 <i>x</i> 求导得 <i>y</i>′ = √(3 − <i>x</i><sup>2</sup>)。</p><p>由直角坐标下的弧长公式并利用偶函数对称性得所求弧长为：</p><p><i>s</i> = ∫<sub>−√3</sub><sup>√3</sup> √(1 + <i>y</i>′<sup>2</sup>) d<i>x</i> = ∫<sub>−√3</sub><sup>√3</sup> √(4 − <i>x</i><sup>2</sup>) d<i>x</i> = 2 ∫<sub>0</sub><sup>√3</sup> √(4 − <i>x</i><sup>2</sup>) d<i>x</i>。</p><p>令 <i>x</i> = 2 sin <i>t</i> (0 ≤ <i>t</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>3</span></span>)，则：</p><p><i>s</i> = ∫<sub>0</sub><sup>π/3</sup> 8 cos<sup>2</sup> <i>t</i> d<i>t</i> = 4 ∫<sub>0</sub><sup>π/3</sup> (1 + cos 2<i>t</i>) d<i>t</i> = 4 [ <i>t</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> sin 2<i>t</i> ]<sub>0</sub><sup>π/3</sup> = √3 + <span class='frac'><span class='frac-num'>4</span><span class='frac-den'>3</span></span>π。</p>",
+    "tips": "本题隐含陷阱是没有直接给出 x 的范围！必须根据根号下 3 - t² ≥ 0 自行确定定义域 x ∈ [-√3, √3]。化简后 ∫_{-√3}^{√3} √(4-x²) dx 也可以用圆 x²+y²=4 在 [-√3, √3] 上的面积（扇形面积 + 两个直角三角形面积）几何法口算。",
+    "kp": "变限积分求导与平面曲线的弧长计算"
+  },
+  {
+    "id": "M2023_13",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 13,
+    "qType": "fill",
+    "chapter": "m_ch5",
+    "title": "2023数二 第13题（填空题 5分）",
+    "stem": "设函数 <i>z</i> = <i>z</i>(<i>x</i>, <i>y</i>) 由方程 e<sup><i>z</i></sup> + <i>xz</i> = 2<i>x</i> − <i>y</i> 确定，则 <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span>|<sub>(<i>x</i>=1, <i>y</i>=1)</sub> = ________.",
+    "options": null,
+    "answer": "-3/2",
+    "analysis": "<p>当 <i>x</i> = 1，<i>y</i> = 1 时，代入原方程得 e<sup><i>z</i></sup> + <i>z</i> = 1，因 <i>f</i>(<i>z</i>) = e<sup><i>z</i></sup> + <i>z</i> 单调递增且 <i>f</i>(0) = 1，故唯一解为 <i>z</i> = 0。</p><p>方程 e<sup><i>z</i></sup> + <i>xz</i> = 2<i>x</i> − <i>y</i> 两边对 <i>x</i> 求偏导，有：</p><p>e<sup><i>z</i></sup> · <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <i>z</i> + <i>x</i> <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> = 2。　①</p><p>① 式两端再对 <i>x</i> 求偏导数，有：</p><p>e<sup><i>z</i></sup> · (<span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span>)<sup>2</sup> + e<sup><i>z</i></sup> · <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span> + <i>x</i> <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = 0。　②</p><p>将 <i>x</i> = 1，<i>y</i> = 1，<i>z</i> = 0 代入 ① 式，得 (1 + 1) <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span>|<sub>(1,1)</sub> = 2，即 <span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span>|<sub>(1,1)</sub> = 1；</p><p>再将 <i>x</i> = 1，<i>y</i> = 1，<i>z</i> = 0，<span class='frac'><span class='frac-num'>∂<i>z</i></span><span class='frac-den'>∂<i>x</i></span></span>|<sub>(1,1)</sub> = 1 代入 ② 式，得 1 · 1<sup>2</sup> + <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> + 1 + 1 + <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = 0，解得 <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>z</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span>|<sub>(1,1)</sub> = −<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>2</span></span>。</p>",
+    "tips": "求多元隐函数在某点处的偏导数值，若只对同一个变量 x 求二阶偏导，可先将另一个独立变量 y = 1 直接代入原方程化为一元隐函数 e^z + xz = 2x - 1，再两边对 x 求导两次并边求导边代值，计算量减半且绝不出错！",
+    "kp": "隐函数求高阶偏导数"
+  },
+  {
+    "id": "M2023_14",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 14,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2023数二 第14题（填空题 5分）",
+    "stem": "曲线 3<i>x</i><sup>3</sup> = <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> 在 <i>x</i> = 1 对应点处的法线斜率为 ________.",
+    "options": null,
+    "answer": "-11/9",
+    "analysis": "<p>将 <i>x</i> = 1 代入曲线方程 3<i>x</i><sup>3</sup> = <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> 得 <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> = 3，因 <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> 单调递增，故唯一实根为 <i>y</i> = 1。</p><p>等式 3<i>x</i><sup>3</sup> = <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> 两端对 <i>x</i> 求导得：</p><p>9<i>x</i><sup>2</sup> = 5<i>y</i><sup>4</sup><i>y</i>′ + 6<i>y</i><sup>2</sup><i>y</i>′。</p><p>将 <i>x</i> = 1，<i>y</i> = 1 代入上式得 9 = (5 + 6)<i>y</i>′(1)，即切线斜率 <i>y</i>′(1) = <span class='frac'><span class='frac-num'>9</span><span class='frac-den'>11</span></span>。</p><p>所以，曲线 3<i>x</i><sup>3</sup> = <i>y</i><sup>5</sup> + 2<i>y</i><sup>3</sup> 在 <i>x</i> = 1 对应点处的法线斜率为 −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>y</i>′(1)</span></span> = −<span class='frac'><span class='frac-num'>11</span><span class='frac-den'>9</span></span>。</p>",
+    "tips": "审题看清求的是“法线斜率”还是“切线斜率”！求出切线斜率 k_切 = y'(1) = 9/11 后，务必取负倒数得到法线斜率 k_法 = -1 / y'(1) = -11/9。",
+    "kp": "隐函数求导与曲线的切线、法线斜率"
+  },
+  {
+    "id": "M2023_15",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 15,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2023数二 第15题（填空题 5分）",
+    "stem": "设连续函数 <i>f</i>(<i>x</i>) 满足 <i>f</i>(<i>x</i> + 2) − <i>f</i>(<i>x</i>) = <i>x</i>，且 ∫<sub>0</sub><sup>2</sup> <i>f</i>(<i>x</i>) d<i>x</i> = 0，则 ∫<sub>1</sub><sup>3</sup> <i>f</i>(<i>x</i>) d<i>x</i> = ________.",
+    "options": null,
+    "answer": "1/2",
+    "analysis": "<p>由定积分的区间可加性，将所求积分拆分为两段：</p><p>∫<sub>1</sub><sup>3</sup> <i>f</i>(<i>x</i>) d<i>x</i> = ∫<sub>1</sub><sup>2</sup> <i>f</i>(<i>x</i>) d<i>x</i> + ∫<sub>2</sub><sup>3</sup> <i>f</i>(<i>x</i>) d<i>x</i>。</p><p>对第二项作平移换元 <i>x</i> = <i>t</i> + 2（d<i>x</i> = d<i>t</i>），并利用递推关系 <i>f</i>(<i>t</i> + 2) = <i>f</i>(<i>t</i>) + <i>t</i>，得：</p><p>∫<sub>2</sub><sup>3</sup> <i>f</i>(<i>x</i>) d<i>x</i> = ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>t</i> + 2) d<i>t</i> = ∫<sub>0</sub><sup>1</sup> [<i>f</i>(<i>x</i>) + <i>x</i>] d<i>x</i> = ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。</p><p>代回原式并合并积分区间 [0, 1] 与 [1, 2]：</p><p>∫<sub>1</sub><sup>3</sup> <i>f</i>(<i>x</i>) d<i>x</i> = ∫<sub>1</sub><sup>2</sup> <i>f</i>(<i>x</i>) d<i>x</i> + ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = ∫<sub>0</sub><sup>2</sup> <i>f</i>(<i>x</i>) d<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = 0 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。</p>",
+    "tips": "遇到含广义周期关系 f(x+T) - f(x) = g(x) 的定积分问题，核心手法是利用区间拆分与平移换元 x = t + T，将超出已知积分区间 [0, 2] 的部分 [2, 3] 平移回 [0, 1]，与剩下的 [1, 2] 恰好拼成完整的 [0, 2]。",
+    "kp": "定积分的区间可加性与换元积分法"
+  },
+  {
+    "id": "M2023_16",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 16,
+    "qType": "fill",
+    "chapter": "m_ch6",
+    "title": "2023数二 第16题（填空题 5分）",
+    "stem": "已知线性方程组 { <i>ax</i><sub>1</sub> + <i>x</i><sub>3</sub> = 1， <i>x</i><sub>1</sub> + <i>ax</i><sub>2</sub> + <i>x</i><sub>3</sub> = 0， <i>x</i><sub>1</sub> + 2<i>x</i><sub>2</sub> + <i>ax</i><sub>3</sub> = 0， <i>ax</i><sub>1</sub> + <i>bx</i><sub>2</sub> = 2 } 有解，且行列式 |<i>a</i> 0 1； 1 <i>a</i> 1； 1 2 <i>a</i>| = 4，则行列式 |1 <i>a</i> 1； 1 2 <i>a</i>； <i>a</i> <i>b</i> 0| = ________.",
+    "options": null,
+    "answer": "8",
+    "analysis": "<p>设方程组的系数矩阵为 <i>A</i>（4×3 矩阵），增广矩阵为 <i>B</i>（4×4 矩阵），其中：</p><p><i>A</i> = [<i>a</i> 0 1； 1 <i>a</i> 1； 1 2 <i>a</i>； <i>a</i> <i>b</i> 0]，<i>B</i> = [<i>a</i> 0 1 1； 1 <i>a</i> 1 0； 1 2 <i>a</i> 0； <i>a</i> <i>b</i> 0 2]。</p><p>因为题中方程组有解，所以 <i>r</i>(<i>A</i>) = <i>r</i>(<i>B</i>)。</p><p>又因为 <i>A</i> 的前 3 行构成的 3 阶子式 |<i>a</i> 0 1； 1 <i>a</i> 1； 1 2 <i>a</i>| = 4 ≠ 0，且 <i>A</i> 只有 3 列，所以 <i>r</i>(<i>A</i>) = 3。</p><p>从而 4 阶方阵 <i>B</i> 的秩 <i>r</i>(<i>B</i>) = 3 < 4，故必有 |<i>B</i>| = 0。</p><p>将 4 阶行列式 |<i>B</i>| 按第 4 列展开：</p><p>|<i>B</i>| = (−1)<sup>1+4</sup> · 1 · |1 <i>a</i> 1； 1 2 <i>a</i>； <i>a</i> <i>b</i> 0| + (−1)<sup>4+4</sup> · 2 · |<i>a</i> 0 1； 1 <i>a</i> 1； 1 2 <i>a</i>| = −|1 <i>a</i> 1； 1 2 <i>a</i>； <i>a</i> <i>b</i> 0| + 2 × 4 = 0。</p><p>所以 |1 <i>a</i> 1； 1 2 <i>a</i>； <i>a</i> <i>b</i> 0| = 8。</p>",
+    "tips": "4 个方程、3 个未知数的非齐次线性方程组有解 ⇔ r(A) = r(B) ≤ 3，这意味着 4×4 的增广矩阵 B 的行列式必为 0（即 |B| = 0）！将 |B| 按常数项所在的第 4 列展开，直接建立已知 3 阶行列式与待求 3 阶行列式的线性关系，无需去解 a 和 b 的值。",
+    "kp": "非齐次线性方程组有解的充要条件与行列式按列展开"
+  },
+  {
+    "id": "M2023_17",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 17,
+    "qType": "solve",
+    "chapter": "m_ch4",
+    "title": "2023数二 第17题（解答题 10分）",
+    "stem": "设曲线 <i>L</i>：<i>y</i> = <i>y</i>(<i>x</i>) (<i>x</i> > e) 经过点 (e<sup>2</sup>, 0)，<i>L</i> 上任一点 <i>P</i>(<i>x</i>, <i>y</i>) 到 <i>y</i> 轴的距离等于该点处的切线在 <i>y</i> 轴上的截距。<br>（Ⅰ）求 <i>y</i>(<i>x</i>) 的表达式；<br>（Ⅱ）在 <i>L</i> 上求一点，使该点处的切线与两坐标轴所围三角形的面积最小，并求此最小面积。",
+    "options": null,
+    "answer": "（Ⅰ）y(x) = x(2 − ln x)；（Ⅱ）所求点为 (e^(3/2), (1/2)e^(3/2))，最小面积为 e^3",
+    "analysis": "<p><strong>（Ⅰ）建立微分方程求曲线方程：</strong></p><p>设曲线 <i>y</i> = <i>y</i>(<i>x</i>) (<i>x</i> > e) 在点 <i>P</i>(<i>x</i>, <i>y</i>) 处的切线方程为 <i>Y</i> − <i>y</i> = <i>y</i>′(<i>X</i> − <i>x</i>)。</p><p>令 <i>X</i> = 0，得该切线在 <i>y</i> 轴上的截距为 <i>Y</i> = <i>y</i> − <i>xy</i>′。</p><p>又点 <i>P</i>(<i>x</i>, <i>y</i>) (<i>x</i> > e > 0) 到 <i>y</i> 轴的距离为 <i>x</i>，由题意有 <i>x</i> = <i>y</i> − <i>xy</i>′，整理为一阶线性微分方程标准形：</p><p><i>y</i>′ − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span><i>y</i> = −1。</p><p>解此方程（或两边除以 <i>x</i> 凑微分 (<span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'><i>x</i></span></span>)′ = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>）得通解：<i>y</i>(<i>x</i>) = <i>x</i>(<i>C</i> − ln <i>x</i>)。</p><p>由曲线经过点 (e<sup>2</sup>, 0)，即 <i>y</i>(e<sup>2</sup>) = 0，代入得 <i>C</i> = 2，故 <i>y</i>(<i>x</i>) = <i>x</i>(2 − ln <i>x</i>) (<i>x</i> > e)。</p><p><strong>（Ⅱ）求切线与坐标轴所围三角形的最小面积：</strong></p><p>由（Ⅰ）知 <i>y</i>′ = 1 − ln <i>x</i>。曲线 <i>y</i> = <i>x</i>(2 − ln <i>x</i>) 在点 (<i>x</i>, <i>y</i>) 处的切线方程为 <i>Y</i> − <i>y</i> = <i>y</i>′(<i>X</i> − <i>x</i>)。</p><p>令 <i>X</i> = 0 得 <i>Y</i> = <i>y</i> − <i>xy</i>′ = <i>x</i> > 0；令 <i>Y</i> = 0 得 <i>X</i> = <i>x</i> − <span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'><i>y</i>′</span></span> = <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>ln <i>x</i> − 1</span></span> > 0 (因 <i>x</i> > e)。</p><p>该切线与两坐标轴所围三角形的面积为：</p><p><i>S</i>(<i>x</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>XY</i> = <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2(ln <i>x</i> − 1)</span></span> (<i>x</i> > e)。</p><p>对 <i>S</i>(<i>x</i>) 求导得：<i>S</i>′(<i>x</i>) = <span class='frac'><span class='frac-num'><i>x</i>(2 ln <i>x</i> − 3)</span><span class='frac-den'>2(ln <i>x</i> − 1)<sup>2</sup></span></span>。</p><p>令 <i>S</i>′(<i>x</i>) = 0，得唯一驻点 <i>x</i> = e<sup>3/2</sup>。当 e < <i>x</i> < e<sup>3/2</sup> 时，<i>S</i>′(<i>x</i>) < 0；当 <i>x</i> > e<sup>3/2</sup> 时，<i>S</i>′(<i>x</i>) > 0。</p><p>故 <i>S</i>(<i>x</i>) 在 <i>x</i> = e<sup>3/2</sup> 处取得最小值，此时 <i>y</i>(e<sup>3/2</sup>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>e<sup>3/2</sup>，最小面积为 <i>S</i>(e<sup>3/2</sup>) = e<sup>3</sup>。因而所求点为 (e<sup>3/2</sup>, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>e<sup>3/2</sup>)，所围三角形的最小面积为 e<sup>3</sup>。</p>",
+    "tips": "对于 y' - y/x = -1 这类微分方程，两边同时除以 x 即可直接看出 (y/x)' = (xy' - y)/x² = -1/x，两边积分立刻得到 y/x = C - ln x，比套一阶线性微分方程通解公式快得多！",
+    "kp": "微分方程几何应用与一元函数最值问题"
+  },
+  {
+    "id": "M2023_18",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 18,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2023数二 第18题（解答题 12分）",
+    "stem": "求函数 <i>f</i>(<i>x</i>, <i>y</i>) = <i>x</i>e<sup>cos <i>y</i></sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span><i>x</i><sup>2</sup> 的极值。",
+    "options": null,
+    "answer": "当 k 为偶数时，函数在点 (−e, kπ) 处取得极小值 −e^2/2",
+    "analysis": "<p><strong>第一步：求一阶偏导数并找出所有驻点</strong></p><p>函数 <i>f</i>(<i>x</i>, <i>y</i>) 在全平面上具有二阶连续偏导数。求一阶偏导数并令其为 0：</p><p>{ <i>f</i>′<sub><i>x</i></sub> = e<sup>cos <i>y</i></sup> + <i>x</i> = 0， <i>f</i>′<sub><i>y</i></sub> = −<i>x</i> sin <i>y</i> e<sup>cos <i>y</i></sup> = 0 }。</p><p>由第一式知 <i>x</i> = −e<sup>cos <i>y</i></sup> ≠ 0，代入第二式得 sin <i>y</i> = 0，解得 <i>y</i> = <i>k</i>π (<i>k</i> = 0, ±1, ±2, …)。</p><p>此时 cos(<i>k</i>π) = (−1)<sup><i>k</i></sup>，故得驻点为 (−e<sup>(−1)<sup><i>k</i></sup></sup>, <i>k</i>π) (<i>k</i> = 0, ±1, ±2, …)。</p><p><strong>第二步：计算二阶偏导数及判别式</strong></p><p><i>A</i> = <i>f</i>′′<sub><i>xx</i></sub> = 1，</p><p><i>B</i> = <i>f</i>′′<sub><i>xy</i></sub> = −sin <i>y</i> e<sup>cos <i>y</i></sup>，</p><p><i>C</i> = <i>f</i>′′<sub><i>yy</i></sub> = −<i>x</i>(cos <i>y</i> − sin<sup>2</sup> <i>y</i>)e<sup>cos <i>y</i></sup>。</p><p>在驻点 (−e<sup>(−1)<sup><i>k</i></sup></sup>, <i>k</i>π) 处，sin(<i>k</i>π) = 0，cos(<i>k</i>π) = (−1)<sup><i>k</i></sup>，故 <i>A</i> = 1，<i>B</i> = 0，<i>C</i> = (−1)<sup><i>k</i></sup> e<sup>2·(−1)<sup><i>k</i></sup></sup>。</p><p>判别式 Δ = <i>B</i><sup>2</sup> − <i>AC</i> = −(−1)<sup><i>k</i></sup> e<sup>2·(−1)<sup><i>k</i></sup></sup>（或用 <i>AC</i> − <i>B</i><sup>2</sup> = (−1)<sup><i>k</i></sup> e<sup>2·(−1)<sup><i>k</i></sup></sup>）：</p><p>（1）当 <i>k</i> 为奇数时，<i>AC</i> − <i>B</i><sup>2</sup> = −e<sup>−2</sup> < 0（即 <i>B</i><sup>2</sup> − <i>AC</i> = e<sup>−2</sup> > 0），故点 (−e<sup>−1</sup>, <i>k</i>π) 不是极值点；</p><p>（2）当 <i>k</i> 为偶数时，<i>AC</i> − <i>B</i><sup>2</sup> = e<sup>2</sup> > 0（即 <i>B</i><sup>2</sup> − <i>AC</i> = −e<sup>2</sup> < 0），且 <i>A</i> = 1 > 0，故函数在点 (−e, <i>k</i>π) 处取得极小值，极小值为：</p><p><i>f</i>(−e, <i>k</i>π) = (−e)·e<sup>1</sup> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>(−e)<sup>2</sup> = −<span class='frac'><span class='frac-num'>e<sup>2</sup></span><span class='frac-den'>2</span></span>（<i>k</i> 为偶数）。</p>",
+    "tips": "含有三角函数 sin y, cos y 的多元函数驻点通常有无穷多个（含整数参数 k），必须按 k 为奇数和 k 为偶数分类讨论 cos(kπ) = (-1)^k 的符号！此外求 C = f''_{yy} 时，由于驻点处 sin y = 0，凡是含 sin y 因子的项在代入驻点时直接为 0，可大幅简化计算。",
+    "kp": "二元函数的无条件极值求法"
+  },
+  {
+    "id": "M2023_19",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 19,
+    "qType": "solve",
+    "chapter": "m_ch3",
+    "title": "2023数二 第19题（解答题 12分）",
+    "stem": "已知平面区域 <i>D</i> = { (<i>x</i>, <i>y</i>) | 1 ≤ <i>x</i> < +∞，0 ≤ <i>y</i> ≤ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i>√(1 + <i>x</i><sup>2</sup>)</span></span> }。<br>（Ⅰ）求 <i>D</i> 的面积 <i>S</i>；<br>（Ⅱ）求 <i>D</i> 绕 <i>x</i> 轴旋转所成旋转体的体积 <i>V</i>。",
+    "options": null,
+    "answer": "（Ⅰ）S = ln(1 + √2)；（Ⅱ）V = π(1 − π/4)",
+    "analysis": "<p><strong>（Ⅰ）求平面区域 <i>D</i> 的面积 <i>S</i>：</strong></p><p>所求面积为反常积分 <i>S</i> = ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'><i>x</i>√(1 + <i>x</i><sup>2</sup>)</span></span>。</p><p><strong>方法一（倒代换）：</strong>令 <i>u</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>，则：</p><p><i>S</i> = ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'><i>x</i><sup>2</sup>√(1 + (1/<i>x</i>)<sup>2</sup>)</span></span> = −∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d(1/<i>x</i>)</span><span class='frac-den'>√(1 + (1/<i>x</i>)<sup>2</sup>)</span></span> = − [ ln(<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> + √(1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup>2</sup></span></span>)) ]<sub>1</sub><sup>+∞</sup> = ln(1 + √2)。</p><p><strong>方法二（根式代换）：</strong>令 <i>t</i> = √(<i>x</i><sup>2</sup> + 1)，则 <i>x</i><sup>2</sup> = <i>t</i><sup>2</sup> − 1，<i>x</i> d<i>x</i> = <i>t</i> d<i>t</i>，</p><p><i>S</i> = ∫<sub>√2</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>t</i></span><span class='frac-den'><i>t</i><sup>2</sup> − 1</span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> [ ln <span class='frac'><span class='frac-num'><i>t</i> − 1</span><span class='frac-den'><i>t</i> + 1</span></span> ]<sub>√2</sub><sup>+∞</sup> = ln(√2 + 1)。</p><p><strong>（Ⅱ）求旋转体体积 <i>V</i>：</strong></p><p>绕 <i>x</i> 轴旋转所成旋转体的体积为：</p><p><i>V</i> = π ∫<sub>1</sub><sup>+∞</sup> <i>y</i><sup>2</sup> d<i>x</i> = π ∫<sub>1</sub><sup>+∞</sup> <span class='frac'><span class='frac-num'>d<i>x</i></span><span class='frac-den'><i>x</i><sup>2</sup>(1 + <i>x</i><sup>2</sup>)</span></span> = π ∫<sub>1</sub><sup>+∞</sup> (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i><sup>2</sup></span></span>) d<i>x</i></p><p>= −π [ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span> + arctan <i>x</i> ]<sub>1</sub><sup>+∞</sup> = −π [ (0 + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>) − (1 + <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>) ] = π(1 − <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>)。</p>",
+    "tips": "处理形如 ∫ dx / [x √(1+x²)] 的积分，倒代换 u = 1/x 是最简洁的杀手锏，一步化为标准积分公式 ∫ du / √(1+u²) = ln(u + √(1+u²)) + C；而有理分式 1 / [x²(1+x²)] 切勿用三角换元，直接拆项为 1/x² - 1/(1+x²) 即可口算原函数。",
+    "kp": "定积分（反常积分）的几何应用：平面图形面积与旋转体体积"
+  },
+  {
+    "id": "M2023_20",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 20,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2023数二 第20题（解答题 12分）",
+    "stem": "设平面有界区域 <i>D</i> 位于第一象限，由曲线 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> − <i>xy</i> = 1，<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> − <i>xy</i> = 2 与直线 <i>y</i> = √3 <i>x</i>，<i>y</i> = 0 围成，计算二重积分 ∬<sub><i>D</i></sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup></span></span> d<i>x</i>d<i>y</i>。",
+    "options": null,
+    "answer": "√3π ln 2 / 24",
+    "analysis": "<p>采用极坐标变换 <i>x</i> = <i>r</i> cos θ，<i>y</i> = <i>r</i> sin θ。</p><p>曲线 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> − <i>xy</i> = 1 与 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> − <i>xy</i> = 2 的极坐标方程分别为：</p><p><i>r</i><sub>1</sub><sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 − cos θ sin θ</span></span>，<i>r</i><sub>2</sub><sup>2</sup> = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>1 − cos θ sin θ</span></span>。</p><p>直线 <i>y</i> = 0 与 <i>y</i> = √3 <i>x</i> 在第一象限对应极角 θ = 0 与 θ = <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>3</span></span>。</p><p>将被积函数与面积元素化为极坐标形式，得：</p><p>∬<sub><i>D</i></sub> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3<i>x</i><sup>2</sup> + <i>y</i><sup>2</sup></span></span> d<i>x</i>d<i>y</i> = ∫<sub>0</sub><sup>π/3</sup> dθ ∫<sub><i>r</i><sub>1</sub>(θ)</sub><sup><i>r</i><sub>2</sub>(θ)</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>r</i><sup>2</sup>(3 cos<sup>2</sup> θ + sin<sup>2</sup> θ)</span></span> · <i>r</i> d<i>r</i></p><p>= ∫<sub>0</sub><sup>π/3</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3 cos<sup>2</sup> θ + sin<sup>2</sup> θ</span></span> [ ln <i>r</i> ]<sub><i>r</i><sub>1</sub>(θ)</sub><sup><i>r</i><sub>2</sub>(θ)</sup> dθ</p><p>= ∫<sub>0</sub><sup>π/3</sup> ln √2 · <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3 cos<sup>2</sup> θ + sin<sup>2</sup> θ</span></span> dθ</p><p>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ln 2 · ∫<sub>0</sub><sup>π/3</sup> <span class='frac'><span class='frac-num'>d(tan θ)</span><span class='frac-den'>3 + tan<sup>2</sup> θ</span></span></p><p>= <span class='frac'><span class='frac-num'>ln 2</span><span class='frac-den'>2√3</span></span> [ arctan <span class='frac'><span class='frac-num'>tan θ</span><span class='frac-den'>√3</span></span> ]<sub>0</sub><sup>π/3</sup> = <span class='frac'><span class='frac-num'>ln 2</span><span class='frac-den'>2√3</span></span> · <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span> = <span class='frac'><span class='frac-num'>√3 ln 2</span><span class='frac-den'>24</span></span>π。</p>",
+    "tips": "当积分区域的边界是二次齐次式 x²+y²-xy = c 且被积函数也是二次齐次分式 1/(3x²+y²)，使用极坐标变换 x=r cos θ, y=r sin θ 会发生奇迹般的化简：被积函数的 1/r² 乘以雅可比行列式 r 变成 1/r，积分出来是 ln(r₂/r₁) = ln √2，复杂的 √(1-sin θ cos θ) 在上下限相除时完全抵消！",
+    "kp": "二重积分的极坐标计算法"
+  },
+  {
+    "id": "M2023_21",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 21,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2023数二 第21题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 在 (−<i>a</i>, <i>a</i>) (<i>a</i> > 0) 上具有二阶连续导数。<br>（Ⅰ）若 <i>f</i>(0) = 0，证明：存在 ξ ∈ (−<i>a</i>, <i>a</i>)，使得 <i>f</i>′′(ξ) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sup>2</sup></span></span>[<i>f</i>(<i>a</i>) + <i>f</i>(−<i>a</i>)]；<br>（Ⅱ）若 <i>f</i>(<i>x</i>) 在 (−<i>a</i>, <i>a</i>) 内取得极值，证明：存在 η ∈ (−<i>a</i>, <i>a</i>)，使得 |<i>f</i>′′(η)| ≥ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2<i>a</i><sup>2</sup></span></span>|<i>f</i>(<i>a</i>) − <i>f</i>(−<i>a</i>)|。",
+    "options": null,
+    "answer": "见解析（利用泰勒中值定理与连续函数介值定理/最值定理证明）",
+    "analysis": "<p><strong>（Ⅰ）证明：</strong></p><p>由泰勒公式（在 <i>x</i> = 0 处展开）及 <i>f</i>(0) = 0 可知：</p><p><i>f</i>(<i>x</i>) = <i>f</i>(0) + <i>f</i>′(0)<i>x</i> + <span class='frac'><span class='frac-num'><i>f</i>′′(η)</span><span class='frac-den'>2!</span></span><i>x</i><sup>2</sup> = <i>f</i>′(0)<i>x</i> + <span class='frac'><span class='frac-num'><i>f</i>′′(η)</span><span class='frac-den'>2!</span></span><i>x</i><sup>2</sup>，其中 η 介于 0 与 <i>x</i> 之间。</p><p>分别取 <i>x</i> = <i>a</i> 与 <i>x</i> = −<i>a</i>，则：</p><p><i>f</i>(<i>a</i>) = <i>f</i>′(0)<i>a</i> + <span class='frac'><span class='frac-num'><i>f</i>′′(η<sub>1</sub>)</span><span class='frac-den'>2!</span></span><i>a</i><sup>2</sup>，(0 < η<sub>1</sub> < <i>a</i>)，　①</p><p><i>f</i>(−<i>a</i>) = −<i>f</i>′(0)<i>a</i> + <span class='frac'><span class='frac-num'><i>f</i>′′(η<sub>2</sub>)</span><span class='frac-den'>2!</span></span><i>a</i><sup>2</sup>，(−<i>a</i> < η<sub>2</sub> < 0)。　②</p><p>① + ② 得：<i>f</i>(<i>a</i>) + <i>f</i>(−<i>a</i>) = <span class='frac'><span class='frac-num'><i>a</i><sup>2</sup></span><span class='frac-den'>2</span></span>[<i>f</i>′′(η<sub>1</sub>) + <i>f</i>′′(η<sub>2</sub>)]。　③</p><p>又 <i>f</i>′′(<i>x</i>) 在闭区间 [η<sub>2</sub>, η<sub>1</sub>] 上连续，故必有最小值 <i>m</i> 和最大值 <i>M</i>，且 <i>m</i> ≤ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>[<i>f</i>′′(η<sub>1</sub>) + <i>f</i>′′(η<sub>2</sub>)] ≤ <i>M</i>。</p><p>由连续函数的介值定理知，存在 ξ ∈ [η<sub>2</sub>, η<sub>1</sub>] ⊂ (−<i>a</i>, <i>a</i>)，使得 <i>f</i>′′(ξ) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>[<i>f</i>′′(η<sub>1</sub>) + <i>f</i>′′(η<sub>2</sub>)]。</p><p>代入 ③ 式得 <i>f</i>′′(ξ) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>a</i><sup>2</sup></span></span>[<i>f</i>(<i>a</i>) + <i>f</i>(−<i>a</i>)]。</p><p><strong>（Ⅱ）证明：</strong></p><p>设 <i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> ∈ (−<i>a</i>, <i>a</i>) 处取得极值，由费马引理知 <i>f</i>′(<i>x</i><sub>0</sub>) = 0。由泰勒公式（在 <i>x</i> = <i>x</i><sub>0</sub> 处展开）可知：</p><p><i>f</i>(<i>x</i>) = <i>f</i>(<i>x</i><sub>0</sub>) + <i>f</i>′(<i>x</i><sub>0</sub>)(<i>x</i> − <i>x</i><sub>0</sub>) + <span class='frac'><span class='frac-num'><i>f</i>′′(ξ)</span><span class='frac-den'>2!</span></span>(<i>x</i> − <i>x</i><sub>0</sub>)<sup>2</sup> = <i>f</i>(<i>x</i><sub>0</sub>) + <span class='frac'><span class='frac-num'><i>f</i>′′(ξ)</span><span class='frac-den'>2!</span></span>(<i>x</i> − <i>x</i><sub>0</sub>)<sup>2</sup>，其中 ξ 介于 <i>x</i><sub>0</sub> 与 <i>x</i> 之间。</p><p>分别取 <i>x</i> = −<i>a</i> 与 <i>x</i> = <i>a</i>，则：</p><p><i>f</i>(−<i>a</i>) = <i>f</i>(<i>x</i><sub>0</sub>) + <span class='frac'><span class='frac-num'><i>f</i>′′(ξ<sub>1</sub>)</span><span class='frac-den'>2!</span></span>(−<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup>，(−<i>a</i> < ξ<sub>1</sub> < <i>x</i><sub>0</sub>)，</p><p><i>f</i>(<i>a</i>) = <i>f</i>(<i>x</i><sub>0</sub>) + <span class='frac'><span class='frac-num'><i>f</i>′′(ξ<sub>2</sub>)</span><span class='frac-den'>2!</span></span>(<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup>，(<i>x</i><sub>0</sub> < ξ<sub>2</sub> < <i>a</i>)。</p><p>两式相减并取绝对值：|<i>f</i>(<i>a</i>) − <i>f</i>(−<i>a</i>)| = | <span class='frac'><span class='frac-num'><i>f</i>′′(ξ<sub>2</sub>)</span><span class='frac-den'>2!</span></span>(<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup> − <span class='frac'><span class='frac-num'><i>f</i>′′(ξ<sub>1</sub>)</span><span class='frac-den'>2!</span></span>(<i>a</i> + <i>x</i><sub>0</sub>)<sup>2</sup> | ≤ <span class='frac'><span class='frac-num'>|<i>f</i>′′(ξ<sub>2</sub>)|</span><span class='frac-den'>2</span></span>(<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup> + <span class='frac'><span class='frac-num'>|<i>f</i>′′(ξ<sub>1</sub>)|</span><span class='frac-den'>2</span></span>(<i>a</i> + <i>x</i><sub>0</sub>)<sup>2</sup>。</p><p>又 |<i>f</i>′′(<i>x</i>)| 在 [ξ<sub>1</sub>, ξ<sub>2</sub>] 上连续，故必存在 η ∈ [ξ<sub>1</sub>, ξ<sub>2</sub>] ⊂ (−<i>a</i>, <i>a</i>)，使得 |<i>f</i>′′(η)| = max<sub><i>x</i>∈[ξ<sub>1</sub>,ξ<sub>2</sub>]</sub> |<i>f</i>′′(<i>x</i>)| = <i>M</i>。</p><p>由于 <i>x</i><sub>0</sub> ∈ (−<i>a</i>, <i>a</i>)，故 (<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup> + (<i>a</i> + <i>x</i><sub>0</sub>)<sup>2</sup> = 2(<i>a</i><sup>2</sup> + <i>x</i><sub>0</sub><sup>2</sup>) < 4<i>a</i><sup>2</sup>，从而：</p><p>|<i>f</i>(<i>a</i>) − <i>f</i>(−<i>a</i>)| ≤ <span class='frac'><span class='frac-num'><i>M</i></span><span class='frac-den'>2</span></span>[(<i>a</i> − <i>x</i><sub>0</sub>)<sup>2</sup> + (<i>a</i> + <i>x</i><sub>0</sub>)<sup>2</sup>] ≤ <span class='frac'><span class='frac-num'><i>M</i></span><span class='frac-den'>2</span></span>(4<i>a</i><sup>2</sup>) = 2<i>a</i><sup>2</sup>|<i>f</i>′′(η)|，</p><p>即 |<i>f</i>′′(η)| ≥ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2<i>a</i><sup>2</sup></span></span>|<i>f</i>(<i>a</i>) − <i>f</i>(−<i>a</i>)|。</p>",
+    "tips": "凡是条件和结论中跨越了函数值 f(a), f(-a) 与二阶导数 f''(ξ) 的中值定理证明题，首选二阶泰勒中值定理！展开点的选取原则是“哪里导数已知（或一阶导可消去）就在哪里展开”：第（Ⅰ）问对称相加可消去 f'(0)a，故在 x = 0 展开；第（Ⅱ）问在极值点 x₀ 处有 f'(x₀) = 0，故在 x = x₀ 展开。",
+    "kp": "泰勒中值定理、费马引理与连续函数介值定理"
+  },
+  {
+    "id": "M2023_22",
+    "subject": "math2",
+    "year": 2023,
+    "qNum": 22,
+    "qType": "solve",
+    "chapter": "m_ch6",
+    "title": "2023数二 第22题（解答题 12分）",
+    "stem": "设矩阵 <i>A</i> 满足：对任意 <i>x</i> = (<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>)<sup>T</sup> 均有 <i>Ax</i> = (<i>x</i><sub>1</sub> + <i>x</i><sub>2</sub> + <i>x</i><sub>3</sub>, 2<i>x</i><sub>1</sub> − <i>x</i><sub>2</sub> + <i>x</i><sub>3</sub>, <i>x</i><sub>2</sub> − <i>x</i><sub>3</sub>)<sup>T</sup>。<br>（Ⅰ）求矩阵 <i>A</i>；<br>（Ⅱ）求可逆矩阵 <i>P</i> 与对角矩阵 Λ，使得 <i>P</i><sup>−1</sup><i>AP</i> = Λ。",
+    "options": null,
+    "answer": "（Ⅰ）A = [1 1 1; 2 −1 1; 0 1 −1]；（Ⅱ）P = [−1 0 4; 0 1 3; 2 −1 1]，Λ = diag(−1, −2, 2)",
+    "analysis": "<p><strong>（Ⅰ）求矩阵 <i>A</i>：</strong></p><p>在 <i>Ax</i> 中分别取标准单位列向量 <i>e</i><sub>1</sub> = (1, 0, 0)<sup>T</sup>，<i>e</i><sub>2</sub> = (0, 1, 0)<sup>T</sup>，<i>e</i><sub>3</sub> = (0, 0, 1)<sup>T</sup>，即：</p><p><i>A</i> = <i>AE</i> = <i>A</i> [1 0 0； 0 1 0； 0 0 1] = [1  1  1； 2  −1  1； 0  1  −1]。</p><p><strong>（Ⅱ）求特征值与特征向量将 <i>A</i> 相似对角化：</strong></p><p>令特征多项式 |<i>A</i> − λ<i>E</i>| = |1 − λ, 1, 1； 2, −1 − λ, 1； 0, 1, −1 − λ|，将第 2 列的 (1 + λ) 倍加到第 3 列得：</p><p>|<i>A</i> − λ<i>E</i>| = |1 − λ, 1, 2 + λ； 2, −1 − λ, 1 − (1 + λ)<sup>2</sup>； 0, 1, 0| = −(λ + 2)(λ − 2)(λ + 1) = 0，</p><p>求得 <i>A</i> 的特征值为 λ<sub>1</sub> = −1，λ<sub>2</sub> = −2，λ<sub>3</sub> = 2。</p><p>（1）当 λ<sub>1</sub> = −1 时，求解齐次线性方程组 (<i>A</i> + <i>E</i>)<i>x</i> = <b>0</b>：</p><p><i>A</i> + <i>E</i> = [2 1 1； 2 0 1； 0 1 0] → [1 0 1/2； 0 1 0； 0 0 0]，</p><p>通解为 <i>x</i> = <i>k</i><sub>1</sub>(−1, 0, 2)<sup>T</sup> (<i>k</i><sub>1</sub> ∈ <b>R</b>)，取属于 λ<sub>1</sub> = −1 的特征向量 ξ<sub>1</sub> = (−1, 0, 2)<sup>T</sup>。</p><p>（2）当 λ<sub>2</sub> = −2 时，求解齐次线性方程组 (<i>A</i> + 2<i>E</i>)<i>x</i> = <b>0</b>：</p><p><i>A</i> + 2<i>E</i> = [3 1 1； 2 1 1； 0 1 1] → [1 0 0； 0 1 1； 0 0 0]，</p><p>通解为 <i>x</i> = <i>k</i><sub>2</sub>(0, 1, −1)<sup>T</sup> (<i>k</i><sub>2</sub> ∈ <b>R</b>)，取属于 λ<sub>2</sub> = −2 的特征向量 ξ<sub>2</sub> = (0, 1, −1)<sup>T</sup>。</p><p>（3）当 λ<sub>3</sub> = 2 时，求解齐次线性方程组 (<i>A</i> − 2<i>E</i>)<i>x</i> = <b>0</b>：</p><p><i>A</i> − 2<i>E</i> = [−1 1 1； 2 −3 1； 0 1 −3] → [1 0 −4； 0 1 −3； 0 0 0]，</p><p>通解为 <i>x</i> = <i>k</i><sub>3</sub>(4, 3, 1)<sup>T</sup> (<i>k</i><sub>3</sub> ∈ <b>R</b>)，取属于 λ<sub>3</sub> = 2 的特征向量 ξ<sub>3</sub> = (4, 3, 1)<sup>T</sup>。</p><p>令可逆矩阵 <i>P</i> = [ξ<sub>1</sub>, ξ<sub>2</sub>, ξ<sub>3</sub>] = [−1  0  4； 0  1  3； 2  −1  1]，则 <i>P</i><sup>−1</sup><i>AP</i> = Λ = [−1  0  0； 0  −2  0； 0  0  2]。</p>",
+    "tips": "由于矩阵 A 不是实对称矩阵，相似对角化时只需要求出每个单特征值对应的特征向量并按列排成可逆矩阵 P 即可，完全不需要做施密特正交化和单位化！求特征向量后务必用 Aξ_i = λ_i ξ_i 快速验算一遍，确保满分。",
+    "kp": "矩阵的特征值与特征向量及一般矩阵的相似对角化"
+  },
+  {
+    "id": "M2022_01",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2022数二 第1题（选择题 5分）",
+    "stem": "若当 <i>x</i> → 0 时，<i>α</i>(<i>x</i>)，<i>β</i>(<i>x</i>) 是非零无穷小量，则以下的命题中，<br>① 若 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，则 <i>α</i><sup>2</sup>(<i>x</i>) ~ <i>β</i><sup>2</sup>(<i>x</i>)；<br>② 若 <i>α</i><sup>2</sup>(<i>x</i>) ~ <i>β</i><sup>2</sup>(<i>x</i>)，则 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)；<br>③ 若 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，则 <i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>) = <i>o</i>(<i>α</i>(<i>x</i>))；<br>④ 若 <i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>) = <i>o</i>(<i>α</i>(<i>x</i>))，则 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，<br>真命题的序号为（ &nbsp; ）",
+    "options": [
+      "A. ①③",
+      "B. ①④",
+      "C. ①③④",
+      "D. ②③④"
+    ],
+    "answer": "C",
+    "analysis": "当 <i>x</i> → 0 时，<i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>) 意味着 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i>(<i>x</i>)</span><span class='frac-den'><i>β</i>(<i>x</i>)</span></span> = 1，<i>o</i>(<i>α</i>(<i>x</i>)) 满足 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>o</i>(<i>α</i>(<i>x</i>))</span><span class='frac-den'><i>α</i>(<i>x</i>)</span></span> = 0。<br>① 若 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，则 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i><sup>2</sup>(<i>x</i>)</span><span class='frac-den'><i>β</i><sup>2</sup>(<i>x</i>)</span></span> = [lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i>(<i>x</i>)</span><span class='frac-den'><i>β</i>(<i>x</i>)</span></span>]<sup>2</sup> = 1，即 <i>α</i><sup>2</sup>(<i>x</i>) ~ <i>β</i><sup>2</sup>(<i>x</i>)，命题①是真命题。<br>② 由 <i>α</i><sup>2</sup>(<i>x</i>) ~ <i>β</i><sup>2</sup>(<i>x</i>) 并不能得到 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)。取反例 <i>β</i>(<i>x</i>) = −<i>α</i>(<i>x</i>)，满足 <i>α</i><sup>2</sup>(<i>x</i>) ~ <i>β</i><sup>2</sup>(<i>x</i>)，但 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i>(<i>x</i>)</span><span class='frac-den'><i>β</i>(<i>x</i>)</span></span> = −1 ≠ 1，命题②不是真命题。<br>③ 若 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，则 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>)</span><span class='frac-den'><i>α</i>(<i>x</i>)</span></span> = 1 − lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>β</i>(<i>x</i>)</span><span class='frac-den'><i>α</i>(<i>x</i>)</span></span> = 1 − 1 = 0，故 <i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>) = <i>o</i>(<i>α</i>(<i>x</i>))，命题③是真命题。<br>④ 若 <i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>) = <i>o</i>(<i>α</i>(<i>x</i>))，则 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>β</i>(<i>x</i>)</span><span class='frac-den'><i>α</i>(<i>x</i>)</span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>α</i>(<i>x</i>) − [<i>α</i>(<i>x</i>) − <i>β</i>(<i>x</i>)]</span><span class='frac-den'><i>α</i>(<i>x</i>)</span></span> = 1 − 0 = 1，故 <i>α</i>(<i>x</i>) ~ <i>β</i>(<i>x</i>)，命题④是真命题。<br>综上所述，应选 C。",
+    "tips": "利用结论“<i>α</i> ~ <i>β</i> ⇔ <i>α</i> − <i>β</i> = <i>o</i>(<i>α</i>)”可直接秒杀③④正确，平方相等开方注意正负号反例即可排除②。",
+    "kp": "无穷小量的比较与等价无穷小性质"
+  },
+  {
+    "id": "M2022_02",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2022数二 第2题（选择题 5分）",
+    "stem": "∫<sub>0</sub><sup>2</sup> d<i>y</i> ∫<sub><i>y</i></sub><sup>2</sup> <span class='frac'><span class='frac-num'><i>y</i></span><span class='frac-den'>√(1 + <i>x</i><sup>3</sup>)</span></span> d<i>x</i> =（ &nbsp; ）",
+    "options": [
+      "A. <span class='frac'><span class='frac-num'>√2</span><span class='frac-den'>6</span></span>",
+      "B. <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span>",
+      "C. <span class='frac'><span class='frac-num'>√2</span><span class='frac-den'>3</span></span>",
+      "D. <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>3</span></span>"
+    ],
+    "answer": "D",
+    "analysis": "原二次积分的积分区域为 <i>D</i> = {(<i>x</i>, <i>y</i>) | <i>y</i> ≤ <i>x</i> ≤ 2, 0 ≤ <i>y</i> ≤ 2}，是由直线 <i>y</i> = <i>x</i>，<i>x</i> = 2 以及 <i>x</i> 轴所围成的三角形区域。<br>交换积分次序，将区域改写为 <i>D</i> = {(<i>x</i>, <i>y</i>) | 0 ≤ <i>y</i> ≤ <i>x</i>, 0 ≤ <i>x</i> ≤ 2}。<br>因此，原积分 = ∫<sub>0</sub><sup>2</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√(1 + <i>x</i><sup>3</sup>)</span></span> d<i>x</i> ∫<sub>0</sub><sup><i>x</i></sup> <i>y</i> d<i>y</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub>0</sub><sup>2</sup> <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>√(1 + <i>x</i><sup>3</sup>)</span></span> d<i>x</i><br>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>6</span></span> ∫<sub>0</sub><sup>2</sup> <span class='frac'><span class='frac-num'>d(1 + <i>x</i><sup>3</sup>)</span><span class='frac-den'>√(1 + <i>x</i><sup>3</sup>)</span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> [√(1 + <i>x</i><sup>3</sup>)]<sub>0</sub><sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> × (3 − 1) = <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>3</span></span>。<br>应选 D。",
+    "tips": "遇到含 √(1 + <i>x</i><sup>3</sup>) 等无法直接对 <i>x</i> 求原函数的累次积分，第一时间画出积分区域并交换积分次序。",
+    "kp": "二重积分交换积分次序"
+  },
+  {
+    "id": "M2022_03",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "m_ch2",
+    "title": "2022数二 第3题（选择题 5分）",
+    "stem": "设 <i>f</i>(<i>x</i>) 在 <i>x</i> = <i>x</i><sub>0</sub> 处有二阶导数，则（ &nbsp; ）",
+    "options": [
+      "A. 当 <i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 的某邻域内单调增加时，<i>f'</i>(<i>x</i><sub>0</sub>) > 0",
+      "B. 当 <i>f'</i>(<i>x</i><sub>0</sub>) > 0 时，<i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 的某邻域内单调增加",
+      "C. 当 <i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 的某邻域内是凹函数时，<i>f''</i>(<i>x</i><sub>0</sub>) > 0",
+      "D. 当 <i>f''</i>(<i>x</i><sub>0</sub>) > 0 时，<i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 的某邻域内是凹函数"
+    ],
+    "answer": "B",
+    "analysis": "注意到题目条件给出 <i>f</i>(<i>x</i>) 在 <i>x</i> = <i>x</i><sub>0</sub> 处有二阶导数，故 <i>f</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 的某邻域内存在一阶导数，且特别地，<i>f'</i>(<i>x</i>) 在 <i>x</i> = <i>x</i><sub>0</sub> 处可导从而连续。<br>对于选项 B：由于 <i>f'</i>(<i>x</i>) 在 <i>x</i> = <i>x</i><sub>0</sub> 处连续，故 lim<sub><i>x</i>→<i>x</i><sub>0</sub></sub> <i>f'</i>(<i>x</i>) = <i>f'</i>(<i>x</i><sub>0</sub>) > 0。结合极限的局部保号性，存在 <i>δ</i> > 0，当 <i>x</i> ∈ (<i>x</i><sub>0</sub> − <i>δ</i>, <i>x</i><sub>0</sub> + <i>δ</i>) 时，恒有 <i>f'</i>(<i>x</i>) > 0。于是由拉格朗日中值定理可知，<i>f</i>(<i>x</i>) 在 (<i>x</i><sub>0</sub> − <i>δ</i>, <i>x</i><sub>0</sub> + <i>δ</i>) 内单调增加，B 正确。<br>对于选项 A：反例 <i>f</i>(<i>x</i>) = <i>x</i><sup>3</sup> 在 <i>x</i><sub>0</sub> = 0 处单调增加，但 <i>f'</i>(0) = 0。<br>对于选项 C：反例 <i>f</i>(<i>x</i>) = <i>x</i><sup>4</sup> 在 <i>x</i><sub>0</sub> = 0 的邻域内是凹函数，但 <i>f''</i>(0) = 0。<br>对于选项 D：只知 <i>x</i> = <i>x</i><sub>0</sub> 一点处有二阶导数，不能保证 <i>f''</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 处连续（如 <i>f</i>(<i>x</i>) = <i>x</i><sup>4</sup>sin(1/<i>x</i>) + <i>x</i><sup>2</sup>/4，<i>x</i> ≠ 0；<i>f</i>(0) = 0），故无法保号推出邻域内 <i>f''</i>(<i>x</i>) > 0。<br>应选 B。",
+    "tips": "核心破题点：“在 <i>x</i><sub>0</sub> 处有二阶导数”等价于“一阶导数 <i>f'</i>(<i>x</i>) 在 <i>x</i><sub>0</sub> 处可导且连续”，连续函数保号性即可推出邻域内 <i>f'</i>(<i>x</i>) > 0；而二阶导数仅在一点存在不代表二阶导函数连续！",
+    "kp": "导数与函数单调性、凹凸性的关系"
+  },
+  {
+    "id": "M2022_04",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "m_ch5",
+    "title": "2022数二 第4题（选择题 5分）",
+    "stem": "已知 <i>f</i>(<i>t</i>) 连续，令 <i>F</i>(<i>x</i>, <i>y</i>) = ∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> (<i>x</i> − <i>y</i> − <i>t</i>)<i>f</i>(<i>t</i>) d<i>t</i>，则（ &nbsp; ）",
+    "options": [
+      "A. <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span>，<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>",
+      "B. <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span>，<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = −<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>",
+      "C. <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = −<span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span>，<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>",
+      "D. <span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = −<span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span>，<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = −<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>"
+    ],
+    "answer": "C",
+    "analysis": "先整理 <i>F</i>(<i>x</i>, <i>y</i>) 的表达式，将与积分变量 <i>t</i> 无关的因式分离出来：<br><i>F</i>(<i>x</i>, <i>y</i>) = (<i>x</i> − <i>y</i>) ∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>f</i>(<i>t</i>) d<i>t</i> − ∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>t</i><i>f</i>(<i>t</i>) d<i>t</i>。<br>分别计算偏导数：<br><span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = ∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>f</i>(<i>t</i>) d<i>t</i> + (<i>x</i> − <i>y</i>)<i>f</i>(<i>x</i> − <i>y</i>) − (<i>x</i> − <i>y</i>)<i>f</i>(<i>x</i> − <i>y</i>) = ∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>f</i>(<i>t</i>) d<i>t</i>，<br><span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = <i>f</i>(<i>x</i> − <i>y</i>)。<br><span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span> = −∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>f</i>(<i>t</i>) d<i>t</i> − (<i>x</i> − <i>y</i>)<i>f</i>(<i>x</i> − <i>y</i>) + (<i>x</i> − <i>y</i>)<i>f</i>(<i>x</i> − <i>y</i>) = −∫<sub>0</sub><sup><i>x</i>−<i>y</i></sup> <i>f</i>(<i>t</i>) d<i>t</i>，<br><span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span> = −[−<i>f</i>(<i>x</i> − <i>y</i>)] = <i>f</i>(<i>x</i> − <i>y</i>)。<br>因此，<span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>x</i></span></span> = −<span class='frac'><span class='frac-num'>∂<i>F</i></span><span class='frac-den'>∂<i>y</i></span></span>，<span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>x</i><sup>2</sup></span></span> = <span class='frac'><span class='frac-num'>∂<sup>2</sup><i>F</i></span><span class='frac-den'>∂<i>y</i><sup>2</sup></span></span>。应选 C。",
+    "tips": "考场秒杀技巧：令 <i>u</i> = <i>x</i> − <i>y</i>，则 <i>F</i>(<i>x</i>, <i>y</i>) = <i>φ</i>(<i>x</i> − <i>y</i>) 是关于 <i>u</i> = <i>x</i> − <i>y</i> 的复合函数！直接由链式法则得 ∂<i>F</i>/∂<i>x</i> = <i>φ'</i>(<i>u</i>)，∂<i>F</i>/∂<i>y</i> = −<i>φ'</i>(<i>u</i>)，∂<sup>2</sup><i>F</i>/∂<i>x</i><sup>2</sup> = <i>φ''</i>(<i>u</i>)，∂<sup>2</sup><i>F</i>/∂<i>y</i><sup>2</sup> = <i>φ''</i>(<i>u</i>)，无需真正求积分导数即可秒选 C！",
+    "kp": "变限积分求导与多元复合函数偏导数"
+  },
+  {
+    "id": "M2022_05",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2022数二 第5题（选择题 5分）",
+    "stem": "设 <i>p</i> 为常数，若反常积分 ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> d<i>x</i> 收敛，则 <i>p</i> 的取值范围是（ &nbsp; ）",
+    "options": [
+      "A. (−1, 1)",
+      "B. (−1, 2)",
+      "C. (−∞, 1)",
+      "D. (−∞, 2)"
+    ],
+    "answer": "A",
+    "analysis": "由于 <i>x</i> = 0 和 <i>x</i> = 1 均为可能的瑕点，将积分拆成两部分：<br>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> d<i>x</i> = ∫<sub>0</sub><sup>1/2</sup> <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> d<i>x</i> + ∫<sub>1/2</sub><sup>1</sup> <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> d<i>x</i>。<br>1) 先考虑 <i>x</i> → 0<sup>+</sup> 时的收敛性：被积函数同阶于 <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup></span></span>。由常用反常积分结论 ∫<sub>0</sub><sup>1/2</sup> <span class='frac'><span class='frac-num'>|ln <i>x</i>|</span><span class='frac-den'><i>x</i><sup><i>p</i></sup></span></span> d<i>x</i> 当且仅当 <i>p</i> < 1 时收敛。<br>2) 再考虑 <i>x</i> → 1<sup>−</sup> 时的收敛性：由于 ln <i>x</i> = ln[1 − (1 − <i>x</i>)] ~ −(1 − <i>x</i>)（<i>x</i> → 1<sup>−</sup>），故被积函数等价于 <span class='frac'><span class='frac-num'>−(1 − <i>x</i>)</span><span class='frac-den'>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> = <span class='frac'><span class='frac-num'>−1</span><span class='frac-den'>(1 − <i>x</i>)<sup>−<i>p</i></sup></span></span>。<br>由 <i>p</i>-积分审敛法可知，当且仅当 −<i>p</i> < 1，即 <i>p</i> > −1 时，∫<sub>1/2</sub><sup>1</sup> <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'><i>x</i><sup><i>p</i></sup>(1 − <i>x</i>)<sup>1−<i>p</i></sup></span></span> d<i>x</i> 收敛。<br>综上所述，原反常积分收敛当且仅当 <i>p</i> ∈ (−∞, 1) ∩ (−1, +∞) = (−1, 1)。应选 A。",
+    "tips": "瑕积分审敛口诀：先找潜在瑕点（分母为0或对数真数为0处），在 <i>x</i> → 0<sup>+</sup> 处对数因子 ln <i>x</i> 不影响幂次临界值 <i>p</i> < 1；在 <i>x</i> → 1<sup>−</sup> 处利用 ln <i>x</i> ~ <i>x</i> − 1 消去一次幂再令指数 < 1。",
+    "kp": "反常积分（瑕积分）的审敛法"
+  },
+  {
+    "id": "M2022_06",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "m_ch1",
+    "title": "2022数二 第6题（选择题 5分）",
+    "stem": "设数列 {<i>x<sub>n</sub></i>} 满足 −<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> ≤ <i>x<sub>n</sub></i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>，则（ &nbsp; ）",
+    "options": [
+      "A. 若 lim<sub><i>n</i>→∞</sub> cos(sin <i>x<sub>n</sub></i>) 存在，则 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 存在",
+      "B. 若 lim<sub><i>n</i>→∞</sub> sin(cos <i>x<sub>n</sub></i>) 存在，则 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 存在",
+      "C. 若 lim<sub><i>n</i>→∞</sub> cos(sin <i>x<sub>n</sub></i>) 存在，则 lim<sub><i>n</i>→∞</sub> sin <i>x<sub>n</sub></i> 存在，但 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 不一定存在",
+      "D. 若 lim<sub><i>n</i>→∞</sub> sin(cos <i>x<sub>n</sub></i>) 存在，则 lim<sub><i>n</i>→∞</sub> cos <i>x<sub>n</sub></i> 存在，但 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 不一定存在"
+    ],
+    "answer": "D",
+    "analysis": "若 lim<sub><i>n</i>→∞</sub> sin(cos <i>x<sub>n</sub></i>) 存在，将其记为 <i>a</i>。由于 −<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> ≤ <i>x<sub>n</sub></i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>，故 cos <i>x<sub>n</sub></i> ∈ [0, 1] ⊂ [−<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>, <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>]。<br>而 sin <i>u</i> 在 [−<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>, <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>] 上严格单调且存在连续反函数 arcsin <i>u</i>，故：<br>lim<sub><i>n</i>→∞</sub> cos <i>x<sub>n</sub></i> = lim<sub><i>n</i>→∞</sub> arcsin(sin(cos <i>x<sub>n</sub></i>)) = arcsin <i>a</i>，即 lim<sub><i>n</i>→∞</sub> cos <i>x<sub>n</sub></i> 必存在。<br>但是 lim<sub><i>n</i>→∞</sub> cos <i>x<sub>n</sub></i> 存在并不能保证 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 存在。例如取 <i>x<sub>n</sub></i> = (−1)<sup><i>n</i></sup> <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>，则 lim<sub><i>n</i>→∞</sub> cos <i>x<sub>n</sub></i> = 0，但 lim<sub><i>n</i>→∞</sub> <i>x<sub>n</sub></i> 和 lim<sub><i>n</i>→∞</sub> sin <i>x<sub>n</sub></i> 均不存在，且此时 lim<sub><i>n</i>→∞</sub> cos(sin <i>x<sub>n</sub></i>) = cos 1 存在。<br>因此选项 A、B、C 错误，选项 D 正确。",
+    "tips": "核心技巧：取摆动数列反例 <i>x<sub>n</sub></i> = (−1)<sup><i>n</i></sup> <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>4</span></span>，由于 cos 是偶函数，sin 是奇函数，立刻发现 cos(sin <i>x<sub>n</sub></i>) = cos(±√2/2) 为常数收敛，但 sin <i>x<sub>n</sub></i> 与 <i>x<sub>n</sub></i> 均发散，瞬间排除 A、B、C！",
+    "kp": "数列极限与反函数连续性"
+  },
+  {
+    "id": "M2022_07",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "m_ch3",
+    "title": "2022数二 第7题（选择题 5分）",
+    "stem": "若 <i>I</i><sub>1</sub> = ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2(1 + cos <i>x</i>)</span></span> d<i>x</i>，<i>I</i><sub>2</sub> = ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'>1 + cos <i>x</i></span></span> d<i>x</i>，<i>I</i><sub>3</sub> = ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>x</i></span><span class='frac-den'>1 + sin <i>x</i></span></span> d<i>x</i>，则（ &nbsp; ）",
+    "options": [
+      "A. <i>I</i><sub>1</sub> < <i>I</i><sub>2</sub> < <i>I</i><sub>3</sub>",
+      "B. <i>I</i><sub>2</sub> < <i>I</i><sub>1</sub> < <i>I</i><sub>3</sub>",
+      "C. <i>I</i><sub>1</sub> < <i>I</i><sub>3</sub> < <i>I</i><sub>2</sub>",
+      "D. <i>I</i><sub>3</sub> < <i>I</i><sub>2</sub> < <i>I</i><sub>1</sub>"
+    ],
+    "answer": "A",
+    "analysis": "三个定积分的积分区间均为 [0, 1]，只需比较在 (0, 1) 内被积函数的大小。<br>1) 比较 <i>I</i><sub>1</sub> 与 <i>I</i><sub>2</sub>：分母均为 1 + cos <i>x</i> > 0，只需比较 <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2</span></span> 与 ln(1 + <i>x</i>)。<br>令 <i>f</i>(<i>x</i>) = ln(1 + <i>x</i>) − <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2</span></span>，则 <i>f</i>(0) = 0，当 <i>x</i> ∈ (0, 1) 时，<i>f'</i>(<i>x</i>) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>1 + <i>x</i></span></span> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> > 0，故 <i>f</i>(<i>x</i>) 单调增加，从而 ln(1 + <i>x</i>) > <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2</span></span>，得 <i>I</i><sub>1</sub> < <i>I</i><sub>2</sub>。<br>2) 比较 <i>I</i><sub>2</sub> 与 <i>I</i><sub>3</sub>：在 (0, 1) 内，有常用不等式 ln(1 + <i>x</i>) < <i>x</i>，且 0 < cos <i>x</i> < 1，0 < sin <i>x</i> < 1。<br>因此 <span class='frac'><span class='frac-num'>ln(1 + <i>x</i>)</span><span class='frac-den'>1 + cos <i>x</i></span></span> < <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>1 + 0</span></span> = <i>x</i> = <span class='frac'><span class='frac-num'>2<i>x</i></span><span class='frac-den'>2</span></span> < <span class='frac'><span class='frac-num'>2<i>x</i></span><span class='frac-den'>1 + sin <i>x</i></span></span>，从而 <i>I</i><sub>2</sub> < <i>I</i><sub>3</sub>。<br>综上所述，<i>I</i><sub>1</sub> < <i>I</i><sub>2</sub> < <i>I</i><sub>3</sub>，应选 A。",
+    "tips": "定积分比大小优先固定积分区间比较被积函数，利用中间桥梁 <i>y</i> = <i>x</i> 放缩：在 (0, 1) 上 <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2</span></span> < ln(1 + <i>x</i>) < <i>x</i>。",
+    "kp": "定积分的性质（比较大小）与常见函数不等式"
+  },
+  {
+    "id": "M2022_08",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2022数二 第8题（选择题 5分）",
+    "stem": "设 <i>A</i> 为 3 阶矩阵，<i>Λ</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1 &nbsp; 0 &nbsp; 0<br>0 &nbsp;−1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 0</span>，则 <i>A</i> 的特征值为 1, −1, 0 的充分必要条件是（ &nbsp; ）",
+    "options": [
+      "A. 存在可逆矩阵 <i>P</i>, <i>Q</i>，使得 <i>A</i> = <i>PΛQ</i>",
+      "B. 存在可逆矩阵 <i>P</i>，使得 <i>A</i> = <i>PΛP</i><sup>−1</sup>",
+      "C. 存在正交矩阵 <i>Q</i>，使得 <i>A</i> = <i>QΛQ</i><sup>−1</sup>",
+      "D. 存在可逆矩阵 <i>P</i>，使得 <i>A</i> = <i>PΛP</i><sup>T</sup>"
+    ],
+    "answer": "B",
+    "analysis": "3 阶矩阵 <i>A</i> 的特征值为 1, −1, 0（3 个互不相同的特征值），意味着 <i>A</i> 必可相似对角化，且相似于对角矩阵 <i>Λ</i> = diag(1, −1, 0)。<br>反之，若 <i>A</i> 与 <i>Λ</i> 相似，由相似矩阵具有相同的特征值可知，<i>A</i> 的特征值必为 1, −1, 0。<br>因此，<i>A</i> 的特征值为 1, −1, 0 的充要条件是 <i>A</i> 与 <i>Λ</i> 相似，即存在可逆矩阵 <i>P</i>，使得 <i>A</i> = <i>PΛP</i><sup>−1</sup>（选项 B）。<br>注：选项 A 为矩阵等价（仅秩相同）；选项 C 要求正交相似，只有当 <i>A</i> 为实对称矩阵时才成立；选项 D 为矩阵合同（仅正负惯性指数相同）。应选 B。",
+    "tips": "注意区分四大关系：<i>PΛQ</i> 是等价，<i>PΛP</i><sup>−1</sup> 是相似，<i>QΛQ</i><sup>−1</sup> = <i>QΛQ</i><sup>T</sup> 是正交相似（对应实对称矩阵），<i>PΛP</i><sup>T</sup> 是合同。3阶矩阵有3个不同特征值 ⇔ 必与该对角阵相似。",
+    "kp": "矩阵相似对角化的充要条件与等价、相似、合同的区分"
+  },
+  {
+    "id": "M2022_09",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2022数二 第9题（选择题 5分）",
+    "stem": "设矩阵 <i>A</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1 &nbsp; 1 &nbsp; 1<br>1 &nbsp; <i>a</i> &nbsp; <i>a</i><sup>2</sup><br>1 &nbsp; <i>b</i> &nbsp; <i>b</i><sup>2</sup></span>，<i>b</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1<br>2<br>4</span>，则线性方程组 <i>Ax</i> = <i>b</i> 的解的情况为（ &nbsp; ）",
+    "options": [
+      "A. 无解",
+      "B. 有解",
+      "C. 有无穷多解或无解",
+      "D. 有唯一解或无解"
+    ],
+    "answer": "D",
+    "analysis": "方法一（利用范德蒙德行列式）：<br>系数矩阵的行列式为转置的范德蒙德行列式：|<i>A</i>| = (<i>b</i> − <i>a</i>)(<i>b</i> − 1)(<i>a</i> − 1)。<br>1) 当 <i>a</i> ≠ 1，<i>b</i> ≠ 1，且 <i>a</i> ≠ <i>b</i> 时，|<i>A</i>| ≠ 0，由克拉默法则知，此时方程组 <i>Ax</i> = <i>b</i> 有唯一解。<br>2) 当 <i>a</i> = 1 时，增广矩阵 (<i>A</i>, <i>b</i>) 第1行与第2行左边均为 (1, 1, 1)，而常数项分别为 1 和 2，显然矛盾，<i>r</i>(<i>A</i>) ≠ <i>r</i>(<i>A</i>, <i>b</i>)，方程组无解。<br>3) 同理，当 <i>b</i> = 1（第1行与第3行矛盾）或 <i>a</i> = <i>b</i>（第2行与第3行矛盾）时，均有 <i>r</i>(<i>A</i>) ≠ <i>r</i>(<i>A</i>, <i>b</i>)，方程组无解。<br>综上所述，方程组 <i>Ax</i> = <i>b</i> 只有唯一解或无解两种可能。应选 D。",
+    "tips": "观察矩阵各行结构：系数矩阵三行形如 (1, <i>t</i>, <i>t</i><sup>2</sup>)，而常数列 (1, 2, 4)<sup>T</sup> 恰好是 <i>t</i> = 2 时的 (1, 2, 2<sup>2</sup>)<sup>T</sup>，相当于把第4列拼成4阶范德蒙德矩阵的前3列！当 <i>a</i>, <i>b</i>, 1 两两不同时有唯一解，一旦有两个相同，对应两行左端相同而右端 1, 2, 4 互不相同，必然矛盾无解！",
+    "kp": "范德蒙德行列式与非齐次线性方程组解的判定"
+  },
+  {
+    "id": "M2022_10",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "m_ch6",
+    "title": "2022数二 第10题（选择题 5分）",
+    "stem": "设 <i>α</i><sub>1</sub> = (<i>λ</i>, 1, 1)<sup>T</sup>，<i>α</i><sub>2</sub> = (1, <i>λ</i>, 1)<sup>T</sup>，<i>α</i><sub>3</sub> = (1, 1, <i>λ</i>)<sup>T</sup>，<i>α</i><sub>4</sub> = (1, <i>λ</i>, <i>λ</i><sup>2</sup>)<sup>T</sup>，若 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub> 与 <i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub> 等价，则 <i>λ</i> 的取值范围是（ &nbsp; ）",
+    "options": [
+      "A. {0, 1}",
+      "B. {<i>λ</i> | <i>λ</i> ∈ <b>R</b>, <i>λ</i> ≠ −2}",
+      "C. {<i>λ</i> | <i>λ</i> ∈ <b>R</b>, <i>λ</i> ≠ −1, <i>λ</i> ≠ −2}",
+      "D. {<i>λ</i> | <i>λ</i> ∈ <b>R</b>, <i>λ</i> ≠ −1}"
+    ],
+    "answer": "C",
+    "analysis": "两个向量组等价的充要条件是 <i>r</i>(<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>) = <i>r</i>(<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub>) = <i>r</i>(<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>, <i>α</i><sub>4</sub>)。<br>分别计算两个3阶行列式：<br>|<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>| = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'><i>λ</i> &nbsp; 1 &nbsp; 1<br>1 &nbsp; <i>λ</i> &nbsp; 1<br>1 &nbsp; 1 &nbsp; <i>λ</i></span> = (<i>λ</i> + 2)(<i>λ</i> − 1)<sup>2</sup>，<br>|<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub>| = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'><i>λ</i> &nbsp; 1 &nbsp; 1<br>1 &nbsp; <i>λ</i> &nbsp; <i>λ</i><br>1 &nbsp; 1 &nbsp; <i>λ</i><sup>2</sup></span> = (<i>λ</i> + 1)<sup>2</sup>(<i>λ</i> − 1)<sup>2</sup>。<br>1) 当 <i>λ</i> ≠ 1, −1, −2 时，两个行列式均不为 0，两个向量组的秩均为 3，故均与 <b>R</b><sup>3</sup> 标准基等价，从而彼此等价。<br>2) 当 <i>λ</i> = 1 时，<i>α</i><sub>1</sub> = <i>α</i><sub>2</sub> = <i>α</i><sub>3</sub> = <i>α</i><sub>4</sub> = (1, 1, 1)<sup>T</sup>，两个向量组完全相同，显然等价。<br>3) 当 <i>λ</i> = −2 时，|<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>| = 0（秩为 2），而 |<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub>| ≠ 0（秩为 3），秩不相等，不等价。<br>4) 当 <i>λ</i> = −1 时，|<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>| ≠ 0（秩为 3），而 |<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub>| = 0（秩为 2），秩不相等，不等价。<br>综上所述，<i>λ</i> ≠ −1 且 <i>λ</i> ≠ −2，应选 C。",
+    "tips": "先算两个三阶行列式 |<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>3</sub>| = (<i>λ</i>+2)(<i>λ</i>−1)<sup>2</sup> 和 |<i>α</i><sub>1</sub>, <i>α</i><sub>2</sub>, <i>α</i><sub>4</sub>| = (<i>λ</i>+1)<sup>2</sup>(<i>λ</i>−1)<sup>2</sup>，当其中一个为0另一个不为0时（即 <i>λ</i> = −2 或 <i>λ</i> = −1），两向量组秩不同必不等价！",
+    "kp": "向量组等价的充要条件与矩阵的秩"
+  },
+  {
+    "id": "M2022_11",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 11,
+    "qType": "fill",
+    "chapter": "m_ch1",
+    "title": "2022数二 第11题（填空题 5分）",
+    "stem": "lim<sub><i>x</i>→0</sub> (<span class='frac'><span class='frac-num'>1 + e<sup><i>x</i></sup></span><span class='frac-den'>2</span></span>)<sup>cot <i>x</i></sup> = ________。",
+    "options": null,
+    "answer": "√e",
+    "analysis": "当 <i>x</i> → 0 时，原极限为 1<sup>∞</sup> 型未定式。<br>利用 1<sup>∞</sup> 型幂指函数极限公式 lim [1 + <i>α</i>(<i>x</i>)]<sup><i>β</i>(<i>x</i>)</sup> = e<sup>lim <i>α</i>(<i>x</i>)<i>β</i>(<i>x</i>)</sup>：<br>先计算指数部分极限：lim<sub><i>x</i>→0</sub> cot <i>x</i> · (<span class='frac'><span class='frac-num'>1 + e<sup><i>x</i></sup></span><span class='frac-den'>2</span></span> − 1) = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>e<sup><i>x</i></sup> − 1</span><span class='frac-den'>2 tan <i>x</i></span></span>。<br>由等价无穷小 e<sup><i>x</i></sup> − 1 ~ <i>x</i>，tan <i>x</i> ~ <i>x</i>（<i>x</i> → 0），可得：<br>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'>e<sup><i>x</i></sup> − 1</span><span class='frac-den'>2 tan <i>x</i></span></span> = lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2<i>x</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>。<br>因此，原极限 = e<sup>1/2</sup> = √e。",
+    "tips": "遇到 1<sup>∞</sup> 型极限，直接套用“e<sup>lim(底数−1)×指数</sup>”三步法，结合 e<sup><i>x</i></sup> − 1 ~ <i>x</i> 与 tan <i>x</i> ~ <i>x</i> 即可十秒出答案。",
+    "kp": "1^∞型幂指函数极限计算"
+  },
+  {
+    "id": "M2022_12",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 12,
+    "qType": "fill",
+    "chapter": "m_ch2",
+    "title": "2022数二 第12题（填空题 5分）",
+    "stem": "已知函数 <i>y</i> = <i>y</i>(<i>x</i>) 由方程 <i>x</i><sup>2</sup> + <i>xy</i> + <i>y</i><sup>3</sup> = 3 确定，则 <i>y''</i>(1) = ________。",
+    "options": null,
+    "answer": "-31/32",
+    "analysis": "1) 将 <i>x</i> = 1 代入原方程可得：1 + <i>y</i> + <i>y</i><sup>3</sup> = 3，即 <i>y</i><sup>3</sup> + <i>y</i> − 2 = 0。易知 <i>y</i> = 1 是该方程的唯一实根（因 <i>f</i>(<i>y</i>) = <i>y</i><sup>3</sup> + <i>y</i> − 2 单调递增），故 <i>y</i>(1) = 1。<br>2) 对方程 <i>x</i><sup>2</sup> + <i>xy</i> + <i>y</i><sup>3</sup> = 3 两端关于 <i>x</i> 求导得：<br>2<i>x</i> + <i>y</i> + <i>xy'</i> + 3<i>y</i><sup>2</sup><i>y'</i> = 0 &nbsp; &nbsp; (1)<br>将 <i>x</i> = 1, <i>y</i> = 1 代入 (1) 式得：2 + 1 + (1 + 3)<i>y'</i>(1) = 0，解得 <i>y'</i>(1) = −<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>4</span></span>。<br>3) 对 (1) 式两端再次关于 <i>x</i> 求导得：<br>2 + <i>y'</i> + <i>y'</i> + <i>xy''</i> + 6<i>y</i>(<i>y'</i>)<sup>2</sup> + 3<i>y</i><sup>2</sup><i>y''</i> = 0，即 2 + 2<i>y'</i> + 6<i>y</i>(<i>y'</i>)<sup>2</sup> + (<i>x</i> + 3<i>y</i><sup>2</sup>)<i>y''</i> = 0。<br>代入 <i>x</i> = 1, <i>y</i> = 1, <i>y'</i>(1) = −<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>4</span></span> 得：<br>2 + 2 × (−<span class='frac'><span class='frac-num'>3</span><span class='frac-den'>4</span></span>) + 6 × 1 × (<span class='frac'><span class='frac-num'>9</span><span class='frac-den'>16</span></span>) + 4<i>y''</i>(1) = 0 ⇒ <span class='frac'><span class='frac-num'>31</span><span class='frac-den'>8</span></span> + 4<i>y''</i>(1) = 0，解得 <i>y''</i>(1) = −<span class='frac'><span class='frac-num'>31</span><span class='frac-den'>32</span></span>。",
+    "tips": "求一点处的隐函数高阶导数，切忌解出 <i>y'</i> 的分式通式再求二阶导！应当对一阶导数隐式方程直接再次求导，每求完一次立即代值，计算量最小且不易出错。",
+    "kp": "隐函数的高阶导数计算"
+  },
+  {
+    "id": "M2022_13",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 13,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2022数二 第13题（填空题 5分）",
+    "stem": "∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>x</i> + 3</span><span class='frac-den'><i>x</i><sup>2</sup> − <i>x</i> + 1</span></span> d<i>x</i> = ________。",
+    "options": null,
+    "answer": "8√3π/9",
+    "analysis": "注意到分母的导数为 (<i>x</i><sup>2</sup> − <i>x</i> + 1)<i>'</i> = 2<i>x</i> − 1，将分子湊成分母的导数加常数：<br><span class='frac'><span class='frac-num'>2<i>x</i> + 3</span><span class='frac-den'><i>x</i><sup>2</sup> − <i>x</i> + 1</span></span> = <span class='frac'><span class='frac-num'>2<i>x</i> − 1</span><span class='frac-den'><i>x</i><sup>2</sup> − <i>x</i> + 1</span></span> + <span class='frac'><span class='frac-num'>4</span><span class='frac-den'>(<i>x</i> − 1/2)<sup>2</sup> + 3/4</span></span>。<br>因此：<br>∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>2<i>x</i> + 3</span><span class='frac-den'><i>x</i><sup>2</sup> − <i>x</i> + 1</span></span> d<i>x</i> = ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>d(<i>x</i><sup>2</sup> − <i>x</i> + 1)</span><span class='frac-den'><i>x</i><sup>2</sup> − <i>x</i> + 1</span></span> + 4 ∫<sub>0</sub><sup>1</sup> <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>(<i>x</i> − 1/2)<sup>2</sup> + (√3/2)<sup>2</sup></span></span> d<i>x</i><br>= [ln(<i>x</i><sup>2</sup> − <i>x</i> + 1)]<sub>0</sub><sup>1</sup> + 4 × <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>√3</span></span> [arctan <span class='frac'><span class='frac-num'>2<i>x</i> − 1</span><span class='frac-den'>√3</span></span>]<sub>0</sub><sup>1</sup><br>= (ln 1 − ln 1) + <span class='frac'><span class='frac-num'>8</span><span class='frac-den'>√3</span></span> [<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span> − (−<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>6</span></span>)] = <span class='frac'><span class='frac-num'>8√3π</span><span class='frac-den'>9</span></span>。",
+    "tips": "有理函数分母为无实根二次三项式 <i>x</i><sup>2</sup> + <i>px</i> + <i>q</i> 时，套路固定为“分子凑分母导数 (2<i>x</i>+<i>p</i>) 得 ln + 常数配方得 arctan”。甚至可以利用区间 [0, 1] 关于 <i>x</i> = 1/2 对称，奇函数 (2<i>x</i>−1) 项积分为 0 直接消去！",
+    "kp": "有理函数的定积分计算（凑微分与配方法）"
+  },
+  {
+    "id": "M2022_14",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 14,
+    "qType": "fill",
+    "chapter": "m_ch4",
+    "title": "2022数二 第14题（填空题 5分）",
+    "stem": "微分方程 <i>y'''</i> − 2<i>y''</i> + 5<i>y'</i> = 0 的通解为 <i>y</i>(<i>x</i>) = ________。",
+    "options": null,
+    "answer": "C₁ + eˣ(C₂cos 2x + C₃sin 2x)（其中C₁, C₂, C₃为任意常数）",
+    "analysis": "所给方程为三阶常系数齐次线性微分方程，其特征方程为：<br><i>r</i><sup>3</sup> − 2<i>r</i><sup>2</sup> + 5<i>r</i> = 0，分解因式得 <i>r</i>(<i>r</i><sup>2</sup> − 2<i>r</i> + 5) = 0。<br>解得特征根为：<i>r</i><sub>1</sub> = 0，<i>r</i><sub>2,3</sub> = 1 ± 2i。<br>根据特征根与通解的对应关系，可得原微分方程的通解为：<br><i>y</i>(<i>x</i>) = <i>C</i><sub>1</sub> + e<sup><i>x</i></sup>(<i>C</i><sub>2</sub>cos 2<i>x</i> + <i>C</i><sub>3</sub>sin 2<i>x</i>)，其中 <i>C</i><sub>1</sub>, <i>C</i><sub>2</sub>, <i>C</i><sub>3</sub> 为任意常数。",
+    "tips": "高阶常系数齐次线性微分方程直接写出特征方程求根：实根 <i>r</i> = 0 对应常数项 <i>C</i><sub>1</sub>e<sup>0<i>x</i></sup> = <i>C</i><sub>1</sub>，共轭复根 <i>α</i> ± i<i>β</i> 对应 e<sup><i>αx</i></sup>(<i>C</i><sub>2</sub>cos <i>βx</i> + <i>C</i><sub>3</sub>sin <i>βx</i>)，注意三阶方程必含三个独立任意常数。",
+    "kp": "高阶常系数齐次线性微分方程求解"
+  },
+  {
+    "id": "M2022_15",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 15,
+    "qType": "fill",
+    "chapter": "m_ch3",
+    "title": "2022数二 第15题（填空题 5分）",
+    "stem": "已知曲线 <i>L</i> 的极坐标方程为 <i>r</i> = sin 3<i>θ</i>（0 ≤ <i>θ</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>3</span></span>），则 <i>L</i> 围成的有界区域的面积为 ________。",
+    "options": null,
+    "answer": "π/12",
+    "analysis": "当 0 ≤ <i>θ</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>3</span></span> 时，sin 3<i>θ</i> ≥ 0，且在 <i>θ</i> = 0 和 <i>θ</i> = <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>3</span></span> 处 <i>r</i> = 0，表示三叶玫瑰线的一个完整花瓣。<br>由极坐标系下平面图形的面积公式得：<br><i>A</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub>0</sub><sup>π/3</sup> <i>r</i><sup>2</sup>(<i>θ</i>) d<i>θ</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub>0</sub><sup>π/3</sup> sin<sup>2</sup>3<i>θ</i> d<i>θ</i><br>= <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> ∫<sub>0</sub><sup>π/3</sup> (1 − cos 6<i>θ</i>) d<i>θ</i> = [<span class='frac'><span class='frac-num'><i>θ</i></span><span class='frac-den'>4</span></span> − <span class='frac'><span class='frac-num'>sin 6<i>θ</i></span><span class='frac-den'>24</span></span>]<sub>0</sub><sup>π/3</sup> = <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>12</span></span>。",
+    "tips": "牢记极坐标面积公式 <i>S</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub><i>α</i></sub><sup><i>β</i></sup> <i>r</i><sup>2</sup>(<i>θ</i>) d<i>θ</i>（切勿漏掉前面的 1/2！），遇到 sin<sup>2</sup>3<i>θ</i> 直接用倍角公式降幂计算。",
+    "kp": "定积分的几何应用（极坐标系下平面图形的面积）"
+  },
+  {
+    "id": "M2022_16",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 16,
+    "qType": "fill",
+    "chapter": "m_ch6",
+    "title": "2022数二 第16题（填空题 5分）",
+    "stem": "设 <i>A</i> 为 3 阶矩阵，交换 <i>A</i> 的第 2 行和第 3 行，再将第 2 列的 −1 倍加到第 1 列，得到矩阵 <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−2 &nbsp; 1 &nbsp;−1<br>1 &nbsp;−1 &nbsp; 0<br>−1 &nbsp; 0 &nbsp; 0</span>，则 <i>A</i><sup>−1</sup> 的迹 tr(<i>A</i><sup>−1</sup>) = ________。",
+    "options": null,
+    "answer": "-1",
+    "analysis": "设题中所得矩阵为 <i>B</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−2 &nbsp; 1 &nbsp;−1<br>1 &nbsp;−1 &nbsp; 0<br>−1 &nbsp; 0 &nbsp; 0</span>。<br>方法一（逆变换还原 <i>A</i> 再求伴随/逆矩阵对角元）：<br>对 <i>B</i> 实施逆变换：先将第 2 列的 1 倍加回第 1 列，再交换第 2 行和第 3 行，即可还原出矩阵 <i>A</i>：<br><i>B</i> <span class='frac'><span class='frac-num'><i>c</i><sub>1</sub> + <i>c</i><sub>2</sub></span><span class='frac-den'>→</span></span> <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−1 &nbsp; 1 &nbsp;−1<br>0 &nbsp;−1 &nbsp; 0<br>−1 &nbsp; 0 &nbsp; 0</span> <span class='frac'><span class='frac-num'><i>r</i><sub>2</sub> ↔ <i>r</i><sub>3</sub></span><span class='frac-den'>→</span></span> <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−1 &nbsp; 1 &nbsp;−1<br>−1 &nbsp; 0 &nbsp; 0<br>0 &nbsp;−1 &nbsp; 0</span> = <i>A</i>。<br>计算 |<i>A</i>|：按第 2 行展开得 |<i>A</i>| = −(−1) × (0 − 1) = −1。<br>由于 <i>A</i><sup>−1</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>|<i>A</i>|</span></span> <i>A</i><sup>*</sup>，故 tr(<i>A</i><sup>−1</sup>) = <span class='frac'><span class='frac-num'><i>A</i><sub>11</sub> + <i>A</i><sub>22</sub> + <i>A</i><sub>33</sub></span><span class='frac-den'>|<i>A</i>|</span></span>。<br>分别计算主对角线元素的代数余子式：<br><i>A</i><sub>11</sub> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>0 &nbsp; 0<br>−1 &nbsp; 0</span> = 0，<i>A</i><sub>22</sub> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−1 &nbsp;−1<br>0 &nbsp; 0</span> = 0，<i>A</i><sub>33</sub> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−1 &nbsp; 1<br>−1 &nbsp; 0</span> = 1。<br>因此，tr(<i>A</i><sup>−1</sup>) = <span class='frac'><span class='frac-num'>0 + 0 + 1</span><span class='frac-den'>−1</span></span> = −1。",
+    "tips": "省时妙招：无需用初等矩阵乘法求 <i>B</i><sup>−1</sup>！直接把文字描述的两步初等变换倒着做回 <i>B</i> 上，3秒还原出 <i>A</i>，再用 tr(<i>A</i><sup>−1</sup>) = (<i>A</i><sub>11</sub> + <i>A</i><sub>22</sub> + <i>A</i><sub>33</sub>)/|<i>A</i>| 算三个二阶行列式即可！",
+    "kp": "矩阵的初等变换、逆矩阵与矩阵的迹"
+  },
+  {
+    "id": "M2022_17",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 17,
+    "qType": "solve",
+    "chapter": "m_ch2",
+    "title": "2022数二 第17题（解答题 10分）",
+    "stem": "已知函数 <i>f</i>(<i>x</i>) 在 <i>x</i> = 1 处可导，且 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(e<sup><i>x</i><sup>2</sup></sup>) − 3<i>f</i>(1 + sin<sup>2</sup><i>x</i>)</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = 2，求 <i>f'</i>(1)。",
+    "options": null,
+    "answer": "f'(1) = -1",
+    "analysis": "<b>【解】</b> 由 <i>f</i>(<i>x</i>) 在 <i>x</i> = 1 处可导可得 <i>f</i>(<i>x</i>) 在 <i>x</i> = 1 处连续。<br>因为当 <i>x</i> → 0 时分母 <i>x</i><sup>2</sup> → 0，且极限 lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(e<sup><i>x</i><sup>2</sup></sup>) − 3<i>f</i>(1 + sin<sup>2</sup><i>x</i>)</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = 2 存在，故分子极限必为 0：<br>lim<sub><i>x</i>→0</sub> [<i>f</i>(e<sup><i>x</i><sup>2</sup></sup>) − 3<i>f</i>(1 + sin<sup>2</sup><i>x</i>)] = <i>f</i>(1) − 3<i>f</i>(1) = −2<i>f</i>(1) = 0，从而 <i>f</i>(1) = 0。<br>另一方面，利用导数的定义湊配：<br>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(e<sup><i>x</i><sup>2</sup></sup>)</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = lim<sub><i>x</i>→0</sub> [<span class='frac'><span class='frac-num'><i>f</i>(e<sup><i>x</i><sup>2</sup></sup>) − <i>f</i>(1)</span><span class='frac-den'>e<sup><i>x</i><sup>2</sup></sup> − 1</span></span> · <span class='frac'><span class='frac-num'>e<sup><i>x</i><sup>2</sup></sup> − 1</span><span class='frac-den'><i>x</i><sup>2</sup></span></span>] = <i>f'</i>(1) · 1 = <i>f'</i>(1)，<br>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(1 + sin<sup>2</sup><i>x</i>)</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = lim<sub><i>x</i>→0</sub> [<span class='frac'><span class='frac-num'><i>f</i>(1 + sin<sup>2</sup><i>x</i>) − <i>f</i>(1)</span><span class='frac-den'>(1 + sin<sup>2</sup><i>x</i>) − 1</span></span> · <span class='frac'><span class='frac-num'>sin<sup>2</sup><i>x</i></span><span class='frac-den'><i>x</i><sup>2</sup></span></span>] = <i>f'</i>(1) · 1 = <i>f'</i>(1)。<br>因此：<br>lim<sub><i>x</i>→0</sub> <span class='frac'><span class='frac-num'><i>f</i>(e<sup><i>x</i><sup>2</sup></sup>) − 3<i>f</i>(1 + sin<sup>2</sup><i>x</i>)</span><span class='frac-den'><i>x</i><sup>2</sup></span></span> = <i>f'</i>(1) − 3<i>f'</i>(1) = −2<i>f'</i>(1) = 2。<br>解得 <i>f'</i>(1) = −1。",
+    "tips": "解答题书写规范：题目只给了“在 <i>x</i> = 1 处单点可导”，不能直接对 <i>f</i> 用洛必达法则求导！必须先由可导必连续及分母趋于0推出 <i>f</i>(1) = 0，再严格用导数定义式 <span class='frac'><span class='frac-num'><i>f</i>(1 + Δ) − <i>f</i>(1)</span><span class='frac-den'>Δ</span></span> 凑配求解，否则会扣步骤分。",
+    "kp": "导数的定义与可导必连续性质"
+  },
+  {
+    "id": "M2022_18",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 18,
+    "qType": "solve",
+    "chapter": "m_ch4",
+    "title": "2022数二 第18题（解答题 12分）",
+    "stem": "设函数 <i>y</i>(<i>x</i>) 是微分方程 2<i>xy'</i> − 4<i>y</i> = 2ln <i>x</i> − 1 的满足条件 <i>y</i>(1) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> 的解，求曲线 <i>y</i> = <i>y</i>(<i>x</i>)（1 ≤ <i>x</i> ≤ e）的弧长。",
+    "options": null,
+    "answer": "(e² + 1)/4",
+    "analysis": "<b>【解】</b> 1) 先求解一阶非齐次线性微分方程：<br>将原方程整理为标准形式：<i>y'</i> − <span class='frac'><span class='frac-num'>2</span><span class='frac-den'><i>x</i></span></span> <i>y</i> = <span class='frac'><span class='frac-num'>2ln <i>x</i> − 1</span><span class='frac-den'>2<i>x</i></span></span>。<br>由一阶线性微分方程通解公式得：<br><i>y</i> = e<sup>∫ (2/<i>x</i>) d<i>x</i></sup> [ ∫ <span class='frac'><span class='frac-num'>2ln <i>x</i> − 1</span><span class='frac-den'>2<i>x</i></span></span> · e<sup>−∫ (2/<i>x</i>) d<i>x</i></sup> d<i>x</i> + <i>C</i> ]<br>= <i>x</i><sup>2</sup> [ ∫ (ln <i>x</i> · <i>x</i><sup>−3</sup> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> <i>x</i><sup>−3</sup>) d<i>x</i> + <i>C</i> ]。<br>对第一项使用分部积分法：∫ ln <i>x</i> · <i>x</i><sup>−3</sup> d<i>x</i> = −<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> <i>x</i><sup>−2</sup> ln <i>x</i> + ∫ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> <i>x</i><sup>−3</sup> d<i>x</i>。<br>代入可得：<i>y</i> = <i>x</i><sup>2</sup> (−<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> <i>x</i><sup>−2</sup> ln <i>x</i> + <i>C</i>) = <i>Cx</i><sup>2</sup> − <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'>2</span></span>。<br>将初值条件 <i>y</i>(1) = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> 代入得 <i>C</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>，故 <i>y</i>(<i>x</i>) = <span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>4</span></span> − <span class='frac'><span class='frac-num'>ln <i>x</i></span><span class='frac-den'>2</span></span>。<br>2) 计算曲线弧长：<br>求导得 <i>y'</i>(<i>x</i>) = <span class='frac'><span class='frac-num'><i>x</i></span><span class='frac-den'>2</span></span> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2<i>x</i></span></span> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> (<i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>)。<br>从而 1 + [<i>y'</i>(<i>x</i>)]<sup>2</sup> = 1 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> (<i>x</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>)<sup>2</sup> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> (<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>)<sup>2</sup>。<br>代入直角坐标弧长公式得：<br><i>s</i> = ∫<sub>1</sub><sup>e</sup> √(1 + [<i>y'</i>(<i>x</i>)]<sup>2</sup>) d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub>1</sub><sup>e</sup> (<i>x</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>x</i></span></span>) d<i>x</i> = <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> [<span class='frac'><span class='frac-num'><i>x</i><sup>2</sup></span><span class='frac-den'>2</span></span> + ln <i>x</i>]<sub>1</sub><sup>e</sup> = <span class='frac'><span class='frac-num'>e<sup>2</sup> + 1</span><span class='frac-den'>4</span></span>。",
+    "tips": "弧长题的经典命制套路：算出的 <i>y'</i>(<i>x</i>) 几乎必然形如 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>(<i>f</i> − <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>f</i></span></span>)，加上 1 之后恰好配成完全平方 <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>(<i>f</i> + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>f</i></span></span>)<sup>2</sup> 脱去根号！若发现根号下无法配方，立即回头检查微分方程是否解错。",
+    "kp": "一阶线性微分方程求解与平面曲线的弧长计算"
+  },
+  {
+    "id": "M2022_19",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 19,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2022数二 第19题（解答题 12分）",
+    "stem": "已知平面区域 <i>D</i> = {(<i>x</i>, <i>y</i>) | <i>y</i> − 2 ≤ <i>x</i> ≤ √(4 − <i>y</i><sup>2</sup>), 0 ≤ <i>y</i> ≤ 2}，计算 <i>I</i> = ∬<sub><i>D</i></sub> <span class='frac'><span class='frac-num'>(<i>x</i> − <i>y</i>)<sup>2</sup></span><span class='frac-den'><i>x</i><sup>2</sup> + <i>y</i><sup>2</sup></span></span> d<i>x</i>d<i>y</i>。",
+    "options": null,
+    "answer": "I = 2π - 2",
+    "analysis": "<b>【解】</b> 由区域 <i>D</i> 的不等式可知，<i>D</i> 是由直线 <i>x</i> = <i>y</i> − 2（即 <i>y</i> = <i>x</i> + 2）、半圆周 <i>x</i> = √(4 − <i>y</i><sup>2</sup>)（即 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> = 4，<i>x</i> ≥ 0）以及 <i>x</i> 轴（<i>y</i> = 0）所围成的第一、二象限区域。<br>将 <i>D</i> 按 <i>y</i> 轴分为第一象限的 1/4 圆域 <i>D</i><sub>1</sub> 和第二象限的等腰直角三角形区域 <i>D</i><sub>2</sub>，在极坐标系下表示为：<br><i>D</i><sub>1</sub> = {(<i>r</i>, <i>θ</i>) | 0 ≤ <i>r</i> ≤ 2, 0 ≤ <i>θ</i> ≤ <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span>}，<br><i>D</i><sub>2</sub> = {(<i>r</i>, <i>θ</i>) | 0 ≤ <i>r</i> ≤ <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>sin <i>θ</i> − cos <i>θ</i></span></span>, <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> ≤ <i>θ</i> ≤ π}。<br>被积函数在极坐标下化简为：<span class='frac'><span class='frac-num'>(<i>r</i>cos <i>θ</i> − <i>r</i>sin <i>θ</i>)<sup>2</sup></span><span class='frac-den'><i>r</i><sup>2</sup></span></span> = (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup>。<br>因此：<br><i>I</i> = ∬<sub><i>D</i></sub> (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup> <i>r</i> d<i>r</i>d<i>θ</i><br>= ∫<sub>0</sub><sup>π/2</sup> (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup> d<i>θ</i> ∫<sub>0</sub><sup>2</sup> <i>r</i> d<i>r</i> + ∫<sub>π/2</sub><sup>π</sup> (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup> d<i>θ</i> ∫<sub>0</sub><sup>2/(sin <i>θ</i> − cos <i>θ</i>)</sup> <i>r</i> d<i>r</i><br>= 2 ∫<sub>0</sub><sup>π/2</sup> (1 − sin 2<i>θ</i>) d<i>θ</i> + ∫<sub>π/2</sub><sup>π</sup> (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup> · <span class='frac'><span class='frac-num'>2</span><span class='frac-den'>(sin <i>θ</i> − cos <i>θ</i>)<sup>2</sup></span></span> d<i>θ</i><br>= 2 [<span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> + <span class='frac'><span class='frac-num'>cos π − cos 0</span><span class='frac-den'>2</span></span>] + ∫<sub>π/2</sub><sup>π</sup> 2 d<i>θ</i><br>= (π − 2) + 2 × <span class='frac'><span class='frac-num'>π</span><span class='frac-den'>2</span></span> = 2π − 2。",
+    "tips": "看到被积函数含 <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup> 且在分母上，必用极坐标！第二象限的直线 <i>y</i> − <i>x</i> = 2 转化为极坐标即 <i>r</i>(sin <i>θ</i> − cos <i>θ</i>) = 2，对 <i>r</i> 积分后分母 (sin <i>θ</i> − cos <i>θ</i>)<sup>2</sup> 恰好与被积函数的 (cos <i>θ</i> − sin <i>θ</i>)<sup>2</sup> 完美约分！",
+    "kp": "极坐标系下二重积分的计算与区域分块"
+  },
+  {
+    "id": "M2022_20",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 20,
+    "qType": "solve",
+    "chapter": "m_ch5",
+    "title": "2022数二 第20题（解答题 12分）",
+    "stem": "已知可微函数 <i>f</i>(<i>u</i>, <i>v</i>) 满足 <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>u</i>, <i>v</i>)</span><span class='frac-den'>∂<i>u</i></span></span> − <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>u</i>, <i>v</i>)</span><span class='frac-den'>∂<i>v</i></span></span> = 2(<i>u</i> − <i>v</i>)e<sup>−(<i>u</i>+<i>v</i>)</sup>，且 <i>f</i>(<i>u</i>, 0) = <i>u</i><sup>2</sup>e<sup>−<i>u</i></sup>。<br>（Ⅰ）记 <i>g</i>(<i>x</i>, <i>y</i>) = <i>f</i>(<i>x</i>, <i>y</i> − <i>x</i>)，求 <span class='frac'><span class='frac-num'>∂<i>g</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span>；<br>（Ⅱ）求 <i>f</i>(<i>u</i>, <i>v</i>) 的表达式与极值。",
+    "options": null,
+    "answer": "（Ⅰ）(4x - 2y)e⁻ʸ；（Ⅱ）f(u, v) = (u² + v²)e⁻⁽ᵘ⁺ᵛ⁾，极小值为 f(0, 0) = 0",
+    "analysis": "<b>【解】</b> （Ⅰ）令 <i>u</i> = <i>x</i>，<i>v</i> = <i>y</i> − <i>x</i>，由多元复合函数求导的链式法则得：<br><span class='frac'><span class='frac-num'>∂<i>g</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> = <span class='frac'><span class='frac-num'>∂<i>f</i>(<i>x</i>, <i>y</i> − <i>x</i>)</span><span class='frac-den'>∂<i>x</i></span></span> = <i>f'</i><sub>1</sub>(<i>x</i>, <i>y</i> − <i>x</i>) · 1 + <i>f'</i><sub>2</sub>(<i>x</i>, <i>y</i> − <i>x</i>) · (−1) = <i>f'</i><sub>1</sub>(<i>u</i>, <i>v</i>) − <i>f'</i><sub>2</sub>(<i>u</i>, <i>v</i>)。<br>将 <i>u</i> = <i>x</i>，<i>v</i> = <i>y</i> − <i>x</i> 代入已知偏微分方程可得：<br><span class='frac'><span class='frac-num'>∂<i>g</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> = 2[<i>x</i> − (<i>y</i> − <i>x</i>)]e<sup>−(<i>x</i> + <i>y</i> − <i>x</i>)</sup> = (4<i>x</i> − 2<i>y</i>)e<sup>−<i>y</i></sup>。<br>（Ⅱ）1) 求 <i>f</i>(<i>u</i>, <i>v</i>) 的表达式：<br>对 <span class='frac'><span class='frac-num'>∂<i>g</i>(<i>x</i>, <i>y</i>)</span><span class='frac-den'>∂<i>x</i></span></span> 关于 <i>x</i> 积分（视 <i>y</i> 为常数）得：<br><i>g</i>(<i>x</i>, <i>y</i>) = ∫ (4<i>x</i> − 2<i>y</i>)e<sup>−<i>y</i></sup> d<i>x</i> = (2<i>x</i><sup>2</sup> − 2<i>xy</i>)e<sup>−<i>y</i></sup> + <i>φ</i>(<i>y</i>)，其中 <i>φ</i>(<i>y</i>) 为关于 <i>y</i> 的可微函数。<br>由 <i>g</i>(<i>x</i>, <i>x</i>) = <i>f</i>(<i>x</i>, 0) = <i>x</i><sup>2</sup>e<sup>−<i>x</i></sup>，代入上式得 0 + <i>φ</i>(<i>x</i>) = <i>x</i><sup>2</sup>e<sup>−<i>x</i></sup>，即 <i>φ</i>(<i>y</i>) = <i>y</i><sup>2</sup>e<sup>−<i>y</i></sup>。<br>于是 <i>f</i>(<i>x</i>, <i>y</i> − <i>x</i>) = (2<i>x</i><sup>2</sup> − 2<i>xy</i> + <i>y</i><sup>2</sup>)e<sup>−<i>y</i></sup> = [<i>x</i><sup>2</sup> + (<i>y</i> − <i>x</i>)<sup>2</sup>]e<sup>−<i>y</i></sup>。<br>还原变量 <i>u</i> = <i>x</i>，<i>v</i> = <i>y</i> − <i>x</i>（即 <i>y</i> = <i>u</i> + <i>v</i>），得 <i>f</i>(<i>u</i>, <i>v</i>) = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup>)e<sup>−(<i>u</i>+<i>v</i>)</sup>。<br>2) 求 <i>f</i>(<i>u</i>, <i>v</i>) 的极值：<br>计算一阶偏导数并令其为 0：<br><i>f'</i><sub><i>u</i></sub> = (2<i>u</i> − <i>u</i><sup>2</sup> − <i>v</i><sup>2</sup>)e<sup>−(<i>u</i>+<i>v</i>)</sup> = 0，<br><i>f'</i><sub><i>v</i></sub> = (2<i>v</i> − <i>u</i><sup>2</sup> − <i>v</i><sup>2</sup>)e<sup>−(<i>u</i>+<i>v</i>)</sup> = 0。<br>两式相减得 <i>u</i> = <i>v</i>，代入得 2<i>u</i> − 2<i>u</i><sup>2</sup> = 0，解得驻点为 (0, 0) 和 (1, 1)。<br>计算二阶偏导数：<br><i>f''</i><sub><i>uu</i></sub> = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup> − 4<i>u</i> + 2)e<sup>−(<i>u</i>+<i>v</i>)</sup>，<i>f''</i><sub><i>uv</i></sub> = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup> − 2<i>u</i> − 2<i>v</i>)e<sup>−(<i>u</i>+<i>v</i>)</sup>，<i>f''</i><sub><i>vv</i></sub> = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup> − 4<i>v</i> + 2)e<sup>−(<i>u</i>+<i>v</i>)</sup>。<br>• 在点 (0, 0) 处：<i>A</i> = 2，<i>B</i> = 0，<i>C</i> = 2，<i>AC</i> − <i>B</i><sup>2</sup> = 4 > 0 且 <i>A</i> > 0，故点 (0, 0) 为极小值点，极小值为 <i>f</i>(0, 0) = 0。<br>• 在点 (1, 1) 处：<i>A</i> = 0，<i>B</i> = −2e<sup>−2</sup>，<i>C</i> = 0，<i>AC</i> − <i>B</i><sup>2</sup> = −4e<sup>−4</sup> < 0，故点 (1, 1) 不是极值点。<br>综上所述，<i>f</i>(<i>u</i>, <i>v</i>) = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup>)e<sup>−(<i>u</i>+<i>v</i>)</sup>，有极小值 <i>f</i>(0, 0) = 0。",
+    "tips": "第（Ⅰ）问实际上是给第（Ⅱ）问铺路的“特征线法”换元提示！对 ∂<i>g</i>/∂<i>x</i> 积分时切记加上关于另一变量的函数 <i>φ</i>(<i>y</i>) 而不是常数 <i>C</i>；求极值时也可直接观察在 (0,0) 邻域内 <i>f</i>(<i>u</i>, <i>v</i>) = (<i>u</i><sup>2</sup> + <i>v</i><sup>2</sup>)e<sup>−(<i>u</i>+<i>v</i>)</sup> ≥ 0 = <i>f</i>(0,0) 快速验证极小值。",
+    "kp": "多元复合函数偏导数、偏微分方程还原与无条件极值"
+  },
+  {
+    "id": "M2022_21",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 21,
+    "qType": "solve",
+    "chapter": "m_ch3",
+    "title": "2022数二 第21题（解答题 12分）",
+    "stem": "设函数 <i>f</i>(<i>x</i>) 在 (−∞, +∞) 上有二阶连续导数，证明：<i>f''</i>(<i>x</i>) ≥ 0 的充分必要条件是对任意不同的实数 <i>a</i>, <i>b</i>，都有 <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>) ≤ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>b</i> − <i>a</i></span></span> ∫<sub><i>a</i></sub><sup><i>b</i></sup> <i>f</i>(<i>x</i>) d<i>x</i> 成立。",
+    "options": null,
+    "answer": "见解析证明（泰勒公式展开与反证法保号性）",
+    "analysis": "<b>【证】</b> <b>（1）必要性：</b> 设 <i>f''</i>(<i>x</i>) ≥ 0，不妨设 <i>a</i> < <i>b</i>（若 <i>a</i> > <i>b</i>，交换上下限后积分平均值不变）。<br>在区间 [<i>a</i>, <i>b</i>] 上，将 <i>f</i>(<i>x</i>) 在中点 <i>x</i><sub>0</sub> = <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span> 处作二阶泰勒展开：<br><i>f</i>(<i>x</i>) = <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>) + <i>f'</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>)(<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>) + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> <i>f''</i>(<i>ξ</i>)(<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>)<sup>2</sup>，其中 <i>ξ</i> 介于 <i>x</i> 与 <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span> 之间。<br>将上式在 [<i>a</i>, <i>b</i>] 上两边积分，注意到 ∫<sub><i>a</i></sub><sup><i>b</i></sup> (<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>) d<i>x</i> = 0，且 <i>f''</i>(<i>ξ</i>) ≥ 0，可得：<br>∫<sub><i>a</i></sub><sup><i>b</i></sup> <i>f</i>(<i>x</i>) d<i>x</i> = <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>)(<i>b</i> − <i>a</i>) + 0 + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub><i>a</i></sub><sup><i>b</i></sup> <i>f''</i>(<i>ξ</i>)(<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>)<sup>2</sup> d<i>x</i> ≥ <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>)(<i>b</i> − <i>a</i>)。<br>两边除以 <i>b</i> − <i>a</i> > 0，即得 <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i> + <i>b</i></span><span class='frac-den'>2</span></span>) ≤ <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>b</i> − <i>a</i></span></span> ∫<sub><i>a</i></sub><sup><i>b</i></sup> <i>f</i>(<i>x</i>) d<i>x</i>。<br><b>（2）充分性：</b> 用反证法。假设存在一点 <i>x</i><sub>0</sub> ∈ (−∞, +∞)，使得 <i>f''</i>(<i>x</i><sub>0</sub>) < 0。<br>由 <i>f''</i>(<i>x</i>) 在 (−∞, +∞) 上连续及极限保号性可知，存在 <i>δ</i> > 0，当 <i>x</i> ∈ (<i>x</i><sub>0</sub> − <i>δ</i>, <i>x</i><sub>0</sub> + <i>δ</i>) 时，恒有 <i>f''</i>(<i>x</i>) < 0。<br>取闭区间 [<i>a</i><sub>0</sub>, <i>b</i><sub>0</sub>] ⊂ (<i>x</i><sub>0</sub> − <i>δ</i>, <i>x</i><sub>0</sub> + <i>δ</i>)（<i>a</i><sub>0</sub> < <i>b</i><sub>0</sub>），则在 [<i>a</i><sub>0</sub>, <i>b</i><sub>0</sub>] 上恒有 <i>f''</i>(<i>x</i>) < 0。<br>在 [<i>a</i><sub>0</sub>, <i>b</i><sub>0</sub>] 上重复必要性中的二阶泰勒展开并积分，由于当 <i>x</i> ≠ <span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span> 时 <i>f''</i>(<i>ξ</i>)(<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span>)<sup>2</sup> < 0，可得：<br>∫<sub><i>a</i><sub>0</sub></sub><sup><i>b</i><sub>0</sub></sup> <i>f</i>(<i>x</i>) d<i>x</i> = <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span>)(<i>b</i><sub>0</sub> − <i>a</i><sub>0</sub>) + <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> ∫<sub><i>a</i><sub>0</sub></sub><sup><i>b</i><sub>0</sub></sup> <i>f''</i>(<i>ξ</i>)(<i>x</i> − <span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span>)<sup>2</sup> d<i>x</i> < <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span>)(<i>b</i><sub>0</sub> − <i>a</i><sub>0</sub>)，<br>即 <i>f</i>(<span class='frac'><span class='frac-num'><i>a</i><sub>0</sub> + <i>b</i><sub>0</sub></span><span class='frac-den'>2</span></span>) > <span class='frac'><span class='frac-num'>1</span><span class='frac-den'><i>b</i><sub>0</sub> − <i>a</i><sub>0</sub></span></span> ∫<sub><i>a</i><sub>0</sub></sub><sup><i>b</i><sub>0</sub></sup> <i>f</i>(<i>x</i>) d<i>x</i>，这与已知条件矛盾！<br>故假设不成立，必有 <i>f''</i>(<i>x</i>) ≥ 0 在 (−∞, +∞) 上恒成立。",
+    "tips": "经典的琴生（Jensen）积分不等式证明：1) 题干同时出现中点值 <i>f</i>((<i>a</i>+<i>b</i>)/2)、定积分与二阶导数 <i>f''</i>(<i>x</i>)，必然在中点 <i>x</i><sub>0</sub> = (<i>a</i>+<i>b</i>)/2 处作二阶泰勒展开再两边积分（一次项积分因对称性自动为0）；2) 由积分不等式反推导数符号时，利用“二阶导数连续 + 反证法局部保号性”是满分标准模板。",
+    "kp": "泰勒公式、定积分不等式证明与连续函数保号性"
+  },
+  {
+    "id": "M2022_22",
+    "subject": "math2",
+    "year": 2022,
+    "qNum": 22,
+    "qType": "solve",
+    "chapter": "m_ch6",
+    "title": "2022数二 第22题（解答题 12分）",
+    "stem": "已知二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) = 3<i>x</i><sub>1</sub><sup>2</sup> + 4<i>x</i><sub>2</sub><sup>2</sup> + 3<i>x</i><sub>3</sub><sup>2</sup> + 2<i>x</i><sub>1</sub><i>x</i><sub>3</sub>。<br>（Ⅰ）求正交矩阵 <i>Q</i>，使正交变换 <i>x</i> = <i>Qy</i> 将二次型 <i>f</i>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>) 化为标准形；<br>（Ⅱ）证明 min<sub><i>x</i>≠0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>x</i><sup>T</sup><i>x</i></span></span> = 2。",
+    "options": null,
+    "answer": "（Ⅰ）Q = [1/√2, 0, -1/√2; 0, 1, 0; 1/√2, 0, 1/√2]，标准形为 4y₁² + 4y₂² + 2y₃²；（Ⅱ）见解析证明",
+    "analysis": "<b>【解】</b> （Ⅰ）二次型 <i>f</i> 对应的实对称矩阵为 <i>A</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>3 &nbsp; 0 &nbsp; 1<br>0 &nbsp; 4 &nbsp; 0<br>1 &nbsp; 0 &nbsp; 3</span>。<br>计算 <i>A</i> 的特征多项式：<br>|<i>λE</i> − <i>A</i>| = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'><i>λ</i> − 3 &nbsp; 0 &nbsp; −1<br>0 &nbsp; <i>λ</i> − 4 &nbsp; 0<br>−1 &nbsp; 0 &nbsp; <i>λ</i> − 3</span> = (<i>λ</i> − 4)[(<i>λ</i> − 3)<sup>2</sup> − 1] = (<i>λ</i> − 4)<sup>2</sup>(<i>λ</i> − 2) = 0。<br>解得 <i>A</i> 的特征值为 <i>λ</i><sub>1</sub> = <i>λ</i><sub>2</sub> = 4，<i>λ</i><sub>3</sub> = 2。<br>1) 当 <i>λ</i><sub>1</sub> = <i>λ</i><sub>2</sub> = 4 时，解齐次线性方程组 (4<i>E</i> − <i>A</i>)<i>x</i> = 0：<br>4<i>E</i> − <i>A</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1 &nbsp; 0 &nbsp;−1<br>0 &nbsp; 0 &nbsp; 0<br>−1 &nbsp; 0 &nbsp; 1</span> → <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1 &nbsp; 0 &nbsp;−1<br>0 &nbsp; 0 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 0</span>，<br>得正交的基础解系 <i>ξ</i><sub>1</sub> = (1, 0, 1)<sup>T</sup>，<i>ξ</i><sub>2</sub> = (0, 1, 0)<sup>T</sup>。<br>单位化得：<i>ε</i><sub>1</sub> = (<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>, 0, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>)<sup>T</sup>，<i>ε</i><sub>2</sub> = (0, 1, 0)<sup>T</sup>。<br>2) 当 <i>λ</i><sub>3</sub> = 2 时，解齐次线性方程组 (2<i>E</i> − <i>A</i>)<i>x</i> = 0：<br>2<i>E</i> − <i>A</i> = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>−1 &nbsp; 0 &nbsp;−1<br>0 &nbsp;−2 &nbsp; 0<br>−1 &nbsp; 0 &nbsp;−1</span> → <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1 &nbsp; 0 &nbsp; 1<br>0 &nbsp; 1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 0</span>，<br>得基础解系 <i>ξ</i><sub>3</sub> = (−1, 0, 1)<sup>T</sup>，单位化得 <i>ε</i><sub>3</sub> = (−<span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>, 0, <span class='frac'><span class='frac-num'>1</span><span class='frac-den'>√2</span></span>)<sup>T</sup>。<br>令正交矩阵 <i>Q</i> = (<i>ε</i><sub>1</sub>, <i>ε</i><sub>2</sub>, <i>ε</i><sub>3</sub>) = <span style='display:inline-block;vertical-align:middle;border-left:1px solid;border-right:1px solid;padding:0 4px;'>1/√2 &nbsp; 0 &nbsp;−1/√2<br>0 &nbsp; 1 &nbsp; 0<br>1/√2 &nbsp; 0 &nbsp; 1/√2</span>，则正交变换 <i>x</i> = <i>Qy</i> 将二次型化为标准形：<br><i>f</i> = 4<i>y</i><sub>1</sub><sup>2</sup> + 4<i>y</i><sub>2</sub><sup>2</sup> + 2<i>y</i><sub>3</sub><sup>2</sup>。<br>（Ⅱ）<b>【证】</b> 由（Ⅰ）知，在正交变换 <i>x</i> = <i>Qy</i> 下，<i>x</i><sup>T</sup><i>x</i> = (<i>Qy</i>)<sup>T</sup>(<i>Qy</i>) = <i>y</i><sup>T</sup><i>Q</i><sup>T</sup><i>Qy</i> = <i>y</i><sup>T</sup><i>y</i> = <i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup> + <i>y</i><sub>3</sub><sup>2</sup>。<br>因此对任意 <i>x</i> ≠ 0（即 <i>y</i> ≠ 0），有：<br><span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>x</i><sup>T</sup><i>x</i></span></span> = <span class='frac'><span class='frac-num'>4<i>y</i><sub>1</sub><sup>2</sup> + 4<i>y</i><sub>2</sub><sup>2</sup> + 2<i>y</i><sub>3</sub><sup>2</sup></span><span class='frac-den'><i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup> + <i>y</i><sub>3</sub><sup>2</sup></span></span> ≥ <span class='frac'><span class='frac-num'>2(<i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup> + <i>y</i><sub>3</sub><sup>2</sup>)</span><span class='frac-den'><i>y</i><sub>1</sub><sup>2</sup> + <i>y</i><sub>2</sub><sup>2</sup> + <i>y</i><sub>3</sub><sup>2</sup></span></span> = 2。<br>且当 <i>y</i><sub>1</sub> = 0, <i>y</i><sub>2</sub> = 0, <i>y</i><sub>3</sub> = 1（即取 <i>x</i> = <i>ε</i><sub>3</sub> ≠ 0）时，等号成立。<br>故 min<sub><i>x</i>≠0</sub> <span class='frac'><span class='frac-num'><i>f</i>(<i>x</i>)</span><span class='frac-den'><i>x</i><sup>T</sup><i>x</i></span></span> = 2。",
+    "tips": "瑞利商（Rayleigh quotient）核心结论：实对称矩阵二次型 <span class='frac'><span class='frac-num'><i>x</i><sup>T</sup><i>Ax</i></span><span class='frac-den'><i>x</i><sup>T</sup><i>x</i></span></span> 的最大值即为最大特征值 <i>λ</i><sub>max</sub>，最小值即为最小特征值 <i>λ</i><sub>min</sub>。证明时一定要补上一句“当 <i>y</i> = (0, 0, 1)<sup>T</sup> 时等号可以取到”，才能严格说明下界就是最小值！",
+    "kp": "正交变换化二次型为标准形与瑞利商最值定理"
+  },
+  {
+    "id": "E2026_01",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第1题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>1</strong> 空的最佳选项：",
+    "options": [
+      "A. afraid",
+      "B. critical",
+      "C. proud",
+      "D. tolerant"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (proud)</strong><br>词义辨析<br>【线索】self-respect 与正面光下<br>本句关键正向词链是 self-respect 和 to see ourselves in a positive light，明确这是正面<br>感受。紧随其后的 to be __(1)__ of who we are 与之并列，所填词必须延续\"正面看待自<br>己\"的色彩，指向\"为自己是谁感到（积极情绪）\"。<br>【选项】A) afraid ✗色彩相反<br>afraid 表\"害怕\"，与 self-respect、positive light 构成的正向链冲突，be afraid of who we are<br>意为\"害怕自己是谁\"，方向与原文完全相反。<br>B) critical ✗态度偏负<br>critical 是\"挑剔/批判\"，be critical of who we are 即\"挑剔自己是谁\"，与开头追求 self-respect<br>的正向语境相悖。<br>C) proud ✓正向且固定搭配<br>be proud of 是固定搭配，意为\"为……感到自豪\"，与 to see ourselves in a positive light 同向<br>并列，完美承接 self-respect 的正面色彩。<br>D) tolerant ✗强度不足且跑偏<br>tolerant 是\"容忍\"，be tolerant of who we are 意为\"容忍自己是谁\"，含\"勉强接受\"意味，与\"自<br>豪地正视自己\"的正向力度不匹配。<br>【验证】代回后 to be __(1)__ of who we are 即 to be proud of who we are，与 to see<br>ourselves in a positive light 并列同义，整段开篇\"人都追求自我尊重——以正面眼光看自<br>己、为自己是谁感到自豪\"语义顺畅，且与 outline 中\"正面自我感受被冒犯才会不适\"的逻辑<br>前提一致。",
+    "tips": "self-respect 与正面光下",
+    "kp": "完形填空 · 第1空考点精析"
+  },
+  {
+    "id": "E2026_02",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第2题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>2</strong> 空的最佳选项：",
+    "options": [
+      "A. risky",
+      "B. natural",
+      "C. admirable",
+      "D. foolish"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (natural)</strong><br>词义辨析<br>【线索】only 暗示理所应当<br>Any comments or experiences that undermine those feelings of self-worth can be<br>uncomfortable and it's only __(2)__ to want to avoid them. 中 only 是关键，only + 形<br>容词常表达\"不过是……、再自然不过\"；后文 But the thing is 才出现转折，说明此处作者<br>并未批评这种回避反应，只是在客观陈述其合理性。<br>【选项】A) risky ✗评价偏负<br>risky 意为\"冒险的\"，把\"想避开不适\"定性为冒险，与 only 形成的\"理所当然\"语气相反，也与下文<br>But the thing is 的反转点不构成正常铺垫。<br>B) natural ✓贴合 only 合理化语气<br>it's only natural to do 是英语高频表达，意为\"想……再自然不过\"，正好把作者\"先承认人之常<br>情、再引出反思\"的论证铺好；与下文 But 形成\"承认—但是\"的标准转折链。<br>C) admirable ✗褒义过头<br>admirable 是\"值得钦佩的\"，作者后文要劝读者别这样想，不可能在此先把这种逃避反应抬到\"令人<br>钦佩\"的高度，褒义程度严重越界。<br>D) foolish ✗贬义且与 only 冲突<br>foolish 是\"愚蠢的\"，与 only 表达的\"再自然不过\"语气冲突；作者也未在此处直接贬低读者，下文<br>是温和劝导而非斥责。<br>【验证】代回 it's only __(2)__ to want to avoid them 即 it's only natural to want to avoid<br>them，意为\"想避开（让人不适的言论）再自然不过\"，与紧随其后的 But the thing is 形<br>成\"承认人之常情—但事实是\"的经典让步—转折链，全文逻辑顺畅。",
+    "tips": "only 暗示理所应当",
+    "kp": "完形填空 · 第2空考点精析"
+  },
+  {
+    "id": "E2026_03",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第3题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>3</strong> 空的最佳选项：",
+    "options": [
+      "A. whether",
+      "B. where",
+      "C. why",
+      "D. how"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (whether)</strong><br>语法形态<br>【线索】主观与否而非地点原因<br>主句宾语是 to a large degree, subjective——\"在很大程度上是主观的\"。判断对象只能<br>是\"自我价值是否真的受损\"这件事本身的真假，而不是\"在哪里受损\"\"为何受损\"\"如何受<br>损\"；故从句应表\"是否……\"。<br>【选项】<br>A) whether ✓是否真的受损<br>whether 引导\"是否\"主语从句，意为\"你的自我价值是否真的在被冒犯\"，正好对应主句 to a<br>large degree, subjective 这个真假判断维度。<br>B) where ✗无地点缺口<br>where 需要从句缺地点状语，但 your self-worth really is being undermined 在语义上不需要地<br>点信息，主句也未谈\"在哪受损\"。<br>C) why ✗主观针对真假非原因<br>why 引出\"为何\"，但主句说的是\"是否真的受损\"主观与否，不是\"为何受损\"主观与否，焦点错位。<br>D) how ✗方式与判断错配<br>how 强调方式，但 subjective 评价的是\"事实是否成立\"而非\"以何种方式发生\"，与主句表语在维度<br>上对不上。<br>【验证】代回 __(3)__ your self-worth really is being undermined is, to a large degree,<br>subjective 即\"你的自我价值是否真的在被冒犯，很大程度上是主观的\"，与下一句 Much of<br>it comes down to your __(4)__ of what someone said or did. 中的\"很大程度上取决于你<br>的（解读）\"形成同义复述，逻辑闭合。",
+    "tips": "主观与否而非地点原因",
+    "kp": "完形填空 · 第3空考点精析"
+  },
+  {
+    "id": "E2026_04",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第4题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>4</strong> 空的最佳选项：",
+    "options": [
+      "A. citation",
+      "B. imitation",
+      "C. perception",
+      "D. introduction"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (perception)</strong><br>词义辨析<br>【线索】subjective 锁定主观解读<br>前句 is, to a large degree, subjective 与本句 Much of it comes down to your __(4)__ 由<br>Much of it 串起，it 指代上句\"自我价值是否被冒犯\"。subjective 一词锁定填空词必须指<br>向\"个人主观加工\"——只有 perception（看法、感知）契合，引文也明确针对的是 what<br>someone said or did——他人的言行。<br>【选项】A) citation ✗意为引用偏离<br>citation 表\"引文、引用\"，多用于学术或法律语境，与\"对他人言行的主观解读\"不搭。<br>B) imitation ✗模仿对象错位<br>imitation 表\"模仿\"，your imitation of what someone said 意为\"你对别人话的模仿\"，但语境<br>是\"是否觉得被冒犯\"，与模仿无关。<br>C) perception ✓主观感知正解<br>perception 表\"看法、感知\"，your perception of what someone said or did 正好是\"你对别<br>人言行的看法\"，与前句 subjective 同向同义，承上启下。<br>D) introduction ✗搭配语义不通<br>introduction 表\"介绍、引入\"，与\"对他人言行的主观感受\"在语义上完全不沾边。<br>【验证】代回 Much of it comes down to your __(4)__ of what someone said or did. 即\"这（自<br>我价值是否真的被冒犯）很大程度上取决于你对别人言行的看法\"，与前句\"subjective\"形成<br>清晰的因果/同义链；为第二段进一步阐述 personalisation 做铺垫。",
+    "tips": "subjective 锁定主观解读",
+    "kp": "完形填空 · 第4空考点精析"
+  },
+  {
+    "id": "E2026_05",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第5题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>5</strong> 空的最佳选项：",
+    "options": [
+      "A. poor",
+      "B. loyal",
+      "C. creative",
+      "D. shy"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (poor)</strong><br>词义辨析<br>【线索】picks holes 锁定负评<br>前文 your boss picks holes in your sales report——pick holes in 是\"挑刺、挑毛病\"的固<br>定表达，触发事件是\"被挑错\"，由此你才会 come away feeling like 老板觉得你是个\"差劲<br>的\"员工。线索就在本句内的 picks holes。<br>【选项】<br>A) poor ✓差劲与挑刺呼应<br>poor 表\"差劲的、不胜任的\"，a poor member of staff 即\"一个不合格的员工\"，与 picks holes<br>in your sales report 的负面色彩一致。<br>B) loyal ✗色彩相反<br>loyal 是\"忠诚的\"，褒义，与被挑错后产生的负面自我评价完全相反。<br>C) creative ✗褒义不符<br>creative 是\"有创意的\"，褒义；被挑错的人不会误以为老板觉得自己\"有创意\"，方向反。<br>D) shy ✗维度跑偏<br>shy 是\"害羞的\"，描述性格而非工作能力评价，与 sales report 被挑错的语境不在同一维度。<br>【验证】代回 she thinks you're a __(5)__ member of staff 即\"她觉得你是个差劲的员工\"，与 picks<br>holes in your sales report 触发的负面自我解读一致，作为 personalisation 的典型例证逻<br>辑顺畅。",
+    "tips": "picks holes 锁定负评",
+    "kp": "完形填空 · 第5空考点精析"
+  },
+  {
+    "id": "E2026_06",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第6题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>6</strong> 空的最佳选项：",
+    "options": [
+      "A. sponsored",
+      "B. crowded",
+      "C. disputed",
+      "D. planned"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (planned)</strong><br>词义辨析<br>【线索】cancel 暗示已有约定<br>本句关键动词 cancel 是\"取消\"；能被取消的 get-together 一定是事先\"已计划好的\"。线索<br>只需本句内自足，无需跨句。<br>【选项】A) sponsored ✗赞助维度跑偏<br>sponsored 是\"被赞助的\"，朋友间的酒吧小聚一般不涉及赞助，搭配过于商务化。<br>B) crowded ✗形容场地非聚会<br>crowded 是\"拥挤的\"，多形容场所人多；用来形容 get-together 本身不自然，也与\"被取消\"无逻<br>辑联系。<br>C) disputed ✗争议含义不符<br>disputed 是\"有争议的\"，意味朋友间为聚会吵过架，是凭空多加的负面前提，原文未提供任何争吵<br>线索。<br>D) planned ✓计划与取消天然搭<br>planned 是\"已计划好的\"，cancel a planned get-together 是英语典型搭配，且只有事先\"约<br>好\"的聚会才能被\"取消\"。<br>【验证】代回 cancel your __(6)__ get-together at the pub 即\"取消你们已约好的酒吧小聚\"，与下<br>文 you interpret this as meaning they're bored of you 形成完整故事——本来说好的聚<br>会被推掉了，你才会怀疑对方厌倦了你。",
+    "tips": "cancel 暗示已有约定",
+    "kp": "完形填空 · 第6空考点精析"
+  },
+  {
+    "id": "E2026_07",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第7题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>7</strong> 空的最佳选项：",
+    "options": [
+      "A. method",
+      "B. term",
+      "C. design",
+      "D. goal"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (term)</strong><br>词义辨析<br>【线索】冒号后 personalisation 是术语<br>冒号后给出的 personalisation 是一个学术名称/术语。所以空里要填\"专门叫法、术语\"这个<br>概念，线索就在冒号后这一个词上。<br>【选项】A) method ✗方法非名称<br>method 是\"方法\"，但冒号后 personalisation 是一个名词性的称呼而非一套做法，对不上。<br>B) term ✓术语正解<br>term 表\"术语、名称\"，have a term for X 是英语固定表达\"对 X 有个专门叫法\"，与冒号后给出<br>的术语 personalisation 完全对应。<br>C) design ✗设计与命名无关<br>design 是\"设计\"，心理学家不会去\"设计\"一种思维方式，搭配 have a design for 也不通顺。<br>D) goal ✗目标偏离<br>goal 是\"目标\"，心理学家对这种思维的\"目标\"在此完全没必要讨论，且 a goal for this way of<br>thinking 语义混乱。<br>【验证】代回 Psychologists have a __(7)__ for this way of thinking: personalisation. 即\"心理学<br>家给这种思维方式起了个术语：personalisation\"，冒号前后等号对齐，段落结尾的概念命<br>名作用非常清晰。",
+    "tips": "冒号后 personalisation 是术语",
+    "kp": "完形填空 · 第7空考点精析"
+  },
+  {
+    "id": "E2026_08",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第8题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>8</strong> 空的最佳选项：",
+    "options": [
+      "A. evidence",
+      "B. theory",
+      "C. condition",
+      "D. reality"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (reality)</strong><br>词义辨析<br>【线索】But 引出与前文相反的真相<br>But the __(8)__ is 中 But 把第二段你以为的\"老板嫌弃你\"翻转过来，引出 your boss might<br>view you very highly——这是事实层面的真相，与前一段你脑补的\"想法\"对立。该词要承<br>担\"真相、实情\"的语义。<br>【选项】A) evidence ✗证据需有出处<br>evidence 是\"证据\"，需依托具体来源；后文 your boss might view you very highly 是一种可能<br>性陈述而非证据材料，搭配 the evidence is that 不自然。<br>B) theory ✗理论与可能错位<br>theory 是\"理论\"，但后文 your boss might view you very highly 是对实际情况的猜测，不是理<br>论命题，对不上。<br>C) condition ✗条件与真相无关<br>condition 是\"条件、情况\"，但语境讨论的是\"真相是什么\"，而非满足某条件下会怎样。<br>D) reality ✓真相一锤定音<br>reality 是\"现实、真相\"，But the reality is that... 是英语表\"但事实是……\"的高频结构，正好与第<br>二段读者的脑补形成翻转对照。<br>【验证】代回 But the __(8)__ is that your boss might view you very highly. 即\"但事实是，你的<br>老板可能对你评价很高\"，与第二段 she thinks you're a __(5)__ member of staff 你脑补的<br>负评直接对冲，转折链清晰。",
+    "tips": "But 引出与前文相反的真相",
+    "kp": "完形填空 · 第8空考点精析"
+  },
+  {
+    "id": "E2026_09",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第9题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>9</strong> 空的最佳选项：",
+    "options": [
+      "A. complaints",
+      "B. choices",
+      "C. mistakes",
+      "D. suggestions"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (mistakes)</strong><br>词义辨析<br>【线索】point these out 反推 mistakes<br>本句后半 she wanted to point these out so that you do better next time——老板<br>要\"指出来让你下次做得更好\"，能被\"指出来以促进改进\"的，只能是\"错误\"。而且前文 picks<br>holes in your sales report 也呼应\"挑出毛病\"。<br>【选项】A) complaints ✗抱怨方向反<br>complaints 是\"抱怨\"，是员工对公司的不满，而本句主语是\"你做的报告里\"，员工不会在自己报告<br>里发牢骚。<br>B) choices ✗中性不触发指正<br>choices 是\"选择\"，中性词，老板不会专门\"point out 你的选择\"来帮你下次做得更好；逻辑联系<br>不紧。<br>C) mistakes ✓错误指出最常配<br>mistakes 是\"错误\"，make mistakes 是固定搭配；point out 错误以便\"do better next time\"逻<br>辑闭环，与上段 picks holes 的负面挑错也保持一致。<br>D) suggestions ✗建议来源错位<br>suggestions 是\"建议\"，但 you made suggestions in the report 表示\"你在报告里给出了建<br>议\"——这不是需要老板纠正的对象，逻辑反向。<br>【验证】代回 It's just you made some __(9)__ in the report 即\"只是你在报告里犯了一些错\"，与<br>she wanted to point these out so that you do better next time 形成\"犯错—指出—下<br>次改进\"的因果链，整段为老板辩护的逻辑通畅。",
+    "tips": "point these out 反推 mistakes",
+    "kp": "完形填空 · 第9空考点精析"
+  },
+  {
+    "id": "E2026_10",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第10题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>10</strong> 空的最佳选项：",
+    "options": [
+      "A. Similarly",
+      "B. Relatively",
+      "C. Accordingly",
+      "D. Contrarily"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (Similarly)</strong><br>逻辑关系<br>【线索】老板事例与朋友事例平行<br>前半段刚分析完老板这例的真相（your boss might view you very highly），本句切到 in<br>the case of your friends cancelling, perhaps they both felt unwell that weekend or<br>they just __(11)__ their minds.——同样给出\"真相另解\"。两件事是\"两个事例平行展开\"，<br>逻辑是\"同理可证\"。<br>【选项】<br>A) Similarly ✓类比并列恰当<br>Similarly 是\"同样地\"，正好把老板事例和朋友事例两种 personalisation 的真相做平行对照——<br>结构和功能完全一致。<br>B) Relatively ✗相对偏离<br>Relatively 是\"相对地\"，多用于比较程度，无法承接\"再举一个同类事例\"这一功能。<br>C) Accordingly ✗因果不成立<br>Accordingly 是\"因此\"，需要前句作为后句的因；但老板事例并不是朋友事例的原因，是平行另一<br>例，逻辑不通。<br>D) Contrarily ✗对立关系反方向<br>Contrarily 是\"相反地\"，但朋友事例和老板事例都是同性质的\"被脑补成坏事，其实另有缘由\"，并<br>非相反。<br>【验证】代回 __(10)__, in the case of your friends cancelling 即\"同样地，就朋友取消聚会这件事<br>而言……\"，正好把上半段老板事例的真相分析平移过来，构成\"两例并列、同理可证\"的结<br>构，与 outline 中第三段\"反转—给真相\"的走向自洽。",
+    "tips": "老板事例与朋友事例平行",
+    "kp": "完形填空 · 第10空考点精析"
+  },
+  {
+    "id": "E2026_11",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 11,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第11题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>11</strong> 空的最佳选项：",
+    "options": [
+      "A. opened",
+      "B. changed",
+      "C. trained",
+      "D. cleared"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (changed)</strong><br>固定搭配<br>【线索】cancel 与 change one's mind<br>本句要解释朋友为何 cancel 聚会的另一种可能原因；前面已经给出一种（perhaps they<br>both felt unwell that weekend），or 后再给一种\"无理由地变卦\"。change one's mind<br>是英语\"改变主意\"的固定表达，正好对应\"临时变卦\"。<br>【选项】A) opened ✗搭配不解释取消<br>opened 与 minds 搭配是 open one's mind\"打开思路、接受新事物\"，无法解释\"为何取消<br>聚会\"。<br>B) changed ✓改变主意正解<br>changed 与 minds 构成 change one's mind\"改变主意\"，正好解释朋友\"临时变卦取消聚会\"的<br>另一种合理原因，固定搭配且语义贴切。<br>C) trained ✗训练大脑跑偏<br>trained 与 minds 搭配是 train one's mind\"训练大脑\"，多用于自我提升语境，与取消聚会无关。<br>D) cleared ✗清空思绪偏离<br>cleared 与 minds 搭配是 clear one's mind\"清空思绪\"，多指放空、冥想，与\"取消聚会\"没有解释<br>关系。<br>【验证】代回 they just __(11)__ their minds 即\"他们只是改变了主意\"，与前半 perhaps they both<br>felt unwell that weekend 用 or 并列，给出朋友取消聚会的两种合理真相，逻辑顺畅。",
+    "tips": "cancel 与 change one's mind",
+    "kp": "完形填空 · 第11空考点精析"
+  },
+  {
+    "id": "E2026_12",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 12,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第12题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>12</strong> 空的最佳选项：",
+    "options": [
+      "A. quotations",
+      "B. experiments",
+      "C. questions",
+      "D. examples"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (examples)</strong><br>词义辨析<br>【线索】老板与朋友是两个例子<br>前两段铺开的两件事 your boss picks holes in your sales report 与 two of your friends<br>cancel your __(6)__ get-together at the pub 是用来说明 personalisation 的具体生活事<br>例；in both ___ 自然指\"在这两个例子中\"。本句 others that we all experience 也补充支<br>持\"事例\"这一性质。<br>【选项】A) quotations ✗引文性质不符<br>quotations 是\"引文、引语\"，但前文不是引用名人的话，是作者构造的生活情景，对不上。<br>B) experiments ✗实验语境错配<br>experiments 是\"实验\"，需有可控变量与实验设计，前文是日常情景而非实验，性质不符。<br>C) questions ✗问题层级跑偏<br>questions 是\"问题\"，但前文不是抛出问题而是描述场景；in both questions 也不符合英语<br>习惯。<br>D) examples ✓例子最贴语境<br>examples 是\"例子\"，in both examples 直接呼应前文老板和朋友这两个 personalisation 的生<br>活示例，搭配自然。<br>【验证】代回 In both __(12)__ — and others that we all experience 即\"在这两个例子——以及<br>我们都经历过的其他例子——中\"，与前文老板挑刺、朋友取消两个场景完美回扣，逻辑<br>顺畅。",
+    "tips": "老板与朋友是两个例子",
+    "kp": "完形填空 · 第12空考点精析"
+  },
+  {
+    "id": "E2026_13",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 13,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第13题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>13</strong> 空的最佳选项：",
+    "options": [
+      "A. process",
+      "B. objective",
+      "C. outcome",
+      "D. background"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (process)</strong><br>词义辨析<br>【线索】personalisation 是 process 的并列<br>第二段 Psychologists have a __(7)__ for this way of thinking: personalisation.——<br>personalisation 被定义为\"a way of thinking\"，是一种心理过程。本段 another __(13)__<br>at work 中 another 暗示与之同类，psychologists call mind reading 也对应 way of<br>thinking 这一性质。<br>【选项】<br>A) process ✓心理过程对应思维方式<br>process 是\"过程\"，与第二段 this way of thinking 同类——personalisation 和 mind reading<br>都是心理过程；another process at work 是心理学文章描述\"另一种在起作用的心理过程\"的高<br>频表达。<br>B) objective ✗目标性质不符<br>objective 是\"目标、目的\"，但 mind reading 是一种思维活动而不是一个目标，对不上。<br>C) outcome ✗结果偏离过程<br>outcome 是\"结果\"，是事后产物；mind reading 是发生中的思维活动，需要的是\"过程\"而<br>非\"结果\"。<br>D) background ✗背景性质错位<br>background 是\"背景\"，是静态情景而非心理活动；不能用 at work 描述\"在起作用\"。<br>【验证】代回 there's another __(13)__ at work that psychologists call mind reading 即\"还有另<br>一种心理过程在起作用，心理学家称之为读心\"，与第二段 personalisation 这一\"思维方<br>式\"形成并列同类概念，逻辑顺畅。",
+    "tips": "personalisation 是 process 的并列",
+    "kp": "完形填空 · 第13空考点精析"
+  },
+  {
+    "id": "E2026_14",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 14,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第14题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>14</strong> 空的最佳选项：",
+    "options": [
+      "A. blaming",
+      "B. warning",
+      "C. teaching",
+      "D. asking"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (asking)</strong><br>词义辨析<br>【线索】知道别人想法靠直接问<br>本句前半 you assume to know what other people are thinking about you, when you<br>can't really know without __(14)__ them directly——核心是\"真正知道别人在想什么\"，<br>directly\"直接\"提示动作要直接作用于对方；要直接获知别人想法，最自然的方式就是\"问\"。<br>【选项】A) blaming ✗指责非获知途径<br>blaming 是\"责备\"，无法用来获知对方想法，且色彩负面，与全文劝人放松心态的立场冲突。<br>B) warning ✗警告与求知无关<br>warning 是\"警告\"，对了解对方想法没有实际作用，逻辑跑偏。<br>C) teaching ✗教导而非询问<br>teaching 是\"教\"，是单向输出，不能帮助了解对方真实想法，与目的相悖。<br>D) asking ✓直接询问最直接<br>asking 是\"询问\"，是直接获知对方想法的最直接方式，与 directly 完美呼应；ask sb directly 也<br>是高频表达。<br>【验证】代回 you can't really know without __(14)__ them directly 即\"不直接问对方就真的没法<br>知道\"，与本段提出 mind reading 错误（假装能猜对方心思）的批评一致——破解之道<br>是\"直接问\"，与全文给出对策的方向匹配。",
+    "tips": "知道别人想法靠直接问",
+    "kp": "完形填空 · 第14空考点精析"
+  },
+  {
+    "id": "E2026_15",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 15,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第15题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>15</strong> 空的最佳选项：",
+    "options": [
+      "A. arguing about",
+      "B. accounting for",
+      "C. engaging in",
+      "D. interfering with"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (engaging in)</strong><br>固定搭配<br>【线索】personalisation 是心理活动<br>宾语 personalisation and mind reading 都是\"思维方式/心理活动\"。本段后文 When you<br>find yourself taking a situation personally 也表明这是\"卷入这种思维\"而不是\"讨论或解<br>释它\"，动作侧重于\"自己陷进去\"。<br>【选项】A) arguing about ✗争论方向跑偏<br>arguing about 是\"争论\"，意味把 personalisation 当成话题去吵；但作者要避免的是\"陷入这种思<br>维\"，不是\"争论它\"。<br>B) accounting for ✗解释非陷入<br>accounting for 是\"解释、说明\"，但 avoid accounting for personalisation 意为\"避免去解释<br>它\"，逻辑荒谬——作者全文都在解释这种现象。<br>C) engaging in ✓陷入思维活动正解<br>engaging in 是\"参与、陷入\"，engage in personalisation and mind reading 表\"陷入这两种<br>思维\"，与全文要避免的\"自己往坏处想\"的主题一致。<br>D) interfering with ✗干扰对象不符<br>interfering with 是\"干扰、妨碍\"，意味把 personalisation 当成被妨碍的事物；但作者不是要去干<br>扰它、而是要避免自己卷入其中，关系反了。<br>【验证】代回 One simple way to avoid __(15)__ personalisation and mind reading 即\"避免陷入<br>personalisation 和 mind reading 的一种简单方法\"，与下句 When you find yourself<br>taking a situation personally 描述\"卷入思维\"的场景对应，承接段落\"给对策\"的功能。",
+    "tips": "personalisation 是心理活动",
+    "kp": "完形填空 · 第15空考点精析"
+  },
+  {
+    "id": "E2026_16",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 16,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第16题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>16</strong> 空的最佳选项：",
+    "options": [
+      "A. happened",
+      "B. continued",
+      "C. returned",
+      "D. disappeared"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (happened)</strong><br>词义辨析<br>【线索】negative assumptions 的对象<br>challenge your negative assumptions of what's __(16)__——前文反复举的事件都是\"已<br>经发生\"的事（老板挑了你的报告，朋友取消了聚会）；assumptions of what's<br>happened\"对所发生之事的揣测\"是英语高频结构。<br>【选项】<br>A) happened ✓对发生事件最贴<br>happened 表\"已发生的事\"，what's happened 即\"发生了什么\"，正好对应前文事例——你<br>对\"发生之事\"的负面揣测。<br>B) continued ✗持续性偏题<br>continued 是\"持续\"，但前文事件是一次性事件（一次挑错、一次取消聚会），不存在\"持<br>续\"维度。<br>C) returned ✗回归与情境无关<br>returned 是\"回归、返回\"，与\"老板批评、朋友取消\"等事件无逻辑关联。<br>D) disappeared ✗消失方向不符<br>disappeared 是\"消失\"，与负面揣测的对象\"刚刚发生之事\"不匹配。<br>【验证】代回 challenge your negative assumptions of what's __(16)__ 即\"挑战你对所发生之事的<br>负面揣测\"，承接前文老板挑错和朋友取消这两件具体已发生事件，并与下文 try to think of<br>other interpretations 形成\"挑战旧解—换新解\"的连贯逻辑。",
+    "tips": "negative assumptions 的对象",
+    "kp": "完形填空 · 第16空考点精析"
+  },
+  {
+    "id": "E2026_17",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 17,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第17题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>17</strong> 空的最佳选项：",
+    "options": [
+      "A. casual",
+      "B. obvious",
+      "C. familiar",
+      "D. fundamental"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (fundamental)</strong><br>词义辨析<br>【线索】deep 锁定根本性<br>saying anything deep or __(17)__ about you 中 deep 表\"深层的、深刻的\"，意指关于<br>你这个人本质的判断；与 deep 由 or 并列的词必然指向\"根本性、本质性\"，而不是表层<br>属性。<br>【选项】A) casual ✗随意与深刻相反<br>casual 是\"随意的、表面的\"，与 deep 在语义上恰好相反，无法并列。<br>B) obvious ✗明显非深刻<br>obvious 是\"明显的\"，强调直观可见，与 deep（隐藏在表面之下的本质）方向冲突。<br>C) familiar ✗熟悉与深刻错位<br>familiar 是\"熟悉的\"，描述认知熟悉度，与 deep 描述的本质程度不在一个维度。<br>D) fundamental ✓根本性与深刻同向<br>fundamental 是\"根本的、本质的\"，与 deep 在\"触及你本质\"这一语义上完美对齐，并列自然，<br>意为\"关于你的某种深层或根本性的判断\"。<br>【验证】代回 saying anything deep or __(17)__ about you 即\"说出关于你的任何深层或根本性的<br>判断\"，与全段\"别把别人言行解读为针对你这个人本质的评价\"的主旨完全一致，逻辑闭环。",
+    "tips": "deep 锁定根本性",
+    "kp": "完形填空 · 第17空考点精析"
+  },
+  {
+    "id": "E2026_18",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 18,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第18题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>18</strong> 空的最佳选项：",
+    "options": [
+      "A. reward",
+      "B. feedback",
+      "C. trust",
+      "D. proof"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (feedback)</strong><br>词义辨析<br>【线索】picks holes + point out 即 feedback<br>回看前文 your boss picks holes in your sales report 与 she wanted to point these out<br>so that you do better next time——老板挑出问题并指给你看，让你下次改进，正是英语<br>里 feedback\"反馈\"的标准定义。<br>【选项】A) reward ✗奖赏方向错<br>reward 是\"奖赏\"，但老板是\"挑错\"不是\"奖赏\"，方向相反。<br>B) feedback ✓反馈一锤定音<br>feedback 是\"反馈\"，give sb feedback 是工作场景的固定搭配；老板挑错并指出问题正是反馈<br>的内容，下文 want to help you __(19)__ 也呼应反馈的目的。<br>C) trust ✗信任范畴跑偏<br>trust 是\"信任\"，给信任与\"花时间挑出问题指出来\"的动作不构成等价关系。<br>D) proof ✗证据维度错位<br>proof 是\"证据\"，老板不会\"给你证据\"，搭配 give you proof 在此语境不通顺。<br>【验证】代回 your boss took the time to give you __(18)__ at all 即\"老板愿意花时间给你反馈\"，<br>与前文老板\"挑错并指出来\"的动作正好对应；与下句 they care enough to want to help<br>you __(19)__ 中\"想帮你改进\"形成\"反馈—助改进\"的因果链。",
+    "tips": "picks holes + point out 即 feedback",
+    "kp": "完形填空 · 第18空考点精析"
+  },
+  {
+    "id": "E2026_19",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 19,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第19题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>19</strong> 空的最佳选项：",
+    "options": [
+      "A. innovate",
+      "B. concentrate",
+      "C. improve",
+      "D. relax"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (improve)</strong><br>词义辨析<br>【线索】feedback + do better 锁 improve<br>上文 so that you do better next time 已经明示反馈目的是\"下次做得更好\"；本句 help<br>you __(19)__ 与之同义换说，自然填 improve\"改进、进步\"。<br>【选项】A) innovate ✗创新过窄<br>innovate 是\"创新\"，超出反馈范畴——挑错不一定意味要创新，多是改正错误而已。<br>B) concentrate ✗专注偏题<br>concentrate 是\"专注\"，与\"挑错并希望你下次做得更好\"的反馈目的不匹配。<br>C) improve ✓改进与 do better 等价<br>improve 是\"改进、进步\"，正好与上文 do better next time 同义；help you improve 是英语<br>反馈语境的固定表达。<br>D) relax ✗放松方向反<br>relax 是\"放松\"，反馈/挑错的目的不是让你放松，方向相反。<br>【验证】代回 they care enough to want to help you __(19)__ 即\"他们足够在乎你、想帮你进<br>步\"，与前文 so that you do better next time 同义换说，全段把老板挑错重新解读为\"善<br>意的帮助\"，逻辑顺畅。",
+    "tips": "feedback + do better 锁 improve",
+    "kp": "完形填空 · 第19空考点精析"
+  },
+  {
+    "id": "E2026_20",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 20,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2026_CLOZE",
+    "title": "2026英二 完形填空 第20题 (0.5分)",
+    "stem": "请结合上方《2026年完形填空》原文，选择第 <strong>20</strong> 空的最佳选项：",
+    "options": [
+      "A. strange",
+      "B. strong",
+      "C. vulnerable",
+      "D. valuable"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (strong)</strong><br>词义辨析<br>【线索】敢临时取消因关系牢固<br>that they felt able to cancel at late notice 提示前面填空词要解释\"为何朋友才敢临时放鸽<br>子\"——只有关系足够牢固、双方都不担心一次取消就翻脸，朋友才会安心地这样做。<br>【选项】A) strange ✗古怪不合逻辑<br>strange 是\"奇怪的\"，奇怪的关系并不必然让朋友安心取消，无法支撑 so…that 的因果。<br>B) strong ✓牢固关系敢取消<br>strong 是\"牢固的\"，a strong friendship 表\"关系够牢固\"——这种关系下临时取消不会被视为<br>绝交信号，正好让朋友 felt able to cancel at late notice，因果链顺畅，且与全文给读者宽慰的<br>正向立意一致。<br>C) vulnerable ✗脆弱与取消因果反<br>vulnerable 是\"脆弱的\"，脆弱关系下任何取消都可能压垮关系，朋友反而不敢取消，与结果矛盾；<br>也违背全文宽慰读者的正向立意。<br>D) valuable ✗宝贵不直接导致敢取消<br>valuable 是\"宝贵的\"，强调关系的重要性而非稳固性；宝贵的关系反而更需谨慎对待，不一定能解<br>释\"敢临时取消\"，且全文要的是\"关系经得起\"这种稳固性，不是\"值钱\"这一价值层面。<br>【验证】代回 your friendship is so __(20)__ that they felt able to cancel at late notice 即\"你们<br>的友谊太牢固了，所以他们才敢临时取消\"，与全段\"给朋友取消行为一个正向解读\"的功能完<br>全一致，全文以宽慰读者收尾，逻辑闭环。<br>O V E R V I E W · 通读建境<br>全文主旨与行文脉络<br>完形是语篇题——单看空所在的半句往往四个选项都「像」。下面是全文主旨与行文脉<br>络，是每个空锁定线索、代入验证时核对的全局工作台。<br>全文主旨<br>别把事情往心里去<br>全文围绕一个心理学现象展开：人们容易把别人的言行往自己身上揽（personalisation）、<br>并揣测别人对自己的看法（mind reading），作者指出这两种思维往往是主观的，并给出<br>避免的方法。开篇 Most of us strive for self-respect — to see ourselves in a positive light<br>定调话题是自我价值感与对外界评价的反应，Much of it comes down to your __(4)__ of<br>what someone said or did. 则点明核心立场——感受被冒犯往往源于自己的解读。<br><br>行文脉络<br>现象—举例—真相—对策<br>文章按四步推进：第一段 to a large degree, subjective 提出自我价值受损在很大程度上是<br>主观解读；第二段用两个生活例子（your boss picks holes in your sales report 与 two of<br>your friends cancel your __(6)__ get-together at the pub）说明什么叫 personalisation；第<br>三段以 But the __(8)__ is 反转，给出 your boss might view you very highly 等真实可能；第<br>四段 there's another __(13)__ at work that psychologists call mind reading 引出第二个概<br>念；第五、六段给出对策——挑战负面假设、换位思考。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>11 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>Most of us strive for self-respect — to see ourselves in a positive light, to be proud<br>of who we are.<br>第1段，第1句<br>覆盖了主谓宾、状语(不定式短语)、宾语从句等多种成分,且插入部分和从句嵌套提供了典型的成分<br>归属判断练习点——学生需区分插入状语与主句核心成分,以及识别引导词在从句内充当表语,具有<br>较好的训练价值<br>Any comments or experiences that undermine those feelings of self-worth can be<br>uncomfortable and it's only natural to want to avoid them.<br>第1段，第2句<br>本句包含多种成分类型：主系表结构、主谓宾结构、定语从句、形式主语与真正主语的对应、并列<br>主句。第一个主句的主语被定语从句分隔，适合练习识别分隔结构。第二个主句的形式主语结构是<br>常见易错点。定语从句中关系代词 \"that\" 既做引导词又做主语，适合强化定语从句成分分析。整体<br>成分丰富且有针对性练习价值。<br><br>But the thing is, whether your self-worth really is being undermined is, to a large<br>degree, subjective.<br>第1段，第3句<br>本句成分丰富，包含主系表结构、表语从句、主语从句、插入状语、被动语态谓语等，覆盖多个易<br>错点：whether 从句作主语、表语从句的识别、插入成分的干扰、被动语态的进行时形式。这些都<br>是考试常考且学生易混淆的点，练习价值很高。<br>Much of it comes down to your perception of what someone said or did.<br>第1段，第4句<br>主句 + 宾语从句嵌套是四六级和考研阅读中的高频句式,\"come down to\" 短语动词和 \"what\" 引导<br>的宾语从句都是常考结构,具有较强的代表性和可迁移性<br>Or, two of your friends cancel your planned get-together at the pub and you<br>interpret this as meaning they're bored of you.<br>第2段，第3句<br>句子覆盖了主语、谓语、宾语、宾语补足语、表语等多种成分，并列主句和宾语从句的组合提供了<br>成分划分的练习机会，特别是宾语补足语 \"as meaning they're bored of you\" 和宾语从句的识别具<br>有一定训练价值。<br>It's just you made some mistakes in the report and she wanted to point these out<br>so that you do better next time.<br>第3段，第2句<br>本句涵盖了主系表结构、表语从句、并列结构、目的状语从句、形式主语等多种成分和结构类型，<br>成分种类较为丰富。并列结构和嵌套从句的组合能够提供较好的划分练习机会。但句中没有特别容<br>易混淆的易错点（如定语从句与同位语从句的区分、复杂的双宾语等），训练价值属于中等偏上。<br>Similarly, in the case of your friends cancelling, perhaps they both felt unwell that<br>weekend or they just changed their minds.<br>第3段，第3句<br>本句涵盖并列谓语、主语、表语、宾语、时间状语、方式状语等多种成分，动名词复合结构 your<br>friends cancelling 可作为介词宾语的练习点，插入语 perhaps 的识别也有练习价值，成分种类较丰<br>富，适合作为划分练习句。<br><br>One simple way to avoid engaging in personalisation and mind reading is to<br>challenge your negative assumptions of what's happened.<br>第5段，第1句<br>本句的主系表结构(主语 + is + 不定式表语)以及嵌套的 what 引导的名词性从句,都是四六级和考研<br>阅读中的高频句式。特别是 way to do sth is to do sth 这类表达方式的句型,以及 what 引导的从句<br>作介词宾语的用法,在真题中反复出现。掌握本句的结构后,学生可将其迁移到大量类似句子的分析<br>中,具有较高的典型性和复用价值。<br>When you find yourself taking a situation personally, try to think of other<br>interpretations that are less focused on you — especially in the sense of saying<br>anything deep or fundamental about you.<br>第5段，第2句<br>成分种类丰富且含多个值得练习的点:(1)状语从句中的 \"find + 宾语 + 宾补(现在分词)\" 结构;(2)主句<br>的祈使句省略主语和不定式作宾语;(3)定语从句的关系代词 \"that\" 在从句中作主语;(4)系表结构与形<br>容词短语作表语。覆盖主谓宾、宾补、表语、定语从句主语等多种成分,且 \"find yourself doing\" 和<br>\"try to do\" 是常考搭配,练习价值较高。<br>When you do this, it might help to try to put yourself in other people's shoes.<br>第6段，第1句<br>本句的\"it + 情态动词 + 动词 + to do\"结构以及时间状语从句置于句首的安排,都是四六级和考研阅<br>读中的高频句式。形式主语用法和情态动词表建议的表达方式具有很强的迁移性,掌握后可应用于<br>大量类似句子。<br>When it comes to your friends — maybe it's because your friendship is so strong<br>that they felt able to cancel at late notice.<br>第6段，第3句<br>本句成分丰富且包含多个易错点：形式主语\"it\"与真正主语（表语从句）的识别、表语从句的定<br>位、\"so...that...\"结构中结果状语从句的划分、系动词\"felt\"后接形容词作表语的判断、介词短语作状<br>语的区分。这些都是学生常见的混淆点，练习价值高。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 28 个考研英语二真题高频词<br><br>下列单词既在本篇完形原文中出现，又是 考研英语二 历年真题的高频词（在该考试真题<br>中出现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查<br>看该词的释义、音标、词形与真题例句。<br>reading<br>A1<br>n. 阅读<br>本篇2 次 · 真题 42 句<br>negative<br>B1<br>adj. 否定的<br>本篇2 次 · 真题 32 句<br>psychologist<br>B2<br>n. 心理学家<br>本篇2 次 · 真题 19 句<br>interpret<br>B2<br>v. 解释<br>本篇2 次 · 真题 11 句<br>undermine<br>C1<br>v. 逐渐削弱<br>本篇2 次 · 真题 11 句<br>personally<br>B1<br>adv. 就个人而言<br>本篇2 次 · 真题 8 句<br>less<br>A1<br>det. 较少的<br>本篇1 次 · 真题 150 句<br>view<br>A2<br>n. 观点，看法<br>本篇1 次 · 真题 91 句<br>process<br>B1<br>n. 过程<br>本篇1 次 · 真题 80 句<br>case<br>A2<br>n. 情况<br>本篇1 次 · 真题 75 句<br>better<br>A1<br>adj. 更好的（good 的比较级）<br>本篇1 次 · 真题 70 句<br>challenge<br>B1<br>n. 挑战<br>本篇1 次 · 真题 57 句<br>significant<br>B2<br>adj. 重要的<br>本篇1 次 · 真题 47 句<br>thinking<br>A2<br>n. 思考<br>本篇1 次 · 真题 33 句<br><br>reality<br>B1<br>n. 现实<br>本篇1 次 · 真题 31 句<br>highly<br>B1<br>adv. 非常<br>本篇1 次 · 真题 28 句<br>positive<br>B1<br>adj. 积极的<br>本篇1 次 · 真题 27 句<br>assume<br>B2<br>v. 假定<br>本篇1 次 · 真题 23 句<br>directly<br>B1<br>adv. 直接地<br>本篇1 次 · 真题 23 句<br>staff<br>B1<br>n. 全体员工<br>本篇1 次 · 真题 21 句<br>engage<br>B2<br>v. 参与;从事<br>本篇1 次 · 真题 19 句<br>comment<br>B1<br>n. 评论<br>本篇1 次 · 真题 18 句<br>fundamental<br>B2<br>adj. 基本的<br>本篇1 次 · 真题 15 句<br>assumption<br>B2<br>n. 假定;假设(未经证实就认为是真的事)<br>本篇1 次 · 真题 11 句<br>interpretation<br>B2<br>n. 解释<br>本篇1 次 · 真题 11 句<br>feedback<br>B1<br>n. 反馈<br>本篇1 次 · 真题 10 句<br>perception<br>C1<br>n. 看法<br>本篇1 次 · 真题 8 句<br>strive<br>B2<br>v. 努力，奋斗，力求<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 137 词按 CEFR 难度累积覆盖<br>带空短文去重后共 137 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 4 个 ·<br>约 3%。<br><br>60%<br>A1<br>及以下<br>81%<br>A2<br>及以下<br>90%<br>B1<br>及以下<br>97%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 137 个 · 末柱为 100%<br>去重总词数<br>137<br>B2 以上难词<br>3%<br>B1 及以下覆盖<br>90%<br>考研英语二<br>2026年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>本题<br>Section II Part A<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>题目解析 →<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "敢临时取消因关系牢固",
+    "kp": "完形填空 · 第20空考点精析"
+  },
+  {
+    "id": "E2026_21",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 21,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT1",
+    "title": "2026英二 阅读 Text 1 第21题 (2分)",
+    "stem": "<strong>21. What was the author commissioned to do about English public libraries?</strong>",
+    "options": [
+      "A. Document their valuable traditions.",
+      "B. Make a plan for their expansions.",
+      "C. Obtain reader opinions on them.",
+      "D. Look into their current situation."
+    ],
+    "answer": "D",
+    "analysis": "作者受委托就英国公共图书馆做什么工作?<br>A) 记录它们的宝贵传统。<br>B) 为它们的扩建制定计划。<br>C) 获取读者对它们的意见。<br>D) 调查它们的现状。<br>【答案】D （细节题）",
+    "tips": "细节题定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_22",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 22,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT1",
+    "title": "2026英二 阅读 Text 1 第22题 (2分)",
+    "stem": "<strong>22. According to Paragraphs 3&4, the author finds that libraries ____</strong>",
+    "options": [
+      "A. boast desirable book collections.",
+      "B. keep detailed visitor records.",
+      "C. perform diversified functions.",
+      "D. attract mostly young readers."
+    ],
+    "answer": "C",
+    "analysis": "【判型】What was the author commissioned to do 问的是一个具体动作的内容，不是推断、不<br>是态度，属典型细节题。<br>【拆句】What was the author commissioned to do about English public libraries? 是一个被动<br>语态疑问句。主干 the author was commissioned to do what, about English public<br>libraries 是范围状语。结构平铺直叙，无陷阱。<br>【定位】The reality is startlingly different, as I discovered when the culture department commissioned<br>me to conduct an independent review of English public libraries, published yesterday.<br>现实却截然不同——这是我在文化部委托我对英国公共图书馆进行独立审查（昨日发布）时<br>发现的。<br>【选项】A)<br>偷换概念<br>选项把 valuable traditions 塞给作者作为审查目标，但作者要审查的是\"现状\"，第 1 段<br>的 dusty, old-fashioned 也只是大众成见，并非\"宝贵传统\"。<br>B)<br>过度推断<br>原文只委托作者去 review，并未让他\"为扩张做计划\"；末段 national branding<br>campaign 等也是建议宣传而非\"扩张\"，时间也不在委托当时。<br>C)<br>无中生有<br>作者是受文化部委托做整体审查，并非\"收集读者意见\"——原文未提任何 reader<br>survey/opinion collection，是无中生有。<br>D)<br>✓ 正确<br>conduct an independent review of English public libraries ↔<br>Look into their current situation<br>预判\"对图书馆做独立审查\"与 Look into their current situation 严格同义——审查的<br>对象正是当前现状，故锁定 D。<br>根据第3段和第4段,作者发现图书馆____<br>A) 拥有令人满意的藏书。<br>B) 保存详细的访客记录。<br>C) 履行多样化的职能。<br>D) 主要吸引年轻读者。<br>【答案】C （细节题）<br>【判型】the author finds that libraries 让选项补全\"作者发现图书馆怎样\"，要求对指定段落事实做<br>归纳，属细节题。",
+    "tips": "What was the author commissioned to do 问的是一个具体动作的内容，不是推断、不",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_23",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 23,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT1",
+    "title": "2026英二 阅读 Text 1 第23题 (2分)",
+    "stem": "<strong>23. It is implied in Paragraph 5 that libraries should ____</strong>",
+    "options": [
+      "A. be given greater attention.",
+      "B. impose stricter visit limits.",
+      "C. work with private institutions.",
+      "D. get their equipment upgraded."
+    ],
+    "answer": "A",
+    "analysis": "【拆句】According to Paragraphs 3&4, the author finds that libraries 是不完整陈述句，选项作<br>宾语从句的谓语+宾语。这是\"读着读着发现\"的客观陈述，不带主观情绪，选项中带强烈感<br>情色彩的要先警惕。<br>【定位】While books are, and should always be, at the heart of any library, a multitude of other<br>services are offered: employment advice, language classes or digital access and support.<br>尽管图书始终是、也应当始终是任何图书馆的核心，图书馆还提供大量其他服务：就业指<br>导、语言课程或者数字接入与支持。<br>【选项】A)<br>以偏概全<br>原文虽提 books are, and should always be, at the heart of any library，但此<br>句只是让步：核心句是\"还提供其他服务\"，重点不在藏书优劣，且原文未评价书<br>的 desirability。<br>B)<br>无中生有<br>第 3、4 段全部在讲提供的服务，未出现 records、tracking、log 等与\"记录访客\"相关<br>表述。<br>C)<br>✓ 正确<br>a multitude of other services are offered ↔perform diversified functions<br>预判\"多种服务/功能\"直接落到 perform diversified functions，且 3、4 两段全部并列<br>项都印证\"功能多样\"，C 项胜出。<br>D)<br>范围程度偷改<br>原文虽提到 young people can borrow a Fifa-standard football，但只是众多服务中<br>的一项，并未说图书馆\"主要吸引的是年轻读者\"——服务对象覆盖商业人士、患者、学<br>习者等。<br>第5段暗示图书馆应该____<br>A) 得到更多关注。<br>B) 实施更严格的访问限制。<br>C) 与私营机构合作。<br>D) 升级它们的设备。<br>【答案】A （推断题）<br>【判型】It is implied in Paragraph 5 that libraries should 中的 implied 直接锁死题型为推断题。<br>【拆句】It is implied in Paragraph 5 that libraries should 用形式主语 It，真主语是 that 从句。<br>选项是 libraries should 后面接动词原形短语。注意 should 提示答案是\"应该被怎么样\"，<br>不是\"目前怎么样\"。<br>【定位】Yet still our libraries are often overlooked and underappreciated.<br>然而我们的图书馆仍然时常被忽视、被低估。",
+    "tips": "It is implied in Paragraph 5 that libraries should 中的 implied 直接锁死题型为推断题。",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2026_24",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 24,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT1",
+    "title": "2026英二 阅读 Text 1 第24题 (2分)",
+    "stem": "<strong>24. The statistics mentioned in Paragraph 6 show ____</strong>",
+    "options": [
+      "A. the crisis faced by libraries.",
+      "B. the advancement of libraries.",
+      "C. the contributions of libraries.",
+      "D. the flaws existing in libraries."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>✓ 正确<br>overlooked and underappreciated ↔be given greater attention<br>作者用 Yet+overlooked+underappreciated 表达不满，逻辑顺推一步即\"libraries<br>should be given greater attention\"，与 A 完全契合。<br>B)<br>与原文相反<br>原文 no charge and you will never be asked to justify or explain yourself 强调图书<br>馆\"零门槛\"，恰恰是\"不设限\"；让它 impose stricter visit limits 完全反着来。<br>C)<br>偷换概念<br>原文只说 There is no other institution, public or private, that can say the same 是<br>把公共与私人机构对比，强调图书馆的独特，并未建议\"与私营机构合作\"。<br>D)<br>无中生有<br>第 5 段全段未出现 equipment、facility、upgrade、modernize 等表述；其他段虽提<br>供服务种类，也未谈\"升级设备\"。<br>第6段提到的统计数据显示____<br>A) 图书馆面临的危机。<br>B) 图书馆的进步。<br>C) 图书馆的贡献。<br>D) 图书馆存在的缺陷。<br>【答案】A （细节题）<br>【判型】The statistics mentioned in Paragraph 6 show 问数据\"显示了什么\"，是对原文事实功能<br>的归纳，属细节题。<br>【拆句】The statistics mentioned in Paragraph 6 show 是 N+过去分词短语+谓语 的结构，<br>mentioned in Paragraph 6 修饰 statistics。选项是 show 的宾语，是名词短语。<br>【定位】An annual survey by the Chartered Institute of Public Finance and Accountancy puts it at<br>nearly 800 across the UK; official statistics held by the Arts Council record 230 in England. It<br>is, of course, 230 libraries too many.<br>公共财务与会计学会的年度调查显示，全英范围内（关闭数）接近 800 间；艺术委员会持有<br>的官方统计则记录英格兰为 230 间。当然，230 间也算关得太多了。",
+    "tips": "The statistics mentioned in Paragraph 6 show 问数据\"显示了什么\"，是对原文事实功能",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_25",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 25,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT1",
+    "title": "2026英二 阅读 Text 1 第25题 (2分)",
+    "stem": "<strong>25. Which of the following is suggested for libraries in the last paragraph?</strong>",
+    "options": [
+      "A. Inviting public feedback.",
+      "B. Seeking adequate funding.",
+      "C. Improving user convenience.",
+      "D. Offering lifetime memberships."
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>✓ 正确<br>230 libraries too many ↔the crisis faced by libraries<br>struggling as local authorities come under continued financial pressure ↔<br>the crisis faced by libraries<br>预判\"图书馆面临关闭危机\"直接对应 the crisis faced by libraries——数据的功能正是<br>揭示危机，故锁定 A。<br>B)<br>与原文相反<br>advancement 是\"进步、提升\"，与作者 230 libraries too many 的负面定调完全相<br>反；数据展示的是 closed 数量而非发展。<br>C)<br>张冠李戴<br>图书馆的贡献在第 3、4 段已展示，但第 6 段的数据展示的是\"关闭数\"，与\"贡献\"无关。<br>D)<br>偷换概念<br>第 6 段呈现关闭数据，归因于 financial pressure 即外部财政压力，未说图书馆自身<br>有 flaws。<br>最后一段对图书馆提出了以下哪项建议?<br>A) 邀请公众反馈。<br>B) 寻求充足的资金。<br>C) 改善用户便利性。<br>D) 提供终身会员资格。<br>【答案】C （细节题）<br>【判型】Which of the following is suggested for libraries in the last paragraph? 问\"末段提到了<br>哪条建议\"，本质是核对末段已写明的建议清单，属细节题。<br>【拆句】Which of the following is suggested for libraries in the last paragraph? 主干 Which is<br>suggested for libraries，is suggested 是被动语态，逻辑主语是作者/综述。理解时要把<br>suggested 还原为\"作者建议\"。<br>【定位】The review recommends a national branding campaign to give libraries a stronger physical<br>presence, the reintroduction of a scheme to enable members to use their card in any library in<br>the country, and automatic memberships for children.<br>该审查建议：开展全国品牌宣传以增强图书馆的实体存在感；重启允许会员在全国任一图书<br>馆使用借阅证的方案；为儿童自动开通会员资格。",
+    "tips": "Which of the following is suggested for libraries in the last paragraph? 问\"末段提到了",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_26",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 26,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT2",
+    "title": "2026英二 阅读 Text 2 第26题 (2分)",
+    "stem": "<strong>26. According to Paragraph 1, workers' engagement with AI can ____</strong>",
+    "options": [
+      "A. facilitate their career progress.",
+      "B. give them emotional support.",
+      "C. help maintain their motivation.",
+      "D. improve workplace communication."
+    ],
+    "answer": "B",
+    "analysis": "根据第一段,员工与人工智能的互动可以____<br>A) 促进他们的职业发展。<br>B) 给予他们情感支持。<br>C) 帮助保持他们的积极性。<br>D) 改善职场沟通。<br>【答案】B （细节题）<br>【判型】题干 According to Paragraph 1, workers' engagement with AI can ____ 指定段号、<br>问\"可以(导致)什么\"，是对原文事实的客观转述要求，不含 infer/imply。<br>【拆句】题干 workers' engagement with AI can ____ 是一句待补全的陈述句，主语 workers'<br>engagement with AI 含名词化结构 engagement with（与...互动/接触），情态动词 can<br>表\"能够带来\"，空格处接动词原形——选项均以动词开头与之衔接，结构无陷阱。",
+    "tips": "题干 According to Paragraph 1, workers' engagement with AI can ____ 指定段号、",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_27",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 27,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT2",
+    "title": "2026英二 阅读 Text 2 第27题 (2分)",
+    "stem": "<strong>27. Microsoft Copilot is cited to show that the use of AI may ____</strong>",
+    "options": [
+      "A. pose a threat to businesses.",
+      "B. generate unnecessary data.",
+      "C. promote business cooperation.",
+      "D. encourage information sharing."
+    ],
+    "answer": "A",
+    "analysis": "【定位】Our data shows that engaging with AI like this can leave us feeling heard and less isolated.<br>我们的数据显示，像这样与 AI 互动可以让我们感到被倾听、不那么孤独。<br>【选项】A)<br>无中生有<br>facilitate their career progress 中\"career progress（职业晋升）\"在第一段里没有任何<br>文本支撑，纯属凭\"和工作有关\"的常识联想。<br>B)<br>✓ 正确<br>feeling heard and less isolated ↔give them emotional support<br>预判\"心理/情感上被安慰\"与 give them emotional support 严丝合缝，是定位句的标<br>准抽象化转述。<br>C)<br>无中生有<br>help maintain their motivation 中\"motivation（动力）\"是又一个职场常见词，但定<br>位句只讲\"被倾听 + 不孤独\"，并未提到\"维持工作动力\"。<br>D)<br>偷换概念<br>improve workplace communication 中\"workplace communication（职场沟通）\"在<br>第一段没有任何对应：原文谈的是\"和 AI 这一个对象\"的私下倾诉，并非员工间或上下级<br>的沟通改善。<br>引用Microsoft Copilot是为了说明人工智能的使用可能会____<br>A) 对企业构成威胁。<br>B) 产生不必要的数据。<br>C) 促进商业合作。<br>D) 鼓励信息共享。<br>【答案】A （例证目的题）<br>【判型】Microsoft Copilot is cited to show that the use of AI may ____ 直接出现 cited to<br>show，模板化地指向\"例子在论证什么\"。<br>【拆句】题干 Microsoft Copilot is cited to show that the use of AI may ____ 主干是被动语态 is<br>cited to show（被用来表明），后接 that 引导的宾语从句，从句主语 the use of AI 与情<br>态动词 may（可能）搭配，空格处接动词原形，结构平铺，无陷阱。<br>【定位】This means that any sensitive business information could potentially be exposed to the world.<br>这就意味着任何敏感的商业信息都有可能被暴露给整个世界。",
+    "tips": "Microsoft Copilot is cited to show that the use of AI may ____ 直接出现 cited to",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2026_28",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 28,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT2",
+    "title": "2026英二 阅读 Text 2 第28题 (2分)",
+    "stem": "<strong>28. Some employees choose to break the rules on AI due to ____</strong>",
+    "options": [
+      "A. easy access to AI products.",
+      "B. the desire to stay well-informed.",
+      "C. its significant role in their work.",
+      "D. the need to compete with others."
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>✓ 正确<br>any sensitive business information could potentially be exposed to the world ↔<br>pose a threat to businesses<br>Copilot 这个例子是用来说\"AI 给企业带来风险\"，pose a threat to businesses 是这一<br>论点的标准抽象化；不取例子内部细节是关键。<br>B)<br>偷换概念<br>generate unnecessary data 的核心是\"产生不必要数据\"，但原文 Copilot 的问题是\"对<br>用户输入/输出数据有广泛权限\"，谈的是\"数据归属与使用\"而非\"产生多余数据\"。<br>C)<br>与原文相反<br>promote business cooperation 是积极含义\"促进商业合作\"，与原文\"AI 给企业带来信<br>息暴露风险\"的负面论点正好相反。<br>D)<br>偷换概念<br>encourage information sharing 中\"鼓励信息共享\"被包装成 AI 的功能，但原文谈的<br>是\"Copilot 把数据共享给第三方\"是风险而非鼓励正常分享——既颠倒褒贬，又混淆<br>了\"主动分享\" 与 \"被动暴露\"。<br>一些员工选择违反人工智能规则是由于____<br>A) 容易获取人工智能产品。<br>B) 希望保持消息灵通。<br>C) 人工智能在他们工作中的重要作用。<br>D) 需要与他人竞争。<br>【答案】C （细节题）<br>【判型】Some employees choose to break the rules on AI due to ____ 用 due to 直接问原因，<br>是典型的细节因果题。<br>【拆句】题干 Some employees choose to break the rules on AI due to ____ 主干 employees<br>choose to break the rules，介词短语 due to 引出原因，空格处接名词性成分——四个选<br>项均为名词短语，结构无歧义。<br>【定位】They have their reasons — around 63% of them report that using AI increases their<br>productivity, and some even feel AI offers more help than their human colleagues.<br>他们有自己的理由——约 63% 的人表示使用 AI 提高了生产力，有些人甚至觉得 AI 比人类<br>同事更能帮上忙。",
+    "tips": "Some employees choose to break the rules on AI due to ____ 用 due to 直接问原因，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_29",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 29,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT2",
+    "title": "2026英二 阅读 Text 2 第29题 (2分)",
+    "stem": "<strong>29. To positively shift the AI landscape, businesses should ____</strong>",
+    "options": [
+      "A. increase the transparency of their data sources.",
+      "B. prioritise the quality of AI-produced content.",
+      "C. include employee perspectives in their rules.",
+      "D. adjust their management to AI development."
+    ],
+    "answer": "D",
+    "analysis": "【选项】A)<br>无中生有<br>easy access to AI products 中\"容易获得 AI 产品\"是\"渠道\"层面的解释，但原文给出的<br>原因是\"AI 有用\"，不是\"AI 好拿到\"。<br>B)<br>无中生有<br>the desire to stay well-informed 中\"想保持信息灵通\"指向\"信息获取需求\"，但原文谈<br>的是\"AI 提高生产力\"，没有任何\"获取信息/资讯\"的描述。<br>C)<br>✓ 正确<br>using AI increases their productivity ↔its significant role in their work<br>AI offers more help than their human colleagues ↔its significant role in their work<br>63% 提产、AI 比人类同事更有用——两句共同支持\"AI 在工作中作用显著\"这一概括，<br>significant role in their work 正是这两句的最大公约数。<br>D)<br>过度推断<br>the need to compete with others 中\"与他人竞争的需要\"是又一种职场常识，但定位<br>句没有任何与同事竞争的信息——AI 比同事更有用 ≠ 员工要与同事竞争。<br>为了积极改变人工智能格局,企业应该____<br>A) 提高其数据来源的透明度。<br>B) 优先考虑人工智能生成内容的质量。<br>C) 在其规则中纳入员工的观点。<br>D) 根据人工智能发展调整其管理方式。<br>【答案】D （细节题）<br>【判型】To positively shift the AI landscape, businesses should ____ 问\"为达成目的应做什么\"，<br>原文必有对应的建议/做法句，属细节题。<br>【拆句】题干 To positively shift the AI landscape, businesses should ____ 句首 To 引导目的状语<br>（为了……），主句主语 businesses，情态动词 should 后接动词原形，空格处填动词短<br>语；四选项均为动词开头，对齐清晰。<br>【定位】By instilling best practices in AI engagement and creating policies that evolve with the<br>technology, businesses can positively shift the AI landscape.<br>通过在 AI 使用中植入最佳实践、并制订能随技术演进的政策，企业可以正向地重塑 AI<br>格局。",
+    "tips": "To positively shift the AI landscape, businesses should ____ 问\"为达成目的应做什么\"，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_30",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 30,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT2",
+    "title": "2026英二 阅读 Text 2 第30题 (2分)",
+    "stem": "<strong>30. According to the last paragraph, we may easily fall victim to AI as we ____</strong>",
+    "options": [
+      "A. have a limited understanding of it.",
+      "B. underestimate its economic costs.",
+      "C. tend to overemphasise its power.",
+      "D. are excessively exposed to it."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>偷换概念<br>increase the transparency of their data sources 中\"数据源的透明度\"在第三段没有任<br>何文本支撑——段内只提及\"AI 内容归属权认知模糊\"，与\"数据源透明\"不是一回事。<br>B)<br>偷换概念<br>prioritise the quality of AI-produced content 中\"优先重视 AI 产出内容的质量\"在原<br>文未被提及——原文谈的是\"内容的归属权\"而不是\"内容的质量\"。<br>C)<br>无中生有<br>include employee perspectives in their rules 中\"把员工视角纳入规则\"原文未提及<br>——第二段虽提到员工违规，但并未提议把员工意见写进规则。<br>D)<br>✓ 正确<br>creating policies that evolve with the technology ↔<br>adjust their management to AI development<br>policies ↔their management<br>预判\"管理跟随技术演进\"与 adjust their management to AI development 一一对齐，<br>连介词搭配（with / to）也是标准的动态匹配。<br>根据最后一段,我们可能容易成为人工智能的受害者,因为我们____<br>A) 对它的理解有限。<br>B) 低估了它的经济成本。<br>C) 倾向于过分强调它的力量。<br>D) 过度接触它。<br>【答案】A （细节题）<br>【判型】we may easily fall victim to AI as we ____ 中 as 表原因，仍是典型细节因果题。<br>【拆句】题干 According to the last paragraph, we may easily fall victim to AI as we ____ 主句<br>we may easily fall victim to AI（容易沦为牺牲品），as 引导原因状语从句，从句主语 we<br>后接谓语——空格需填动词短语，四个选项均以动词开头，结构清楚。<br>【定位】There are so many products out there, being promoted with huge advertising and marketing<br>budgets, that it's easy to fall victim.<br>外面有那么多产品，用巨额广告和营销预算去推广，以至于人们很容易上当受害。",
+    "tips": "we may easily fall victim to AI as we ____ 中 as 表原因，仍是典型细节因果题。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_31",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 31,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT3",
+    "title": "2026英二 阅读 Text 3 第31题 (2分)",
+    "stem": "<strong>31. According to the first two paragraphs, the high-speed rail network in Italy ____</strong>",
+    "options": [
+      "A. is seen by tourists as outdated.",
+      "B. is a popular option for travelling.",
+      "C. is inadequately utilised by locals.",
+      "D. is an example of good maintenance."
+    ],
+    "answer": "B",
+    "analysis": "根据前两段,意大利的高速铁路网____<br>A) 被游客视为过时的。<br>B) 是一种受欢迎的出行选择。<br>C) 未被当地人充分利用。<br>D) 是良好维护的一个例子。<br>【答案】B （细节题）<br>【判型】Q31 不含 infer/imply 等推断信号词，且明确限定 According to the first two<br>paragraphs，属于对限定段落事实信息的补全式细节题。",
+    "tips": "Q31 不含 infer/imply 等推断信号词，且明确限定 According to the first two",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_32",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 32,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT3",
+    "title": "2026英二 阅读 Text 3 第32题 (2分)",
+    "stem": "<strong>32. Ferrovie is quoted in Paragraph 3 to show ____</strong>",
+    "options": [
+      "A. the common occurrence of train delays.",
+      "B. the value of the Italian train network.",
+      "C. the wide media coverage of trains.",
+      "D. the high efficiency of Trenitalia."
+    ],
+    "answer": "A",
+    "analysis": "【拆句】Q31 是不完整陈述句，主语 the high-speed rail network in Italy，谓语待补；选项是 is<br>+ 表语的延续。无从句、无否定、无比较，结构平铺，无陷阱。<br>【定位】Since the 2008 launch of the high-speed rail network between Rome and Milan, trains have<br>become the preferred means of travel across Italy for locals and tourists alike.<br>自 2008 年罗马—米兰高铁网开通以来，火车已经成为意大利本地人和游客同样首选的出行<br>方式。<br>【选项】A)<br>与原文相反<br>原文 trains have become the preferred means of travel 表明高铁是首选；outdated<br>是 \"过时\" 的负面评价，与原文正向描述方向相反。<br>B)<br>✓ 正确<br>trains have become the preferred means of travel ↔is a popular option for travelling<br>预判 \"广受欢迎\" 与 popular option 字面贴合，且 for travelling 与 means of travel<br>一一对应，是定位句的最朴素客观转述。<br>C)<br>与原文相反<br>原文 for locals and tourists alike 已说明本地人也偏好高铁；inadequately utilised by<br>locals 称 \"本地人利用不足\"，与原文相反。<br>D)<br>无中生有<br>前两段未对维护质量作任何正面评价；恰相反，the recent severe delays caused by<br>numerous maintenance works 是把维护作业当成造成延误的负面因素。<br>第三段引用Ferrovie是为了表明____<br>A) 列车延误的普遍发生。<br>B) 意大利铁路网的价值。<br>C) 列车受到的广泛媒体报道。<br>D) Trenitalia的高效率。<br>【答案】A （例证目的题）<br>【判型】Ferrovie is quoted in Paragraph 3 to show 明确问 \"引用此句的目的\"，是例证目的题的<br>典型句式。<br>【拆句】Q32 是不完整陈述句，主干为 Ferrovie is quoted，in Paragraph 3 作状语限定位置，to<br>show 是不定式作目的状语，引出后续待补全的目的内容；无陷阱，但要紧扣 to show 的目<br>的语义。",
+    "tips": "Ferrovie is quoted in Paragraph 3 to show 明确问 \"引用此句的目的\"，是例证目的题的",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2026_33",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 33,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT3",
+    "title": "2026英二 阅读 Text 3 第33题 (2分)",
+    "stem": "<strong>33. Which of the following is one cause of the disruptions in the network?</strong>",
+    "options": [
+      "A. Complex train schedules.",
+      "B. Shortage of investments.",
+      "C. Its limited capacity.",
+      "D. Its massive scale."
+    ],
+    "answer": "C",
+    "analysis": "【定位】Disruptions have become increasingly frequent with train delays now a fixture in Italian<br>media coverage. Ferrovie dello Stato Italiane, the publicly controlled group that owns train<br>operator Trenitalia and the national train network RFI, said 23 percent of all high-speed trains<br>it operated were late in 2023.<br>中断越来越频繁，火车延误如今已成意大利媒体报道的常客。意大利国铁集团——掌控运营<br>商 Trenitalia 和国家铁路网 RFI 的公共控股集团——表示，2023 年其运营的所有高铁中有<br>23% 出现晚点。<br>【选项】A)<br>✓ 正确<br>Disruptions have become increasingly frequent ↔the common occurrence of train delays<br>23 percent of all high-speed trains it operated were late in 2023 ↔<br>the common occurrence of train delays<br>预判 \"印证延误频发\" 与 the common occurrence of train delays 完全对齐：A 既概括<br>了引述数据，又呼应了主题句论点，是引述的真正目的。<br>B)<br>答非所问<br>Ferrovie 是铁路集团，引述其数据是为了证明延误频发；the value of the Italian train<br>network 把焦点偏移到 \"铁路网的价值\"，答非所问，且原文未对铁路网的价值做评价。<br>C)<br>偷换概念<br>原文 a fixture in Italian media coverage 说的是 \"延误成了媒体的常客\"，主语是延<br>误；the wide media coverage of trains 把主语偷换成 \"对火车的广泛媒体报道\"，模糊<br>了 \"延误\" 这一关键词。<br>D)<br>与原文相反<br>Ferrovie 报出 23 percent of all high-speed trains it operated were late 是承认晚<br>点严重；the high efficiency of Trenitalia 反过来夸 Trenitalia 高效，与原文事实极性<br>相反。<br>以下哪一项是铁路网中断的原因之一?<br>A) 复杂的列车时刻表。<br>B) 投资不足。<br>C) 其有限的容量。<br>D) 其巨大的规模。<br>【答案】C （细节题）<br>【判型】Which of the following is one cause of the disruptions in the network? 是直接问事实<br>原因的疑问句，无 infer/imply 等推断信号。<br>【拆句】Q33 是 which 引导的特殊疑问句，主干为 Which ... is one cause of the disruptions；<br>one 暗示原文给出的原因不止一个，本题只需对上其中一个即可。",
+    "tips": "Which of the following is one cause of the disruptions in the network? 是直接问事实",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_34",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 34,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT3",
+    "title": "2026英二 阅读 Text 3 第34题 (2分)",
+    "stem": "<strong>34. It can be learned that the mixed system ____</strong>",
+    "options": [
+      "A. provides a wide choice of routes.",
+      "B. requires extra operational spending.",
+      "C. increases the level of travel comfort.",
+      "D. puts the high-speed network in trouble."
+    ],
+    "answer": "D",
+    "analysis": "【定位】But lack of capacity is another problem. Transport economist Andrea Giuricin said the<br>planned investments would bring improvements but disruptions in the meantime were<br>inevitable. \"We have a mixed system, there is no spare capacity and as soon as there's a<br>hiccup on the line, the situation becomes highly complex,\" he said.<br>但容量不足是另一个问题。交通经济学家安德烈亚·朱里钦表示，已规划的投资将带来改善，<br>但在此期间中断不可避免。\"我们是一个混合系统，没有冗余容量，线路上一旦出点小问<br>题，局面就会变得非常复杂。\"<br>【选项】A)<br>无中生有<br>原文从未提到 \"列车调度复杂\" 是中断原因；Complex train schedules 利用 the<br>situation becomes highly complex 中的 complex 一词制造熟词错觉，但 highly<br>complex 修饰的是 situation（局面），不是 schedules（时刻表）。<br>B)<br>与原文相反<br>原文 planned investments of €24bn by 2026 与 €124bn in infrastructure over the<br>next 10 years 显示投资规模庞大；Shortage of investments 称 \"投资不足\"，与原文<br>相反。<br>C)<br>✓ 正确<br>lack of capacity ↔Its limited capacity<br>there is no spare capacity ↔Its limited capacity<br>预判 \"容量不足\" 与 Its limited capacity 字面贴合，且原文 But lack of capacity is<br>another problem 用 another 明确把它列为原因之一，与 one cause 的 one 完全<br>对应。<br>D)<br>无中生有<br>原文从未把 \"铁路网规模庞大\" 列为中断原因；Its massive scale 利用 €124bn、<br>Naples, Bologna, Florence and Turin 等规模意象，把 \"规模大\" 推断为 \"导致中断\"，<br>但原文没有这一因果链。<br>可以得知,混合系统____<br>A) 提供广泛的线路选择。<br>B) 需要额外的运营支出。<br>C) 提高了出行舒适度。<br>D) 使高速铁路网陷入困境。<br>【答案】D （推断题）<br>【判型】It can be learned that 是典型推断题标志，答案需基于原文对 the mixed system 的描述<br>做一步引申。",
+    "tips": "It can be learned that 是典型推断题标志，答案需基于原文对 the mixed system 的描述",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2026_35",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 35,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT3",
+    "title": "2026英二 阅读 Text 3 第35题 (2分)",
+    "stem": "<strong>35. Improvements to the Italian train network will include ____</strong>",
+    "options": [
+      "A. reconstructing the regular train lines.",
+      "B. shortening high-speed train intervals.",
+      "C. building more stations in urban centres.",
+      "D. enhancing the safety of high-speed trains."
+    ],
+    "answer": "B",
+    "analysis": "【拆句】Q34 主干 It can be learned，that 引导宾语从句作补语，从句主语 the mixed system 待<br>补谓语；选项接续谓语，结构简单但需注意 \"推断而非复述\" 的题型属性。<br>【定位】A mixed system means that high-speed trains must travel on the regular tracks on certain<br>routes or when passing through large cities. If there's congestion or, for example, a local train<br>breaks down, the entire high-speed network is affected.<br>所谓混合系统，是指高铁在某些路段或穿越大城市时必须借用普通线路。一旦发生拥堵，或<br>譬如某列普通列车抛锚，整张高铁网都会受影响。<br>【选项】A)<br>与原文相反<br>原文 high-speed trains must travel on the regular tracks on certain routes 中<br>must 表明高铁是被迫借道，路径不灵活；provides a wide choice of routes 反过来说<br>\"提供广泛路线选择\"，与原文 must 的强制意味相反。<br>B)<br>无中生有<br>原文未提到混合系统会增加运营开支；requires extra operational spending 是从 \"混<br>合系统\" 联想出的 \"额外成本\" 印象，但原文从头到尾未把 spending 与 mixed system<br>关联。<br>C)<br>与原文相反<br>原文 the situation becomes highly complex 与 the entire high-speed network is<br>affected 都是负面后果；increases the level of travel comfort 反向陈述 \"提升出行舒<br>适度\"，与原文极性完全相反。<br>D)<br>✓ 正确<br>the entire high-speed network is affected ↔puts the high-speed network in trouble<br>If there's congestion or, for example, a local train breaks down, the entire high-speed network is<br>affected.<br>↔puts the high-speed network in trouble<br>预判 \"拖累高铁网\" 与 puts the high-speed network in trouble 字面贴合，且 D 只在<br>原文条件句基础上走了一步上位概括，未越界。<br>对意大利铁路网的改进将包括____<br>A) 重建普通铁路线。<br>B) 缩短高速列车的发车间隔。<br>C) 在城市中心建设更多车站。<br>D) 提升高速列车的安全性。<br>【答案】B （细节题）<br>【判型】Improvements to the Italian train network will include 直接问改进措施包括什么，是对<br>具体内容的事实询问，无推断信号。",
+    "tips": "Improvements to the Italian train network will include 直接问改进措施包括什么，是对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_36",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 36,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT4",
+    "title": "2026英二 阅读 Text 4 第36题 (2分)",
+    "stem": "<strong>36. It can be learned from Paragraph 1 that the Silver Room Block Party ____</strong>",
+    "options": [
+      "A. has been replaced by other festivals.",
+      "B. has gained great international fame.",
+      "C. was held in various neighborhoods.",
+      "D. was an appealing cultural gathering."
+    ],
+    "answer": "A",
+    "analysis": "从第一段可以得知，Silver Room街区派对____<br>A) 已被其他节日取代。<br>B) 已获得巨大的国际声誉。<br>C) 在不同的街区举办。",
+    "tips": "阅读理解定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 阅读理解"
+  },
+  {
+    "id": "E2026_37",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 37,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT4",
+    "title": "2026英二 阅读 Text 4 第37题 (2分)",
+    "stem": "<strong>37. One reality street festival organizers face is that ____</strong>",
+    "options": [
+      "A. they are unable to use the donations wisely.",
+      "B. they are unable to get sufficient facilities.",
+      "C. they have to tackle financial difficulties.",
+      "D. they have to step up security measures."
+    ],
+    "answer": "D",
+    "analysis": "D) 是一场吸引人的文化聚会。<br>【答案】D （细节题）<br>【判型】It can be learned from Paragraph 1 that 把答题来源限死在第 1 段，要求的是从该段文字<br>直接读出的事实陈述，不要求跨段综合或多步推理。<br>【拆句】It can be learned from Paragraph 1 that the Silver Room Block Party ____ 是「It + 被<br>动 + that 从句」的形式主语结构，that 引导的从句是真正待补全的内容；the Silver Room<br>Block Party 是从句的主语，横线处是其谓语+宾语，所以选项都是动词起头的陈述，无<br>陷阱。<br>【定位】What began as a small neighborhood gathering blossomed into a massive cultural event,<br>welcoming tens of thousands of people each year over nearly two decades before abruptly<br>shutting down.<br>（这场活动）最初只是一场小型邻里聚会，后来发展成一项大型文化盛事，近二十年间每年<br>吸引数万人参与，直到突然停办。<br>【选项】A)<br>无中生有<br>P1 只说它 abruptly shutting down（突然停办），从未提到有其他节日来「取代」<br>它；has been replaced by other festivals 是凭空捏造的因果。<br>B)<br>过度推断<br>原文最多说它每年吸引 tens of thousands of people，但人数多不等于「国际知名」；<br>has gained great international fame 把规模扩展为国际声誉，超出文本边界。<br>C)<br>偷换概念<br>原文明确说它扎根在 Hyde Park 一个社区——Hyde Park community leader Eric<br>Williams，并未说「在多个社区举办」；was held in various neighborhoods 把单一<br>社区的活动偷换成多社区轮办。<br>D)<br>✓ 正确<br>massive cultural event, welcoming tens of thousands of people each year ↔<br>an appealing cultural gathering<br>one of its most beloved street festivals ↔appealing<br>预判要的「文化属性 + 吸引大批人」两个核心义素，只有 D 同时命中——cultural<br>gathering 对应文化属性、appealing 对应吸引力。<br>街头节日组织者面临的一个现实是____<br>A) 他们无法明智地使用捐款。<br>B) 他们无法获得充足的设施。<br>C) 他们必须应对财务困难。",
+    "tips": "It can be learned from Paragraph 1 that 把答题来源限死在第 1 段，要求的是从该段文字",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_38",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 38,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT4",
+    "title": "2026英二 阅读 Text 4 第38题 (2分)",
+    "stem": "<strong>38. According to Paragraphs 3 and 4, Chicago's street festivals ____</strong>",
+    "options": [
+      "A. relieve typical urban lifestyles.",
+      "B. are funded by the government.",
+      "C. contribute to the local economy.",
+      "D. are famous for their music shows."
+    ],
+    "answer": "C",
+    "analysis": "D) 他们必须加强安保措施。<br>【答案】C （细节题）<br>【判型】One reality street festival organizers face is that 直接问一个事实，没有 imply /<br>suggest / infer 等推断信号。<br>【拆句】One reality street festival organizers face is that ____ 中 street festival organizers face<br>是省略 that 的定语从句修饰 One reality，is 后接 that 从句作表语，横线处要补完整的主<br>语+谓语；句式平铺直叙，无陷阱。<br>【定位】Williams pointed to rising production costs and declining attendee donations as primary<br>reasons the Silver Room Block Party could not continue, highlighting a reality that all street<br>festival organizers face right now.<br>Williams 把制作成本上涨和参与者捐款下滑列为 Silver Room Block Party 无法继续的主要<br>原因，并指出这是所有街道节日组织者眼下都要面对的现实。<br>【选项】A)<br>无中生有<br>P2 抱怨的是 donations at festival gates have dropped dramatically，根本没有提到<br>组织者「不会用」捐款；unable to use the donations wisely 是凭空生造的指控。<br>B)<br>偷换概念<br>原文说 Security, entertainment, portable restrooms, insurance and even basics<br>such as fencing and staffing have all become significantly more expensive，强调<br>的是「成本变贵」而非「设施买不到」；unable to get sufficient facilities 把「价格上<br>涨」偷换成「数量不足」。<br>C)<br>✓ 正确<br>rising production costs and declining attendee donations ↔tackle financial difficulties<br>The cost of producing a street festival in Chicago has skyrocketed ↔financial difficulties<br>donations at festival gates have dropped dramatically ↔financial difficulties<br>预判的「钱进得少 + 花得多」需要选项能同时覆盖两端，只有 C 用 financial<br>difficulties 这种上位概念把两者同时收纳，其他选项都只触及其中一端或完全跑偏。<br>D)<br>以偏概全<br>原文只是把 Security 列为成本激增的其中一项，并未说要 step up security measures<br>——「加强安保」是把众多并列项中的一项硬拎出来，并把「贵了」歪曲为「要<br>加码」。<br>根据第三段和第四段，芝加哥的街头节日____<br>A) 缓解了典型的城市生活方式。<br>B) 由政府资助。<br>C) 对当地经济有贡献。",
+    "tips": "One reality street festival organizers face is that 直接问一个事实，没有 imply /",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_39",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 39,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT4",
+    "title": "2026英二 阅读 Text 4 第39题 (2分)",
+    "stem": "<strong>39. It is implied that the organizers of Wicker Park Fest have to ____</strong>",
+    "options": [
+      "A. count on amateur artists' participation.",
+      "B. reduce the number of performances.",
+      "C. give up its most prominent feature.",
+      "D. collaborate with large businesses."
+    ],
+    "answer": "C",
+    "analysis": "D) 以其音乐表演而闻名。<br>【答案】C （细节题）<br>【判型】According to Paragraphs 3 and 4 是典型的「按段问事实」句式，答案要从这两段直接读<br>出，不是推断。<br>【拆句】According to Paragraphs 3 and 4, Chicago's street festivals ____ 是简单的「介词短语状<br>语 + 主谓」结构，横线处补谓语，句式干净无陷阱。<br>【定位】Chicago's summer festivals are about more than just entertainment; they are economic<br>engines that directly benefit the neighborhoods they're in and the city of Chicago as a whole.<br>芝加哥的夏日节日远不止是娱乐——它们是经济引擎，直接惠及所在的社区以及整个芝加<br>哥市。<br>【选项】A)<br>无中生有<br>P3、P4 全段未提「缓解城市生活方式」之说；relieve typical urban lifestyles 是凭空<br>捏造的功能，原文没有任何对应表述。<br>B)<br>与原文相反<br>P4 明确写 your neighborhood street festivals receive no city funding，选项 are<br>funded by the government 与原文完全相反。<br>C)<br>✓ 正确<br>economic engines that directly benefit the neighborhoods they're in and the city of Chicago as a<br>whole<br>↔contribute to the local economy<br>Street festivals drive foot traffic to local businesses ↔contribute to the local economy<br>在四个选项里，唯独 C 直接对应 economic engines + local benefit 这一核心定性，其<br>他选项要么与原文相反，要么偏题。<br>D)<br>张冠李戴<br>P4 提到 Chicago Jazz Festival 只是为了对比「市办大型节」与「邻里街道节」在经费<br>来源上的差异，并非说芝加哥街道节日「以音乐演出闻名」；are famous for their<br>music shows 把对比例子的属性硬安到主角身上。<br>文中暗示Wicker Park Fest的组织者必须____<br>A) 依靠业余艺术家的参与。<br>B) 减少演出数量。<br>C) 放弃其最突出的特色。<br>D) 与大型企业合作。<br>【答案】B （推断题）",
+    "tips": "According to Paragraphs 3 and 4 是典型的「按段问事实」句式，答案要从这两段直接读",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2026_40",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 40,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2026_TEXT4",
+    "title": "2026英二 阅读 Text 4 第40题 (2分)",
+    "stem": "<strong>40. The author holds that the future of street festivals depends on ____</strong>",
+    "options": [
+      "A. the variety of activities.",
+      "B. the generosity of attendants.",
+      "C. the reputation of neighborhoods.",
+      "D. the management of expenditures."
+    ],
+    "answer": "B",
+    "analysis": "【判型】It is implied that the organizers of Wicker Park Fest have to ____ 用 implied 明示需要<br>从原文做推断，而不是抄原文。<br>【拆句】It is implied that the organizers of Wicker Park Fest have to ____ 是「It is + 过去分词<br>+ that 从句」的形式主语句，that 从句的主语是 organizers，have to 后接动词原形，故<br>四个选项都是动词原形开头；句式平铺直叙，无陷阱。<br>【定位】This year, we've been forced to scale back the footprint of the fest. We are eliminating a stage,<br>booking fewer performers and making additional cuts to reduce our costs, all while striving to<br>keep the festival as vibrant as ever, as supportive of local artists and businesses, and as true to<br>Wicker Park's unique spirit and reputation as festgoers have come to expect.<br>今年，我们被迫缩减节日的规模——撤掉一个舞台、减少演出阵容、再做其他削减以压缩成<br>本，同时努力让节日保持一贯的活力，继续支持本地艺术家与商家，延续 Wicker Park 独有<br>的精神与名声。<br>【选项】A)<br>无中生有<br>P5 只提 booking fewer performers、supportive of local artists，从未说要「依靠业<br>余艺术家」；count on amateur artists' participation 中 amateur（业余）一词原文<br>完全没有。<br>B)<br>✓ 正确<br>eliminating a stage, booking fewer performers ↔reduce the number of performances<br>booking fewer performers ↔reduce the number of performances<br>预判要求的「演出规模缩减」直接在原文有动作支撑，且 B 只用了「减少数量」这一步<br>逻辑——既没欠推也没过推，是推断题的标准答法。<br>C)<br>与原文相反<br>原文紧跟削减动作的反向承诺：striving to keep the festival as vibrant as ever 和 as<br>true to Wicker Park's unique spirit and reputation——明确表示要保留节日最鲜明的<br>特色；give up its most prominent feature 与之正反。<br>D)<br>无中生有<br>原文谈的是 local artists and businesses 和 small business vendors——明确是「本<br>地+小」字号，原文从未提到与大企业合作；collaborate with large businesses 是凭<br>空捏造。<br>作者认为街头节日的未来取决于____<br>A) 活动的多样性。<br>B) 参与者的慷慨。<br>C) 街区的声誉。<br>D) 支出的管理。<br>【答案】B （主旨题）",
+    "tips": "It is implied that the organizers of Wicker Park Fest have to ____ 用 implied 明示需要",
+    "kp": "阅读理解 Part A · 主旨题"
+  },
+  {
+    "id": "E2026_41",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 41,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2026_PARTB",
+    "title": "2026英二 新题型 Part B 第41题 (2分)",
+    "stem": "请结合上方《2026年新题型 Part B》原文及 A–G 候选项，为 <strong>41. Ramni Jamnadass</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "E",
+    "analysis": "<strong>【正确答案】[E] The supply of seeds is a tough problem that has to be dealt with.</strong><br>信息在第 2 段<br>【候选项】The supply of seeds is a tough problem that has to be dealt with.<br>种子供应是一个必须解决的棘手问题。<br>【定位】\"Where's the planting material going to come from? That's one big bottleneck,\" says genetic-<br>resources specialist Ramni Jamnadass.<br>「种植材料从哪来？这是一个大瓶颈，」遗传资源专家 Ramni Jamnadass 说。<br>【锚点】种植材料来源是大难题<br>【对照】planting material ↔The supply of seeds<br>上下位+名词化对应<br>one big bottleneck ↔a tough problem that has to be dealt with<br>比喻词换成直白同义表达<br>【依据】来源难题=种子供应难题<br>【辨邻】[ A ]<br>也涉及 seeds/trees，眼熟；但 A 的主张是「有些树不每年结种」some kinds of trees do<br>not produce seeds annually，这是第3段 Kettle 谈 masting 的内容，与 Jamnadass 说的<br>「材料来源是瓶颈」不是一回事。<br>many trees are 'masting' species, which don't produce seeds every year",
+    "tips": "种植材料来源是大难题",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2026_42",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 42,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2026_PARTB",
+    "title": "2026英二 新题型 Part B 第42题 (2分)",
+    "stem": "请结合上方《2026年新题型 Part B》原文及 A–G 候选项，为 <strong>42. Christopher Kettle</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】[A] People must pay attention to the fact that some kinds of trees do not produce</strong><br>信息在第 3 段<br>【候选项】People must pay attention to the fact that some kinds of trees do not produce<br>seeds annually.<br>人们必须注意这样一个事实：某些种类的树木并非每年都产生种子。<br>【定位】\"This is a really, really critical issue for restoration in Southeast Asia, because many of the most<br>important timber species and tree species — the ones that will lock up the most carbon — they're<br>all masting species.\"<br>「这对东南亚的修复是个非常非常关键的问题，因为许多最重要的木材树种和树种——那些<br>能固存最多碳的——它们全是 masting（间歇结实）树种。」<br>【锚点】许多重要树种不每年结种<br>【对照】many of the most important timber species and tree species ↔some kinds of trees<br>具体范围概括成泛指<br>don't produce seeds every year ↔do not produce seeds annually<br>近义短语对应<br>People need to be ready. ↔People must pay attention to the fact<br>呼吁行动的同义改写<br>【依据】间歇结实需提前重视=A<br>【辨邻】[ E ]<br>Kettle 也谈 seeds，且提到 you lose all the seed，眼熟；但他强调的是「结种的时间规律<br>（不每年结）」，而 The supply of seeds 强调的是「来源供应」，那是第2段 Jamnadass<br>的主张，张冠李戴。<br>That's one big bottleneck<br>[ G ]<br>讲森林里繁殖快的生物 multiply fast 威胁修复，虽同在「修复难题」大框下，但与 Kettle 的<br>masting 结种问题毫无关系，是第4段 Stanturf 的内容。<br>Insects that today are a minor problem may become a major problem",
+    "tips": "许多重要树种不每年结种",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2026_43",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 43,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2026_PARTB",
+    "title": "2026英二 新题型 Part B 第43题 (2分)",
+    "stem": "请结合上方《2026年新题型 Part B》原文及 A–G 候选项，为 <strong>43. John Stanturf</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "G",
+    "analysis": "<strong>【正确答案】[G] Some creatures in the forest that multiply fast can become a great threat to</strong><br>信息在第 4 段<br>【候选项】Some creatures in the forest that multiply fast can become a great threat to<br>forest restoration.<br>森林中一些繁殖迅速的生物可能对森林恢复构成巨大威胁。<br>【定位】\"Insects that today are a minor problem may become a major problem if they can produce three<br>or four generations in a year,\" says forest ecologist John Stanturf.<br>「如果昆虫一年能繁殖三四代，那么今天还是小问题的昆虫可能变成大问题，」森林生态学<br>家 John Stanturf 说。<br>【锚点】繁殖快的昆虫会变成大威胁<br>【对照】Insects ↔Some creatures in the forest<br>下位词升为上位词<br>produce three or four generations in a year ↔multiply fast<br>具体描述抽象成形容<br>become a major problem ↔a great threat to forest restoration<br>程度词与对象补全的对应<br>【依据】繁殖快的虫=大威胁=G<br>【辨邻】[ B ]<br>讲 Soil（土壤）的重要性，与第4段同段，眼熟易混；但土壤是 Cindy Prescott 的发言 If<br>you don't look at the soil at the start，不是 Stanturf 谈的昆虫，对象错位。<br>If you don't look at the soil at the start, you can spend a lot of money and time putting in species that aren't<br>going to survive there.",
+    "tips": "繁殖快的昆虫会变成大威胁",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2026_44",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 44,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2026_PARTB",
+    "title": "2026英二 新题型 Part B 第44题 (2分)",
+    "stem": "请结合上方《2026年新题型 Part B》原文及 A–G 候选项，为 <strong>44. Pedro Brancalion</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】[C] The purpose of restoration efforts may be different from the real needs of the</strong><br>信息在第 6 段<br>【候选项】The purpose of restoration efforts may be different from the real needs of the<br>people involved.<br>恢复工作的目的可能与相关人员的实际需求不同。<br>【定位】\"But if you ask a farmer in Brazil if he or she is concerned about climate change, they would say,<br>'No, I am concerned about water,'\" he says.<br>「但如果你问一个巴西农民是否担心气候变化，他或她会说：『不，我担心的是水，』」<br>他说。<br>【锚点】修复目的与当地人真实需求错位<br>【对照】dedicated to developing it as a tool to mitigate climate change ↔<br>The purpose of restoration efforts<br>具体目的概括成purpose<br>I am concerned about water ↔the real needs of the people involved<br>举例还原成上位概念<br>But ↔may be different from<br>转折逻辑显化成差异表述<br>【依据】目的vs需求错位=C<br>【辨邻】[ F ]<br>讲修复要意识到 whose interests to serve（为谁的利益服务），和「需求」沾边、很像；但<br>F 对应第5段 Janzen 的 restoration by whom, for whom，是「应保持为谁服务的意识」的<br>呼吁，而 Brancalion 说的是「目的与需求实际错位」这一现象，主张不同。<br>the first question has to be restoration by whom, for whom?",
+    "tips": "修复目的与当地人真实需求错位",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2026_45",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 45,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2026_PARTB",
+    "title": "2026英二 新题型 Part B 第45题 (2分)",
+    "stem": "请结合上方《2026年新题型 Part B》原文及 A–G 候选项，为 <strong>45. Robin Chazdon</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】[D] Human factors, as well as trees planted, should be emphasized in forest restoration.</strong><br>信息在第 7 段<br>【候选项】Human factors, as well as trees planted, should be emphasized in forest restoration.<br>在森林恢复中，应当同时强调人为因素和种植的树木。<br>【定位】Restoration is about more than what gets planted in the ground, she says. \"Yes, it's about forests,<br>but it's really about people. They are the agents of restoration.\"<br>她说，修复不仅仅是种在地里的东西。「是的，它关乎森林，但它真正关乎的是人。他们才<br>是修复的行动者。」<br>【锚点】除了种树，人更是修复的关键<br>【对照】what gets planted in the ground ↔trees planted<br>口语短语对应名词短语<br>it's really about people ↔Human factors<br>人名词化为人的因素<br>more than ↔as well as<br>递进结构改成并重结构<br>【依据】树之外更重人=D<br>【辨邻】[ F ]<br>也含 people 取向、谈 restoration，很眼熟；但 F 强调 whose interests to serve（为谁的<br>利益服务），是 Janzen 的主张，而 Chazdon 强调的是「人是修复的行动主体、人的因素要<br>被重视」，方向不同。<br>restoration by whom, for whom?<br>C H O I C E S · 候选池地图<br>A~G 共 7 个候选项各自在说什么<br>候选项是经同义改写的句子，比题目多 2 个。下面逐条给出候选句原文、「它到底主张<br>什么」的中文压缩，并标注它对应哪道题——始终无人对应的就是多余干扰项。<br>[ A ] People must pay attention to the fact that some kinds of trees do not produce<br>seeds annually.<br>人们必须注意：有些树不是每年都结种子。<br>对应第 42 题<br><br>[ B ] Soil is an important element to be taken into account in forest restoration.<br>土壤是森林修复中必须考虑的重要因素。<br>多余项 · 无人对应<br>[ C ] The purpose of restoration efforts may be different from the real needs of the<br>people involved.<br>修复工作的目的，可能与相关人群的真实需求不一致。<br>对应第 44 题<br>[ D ] Human factors, as well as trees planted, should be emphasized in<br>forest restoration.<br>森林修复中，除了种下的树，人的因素也应被重视。<br>对应第 45 题<br>[ E ] The supply of seeds is a tough problem that has to be dealt with.<br>种子供应是一个必须解决的棘手难题。<br>对应第 41 题<br>[ F ] When it comes to restoration, we have to stay with an awareness of whose interests<br>to serve.<br>谈到修复，必须时刻意识到自己是在为谁的利益服务。<br>多余项 · 无人对应<br>[ G ] Some creatures in the forest that multiply fast can become a great threat to<br>forest restoration.<br>森林里某些繁殖快的生物会成为修复的巨大威胁。<br>对应第 43 题<br>E X T R A C H O I C E S · 多余项交代<br>这 2 个候选项始终无人对应<br>多项对应必有 2 个候选项无人认领——往往最像文中某个没被问到的人/事物，或是对某<br>段的片面概括。下面逐条剖析它们「像在哪、差在哪、为何无人认领」，读透多余项才算<br>读透全局。<br><br>[ B ] Soil is an important element to be taken into account in forest restoration.<br>Soil is an important element 最像第4段 Cindy Prescott 的发言 If you don't look at the soil at<br>the start。但 Prescott 没出现在题干里，第4段被问的是 Stanturf（昆虫），所以 B 最终无人<br>认领。做 43 题时若把同段的土壤算给 Stanturf，就会错配 B。<br>[ F ] When it comes to restoration, we have to stay with an awareness of whose interests<br>to serve.<br>whose interests to serve 最像第5段 Daniel Janzen 的 restoration by whom, for whom?。<br>Janzen 不在五个题干中，故 F 无人认领。它同时蹭 44（需求）和 45（人）的边，是全卷最<br>具迷惑性的多余项。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>15 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>Christopher Kettle, Biodiversity International's director for forest genetic<br>resources and restoration in Rome, says that the need for infrastructure — things<br>such as mechanisms for collecting and storing seeds, and nurseries to raise<br>seedlings — might be most desperate here because many trees are 'masting'<br>species, which don't produce seeds every year.<br>第3段，第2句<br>句子成分丰富且具有典型性：主句包含同位语；宾语从句内有同位语、表语、地点状语、原因状语<br>从句；定语从句内有时间状语。特别是同位语的识别（主语后和宾语从句内各有一处）、从句整体<br>作宾语、以及定语从句中关系代词作主语等，都是常见易错点，训练价值高<br>\"Otherwise, you miss the boat, you lose all the seed and you've got to wait another<br>seven years,\" says Kettle.<br>第3段，第4句<br>引述结构（says + 说话人 + 宾语从句）和并列谓语都是真题中常见句式，并列谓语的递进逻辑也<br>是阅读理解的典型考点，结构具有较强的代表性和迁移价值。<br><br>\"This is a really, really critical issue for restoration in Southeast Asia, because<br>many of the most important timber species and tree species — the ones that will<br>lock up the most carbon — they're all masting species.\"<br>第3段，第5句<br>\"主句 + because 原因状语从句\" 是四六级和考研阅读中的高频句式，定语从句修饰名词也是典型结<br>构。破折号插入同位或限定成分的用法在学术文本中常见。整体结构代表性较强，掌握后可在大量<br>真题句中复用，具有较好的迁移价值。<br>Climate change is a driving factor in the push to restore forests, but it also raises<br>questions, such as where trees can thrive in the future.<br>第4段，第1句<br>并列转折句加同位结构是四六级和考研真题中的常见句式，but 连接的转折逻辑、名词后接同位说<br>明的结构都是高频考点，掌握后可迁移到大量类似长难句的分析中，具有较高典型性。<br>\"We know enough to know that this is a concern, but we don't know enough about<br>how to respond to it yet. That's a great area to be doing research.\"<br>第4段，第5句<br>\"know enough to do\" 和 \"not know enough about\" 是四六级和考研常见的表达认知程度的句<br>式，\"that\" 引导宾语从句、\"but\" 连接转折并列句、\"That's a great area to do sth\" 也是典型的评价<br>结构，整句的组合方式在真题中有较高的复现率。<br>So is soil, says Cindy Prescott, a forest ecologist at the University of British<br>Columbia in Vancouver.<br>第4段，第6句<br>成分划分训练价值较高。本句涵盖了倒装结构中的主语、系动词、状语识别，引述结构中的谓语、<br>主语、同位语识别，以及同位语内部的定语（介词短语）。倒装和引述动词后置是考试中的常见易<br>错点，适合作为成分划分练习。<br><br>With so much research left to do, leaders in the field have been doing some soul-<br>searching, and acknowledging that restoration can be motivated by — and<br>designed to meet — different needs.<br>第5段，第1句<br>本句成分较为丰富：主句包含主语、并列谓语、宾语、状语，宾语从句包含主语、并列谓语、方式<br>状语、目的状语；句首 With 复合结构作状语、宾语从句作宾语、不定式作目的状语等都是值得练<br>习的结构；并列谓语和承前省略也是常见易错点，训练价值较高。<br>The question can have more than one answer.<br>第6段，第1句<br>情态动词加动词原形是考试中的常见结构，具有一定代表性，但本句结构过于简单，缺少从句、并<br>列或其他常考复杂句式特征，作为真题句式的典型性不高。<br>Much of the global funding for restoration is dedicated to developing it as a tool to<br>mitigate climate change, notes restoration ecologist Pedro Brancalion.<br>第6段，第2句<br>本句包含主谓倒装、宾语从句前置、被动语态、介词短语作定语和状语、动名词短语作宾语、不定<br>式作目的状语等多种成分，且易错点是倒装结构和被动语态的识别，适合作为成分划分和倒装句式<br>的练习题。<br>\"But if you ask a farmer in Brazil if he or she is concerned about climate change,<br>they would say, 'No, I am concerned about water,'\" he says.<br>第6段，第3句<br>这类“主句框架在后 + 长嵌套从句在前”的结构在学术论文和严肃新闻（如经济学人）中极为常见，<br>具有很强的实战代表性。<br>Restoration is about more than what gets planted in the ground, she says.<br>第7段，第2句<br>句子覆盖主系表结构、宾语从句（嵌套在表语中）、被动语态、地点状语等多种成分。\"what\" 在<br>从句中既引导又充当主语，是值得练习的考点。比较结构 \"more than\" 也增加了成分识别的层次。<br>适合作为中等难度的划分练习。<br><br>People must pay attention to the fact that some kinds of trees do not produce<br>seeds annually.<br>选项A<br>\"名词 + that同位语从句\"是四六级和考研阅读中的高频结构,且\"pay attention to the fact that\"这类<br>表达常见于学术和说明文体,句式代表性强,掌握后可迁移到大量类似句子<br>Soil is an important element to be taken into account in forest restoration.<br>选项B<br>主系表结构加后置定语是四六级和考研阅读中常见的句式，特别是学术类文本中经常用系表结构定<br>义概念或陈述观点，具有一定代表性。不过本句过于简短，缺少从句等更复杂的典型结构。<br>The purpose of restoration efforts may be different from the real needs of the<br>people involved.<br>选项C<br>主系表结构加情态动词表推测，以及介词短语修饰名词、过去分词作后置定语，都是四六级和考研<br>阅读中的常见句式。本句结构具有较高的典型性和复用价值，学生掌握后可迁移到大量类似句子。<br>When it comes to restoration, we have to stay with an awareness of whose<br>interests to serve.<br>选项F<br>\"When it comes to\" 引导条件或话题状语从句是四六级和考研阅读中的高频结构。宾语从句采用<br>\"疑问词 + 不定式\" 形式（如 whose interests to serve）也是常考句式，常出现在间接疑问或目标陈<br>述中。主句的 \"have to\" 表达义务也很典型。掌握本句结构后可迁移到大量类似句型。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 56 个考研英语二真题高频词<br>下列单词既在本篇长文中出现，又是 考研英语二 历年真题的高频词（在该考试真题中出<br>现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查看该<br>词的释义、音标、词形与真题例句。<br><br>restoration<br>C1<br>n. 恢复<br>本篇18 次 · 真题 18 句<br>species<br>B2<br>n. 物种<br>本篇7 次 · 真题 36 句<br>climate<br>B1<br>n. 气候<br>本篇4 次 · 真题 50 句<br>support<br>A2<br>v. 支持<br>本篇2 次 · 真题 87 句<br>major<br>B1<br>adj. 主要的<br>本篇2 次 · 真题 56 句<br>factor<br>B1<br>n. 因素<br>本篇2 次 · 真题 47 句<br>global<br>B2<br>adj. 全球的<br>本篇2 次 · 真题 44 句<br>concerned<br>B1<br>adj. 担心的<br>本篇2 次 · 真题 20 句<br>insect<br>A2<br>n. 昆虫<br>本篇2 次 · 真题 14 句<br>would<br>A1<br>aux. （will 的过去式）将要，会<br>本篇1 次 · 真题 304 句<br>issue<br>B1<br>n. 问题<br>本篇1 次 · 真题 89 句<br>better<br>A1<br>adj. 更好的（good 的比较级）<br>本篇1 次 · 真题 70 句<br>involve<br>B1<br>v. 包含<br>本篇1 次 · 真题 61 句<br>concern<br>B1<br>v. 涉及<br>本篇1 次 · 真题 60 句<br>generation<br>B2<br>n. 一代人<br>本篇1 次 · 真题 60 句<br>design<br>B1<br>n. 设计<br>本篇1 次 · 真题 52 句<br><br>significant<br>B2<br>adj. 重要的<br>本篇1 次 · 真题 47 句<br>gap<br>B1<br>n. 间隙<br>本篇1 次 · 真题 45 句<br>account<br>A2<br>n. 账户<br>本篇1 次 · 真题 42 句<br>material<br>B1<br>n. 材料<br>本篇1 次 · 真题 41 句<br>respond<br>B1<br>v. 回答，答复<br>本篇1 次 · 真题 33 句<br>funding<br>B2<br>n. 资金<br>本篇1 次 · 真题 31 句<br>maintain<br>B1<br>v. 维持<br>本篇1 次 · 真题 31 句<br>threat<br>B1<br>n. 威胁<br>本篇1 次 · 真题 31 句<br>relationship<br>B1<br>n. 关系<br>本篇1 次 · 真题 28 句<br>critical<br>B2<br>adj. 批评的<br>本篇1 次 · 真题 26 句<br>agent<br>B2<br>n. 代理人<br>本篇1 次 · 真题 24 句<br>conservation<br>B2<br>n. 保护<br>本篇1 次 · 真题 24 句<br>resource<br>B1<br>n. 资源<br>本篇1 次 · 真题 24 句<br>infrastructure<br>C1<br>n. 基础设施<br>本篇1 次 · 真题 23 句<br>emphasize<br>B2<br>v. 强调<br>本篇1 次 · 真题 22 句<br>gene<br>B2<br>n. 基因<br>本篇1 次 · 真题 21 句<br><br>genetic<br>B2<br>adj. 遗传的<br>本篇1 次 · 真题 21 句<br>carbon<br>B2<br>n. 碳（化学元素）<br>本篇1 次 · 真题 20 句<br>tough<br>B1<br>adj. 困难的<br>本篇1 次 · 真题 20 句<br>survive<br>B1<br>v. 幸存<br>本篇1 次 · 真题 19 句<br>crop<br>B1<br>n. 农作物<br>本篇1 次 · 真题 17 句<br>native<br>B1<br>adj. 本国的<br>本篇1 次 · 真题 16 句<br>neglect<br>B2<br>v. 忽视;疏忽<br>本篇1 次 · 真题 16 句<br>otherwise<br>B2<br>adv. 否则，不然<br>本篇1 次 · 真题 16 句<br>region<br>B1<br>n. 地区<br>本篇1 次 · 真题 15 句<br>acknowledge<br>B2<br>v. 承认（事实、错误等）<br>本篇1 次 · 真题 14 句<br>alter<br>B2<br>v. 改变，更改（使某物与之前不同）<br>本篇1 次 · 真题 13 句<br>restore<br>B2<br>v. 恢复，使复原<br>本篇1 次 · 真题 13 句<br>awareness<br>B2<br>n. 意识<br>本篇1 次 · 真题 12 句<br>diversity<br>B2<br>n. 多样性<br>本篇1 次 · 真题 12 句<br>element<br>B1<br>n. 要素<br>本篇1 次 · 真题 12 句<br>integrate<br>C1<br>v. 使融入<br>本篇1 次 · 真题 12 句<br><br>mechanism<br>B2<br>n. 机制<br>本篇1 次 · 真题 12 句<br>thrive<br>B2<br>v. 茁壮成长<br>本篇1 次 · 真题 12 句<br>desperate<br>B2<br>adj. 绝望的<br>本篇1 次 · 真题 11 句<br>timber<br>B2<br>n. 木材<br>本篇1 次 · 真题 11 句<br>biologist<br>B2<br>n. 生物学家<br>本篇1 次 · 真题 10 句<br>creature<br>B1<br>n. 生物<br>本篇1 次 · 真题 9 句<br>driving<br>A2<br>n. 驾驶<br>本篇1 次 · 真题 9 句<br>motivate<br>B2<br>v. 激励<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 209 词按 CEFR 难度累积覆盖<br>数字标号长文去重后共 209 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以<br>下」的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 11<br>个 · 约 5%。<br>48%<br>A1<br>及以下<br>66%<br>A2<br>及以下<br>83%<br>B1<br>及以下<br>95%<br>B2<br>及以下<br>99%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 209 个 · 末柱为 100%<br><br>去重总词数<br>209<br>B2 以上难词<br>5%<br>B1 及以下覆盖<br>83%<br>考研英语二<br>2026年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>题目解析 →<br>Section II Part A<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>本题<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "除了种树，人更是修复的关键",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2026_46",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 46,
+    "qType": "solve",
+    "chapter": "e_ch4",
+    "title": "2026英二 翻译 Section III 第46题 (15分)",
+    "stem": "<strong>Section III Translation (15 points) — Directions: Translate the following text into Chinese.</strong><div class='formula-card'>P1 The influence of wearables on psychology refers to how the clothes we wear affect our thoughts,<br>feelings, and behaviors. Clothing is not just about covering our bodies; it plays a significant role in<br>shaping our self-perception and interactions with others.<br>P2 One aspect of this influence is self-expression. The clothes we choose can reflect our personality,<br>mood, and identity. Whether we opt for bold, colorful outfits or prefer more understated styles, our dress<br>choices convey messages about who we are and how we want to be perceived.<br>P3 Additionally, clothing can impact our confidence levels. When we wear clothes that make us feel<br>comfortable and confident, it can positively affect our self-esteem and overall mood.<br>P4 Moreover, cultural and societal influences play a significant role in shaping our dress choices.<br>Different cultures have their norms and expectations regarding dress, which can influence the types of<br>clothing people wear and the meanings attributed to them.</div>",
+    "options": null,
+    "answer": "详见解析中的参考译文与逐句精解",
+    "analysis": "<strong>【逐句拆分与核心采分点解析】</strong><br>2026年考研英语二 英译汉（段落翻译） Section III · 参考译文与逐<br>句解析<br>P A S S A G E & T R A N S L A T I O N · 题和解析<br>英译汉真题、参考译文与逐句解析<br>逐句译审整理。与试卷排版同一卷面：Directions 与整段英文原文连续排印——整段连<br>排、无题号无划线，把它切成一句句翻译单元本身就是解题动作。卷面之后先给按段定稿<br>的整篇参考译文，再按自切句序逐句拆分：意群直译、难点点破、语序调整、句内定稿中<br>译，答案直显。<br>英语二真题(2026)<br>Section III<br>Directions:<br>Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points)<br>P1 The influence of wearables on psychology refers to how the clothes we wear affect our thoughts,<br>feelings, and behaviors. Clothing is not just about covering our bodies; it plays a significant role in<br>shaping our self-perception and interactions with others.<br>P2 One aspect of this influence is self-expression. The clothes we choose can reflect our personality,<br>mood, and identity. Whether we opt for bold, colorful outfits or prefer more understated styles, our dress<br>choices convey messages about who we are and how we want to be perceived.<br>P3 Additionally, clothing can impact our confidence levels. When we wear clothes that make us feel<br>comfortable and confident, it can positively affect our self-esteem and overall mood.<br>P4 Moreover, cultural and societal influences play a significant role in shaping our dress choices.<br>Different cultures have their norms and expectations regarding dress, which can influence the types of<br>clothing people wear and the meanings attributed to them.<br>参考译文<br>按段定稿的整篇参考译文是复盘资产，考卷上只印英文原文——英语二英译汉满分 15 分，按「理解准确、表达通<br>顺连贯、无错译漏译」整篇四档评分。<br>P1 穿戴对心理的影响，指的是我们所穿的衣服如何影响我们的思想、感受和行为。衣服不仅仅是<br>遮体之物，它在塑造我们的自我认知和与他人的互动方面，起着重要作用。<br>P2 这种影响的一个方面是自我表达。我们所选择的衣服可以反映我们的个性、心情和身份。无论<br>我们选择大胆、色彩鲜艳的服装，还是偏爱更为低调的风格，我们的着装选择都在传递着关于我们是<br><br>谁、以及我们希望别人如何看待自己的信息。<br>P3 此外，衣着还会影响我们的自信程度。当我们穿上让自己感到舒适和自信的衣服时，这会对我<br>们的自尊心和整体情绪产生积极影响。<br>P4 再者，文化和社会方面的影响在塑造我们的着装选择方面，也起着重要作用。不同的文化对着<br>装有着各自的规范与期望，这些规范与期望会影响人们所穿衣服的种类，以及人们赋予这些衣服的意<br>义。<br>【衔接】第 1 段两句之间不加连接词，保留分号节奏<br>The influence of wearables on psychology refers to how the clothes we wear affect our<br>thoughts, feelings, and behaviors. 与 Clothing is not just about covering our bodies; it<br>plays a significant role in shaping our self-perception and interactions with others. 在汉语<br>里是\"概念定义 + 进一步说明\"的关系，第二句开头不必加\"事实上 / 实际上\"，让两句自然衔接即<br>可。第二句内部的分号在汉语保留为逗号 + \"它\"承接，更顺。<br>第 2 段三句之间用\"……的一个方面是……\"自然过渡<br>句 3 One aspect of this influence is self-expression. 是该段的话题句，句 4 The clothes we<br>choose can reflect our personality, mood, and identity. 紧跟着展开，句 5 Whether we opt<br>for bold, colorful outfits... 进一步举例。三句话题一致都是\"自我表达\"，句 5 句首的\"无论……还<br>是……\"已自带递进感，不必再补\"也就是说 / 比如\"。<br>第 3 段两句之间加\"具体来说\"或直接零连接<br>Additionally, clothing can impact our confidence levels. 是话题句，When we wear clothes<br>that make us feel comfortable and confident, it can positively affect our self-esteem and<br>overall mood. 是对前句的展开。两句之间汉语可零连接，让 When 状语从句自然引出展开内容；<br>若想更显层次，可在第二句前加\"具体来说\"或\"比如\"。本译文采用零连接、节奏更紧。<br>第 4 段两句之间用\"具体而言\"显化展开关系<br>Moreover, cultural and societal influences play a significant role in shaping our dress<br>choices. 是论点，Different cultures have their norms and expectations regarding dress,<br>which can influence... 是对论点的具体展开。汉语在第二句前补\"具体而言\"或\"具体来说\"能让逻辑<br>更清晰，避免两句平行罗列。<br>全篇统一三大方面的层次词\"一方面 / 此外 / 再者\"<br>One aspect of this influence、Additionally、Moreover 三处分别译\"一方面\"\"此外\"\"再者\"——<br>也可以\"其一……其二……其三……\"。关键是三者一气呵成，不要忽而\"一个方面\"忽而\"另外\"忽而\"而<br>且\"，否则整篇层次糊掉。<br>逐句解析<br>整段连排、无题号无划线——把原文切成一句句翻译单元本身就是解题动作，句前 N. 为逐句解析自切的句序号<br>（非考卷题号），与卷面原文逐字对应。<br><br>【主旨】穿戴对心理的影响<br>全文围绕一个核心命题展开：衣着不只是遮体之物，它会从自我表达、自信水平、文化与社会规范<br>三个层面塑造我们的心理与行为。开篇即定调——The influence of wearables on psychology<br>refers to how the clothes we wear affect our thoughts, feelings, and behaviors.，随后每段<br>引出一个具体方面，文章基调是中性的说明文，作者并未褒贬某种穿衣方式，因此译文也应保持客<br>观、不要加重情感色彩。<br>【术",
+    "tips": "先通读全文锁死核心术语译名，长难句按连词/介词/非谓语切分意群，定语从句短前长后。",
+    "kp": "2026英译汉真题精译与采分点"
+  },
+  {
+    "id": "E2026_47",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 47,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2026英二 小作文 Part A 第47题 (10分)",
+    "stem": "<strong>Section IV Part A (10 points) — Directions:</strong><div class='formula-card'>Suppose your friend Jack has shared with you a video of his family's travel in China. Write an email to<br>tell him<br>1) how you feel about the video, and<br>2) your wish to learn more about their travel.<br>Write your answer in about 100 words on the ANSWER SHEET.<br>Do not use your own name in your email. Use \"Li Ming\" instead. (10 points)</div>",
+    "options": null,
+    "answer": "见参考范文与段落句架",
+    "analysis": "【参考范文 · 99 词】<br>写作无唯一标准答案，以下为达标示范<br>Dear Jack,<br>Thank you so much for sharing the wonderful video of your family's trip to China. I have watched it three<br>times, and I was truly amazed by the stunning scenery and the warm smiles on everyone's faces. It really made<br>my day!<br>Now I would love to learn more about your journey. Could you tell me which cities you visited and which<br>place impressed you most? I am also curious about the local food you tried during the trip.<br>Please share more stories when you are free. Looking forward to hearing from you soon. Best regards, Li Ming<br>【参考译文】<br>亲爱的杰克：<br>非常感谢你分享这段精彩的家庭中国之行视频。我已经看了三遍，那壮丽的风景和每个人脸上温暖的笑容<br>真的让我惊叹不已。它让我一整天心情都很好！<br>现在我很想更多地了解你们的旅程。能告诉我你们去了哪些城市、哪个地方给你留下的印象最深吗？我也<br>很好奇你们旅途中尝过的当地美食。<br>有空时请多分享一些故事。期待早日收到你的回信。<br><br>此致敬礼 李明<br>【第 1 段】称呼单独成行。Dear Jack, 顶格单独成行，落实第 1 段‘称呼’功能，用 Dear ＋名字的朋友语<br>域称呼，格式起手到位。<br>【第 2 段】谢＋具体感受落地。用 Thank you so much for sharing 交代缘由，再以 I was truly<br>amazed by the stunning scenery and the warm smiles 把how you feel about the video写成具体画<br>面，末句 It really made my day 补足感受效果，避免空泛说 good。<br>【第 3 段】愿望化为具体问句。以 I would love to learn more 总起，再用 which cities you visited<br>and which place impressed you most 与 the local food 三个具体问题，把your wish to learn more<br>about their travel写实充实。<br>【第 4 段】礼貌收束＋规范署名。Looking forward to hearing from you soon 期待回信收<br>束，落款 Best regards 后署 Li Ming，严守Do not use your own name in your email. Use \"Li<br>Ming\" instead.。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域 ，再定中心立意与要展开的要点 —— 这些<br>是本题特有的内容判断，不是通用套路。<br>核心任务<br>给朋友写信谈观后感并求更多信息<br>本题交际目的一句话钉死：朋友 Jack 分享了他家中国之行的视频，Suppose your friend Jack<br>has shared with you a video of his family's travel in China，你要回一封邮件，完成两件事——<br>how you feel about the video（表达观后感受）和your wish to learn more about their travel<br>（表达想进一步了解此行的愿望）。两点缺一不可，只写感受就是漏答一半。<br>读者 · 语域<br>写给朋友，亲切但守邮件格式<br>读者是你的朋友 Jack，指令写明Write an email to tell him，所以身份是朋友对朋友，语域偏亲<br>切口语，多用第一、第二人称（I / you），可以带点真情实感和感叹。但‘亲切’不等于没格式：<br>仍要有称呼 Dear Jack 单独成行、结尾礼貌语和落款。署名有硬性规定，Do not use your own<br>name in your email. Use \"Li Ming\" instead.，必须落款 Li Ming，绝不能写自己真名。<br><br>中心立意<br>回信谢分享、表感受、求详情<br>本信交际目的：就 Jack 分享的中国之行视频回信，先真诚表达观后感受，再表达希望了解更多<br>此行细节的愿望，达成Write an email to tell him所要求的两项交际任务。<br>要展开的要点<br>1. 感谢并说出真实感受<br>第一个任务点how you feel about the video：开头一句感谢 Jack 分享视频交代写信缘由，再用<br>具体感受落地——如画面里的风景令人惊艳、家人笑容温暖动人、视频激发了你对中国的向<br>往，而不是干巴巴一句 good。<br>2. 表达想了解的具体细节<br>第二个任务点your wish to learn more about their travel：说出你想进一步知道哪些具体内容<br>——他们去了哪些城市、哪个地方印象最深、尝了什么当地美食、遇到什么有趣的风俗，用具<br>体问题把‘愿望’写实。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>称呼<br>顶格写称呼 Dear Jack 并单独成行，这是邮件格式的起手块，缺它直接扣格式分。<br>第 2 段<br>感谢＋感受<br>正文第一段：一句感谢交代写信缘由，随即落实第一个任务点how you feel about the<br>video，写出对视频的具体真实感受。<br>第 3 段<br>表达求知愿望<br>正文第二段：落实第二个任务点your wish to learn more about their travel，用具体问题<br>表达想进一步了解此行的愿望。<br><br>第 4 段<br>礼貌收束＋落款<br>结尾一句礼貌收束并表达期待回信，另起落款 Best regards 与署名 Li Ming，收束全信。<br>第 1 段<br>Dear Jack,<br>本题收信人是朋友 Jack，故称呼写 Dear Jack，单独成行。<br>邮件称呼<br>· Dear ＋（收信人名字），单独成行，如 Dear ___,<br>第 2 段<br>谢分享＋惊艳于风景与笑容<br>先谢 Jack 分享视频，再落实how you feel about the video：写被视频里壮丽风景和家人温暖<br>笑容打动，看了不止一遍，心情大好。<br>开头致谢缘由<br>· Thank you so much for sharing ___（所分享之物）.<br>表达强烈感受<br>· I was truly amazed by ___（打动你的具体内容）.<br>补充感受带来的效果<br>· It really ___（对你的影响，如 made my day）!<br>第 3 段<br>问行程、印象最深地、当地美食<br>落实your wish to learn more about their travel：表达想多了解此行，具体问他们去了哪些城<br>市、哪个地方印象最深、旅途中尝了什么当地美食。<br>总起表达愿望<br>· I would love to learn more about ___（想了解的对象）.<br>抛出具体问题<br>· Could you tell me ___（具体问题一）and ___（具体问题二）?<br>追加好奇点<br>· I am also curious about ___（另一个想知道的细节）.<br><br>第 4 段<br>期待回信＋署名 Li Ming<br>一句期待 Jack 分享更多、盼回信收束，落款 Best regards 后署名 Li Ming，满足Use \"Li Ming\"<br>instead.的硬性要求。<br>期待回信收束<br>· Looki",
+    "tips": "小作文严格三段式：第1段表明写信目的，第2段逐一落实题干两个要点，第3段期待回复并规范署名 Li Ming。",
+    "kp": "2026英语二小作文应用文实战"
+  },
+  {
+    "id": "E2026_48",
+    "subject": "eng2",
+    "year": 2026,
+    "qNum": 48,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2026英二 大作文 Part B 第48题 (15分)",
+    "stem": "<strong>Section IV Part B (15 points) — Directions:</strong><div class='formula-card'>Write an essay based on the chart below. In your essay, you should<br>1) describe and interpret the chart, and<br>2) give your comments.<br>Write your answer in about 150 words on the ANSWER SHEET. (15 points)</div>",
+    "options": null,
+    "answer": "见图表描述与参考范文",
+    "analysis": "【参考范文 · 146 词】<br>写作无唯一标准答案，以下为达标示范<br><br>The bar chart illustrates the results of a survey on people's views of children's outdoor activities. As is shown,<br>the two most valued benefits are satisfying curiosity and developing observation, cited by 54.60% and 54.50%<br>of respondents respectively. By contrast, building a strong body and enhancing parent-child interaction were<br>selected by only 37.20% and 33.20%, noticeably lower figures.<br>Several factors account for this distribution. In an era that prizes intellectual growth, many parents regard<br>outdoor activities primarily as a channel for stimulating children's minds. Physical health and family bonding,<br>though important, are often taken for granted or pursued through other means, so they receive less attention.<br>In my view, this narrow emphasis deserves rethinking. Outdoor activities should nourish children as whole<br>persons—strong bodies and warm family ties matter as much as sharp minds. Parents, therefore, ought to value<br>every dimension rather than a single one.<br>【参考译文】<br>该柱状图展示了一项关于人们如何看待儿童户外活动的调查结果。如图所示，最受重视的两项益处是满足<br>好奇心和促进观察力，分别有 54.60% 和 54.50% 的受访者选择。相比之下，强身健体和增强亲子互动仅<br>被 37.20% 和 33.20% 的人选中，明显偏低。<br>造成这种分布有若干原因。在一个崇尚智力成长的时代，许多家长主要把户外活动看作激发孩子心智的途<br>径。身体健康与家庭情感联结虽然重要，却常被视为理所当然，或通过其他方式来实现，因而受到的关注<br>较少。<br>在我看来，这种狭隘的偏重值得反思。户外活动应当滋养孩子的整个人——强健的体魄和温暖的亲情，与<br>敏锐的头脑同等重要。因此，家长应当看重每一个维度，而不是只看重其中一项。<br>【第 1 段】两档描述达标。开头 The bar chart illustrates the results of a survey 交代主题，再用<br>cited by 54.60% and 54.50%…／By contrast, … selected by only 37.20% and 33.20% 分两档引数<br>据，末尾 noticeably lower figures 完成概括，落实描述段『先概述再分档引数』的方法。<br>【第 2 段】归因解读到位。Several factors account for this distribution 总起，随后 In an era that<br>prizes intellectual growth… 与 often taken for granted… 一高一低各给一条原因，完成对数据<br>的 interpret。<br>【第 3 段】评论呼应中心。In my view, this narrow emphasis deserves rethinking 亮态度，strong<br>bodies and warm family ties matter as much as sharp minds 呼应『全面发展』的中心，末句 ought<br>to value every dimension 给出建议收尾。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域、读懂配图 ，再定中心立意与要展开的要<br>点 —— 这些是本题特有的内容判断，不是通用套路。<br><br>核心任务<br>描述图表并加评论<br>本题要写两件事、缺一不可：第一步 describe and interpret the chart（客观描述图表数据并解<br>读其含义），第二步 give your comments（给出自己的评论）。只描数字不评论，就等于漏做<br>了一半。<br>读者 · 语域<br>写给阅卷人的正式文<br>本题是考研英语二 B 节大作文，没有具体收信人，写给阅卷人看，用正式书面语即可；不需要<br>称呼与署名，也不要用口语缩略或和读者拉家常的第二人称。<br>配图要读出<br>两高两低分两档<br>本图是关于 某项关于儿童户外活动看法的调查 的柱状图：满足好奇心（54.60%）与 促进观察<br>力（54.50%）分列前两位、几乎持平；而 强身健体（37.20%）与 增强亲子互动（33.20%）明<br>显偏低。可写点就是『重智力启蒙、轻身体与亲情』这一反差。<br>中心立意<br>户外活动应助全面发展<br>中心观点：家长看待儿童户外活动应兼顾智力、体魄与亲情，而不该只盯着 满足好奇心 这类<br>偏智力的益处。<br><br>要展开的要点<br>1. 客观描述数据分两档<br>第一段落点：读出四项数据，分成『满足好奇心、促进观察力』两高与『强身健体、增强亲子<br>互动』两低两档，并用一句话概括反差。<br>2. 解读反差成因<br>第二段落点：分析为什么智力类受捧、健康亲子类遇冷——如社会重智育、家长把体健与陪伴<br>视为理所当然或另有渠道。<br>3. 评论并呼吁全面<br>第三段落点：给出评论，主张户外活动应同时滋养身心与亲情，家长不应厚此薄彼，据此收<br>尾。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>描述并概括图表<br>客观呈现柱状图四项数据，用一句总括点出两高两低的分档，落实 describe and<br>interpret the chart 中的描述部分。<br>第 2 段<br>解读数据成因<br>分析数据反差背后的原因，落实 describe and interpret the chart 中的解读（interpret）<br>部分。<br>第 3 段<br>评论并收尾<br>给出个人评论与呼吁，落实 give your comments。<br><br>第 1 段<br>四数据两档＋总括<br>写出 满足好奇心（54.60%）与 促进观察力（54.50%）居前两位、几乎持平；强身健体<br>（37.20%）与 增强亲子互动（33.20%）明显偏低，末句总括为『重智力、轻体健与亲情』。<br>引出图表主题<br>· The bar chart illustrates the results of a survey on ＿＿.<br>引数据带占比<br>· ＿＿ and ＿＿ are cited by ＿＿ and ＿＿ of respondents respectively.<br>对比转折带出低值<br>· By contrast, ＿＿ were selected by only ＿＿, noticeably lower<br>figures.<br>第 2 段<br>重智育轻体健亲情之由<br>解读：当下社会看重智力成长，家长把户外活动当成开发心智的途径；而身体健康与亲子陪<br>伴常被视为理所当然或另有渠道，故受关注较少。<br>总起归因<br>· Several factors account for this ＿＿.<br>点明背景成因<br>· In an era that prizes ＿＿, many parents regard ＿＿ as ＿＿.<br>补充被忽视之由<br>· ＿",
+    "tips": "图表大作文三段式：第1段客观读图抓极值反差，第2段分析数据背后的两点原因，第3段总结展望与建议。",
+    "kp": "2026英语二大作文图表作文实战"
+  },
+  {
+    "id": "E2025_01",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第1题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>1</strong> 空的最佳选项：",
+    "options": [
+      "A. illusion",
+      "B. discussion",
+      "C. tradition",
+      "D. question"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (question)</strong><br>词义辨析<br>【线索】this 回指 \"求助难\" 这个值得研究的议题<br>线索就在前一句 There are many understandable reasons why you might find it<br>difficult to ask for help when you need it.：作者把 \"开口求助难\" 当成一个值得心理学家<br>研究几十年的现象/问题。指向答案应具备 \"可供长期研究的议题/问题\" 这一语义特征。<br>【选项】A) illusion ✗义偏 \"错觉\"，与所指不符<br>illusion 意为 \"错觉、幻想\"，但前句说的是 \"求助难\" 这件真实存在的现象，不是幻觉。<br>B) discussion ✗义偏 \"讨论\"，与研究对象不符<br>discussion 是 \"讨论\"，心理学家研究的是现象本身，不是研究 \"一场讨论\"。<br>C) tradition ✗义偏 \"传统\"，对象错位<br>tradition 指文化习俗，而 \"难以求助\" 是心理现象，不是传统。<br>D) question ✓\"议题/问题\" 与回指对象完全对位<br>question 在此可作 \"问题、议题\" 解，正好概括 \"为什么人们难以开口求助\" 这个被研究数十年的<br>议题，与 Psychologists have been interested in this __(1)__ for decades 完美对位。<br>【验证】代回后整句意为 Psychologists have been interested in this __(1)__ for decades——心<br>理学家几十年来对 \"这个问题\" 一直感兴趣，承接前句对 \"求助难\" 现象的提出，与全文 \"提<br>出现象→展开分析\" 的走向自洽。",
+    "tips": "this 回指 \"求助难\" 这个值得研究的议题",
+    "kp": "完形填空 · 第1空考点精析"
+  },
+  {
+    "id": "E2025_02",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第2题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>2</strong> 空的最佳选项：",
+    "options": [
+      "A. reluctance",
+      "B. ambition",
+      "C. tendency",
+      "D. enthusiasm"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (reluctance)</strong><br>词义辨析<br>【线索】求助难、且导致 high-profile failures，方向负面<br>前句 There are many understandable reasons why you might find it difficult to ask<br>for help 已经定性 \"难以求助\"；本句又说 people's widespread __(2)__ to ask for help<br>has led to some high-profile failures，明确这种倾向引发了重大失败。线索指向 \"不愿/<br>抗拒求助\" 这一负面倾向。<br>【选项】<br>A) reluctance ✓\"不情愿\" 精准对应 \"求助难\"<br>reluctance 意为 \"不情愿、勉强\"，与上文 find it difficult to ask for help 的负面倾向完全一<br>致，且能合理引发 high-profile failures。<br>B) ambition ✗\"雄心\" 极性正向，方向反<br>ambition 是正向词，\"对求助有雄心\" 既不通顺也违反上下文负面定调。<br>C) tendency ✗中性 \"倾向\"，但与 to ask for help 搭配后方向反<br>tendency 本身中性，但 tendency to ask for help 表示 \"倾向于求助\"，与原文 \"难以求助\" 方向<br>相反，最具迷惑性。<br>D) enthusiasm ✗\"热情\" 极性正向，方向反<br>enthusiasm 表正向情绪，\"对求助充满热情\" 与上文相反。<br>【验证】代入后 people's widespread __(2)__ to ask for help has led to some high-profile<br>failures 意为 \"人们普遍不愿求助导致了一些重大失败\"，承接首句对现象的提出，与全文<br>\"求助难\" 的总基调高度自洽。",
+    "tips": "求助难、且导致 high-profile failures，方向负面",
+    "kp": "完形填空 · 第2空考点精析"
+  },
+  {
+    "id": "E2025_03",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第3题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>3</strong> 空的最佳选项：",
+    "options": [
+      "A. attention",
+      "B. talent",
+      "C. courage",
+      "D. patience"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (courage)</strong><br>词义辨析<br>【线索】下文讲暴露弱点、怕显得无能<br>话题句 Asking for help takes __(3)__. 之后紧跟 It involves communicating a need on<br>your part—there's something you can't do. 和 you're broadcasting your own<br>weaknesses, which can be __(5)__.——求助意味着暴露弱点、承认自己做不到，这是需要<br>克服心理障碍才能做到的事。线索指向 \"勇气\" 这一品质。<br>【选项】A) attention ✗\"注意力\" 与暴露弱点无关<br>attention 指 \"注意力\"，求助并不主要消耗注意力，与下文解释脱钩。<br>B) talent ✗\"天赋\" 与心理障碍无关<br>talent 是天赋才能，求助不是依靠天赋的能力。<br>C) courage ✓\"勇气\" 与暴露弱点正相关<br>courage 与下文 you're broadcasting your own weaknesses 形成因果——正因为要公开弱<br>点，才需要勇气；这是英语中 \"It takes courage to do sth.\" 的经典搭配。<br>D) patience ✗\"耐心\" 与瞬时心理障碍不符<br>patience 指耐心，强调长期等待，与求助的 \"开口瞬间的心理门槛\" 不匹配。<br>【验证】代入后整段逻辑通畅：Asking for help takes __(3)__. 求助需要勇气，因为它会让你暴露弱<br>点、显得无能，这正是第 2 段后续展开的核心。",
+    "tips": "下文讲暴露弱点、怕显得无能",
+    "kp": "完形填空 · 第3空考点精析"
+  },
+  {
+    "id": "E2025_04",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第4题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>4</strong> 空的最佳选项：",
+    "options": [
+      "A. At any time",
+      "B. In other words",
+      "C. By all means",
+      "D. On the contrary"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (In other words)</strong><br>逻辑关系<br>【线索】前后两句是同义改写关系<br>前句 It involves communicating a need on your part—there's something you can't<br>do. 说求助等于承认自己有做不到的事；本句 __(4)__ you're broadcasting your own<br>weaknesses 进一步把 \"承认做不到\" 换成 \"广而告之自己的弱点\"——同一事实换种说法。<br>【选项】A) At any time ✗时间义、与逻辑关系无关<br>At any time 表 \"任何时候\"，是时间状语，与两句的同义改写关系无关。<br>B) In other words ✓\"换句话说\" 精准对应同义复述<br>In other words 表 \"换句话说\"，正好引出对前句的同义改写：把 \"承认有做不到的事\" 重述为<br>\"广播自己的弱点\"。<br>C) By all means ✗\"务必\" 语义错位<br>By all means 意为 \"务必、当然可以\"，常用于回应请求，不能引出同义复述。<br>D) On the contrary ✗\"恰恰相反\"，方向反<br>On the contrary 表转折，但前后两句并无对立，是同义而非反义。<br>【验证】代入后 __(4)__ you're broadcasting your own weaknesses, which can be __(5)__. 衔接<br>自然——\"换句话说，你是在广播自己的弱点\"，与作者 \"层层解释为什么求助难\" 的脉络<br>一致。",
+    "tips": "前后两句是同义改写关系",
+    "kp": "完形填空 · 第4空考点精析"
+  },
+  {
+    "id": "E2025_05",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第5题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>5</strong> 空的最佳选项：",
+    "options": [
+      "A. unrealistic",
+      "B. deceptive",
+      "C. tiresome",
+      "D. uncomfortable"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (uncomfortable)</strong><br>词义辨析<br>【线索】暴露弱点带来心理不适<br>you're broadcasting your own weaknesses, which can be __(5)__. 中 which 指 \"广播自<br>己的弱点\"，后文 You might worry about coming across as incompetent. 进一步描述这<br>种心理负担。线索指向 \"令人不舒服\"。<br>【选项】A) unrealistic ✗\"不切实际\"、对象错位<br>unrealistic 形容想法不切实际，而原文说的是真实暴露的弱点，不是空想。<br>B) deceptive ✗\"欺骗性\"，对象错位<br>deceptive 表 \"具有欺骗性\"，暴露弱点恰恰是真实的，并非欺骗。<br>C) tiresome ✗\"令人厌烦\"，重心偏疲倦感<br>tiresome 强调 \"使人厌倦\"，与下文 \"担心显得无能\" 的心理不适方向不同。<br>D) uncomfortable ✓\"令人不适\" 与心理负担吻合<br>uncomfortable 表 \"令人不舒服的、不安的\"，与紧接其后的 You might worry about coming<br>across as incompetent. 形成自然衔接。<br>【验证】代入后 you're broadcasting your own weaknesses, which can be __(5)__. 表达 \"暴露弱<br>点可能让人感到不适\"，与下文一系列担忧形成总分关系，与全段 \"拆解恐惧\" 的脉络相符。",
+    "tips": "暴露弱点带来心理不适",
+    "kp": "完形填空 · 第5空考点精析"
+  },
+  {
+    "id": "E2025_06",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第6题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>6</strong> 空的最佳选项：",
+    "options": [
+      "A. doubts",
+      "B. concerns",
+      "C. suggestions",
+      "D. secrets"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (concerns)</strong><br>词义辨析<br>【线索】about 后接 \"失去控制\" 是负面顾虑<br>You might have __(6)__ about losing control of whatever it is you're asking for help<br>with. 后接 losing control 这种典型负面情境；前句 You might worry about coming<br>across as incompetent. 已经定调为 \"worry\" 一类的担忧。线索指向 \"担忧、顾虑\" 这种情<br>绪名词。<br>【选项】A) doubts ✗\"怀疑\"，搭配偏 doubt about sth 是否真实<br>doubts 表 \"对…是否真实/可行的怀疑\"，但原文不是怀疑 \"是否会失去控制\"，而是担心它发生，方<br>向偏。<br>B) concerns ✓\"担忧\" 与 worry 同义接力<br>concerns 即 \"忧虑、关切的事\"，与前句 worry about 完美呼应，且 have concerns about 是<br>标准搭配。<br>C) suggestions ✗\"建议\"，情感方向错<br>suggestions 是中性甚至偏正面，与本段累加 \"心理负担\" 的负面基调相悖。<br>D) secrets ✗\"秘密\"，语义错位<br>secrets 与 about losing control 搭配不通——\"对失控有秘密\" 既不像英语表达也无原文依据。<br>【验证】代回后 You might have __(6)__ about losing control of whatever it is you're asking<br>for help with. 即 \"你可能担心失去对所求助之事的控制\"，与前后两句的 worry/担忧 链条<br>自洽。",
+    "tips": "about 后接 \"失去控制\" 是负面顾虑",
+    "kp": "完形填空 · 第6空考点精析"
+  },
+  {
+    "id": "E2025_07",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第7题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>7</strong> 空的最佳选项：",
+    "options": [
+      "A. Once",
+      "B. Unless",
+      "C. Although",
+      "D. Before"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (Once)</strong><br>逻辑关系<br>【线索】他人开始帮忙是 \"被接管/抢功\" 的前提<br>__(7)__ someone starts to help, perhaps they'll take over, or get credit for your<br>earlier efforts. 显示前分句是触发条件，后分句是可能的结果。\"一旦有人开始帮忙\" 才会发<br>生 \"接管\" 或 \"抢功\"。<br>【选项】<br>A) Once ✓\"一旦…就\" 正好衔接条件—结果<br>Once 表 \"一旦\"，准确表达 \"一旦有人开始帮忙，他们就可能接管或抢功\" 的条件-结果逻辑。<br>B) Unless ✗\"除非\"，方向反<br>Unless 表 \"除非\"，意为 \"除非有人帮忙否则会被接管\"，逻辑反，且与现实因果不符。<br>C) Although ✗\"尽管\"，转折与原文不符<br>Although 表让步转折，但原文并非 \"尽管帮忙，他们还是抢功\"——是 \"帮忙之后就会抢功\"，无转<br>折意味。<br>D) Before ✗\"在…之前\" 时序倒置<br>Before 表 \"在…之前\"，会变成 \"在他人开始帮忙之前，他们就接管\"，时序颠倒，不通。<br>【验证】代入后 __(7)__ someone starts to help, perhaps they'll take over 表达 \"一旦有人开始帮<br>忙，他们可能就会接管\"，正是第 2 段列举的 \"失去控制\" 这一具体顾虑，与上下文自洽。",
+    "tips": "他人开始帮忙是 \"被接管/抢功\" 的前提",
+    "kp": "完形填空 · 第7空考点精析"
+  },
+  {
+    "id": "E2025_08",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第8题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>8</strong> 空的最佳选项：",
+    "options": [
+      "A. theory",
+      "B. choice",
+      "C. factor",
+      "D. context"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (factor)</strong><br>词义辨析<br>【线索】前文列举的都是 \"让你担心的顾虑因素\"<br>前文已列 You might worry about coming across as incompetent.、You might have<br>__(6)__ about losing control、__(7)__ someone starts to help, perhaps they'll take<br>over 等多条，都是 \"让你担心而不敢求助的因素\"。线索指向 \"因素\" 这一概括类别。<br>【选项】A) theory ✗\"理论\"，类别错位<br>theory 是 \"理论\"，但前文列的是具体顾虑而非理论。<br>B) choice ✗\"选择\"，对象不符<br>choice 表 \"选择\"，但 \"被接管\"、\"显得无能\" 不是 \"选择\"，是不可控的顾虑。<br>C) factor ✓\"因素\" 准确概括前文列举<br>factor 表 \"因素、原因\"，可作 \"让你担忧的因素\" 解，与前文枚举的多个顾虑严丝合缝。<br>D) context ✗\"语境/背景\"，搭配方向错<br>context 指 \"上下文/背景\"，不能用 worried about a context 描述心理顾虑。<br>【验证】代回后 Yet another __(8)__ that you might be worried about is being a nuisance 衔接<br>自然：\"另一个让你担心的因素就是怕给人添麻烦\"，把前文若干顾虑统一在 \"factor\" 这一范<br>畴下。",
+    "tips": "前文列举的都是 \"让你担心的顾虑因素\"",
+    "kp": "完形填空 · 第8空考点精析"
+  },
+  {
+    "id": "E2025_09",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第9题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>9</strong> 空的最佳选项：",
+    "options": [
+      "A. overpraising",
+      "B. outperforming",
+      "C. reassessing",
+      "D. inconveniencing"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (inconveniencing)</strong><br>词义辨析<br>【线索】前并列项是 \"being a nuisance\"<br>Yet another __(8)__ that you might be worried about is being a nuisance or __(9)__<br>the person you go to for help. 中 or 前并列项是 \"being a nuisance（成为麻烦/讨厌<br>的人）\"，or 后必须是相近的负面行为，且能接 the person 作宾语。线索指向 \"给别人添<br>麻烦\"。<br>【选项】A) overpraising ✗\"过度赞美\"，方向反<br>overpraising 是过度夸奖，正向行为，与 nuisance 方向相反。<br>B) outperforming ✗\"表现胜过\"，对象错位<br>outperforming 指 \"业绩胜过某人\"，与 \"怕给求助对象添麻烦\" 无关。<br>C) reassessing ✗\"重新评估\"，对象错位<br>reassessing 是 \"重新评估\"，与本句心理顾虑无关。<br>D) inconveniencing ✓\"给…添麻烦\" 与 nuisance 同义并列<br>inconveniencing 即 \"给某人带来不便\"，与 being a nuisance 形成同义并列，且宾语正是<br>the person。<br>【验证】代回后 being a nuisance or __(9)__ the person you go to for help 意为 \"成为讨厌鬼、<br>或给所求助之人添麻烦\"，与第 2 段 \"怕影响他人\" 的最后一条顾虑严丝合缝。",
+    "tips": "前并列项是 \"being a nuisance\"",
+    "kp": "完形填空 · 第9空考点精析"
+  },
+  {
+    "id": "E2025_10",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第10题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>10</strong> 空的最佳选项：",
+    "options": [
+      "A. reach out",
+      "B. settle down",
+      "C. turn over",
+      "D. look back"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (reach out)</strong><br>固定搭配<br>【线索】段落主题 \"求助难\"、空后 for help<br>you might find it especially difficult to __(10)__ for help 主题就是 \"开口求助\"，且空后<br>紧跟 for help。reach out for help 是 \"伸手求助\" 的固定搭配。本空只需看本句即可定。<br>【选项】<br>A) reach out ✓reach out for help 固定搭配<br>reach out 与 for help 构成固定搭配 \"reach out for help\"——伸手求助，正是本段主题。<br>B) settle down ✗\"安顿/平静\"，搭配错<br>settle down 表 \"安顿下来\"，不与 for help 搭配。<br>C) turn over ✗\"翻转/移交\"，搭配错<br>turn over 是 \"翻转/移交\"，不与 for help 搭配。<br>D) look back ✗\"回顾\"，搭配错<br>look back 表 \"回顾过去\"，与 for help 不搭。<br>【验证】代回后 you might find it especially difficult to __(10)__ for help 意为 \"你会发现尤其难<br>以开口求助\"，与第 3 段对低自尊群体的特别讨论自洽。",
+    "tips": "段落主题 \"求助难\"、空后 for help",
+    "kp": "完形填空 · 第10空考点精析"
+  },
+  {
+    "id": "E2025_11",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 11,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第11题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>11</strong> 空的最佳选项：",
+    "options": [
+      "A. declining",
+      "B. considering",
+      "C. criticising",
+      "D. evaluating"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (declining)</strong><br>词义辨析<br>【线索】下文 such refusals 直接定性<br>紧随其后的 You might see such refusals as implying something __(12)__ about the<br>status of your relationship with them. 用 such refusals 回指上句的动作。线索锁死答案<br>必须表达 \"拒绝\"。<br>【选项】<br>A) declining ✓\"拒绝\" 与 such refusals 完美对应<br>declining 表 \"婉拒、拒绝\"，正好与下文 such refusals 形成名动呼应。<br>B) considering ✗\"考虑\"，与 refusals 不符<br>considering 是 \"考虑\"，并非拒绝，与下文 such refusals 矛盾。<br>C) criticising ✗\"批评\"，对象偏<br>criticising 表 \"批评\"，是对内容的负面评价，但 \"批评你的请求\" 不等于 \"拒绝\"，与 such refusals<br>不对位。<br>D) evaluating ✗\"评估\"，中性、不等于拒绝<br>evaluating 是中性的 \"评估\"，不蕴含拒绝意味，与下文不符。<br>【验证】代回后 you have the added worry of the other person __(11)__ your request 意为 \"还<br>多了一层对对方拒绝你请求的担心\"，正好被下句的 such refusals 自然接住。",
+    "tips": "下文 such refusals 直接定性",
+    "kp": "完形填空 · 第11空考点精析"
+  },
+  {
+    "id": "E2025_12",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 12,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第12题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>12</strong> 空的最佳选项：",
+    "options": [
+      "A. unnecessary",
+      "B. negative",
+      "C. strange",
+      "D. impractical"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (negative)</strong><br>词义辨析<br>【线索】整段在讲低自尊的负面解读<br>If you struggle with low self-esteem, you might find it especially difficult to __(10)__<br>for help 已定调本段聚焦 \"低自尊→负面解读\"；下一句 To __(13)__ these difficulties, try<br>to remind yourself that everyone needs help sometimes. 把这些解读统称为<br>difficulties。线索指向 \"负面的\"。<br>【选项】A) unnecessary ✗\"不必要的\"，无关<br>unnecessary 表 \"不必要\"，与关系状况的好坏无关。<br>B) negative ✓\"负面的\" 与低自尊推断方向一致<br>negative 表 \"负面的\"，精确刻画低自尊者把拒绝解读为 \"我们关系出问题了\" 这种负面联想。<br>C) strange ✗\"奇怪的\"，方向不准<br>strange 是 \"奇怪\"，并不能直接表达 \"关系出了问题\" 的负面联想。<br>D) impractical ✗\"不实用的\"，对象错位<br>impractical 用于评价方法、计划是否可行，不可用来描述 \"关系状况\"。<br>【验证】代回后 You might see such refusals as implying something __(12)__ about the status<br>of your relationship with them. 意为 \"你会把拒绝看作暗示你们关系出了什么负面问题\"，<br>与本段低自尊主线自洽。",
+    "tips": "整段在讲低自尊的负面解读",
+    "kp": "完形填空 · 第12空考点精析"
+  },
+  {
+    "id": "E2025_13",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 13,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第13题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>13</strong> 空的最佳选项：",
+    "options": [
+      "A. explain",
+      "B. identify",
+      "C. predict",
+      "D. overcome"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (overcome)</strong><br>固定搭配<br>【线索】后接的是消除负面想法的具体建议<br>To __(13)__ these difficulties, try to remind yourself that everyone needs help<br>sometimes. 后给出的是 \"提醒自己人人都需要帮助\" 这样消解 difficulties 的方法，与 \"克<br>服\" 的目标完全匹配。本空仅看本句即可定。<br>【选项】A) explain ✗\"解释\"，与解决方法不匹配<br>explain 是 \"解释\"，后续给的不是解释 difficulties 的来源，而是消解它。<br>B) identify ✗\"识别\"，方向不彻底<br>identify 是 \"识别\"，仅停在认出层面，与下文 \"消除困扰\" 的实操建议不匹配。<br>C) predict ✗\"预测\"，对象错位<br>predict 是 \"预测\"，与本句给出的 \"应对建议\" 方向无关。<br>D) overcome ✓overcome difficulties 固定搭配且贴合方向<br>overcome 与 difficulties 是高频固定搭配 \"克服困难\"，且与下文给出的实操建议完全自洽。<br>【验证】代回后 To __(13)__ these difficulties, try to remind yourself that everyone needs help<br>sometimes. 意为 \"为了克服这些困难，要提醒自己每个人都偶尔需要帮助\"，正是从负面解<br>读转向积极建议的转折点。",
+    "tips": "后接的是消除负面想法的具体建议",
+    "kp": "完形填空 · 第13空考点精析"
+  },
+  {
+    "id": "E2025_14",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 14,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第14题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>14</strong> 空的最佳选项：",
+    "options": [
+      "A. deny",
+      "B. forget",
+      "C. miss",
+      "D. fear"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (fear)</strong><br>词义辨析<br>【线索】while…there's actually research 的让步反转<br>while you might __(14)__ coming across as incompetent, there's actually research<br>that shows that advice-seekers are __(15)__ as more competent, not less. while 引导<br>让步从句，后半用 actually 强转折，说明前半是 \"担心被看作无能\"——研究反过来证明并<br>不会。线索指向 \"害怕\"。<br>【选项】A) deny ✗\"否认\"，与担心不同<br>deny 是 \"否认\"，但本句要表达的是 \"你担心\" 而不是 \"你否认\" 显得无能。<br>B) forget ✗\"忘记\"，与情感方向不符<br>forget 表 \"忘记\"，与心理顾虑无关。<br>C) miss ✗\"错过/想念\"，对象错位<br>miss 表 \"错过、思念\"，与 \"显得无能\" 这种负面状态不能匹配。<br>D) fear ✓\"害怕\" 与 worry 情感链接力<br>fear 表 \"害怕\"，与前文反复出现的 worry about coming across as incompetent 同向同质，<br>是该担忧的强化版。<br>【验证】代回后 while you might __(14)__ coming across as incompetent, there's actually<br>research that shows that advice-seekers are __(15)__ as more competent, not less. 意<br>为 \"尽管你可能害怕显得无能，但研究表明求助者反而被认为更能干\"，正好是第 3 段向第 4<br>段过渡的反转铺垫。",
+    "tips": "while…there's actually research 的让步反转",
+    "kp": "完形填空 · 第14空考点精析"
+  },
+  {
+    "id": "E2025_15",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 15,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第15题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>15</strong> 空的最佳选项：",
+    "options": [
+      "A. disguised",
+      "B. perceived",
+      "C. followed",
+      "D. introduced"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (perceived)</strong><br>词义辨析<br>【线索】研究结果是 \"别人怎么看求助者\"<br>advice-seekers are __(15)__ as more competent, not less 表达的是研究中别人对求助者<br>的看法。线索指向 \"被视为\"。<br>【选项】A) disguised ✗\"伪装成\"，方向错<br>disguised 表 \"伪装成\"，与 \"被认为\" 无关，且 disguised as more competent 不通顺。<br>B) perceived ✓be perceived as 标准搭配<br>perceived 表 \"被视为\"，be perceived as more competent 即 \"被认为更能干\"，与 research<br>的语境完美匹配。<br>C) followed ✗\"跟随\"，搭配错<br>followed 是 \"跟随\"，followed as more competent 不通。<br>D) introduced ✗\"被介绍为\"，搭配偏<br>introduced 是 \"被介绍为\"，常用于正式场合介绍身份，不用于描述别人对一个人的总体评价。<br>【验证】代回后 advice-seekers are __(15)__ as more competent, not less 意为 \"求助者反而被视<br>为更有能力，而非更无能\"，与 \"害怕显得无能\" 形成反转闭环。",
+    "tips": "研究结果是 \"别人怎么看求助者\"",
+    "kp": "完形填空 · 第15空考点精析"
+  },
+  {
+    "id": "E2025_16",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 16,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第16题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>16</strong> 空的最佳选项：",
+    "options": [
+      "A. recall",
+      "B. classify",
+      "C. analyse",
+      "D. compare"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (recall)</strong><br>词义辨析<br>【线索】the past + 让被试做的事<br>asking people to __(16)__ times they'd sought help in the past 关键在 times they'd<br>sought help in the past——线索指向 \"回忆过去经历\"。<br>【选项】<br>A) recall ✓\"回忆\" 与 in the past 完美对位<br>recall 表 \"回忆\"，是心理学研究中 \"让被试回忆过往经历\" 的典型用语。<br>B) classify ✗\"分类\"，与单次记忆不符<br>classify 是 \"分类\"，但宾语是若干次求助经历，并非要分类的对象，方向偏。<br>C) analyse ✗\"分析\"，与方法描述不符<br>analyse 是 \"分析\"，但被试在这一步只是 \"想起\" 经历，分析往往是研究者的工作。<br>D) compare ✗\"比较\"，对象不齐<br>compare 表 \"比较\"，需要两组对象，但本句宾语只是 times they'd sought help，不是对比<br>关系。<br>【验证】代回后 asking people to __(16)__ times they'd sought help in the past 意为 \"让人们回<br>忆他们过去寻求帮助的经历\"，与心理学研究方法的常见描述高度一致。",
+    "tips": "the past + 让被试做的事",
+    "kp": "完形填空 · 第16空考点精析"
+  },
+  {
+    "id": "E2025_17",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 17,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第17题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>17</strong> 空的最佳选项：",
+    "options": [
+      "A. brave",
+      "B. disappointed",
+      "C. willing",
+      "D. hesitant"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (willing)</strong><br>词义辨析<br>【线索】研究反转主旨：他人比想象中乐意帮忙<br>The findings showed that help-seekers generally underestimate how __(17)__ other<br>people will be to help and how good it'll make the help-giver feel 与下文 having the<br>chance to help someone is highly __(18)__ 共同指明研究反转方向：人们 \"低估了\" 别人<br>\"乐于\" 帮忙的程度。线索指向 \"愿意的\"。<br>【选项】A) brave ✗\"勇敢\"，对象不符<br>brave 表 \"勇敢\"，但帮人不需要勇敢，方向偏。<br>B) disappointed ✗\"失望\"，方向反<br>disappointed 是负面词，与 underestimate how + 形容词 的正面属性结构相悖。<br>C) willing ✓\"愿意的\" 完美对位反转结论<br>willing 表 \"愿意的\"，与 be willing to help 是标准搭配，研究反转结论正是 \"他人比你想象中愿<br>意帮忙\"。<br>D) hesitant ✗\"犹豫的\"，方向反<br>hesitant 是负面词，按 underestimate 反向推理也不对——\"低估别人有多犹豫\" 不构成令人鼓舞<br>的发现。<br>【验证】代回后 help-seekers generally underestimate how __(17)__ other people will be to<br>help 意为 \"求助者普遍低估了他人帮忙的意愿\"，与第 4 段 \"研究反转\" 的整体走向严丝<br>合缝。",
+    "tips": "研究反转主旨：他人比想象中乐意帮忙",
+    "kp": "完形填空 · 第17空考点精析"
+  },
+  {
+    "id": "E2025_18",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 18,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第18题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>18</strong> 空的最佳选项：",
+    "options": [
+      "A. relaxing",
+      "B. surprising",
+      "C. rewarding",
+      "D. demanding"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (rewarding)</strong><br>词义辨析<br>【线索】括号外 how good 决定方向<br>前文 how good it'll make the help-giver feel 已经定调帮助他人 \"让助人者感觉很好\"，括<br>号内 having the chance to help someone is highly __(18)__ 是对其进一步具体化。线索<br>指向 \"让人有获得感的\"。<br>【选项】A) relaxing ✗\"放松的\"，方向偏<br>relaxing 强调身心放松，与 \"帮助他人带来满足感\" 的方向不完全一致。<br>B) surprising ✗\"令人惊讶\"，方向偏<br>surprising 表 \"令人意外\"，可解释 finding 出人意料，但不能直接形容 having the chance to<br>help 本身的属性。<br>C) rewarding ✓\"有回报的\" 与 feel good 同向<br>rewarding 表 \"有成就感的、值得做的\"，与 how good it'll make the help-giver feel 完美<br>呼应。<br>D) demanding ✗\"要求高的\"，方向反<br>demanding 表 \"耗费精力的、苛刻的\"，与括号外 \"感觉良好\" 完全相反。<br>【验证】代回后 having the chance to help someone is highly __(18)__ 意为 \"有机会帮人是非常<br>有成就感的\"，把括号外 feel good 的抽象判断具象化，构成第 4 段研究反转的内核。",
+    "tips": "括号外 how good 决定方向",
+    "kp": "完形填空 · 第18空考点精析"
+  },
+  {
+    "id": "E2025_19",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 19,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第19题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>19</strong> 空的最佳选项：",
+    "options": [
+      "A. Thus",
+      "B. Also",
+      "C. Finally",
+      "D. Instead"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (Also)</strong><br>逻辑关系<br>【线索】前句给总建议、本句给附加细则<br>前句 So, bear all this in mind the next time you need to ask for help. 是总建议；本句<br>__(19)__ take care over who you ask and when you ask them. 给出附加的 \"选谁问、什<br>么时候问\" 细则；后面又接着 And if someone can't help right now, avoid taking it<br>personally. 再加一条，明显是并列累加而非替代或收尾。<br>【选项】A) Thus ✗\"因此\"，因果关系不成立<br>Thus 表 \"因此\"，但本句与前句不是因果而是并列建议。<br>B) Also ✓\"另外\" 与并列累加吻合<br>Also 表 \"另外、并且\"，正好对应 \"在记住总建议之外，再注意以下细节\" 的并列累加关系。<br>C) Finally ✗\"最后\"，与后文还有一条建议矛盾<br>Finally 应放在最后一条建议前，但本句后面还有 And if someone can't help right now, avoid<br>taking it personally.，并未结束。<br>D) Instead ✗\"取而代之\"，与前句无对立<br>Instead 表替代关系，但本句并未推翻前句建议，逻辑不符。<br>【验证】代回后 __(19)__ take care over who you ask and when you ask them. 衔接顺畅——\"另<br>外，要注意找谁求助、何时求助\"，是对总建议的细节补充，与后文 And + 再加一条建议的<br>累加格式一致。",
+    "tips": "前句给总建议、本句给附加细则",
+    "kp": "完形填空 · 第19空考点精析"
+  },
+  {
+    "id": "E2025_20",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 20,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2025_CLOZE",
+    "title": "2025英二 完形填空 第20题 (0.5分)",
+    "stem": "请结合上方《2025年完形填空》原文，选择第 <strong>20</strong> 空的最佳选项：",
+    "options": [
+      "A. polite",
+      "B. proud",
+      "C. busy",
+      "D. lazy"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (busy)</strong><br>词义辨析<br>【线索】right now + or 平行项的善意基调<br>And if someone can't help right now, avoid taking it personally. They might just be<br>too __(20)__, or they might not feel confident about their ability to help. 中 right<br>now 暗示时间不凑巧；后并列项 they might not feel confident about their ability to<br>help 是善意中性的原因，作者明显在劝考生不要责怪对方。线索指向 \"忙\" 这种中性外因。<br>【选项】A) polite ✗\"礼貌\"，方向错<br>polite 表 \"礼貌\"，与拒绝帮忙之间没有合理因果关系。<br>B) proud ✗\"骄傲\"，与本段善意基调不符<br>proud 表 \"骄傲\"，与作者劝慰口吻不符，且 \"太骄傲\" 不能解释 right now 拒帮。<br>C) busy ✓\"忙\" 与 right now 完美对位<br>busy 表 \"忙\"，是最贴合 \"现在帮不上\" 的中性外因，且符合作者劝慰 \"别往心里去\" 的善意<br>基调。<br>D) lazy ✗\"懒\"，色彩责备、违背基调<br>lazy 是带责备色彩的负面词，与本段劝考生 \"不要把拒绝个人化\" 的口吻直接冲突。<br>【验证】代回后 They might just be too __(20)__, or they might not feel confident about their<br>ability to help. 意为 \"他们可能只是太忙了，或者对自己的帮助能力没信心\"，与全文 \"求助<br>难但别想多\" 的劝慰基调收束自洽。<br>O V E R V I E W · 通读建境<br>全文主旨与行文脉络<br>完形是语篇题——单看空所在的半句往往四个选项都「像」。下面是全文主旨与行文脉<br>络，是每个空锁定线索、代入验证时核对的全局工作台。<br>全文主旨<br>求助为何难、又为何值得开口<br>全文是一篇心理科普短文，主旨可由开篇 There are many understandable reasons why<br>you might find it difficult to ask for help when you need it. 一句定调：作者承认 \"开口求<br>助\" 是件难事，并要逐层解释 \"为什么难\"，再用研究反转告诉读者 \"其实没你想的那么糟\"。<br>整体基调是劝慰式、积极向上的科普口吻。<br><br>行文脉络<br>提出现象→拆解恐惧→低自尊加码→研究反转→给出建议<br>脉络清晰，可切成五块：第 1 段抛出现象与心理学家长期关注的背景 Psychologists have<br>been interested in this __(1)__ for decades；第 2 段集中拆解 \"求助难\" 的多重恐惧（暴露弱<br>点、失去控制、给人添麻烦）Asking for help takes __(3)__.；第 3 段把低自尊群体单列出来<br>加码 If you struggle with low self-esteem, you might find it especially difficult to __(10)__<br>for help；第 4 段用 2022 年斯坦福研究做关键反转 The findings showed that help-seekers<br>generally underestimate how __(17)__ other people will be to help；第 5 段给出最终行动<br>建议 So, bear all this in mind the next time you need to ask for help.。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>12 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>There are many understandable reasons why you might find it difficult to ask for<br>help when you need it.<br>第1段，第1句<br>句子涵盖存在句结构、定语从句、时间状语从句、形式宾语 it、宾语补足语、不定式短语等多种<br>成分，且有 why 和 when 两个关系词在从句中分别充当状语的用法，成分丰富，适合作为划分<br>练习。<br>Psychologists have been interested in this question for decades, not least because<br>people's widespread reluctance to ask for help has led to some high-profile<br>failures.<br>第1段，第2句<br>主句 + 原因状语从句的结构在四六级和考研阅读中高频出现，且从句主语包含不定式修饰<br>（\"reluctance to ask for help\"）和现在完成时的使用都是常见考点，具有较强的代表性和迁移<br>价值。<br><br>In other words you're broadcasting your own weaknesses, which can be<br>uncomfortable.<br>第2段，第3句<br>非限制性定语从句是四六级和考研阅读中的高频句式，\"which\" 补充说明前文内容的用法非常典<br>型。主句使用进行时加状语的结构也常见。掌握这个句型后，学生可以迁移到大量类似的长句分<br>析中。<br>You might worry about coming across as incompetent.<br>第2段，第4句<br>“主语 + 情态动词 + 动词原形 + 介词 + 动名词短语”是常见句式，阅读和写作里都很常见。学会区<br>分主谓和介词后非谓语内容，迁移价值很高。<br>Once someone starts to help, perhaps they'll take over, or get credit for your<br>earlier efforts.<br>第2段，第6句<br>“前置时间或条件从句 + 主句结果判断”是很常见的考试句式，主句中再带并列谓语也十分典型。掌<br>握这种读法后，迁移到大量类似句子都很有帮助。<br>Yet another factor that you might be worried about is being a nuisance or<br>inconveniencing the person you go to for help.<br>第2段，第7句<br>本句结构层次清楚但不算过难，既能训练主干识别，也能训练从修饰成分中排除干扰；时态难度适<br>中，适合作为结构与时态综合练习材料。<br>If you struggle with low self-esteem, you might find it especially difficult to reach<br>out for help because you have the added worry of the other person declining your<br>request.<br>第3段，第1句<br>该句结构高度典型:条件状语从句加主句加原因状语从句的组合、形式宾语加真正宾语后置、情态<br>动词表推测,这些都是四六级和考研阅读中的常见句式。掌握该句的分析方法可以直接应用到大量<br>类似结构的长句中,迁移性强,是很有代表性的训练句。<br><br>To overcome these difficulties, try to remind yourself that everyone needs help<br>sometimes.<br>第3段，第3句<br>祈使句 + 宾语从句 + 目的状语的组合在四六级和考研写作建议类句型中非常常见，例如 \"To<br>achieve your goal, try to do...\" 或 \"To solve the problem, remember that...\" 等句式都是这一结构的<br>变体。学生掌握这个句式后可以直接套用到多种表达场景，迁移性强。<br>And while you might fear coming across as incompetent, there's actually research<br>that shows that advice-seekers are perceived as more competent, not less.<br>第3段，第5句<br>让步状语从句 + there be 引出论据 + 定语从句修饰名词 + 宾语从句陈述内容，是四六级和考研阅<br>读中高频出现的学术论证句式。嵌套方式和逻辑链条（假设担忧 → 客观研究反驳）也符合议论文<br>常见模式，学习后可大量迁移到类似句型。<br>Perhaps most encouraging of all is a paper from 2022 by researchers at Stanford<br>University that involved a mix of contrived help-seeking interactions and asking<br>people to recall times they'd sought help in the past.<br>第4段，第1句<br>本句成分丰富且包含多个训练价值点:完全倒装的主系表结构可训练非常规语序识别;长主语中的多<br>层后置定语(介词短语+定语从句)训练修饰成分的剥离;定语从句中 \"mix of...and...\" 结构训练并列成<br>分识别;宾语从句中关系词省略训练隐含连接的补足;多个动词形式<br>(is/involved/asking/recall/sought)并存训练谓语与非谓语的区分;是一个坑点较密集的优质练习句<br>So, bear all this in mind the next time you need to ask for help.<br>第5段，第1句<br>覆盖祈使句谓语、宾语、方式状语（固定搭配 bear...in mind）、时间状语从句（the next time 引<br>导）等多个成分；包含不定式作宾语的常见结构；对练习祈使句识别、状语从句定位、固定搭配拆<br>分有一定价值，但无复杂定语或并列成分，可挖掘点中等。<br>And if someone can't help right now, avoid taking it personally.<br>第5段，第3句<br>“If 条件部分 + 逗号 + 祈使句”是非常常见、可迁移性很强的英语句式。掌握这种读法后，处理大量<br>建议类和说明类句子都会有帮助。<br><br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 34 个考研英语二真题高频词<br>下列单词既在本篇完形原文中出现，又是 考研英语二 历年真题的高频词（在该考试真题<br>中出现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查<br>看该词的释义、音标、词形与真题例句。<br>involve<br>B1<br>v. 包含<br>本篇2 次 · 真题 61 句<br>would<br>A1<br>aux. （will 的过去式）将要，会<br>本篇1 次 · 真题 304 句<br>less<br>A1<br>det. 较少的<br>本篇1 次 · 真题 150 句<br>researcher<br>B2<br>n. 研究人员<br>本篇1 次 · 真题 112 句<br>least<br>A2<br>det. 最少的<br>本篇1 次 · 真题 63 句<br>decade<br>B1<br>n. 十年<br>本篇1 次 · 真题 61 句<br>concern<br>B1<br>v. 涉及<br>本篇1 次 · 真题 60 句<br>decline<br>B2<br>v. 下降<br>本篇1 次 · 真题 56 句<br>factor<br>B1<br>n. 因素<br>本篇1 次 · 真题 47 句<br>actually<br>A2<br>adv. 实际上，事实上（用于纠正或补充信息）<br>本篇1 次 · 真题 42 句<br>seek<br>B1<br>v. 寻找<br>本篇1 次 · 真题 40 句<br>generally<br>B1<br>adv. 通常，一般地<br>本篇1 次 · 真题 35 句<br>negative<br>B1<br>adj. 否定的<br>本篇1 次 · 真题 32 句<br>struggle<br>B1<br>v. 奋斗<br>本篇1 次 · 真题 32 句<br><br>finding<br>B2<br>n. 调查结果<br>本篇1 次 · 真题 30 句<br>status<br>B2<br>n. 地位<br>本篇1 次 · 真题 29 句<br>highly<br>B1<br>adv. 非常<br>本篇1 次 · 真题 28 句<br>relationship<br>B1<br>n. 关系<br>本篇1 次 · 真题 28 句<br>failure<br>B1<br>n. 失败<br>本篇1 次 · 真题 24 句<br>imply<br>B2<br>v. 暗示，暗指<br>本篇1 次 · 真题 24 句<br>willing<br>B1<br>adj. 愿意的，乐意的<br>本篇1 次 · 真题 23 句<br>interaction<br>B2<br>n. 相互作用<br>本篇1 次 · 真题 22 句<br>perceive<br>B2<br>v. 理解，领悟（某事的性质或意义）<br>本篇1 次 · 真题 19 句<br>psychologist<br>B2<br>n. 心理学家<br>本篇1 次 · 真题 19 句<br>request<br>B1<br>n. 请求<br>本篇1 次 · 真题 14 句<br>underestimate<br>B2<br>v. 低估<br>本篇1 次 · 真题 13 句<br>widespread<br>B2<br>adj. 广泛的<br>本篇1 次 · 真题 13 句<br>interested<br>A1<br>adj. 感兴趣的<br>本篇1 次 · 真题 12 句<br>weakness<br>B1<br>n. 缺点<br>本篇1 次 · 真题 12 句<br>credit<br>B1<br>n. 赊购，赊账<br>本篇1 次 · 真题 11 句<br><br>mix<br>A2<br>v. 混合<br>本篇1 次 · 真题 11 句<br>recall<br>B2<br>v. 回忆起，记起<br>本篇1 次 · 真题 10 句<br>remind<br>A2<br>v. 提醒<br>本篇1 次 · 真题 10 句<br>personally<br>B1<br>adv. 就个人而言<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 139 词按 CEFR 难度累积覆盖<br>带空短文去重后共 139 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 3 个 ·<br>约 2%。<br>50%<br>A1<br>及以下<br>71%<br>A2<br>及以下<br>86%<br>B1<br>及以下<br>98%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 139 个 · 末柱为 100%<br>去重总词数<br>139<br>B2 以上难词<br>2%<br>B1 及以下覆盖<br>86%<br><br>考研英语二<br>2025年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>本题<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>段落小标题（7选5）<br>题目解析 →<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "right now + or 平行项的善意基调",
+    "kp": "完形填空 · 第20空考点精析"
+  },
+  {
+    "id": "E2025_21",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 21,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT1",
+    "title": "2025英二 阅读 Text 1 第21题 (2分)",
+    "stem": "<strong>21. According to Paragraph 1, the practice of tipping in the U.S. ________.</strong>",
+    "options": [
+      "A. was regarded as a sign of generosity",
+      "B. was considered essential for waiters",
+      "C. was a way of rewarding diligence",
+      "D. was optional in most businesses"
+    ],
+    "answer": "B",
+    "analysis": "根据第一段，美国的小费习俗________。<br>A) 被视为慷慨的标志<br>B) 被认为对服务员至关重要<br>C) 是一种奖励勤奋的方式<br>D) 在大多数商家是可选的<br>【答案】B （细节题）<br>【判型】题干According to Paragraph 1, the practice of tipping in the U.S.显式指段，问的是该<br>段对小费做法的客观陈述，不带 infer / suggest / imply。",
+    "tips": "题干According to Paragraph 1, the practice of tipping in the U.S.显式指段，问的是该",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_22",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 22,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT1",
+    "title": "2025英二 阅读 Text 1 第22题 (2分)",
+    "stem": "<strong>22. Compared with tips in the past, today's tips ________.</strong>",
+    "options": [
+      "A. are paid much less frequently",
+      "B. are less often requested in advance",
+      "C. have less to do with service quality",
+      "D. contribute less to workers' income"
+    ],
+    "answer": "C",
+    "analysis": "【拆句】According to Paragraph 1, the practice of tipping in the U.S. ________. 主句是 the<br>practice of tipping in the U.S. + 空格谓语；According to Paragraph 1 是状语，限定信<br>息来源；选项是对主语 the practice of tipping 的谓语补全，理解上无陷阱。<br>【定位】U.S. customers historically tipped people they assumed were earning most of their income via<br>tips, such as restaurant servers earning less than the minimum wage.<br>美国顾客历来只给那些他们认为大部分收入来源于小费的人付小费，比如时薪低于最低工资<br>的餐厅服务员。<br>【选项】A)<br>无中生有<br>原文从未把小费描述为a sign of generosity（慷慨的象征），段中只讲“付给以小费为<br>主要收入者”的做法，与慷慨无关。<br>B)<br>✓ 正确<br>earning most of their income via tips ↔was considered essential for waiters<br>U.S. customers historically tipped ↔was considered<br>预判“小费对低薪服务员是必需收入”，四个选项中只有was considered essential for<br>waiters准确对应“essential（必需）+ waiters（服务员）”，故锁 B。<br>C)<br>张冠李戴<br>was a way of rewarding diligence（奖励勤勉）对应的是reward high-quality<br>service（奖励优质服务）的概念，那是第 2 段对“过去事后小费”的描述，与 Q21 限定<br>的Paragraph 1不符；且 diligence（勤勉）≠ high-quality service（优质服务）。<br>D)<br>与原文相反<br>原文说小费集中给“以小费为主要收入”的工种（如低于最低工资的服务员），暗示在那些<br>工种里给小费几乎是惯例、并非可有可无；was optional in most businesses反过来说<br>“在大多数行业里可给可不给”，与“传统上限定特定行业”的事实相反，且 most<br>businesses 范围被放大。<br>与过去的小费相比，如今的小费________。<br>A) 支付频率大大降低<br>B) 较少被提前要求<br>C) 与服务质量的关系更小<br>D) 对员工收入的贡献更少<br>【答案】C （细节题）<br>【判型】题干Compared with tips in the past, today's tips要求找两个时点之间的差异，是对原文<br>显式对比的复盘，非推断。<br>【拆句】Compared with tips in the past, today's tips ________. Compared with tips in the past<br>是过去分词短语作状语，逻辑主语是 today's tips；主语 today's tips 后接空缺谓语，由选<br>项补全；无从句、无否定，结构平铺。",
+    "tips": "题干Compared with tips in the past, today's tips要求找两个时点之间的差异，是对原文",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_23",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 23,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT1",
+    "title": "2025英二 阅读 Text 1 第23题 (2分)",
+    "stem": "<strong>23. Tip requests are creeping into new kinds of services as a result of ________.</strong>",
+    "options": [
+      "A. the advancement of technology",
+      "B. the desire for income increase",
+      "C. the diversification of business",
+      "D. the emergence of tipflation"
+    ],
+    "answer": "A",
+    "analysis": "【定位】Today's tip requests are often not connected to the salary and service norms that used to<br>determine when and how people tip. Customers in the past nearly always paid tips after<br>receiving a service, such as at the conclusion of a restaurant meal, after getting a haircut or<br>once a pizza was delivered. That timing could reward high-quality service and give workers<br>an incentive to provide it.<br>今天的小费请求往往已不再与过去决定何时及如何付小费的薪资和服务规范相挂钩。过去顾<br>客几乎总是在享受完服务后才付小费，比如餐毕、剪完头发或披萨送达之后；这种时机本可<br>奖励优质服务并激励工人提供优质服务。<br>【选项】A)<br>无中生有<br>原文没说今天小费“被支付的频次”比过去少；恰恰相反，第 4 段tip requests are<br>creeping into new kinds of services暗示场合更多了。are paid much less<br>frequently在频率维度上无原文支撑。<br>B)<br>与原文相反<br>原文It's becoming more common for tips to be requested beforehand明确说“事前<br>请求小费越来越普遍”，所以今天 in advance 的小费请求是更多而非更少；are less<br>often requested in advance恰好把方向写反。<br>C)<br>✓ 正确<br>Today's tip requests are often not connected to the salary and service norms ↔<br>have less to do with service quality<br>That timing could reward high-quality service ↔service quality<br>预判差异维度是“与服务质量挂钩程度下降”，四个选项中只有have less to do with<br>service quality精确命中这一维度，故锁 C。<br>D)<br>与原文相反<br>原文Tip creep and tipflation are now further supplementing the income of many<br>low-wage service workers明确说今天的小费正在“更多地”补贴低薪工人的收入；<br>contribute less to workers' income反向缩小其贡献，与原文相反。<br>小费要求正在渗入新型服务领域，这是________的结果。<br>A) 技术的进步<br>B) 增加收入的愿望<br>C) 业务的多元化<br>D) tipflation的出现<br>【答案】A （细节题）<br>【判型】题干as a result of问的是已被原文用 helps explain why 这类显式因果句写出的原因，属于<br>事实定位，不是推断。",
+    "tips": "题干as a result of问的是已被原文用 helps explain why 这类显式因果句写出的原因，属于",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_24",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 24,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT1",
+    "title": "2025英二 阅读 Text 1 第24题 (2分)",
+    "stem": "<strong>24. The movement toward no-tipping services was intended to ________.</strong>",
+    "options": [
+      "A. promote consumption",
+      "B. enrich income sources",
+      "C. maintain reasonable prices",
+      "D. guarantee income fairness"
+    ],
+    "answer": "D",
+    "analysis": "【拆句】Tip requests are creeping into new kinds of services as a result of ________. 主句 Tip<br>requests are creeping into new kinds of services 用现在进行时表趋势；as a result of<br>引介动名词宾语（由选项补全），是固定因果短语；句式平铺无陷阱。<br>【定位】The prevalence of digital payment devices has made it easier to ask customers for a tip. That<br>helps explain why tip requests are creeping into new kinds of services.<br>数字支付设备的普及让向顾客索取小费变得更容易了。这有助于解释为什么小费请求正在蔓<br>延到新型服务里。<br>【选项】A)<br>✓ 正确<br>The prevalence of digital payment devices ↔the advancement of technology<br>has made it easier to ask customers for a tip ↔the advancement of technology<br>预判原因为“数字支付普及”，A 选项以“technology 进步”作为更宽泛但精准包含原因的<br>上位概念，与原文因果完全吻合，故锁 A。<br>B)<br>张冠李戴<br>the desire for income increase（加薪诉求）对应的是第 7 段to increase employee<br>wages without raising prices, more employers are succumbing to the<br>temptations of tip creep and tipflation，那是雇主“屈从于”小费蔓延的原因，而非小<br>费蔓延到新型服务的直接原因；段位与因果链都不对。<br>C)<br>无中生有<br>原文从未提到“商业多元化 / 业态多元化”导致小费请求扩散；the diversification of<br>business是无中生有的因。<br>D)<br>与原文相反<br>原文This increase is sometimes called tipflation把 tipflation 定义为“小费比例不断上<br>涨的预期”，是“小费蔓延”现象的结果或同伴现象，而非其原因；the emergence of<br>tipflation把结果当原因，因果倒置。<br>取消小费服务的运动旨在________。<br>A) 促进消费<br>B) 丰富收入来源<br>C) 维持合理价格<br>D) 保障收入公平<br>【答案】D （细节题）<br>【判型】原文用 To ensure that ... 直接交代了该运动的目的，题干intended to问的就是这一显式目<br>的，属细节定位。<br>【拆句】The movement toward no-tipping services was intended to ________. 主语 The<br>movement toward no-tipping services 后接被动谓语 was intended to + 不定式（由选<br>项补全 do 动词）；toward 介词短语作主语后置定语；结构平铺无陷阱。",
+    "tips": "原文用 To ensure that ... 直接交代了该运动的目的，题干intended to问的就是这一显式目",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_25",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 25,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT1",
+    "title": "2025英二 阅读 Text 1 第25题 (2分)",
+    "stem": "<strong>25. It can be learned from the last paragraph that tipping ________.</strong>",
+    "options": [
+      "A. is becoming a burden for customers",
+      "B. helps encourage quality service",
+      "C. is vital to business development",
+      "D. reflects the need to reduce prices"
+    ],
+    "answer": "A",
+    "analysis": "【定位】To ensure that all employees were paid fair wages, some restaurants banned tipping and<br>increased prices, but this movement toward no-tipping services has largely fizzled out.<br>为了确保所有员工都拿到公平的工资，一些餐厅禁止小费并提高了菜价，但这场无小费服务<br>运动已大体熄火。<br>【选项】A)<br>无中生有<br>原文没说该运动旨在promote consumption（促进消费）；提价反而可能抑制消费，与<br>原文意图不符。<br>B)<br>答非所问<br>enrich income sources（丰富收入来源）问的是收入“多样化”，但原文目的是“公平”而<br>非“多样”——禁止小费、单一靠工资恰恰是减少而非丰富收入来源；与目的相反。<br>C)<br>与原文相反<br>原文明确说该运动选择了increased prices（提价），并不是为了维持合理价格；<br>maintain reasonable prices与原文做法相反。<br>D)<br>✓ 正确<br>To ensure that all employees were paid fair wages ↔guarantee income fairness<br>all employees ↔income fairness<br>预判目的是“工资公平”，四选项中 D 直接用“guarantee income fairness”复刻原文<br>ensure...fair wages，是最直接的同义替换，故锁 D。<br>从最后一段可以了解到，小费________。<br>A) 正在成为顾客的负担<br>B) 有助于鼓励优质服务<br>C) 对业务发展至关重要<br>D) 反映了降低价格的需求<br>【答案】A （推断题）<br>【判型】题干It can be learned from the last paragraph that tipping含 It can be learned<br>from，是典型推断题信号。<br>【拆句】It can be learned from the last paragraph that tipping ________. It 为形式主语，that 引<br>导真正主语从句 tipping ________；从句主语 tipping 后接空缺谓语（由选项补全）；can<br>be learned from 是被动情态结构，提示答案是引申而非原文照搬。<br>【定位】However, many customers are frustrated because they feel they are being asked for too high<br>of a tip, too often. And, as our research emphasizes, tipping now seems to be more coercive,<br>less generous and often completely dissociated from service quality.<br>然而许多顾客感到沮丧，因为他们觉得自己被要求支付太高的小费、还过于频繁。而且，正<br>如我们的研究所强调的，小费如今似乎更具强制性、更少出于慷慨，且常常与服务质量完全<br>脱钩。",
+    "tips": "题干It can be learned from the last paragraph that tipping含 It can be learned",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2025_26",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 26,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT2",
+    "title": "2025英二 阅读 Text 2 第26题 (2分)",
+    "stem": "<strong>26. According to the first two paragraphs, the NHS ________.</strong>",
+    "options": [
+      "A. is troubled by funding deficiencies",
+      "B. can hardly satisfy people's needs",
+      "C. can barely retain its current employees",
+      "D. is rivalled by private medical services"
+    ],
+    "answer": "B",
+    "analysis": "根据前两段,NHS________。<br>A) 受到资金不足的困扰<br>B) 难以满足人们的需求<br>C) 几乎无法留住现有员工<br>D) 受到私营医疗服务的竞争<br>【答案】B （细节题）<br>【判型】题干 According to the first two paragraphs, the NHS ________ 要求依据指定段落补全对<br>NHS 现状的客观描述，没有 infer/imply/mainly about，是典型段内细节归纳。",
+    "tips": "题干 According to the first two paragraphs, the NHS ________ 要求依据指定段落补全对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_27",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 27,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT2",
+    "title": "2025英二 阅读 Text 2 第27题 (2分)",
+    "stem": "<strong>27. One answer to the crisis in health and care is to ________.</strong>",
+    "options": [
+      "A. boost the efficiency of hospitals",
+      "B. lighten the burden on social care",
+      "C. increase resources for primary care",
+      "D. reduce the pressure on communities"
+    ],
+    "answer": "C",
+    "analysis": "【拆句】According to the first two paragraphs, the NHS ________. 是 \"介词短语 + 主语 + 待补谓<br>语\" 的不完整陈述结构，According to 引导信息来源状语，主句缺谓语，选项要接成对<br>NHS 的判断；无否定、无比较，结构平铺，无陷阱。<br>【定位】With more than 6.8 million on waitlists, healthcare is becoming increasingly inaccessible for<br>those who cannot opt to pay for private treatment; and the cost of providing healthcare is<br>increasingly squeezing out investment in other public services.<br>在 680 多万人排队候诊的情况下，对于无法选择自费接受私人治疗的人来说，医疗服务正变<br>得越来越难以获得；同时，提供医疗服务的成本正越来越多地挤压对其他公共服务的投入。<br>【选项】A)<br>无中生有<br>is troubled by funding deficiencies 用 funding deficiencies (资金短缺) 替换\"难以满<br>足需求\"，前两段未把矛头指向资金不足，只说成本挤压其他公共服务投入。<br>B)<br>✓ 正确<br>healthcare is becoming increasingly inaccessible ↔can hardly satisfy people's needs<br>model is out of date ↔can hardly satisfy people's needs<br>预判\"需求难被满足\"与 can hardly satisfy people's needs 完全同义，直接锁 B。<br>C)<br>偷换概念<br>can barely retain its current employees 把 pressures on the workforce 偷换成\"留<br>不住员工\"，原文只说人员压力大，并未谈\"留不住/流失\"。<br>D)<br>过度推断<br>is rivalled by private medical services 暗示 NHS 受私营医疗的竞争挑战，原文 pay<br>for private treatment 只是说没钱付私营治疗的人就医难，而非\"NHS 被私营对手<br>击败\"。<br>应对健康和护理危机的一个答案是________。<br>A) 提高医院的效率<br>B) 减轻社会护理的负担<br>C) 增加初级医疗的资源<br>D) 减少社区的压力<br>【答案】C （细节题）<br>【判型】题干 One answer to the crisis in health and care is to ________ 是\"其中一个对策是…\"，<br>要求从原文罗列的建议中挑出一条同义改写，属事实细节。<br>【拆句】One answer to the crisis in health and care is to ________. 是 \"主语 + 系动词 + 不定式<br>表语\" 结构，待补内容是不定式，因此选项均以动词原形开头，是\"做什么\"而非\"是什么\"，<br>结构清楚无陷阱。",
+    "tips": "题干 One answer to the crisis in health and care is to ________ 是\"其中一个对策是…\"，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_28",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 28,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT2",
+    "title": "2025英二 阅读 Text 2 第28题 (2分)",
+    "stem": "<strong>28. \"Reimagining health\" is aimed to ________.</strong>",
+    "options": [
+      "A. reinforce hospital management",
+      "B. readjust healthcare regulations",
+      "C. restructure the health system",
+      "D. resume suspended health reforms"
+    ],
+    "answer": "C",
+    "analysis": "【定位】Much more needs to be invested in communities and primary care to reduce our reliance<br>on hospitals.<br>我们必须在社区和初级医疗上加大投入，以减少对医院的依赖。<br>【选项】A)<br>与原文相反<br>boost the efficiency of hospitals 主张提升医院效率，而原文主张\"减少对医院的依<br>赖\"，方向相反。<br>B)<br>与原文相反<br>lighten the burden on social care 说\"减轻社会照护负担\"，原文说\"capacity in social<br>care needs to be greater\"，即扩容、而非减轻其负担，方向被偷反。<br>C)<br>✓ 正确<br>Much more needs to be invested in communities and primary care ↔<br>increase resources for primary care<br>预判\"加大初级医疗投入\"与 increase resources for primary care 同向同对象，且<br>\"resources\" 是 \"investment\" 的上位概括，直接锁 C。<br>D)<br>偷换概念<br>reduce the pressure on communities 把\"在社区加大投入\"偷换成\"给社区减压\"，原文<br>是\"投资社区\"以减少对医院的依赖，不是给社区减压。<br>重新构想健康\"旨在________。<br>A) 加强医院管理<br>B) 调整医疗保健法规<br>C) 重组健康系统<br>D) 恢复暂停的健康改革<br>【答案】C （细节题）<br>【判型】题干 Reimagining health is aimed to ________ 问该项目的目的，是对原文显性表述的指<br>认，不需推断。<br>【拆句】\"Reimagining health\" is aimed to ________. 主语是项目名，谓语 is aimed to 后接动词<br>原形作目的，选项均以 \"re-\" 开头的动词，看似工整实则要靠原文区分，不被字形误导是<br>关键。",
+    "tips": "题干 Reimagining health is aimed to ________ 问该项目的目的，是对原文显性表述的指",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_29",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 29,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT2",
+    "title": "2025英二 阅读 Text 2 第29题 (2分)",
+    "stem": "<strong>29. To maximise the nation's health, the author suggests ________.</strong>",
+    "options": [
+      "A. introducing relevant taxation policies",
+      "B. paying due attention to social factors",
+      "C. reevaluating major health outcomes",
+      "D. enhancing the quality of healthcare"
+    ],
+    "answer": "B",
+    "analysis": "【定位】That is why the Reform think tank is launching a new programme of work entitled<br>\"Reimagining health\", supported by ten former health ministers. Together, we are calling for a<br>much more open and honest conversation about the future of health in the UK, and an \"urgent<br>rethink\" of the hospital-centric model we retain.<br>正因如此，Reform 智库正在启动一项名为\"重新构想健康\"的新工作计划，由十位前卫生大<br>臣支持。我们共同呼吁，就英国健康的未来进行一场更加开放和坦诚的对话，并对我们仍保<br>留的以医院为中心的模式进行一次\"紧急重新思考\"。<br>【选项】A)<br>与原文相反<br>reinforce hospital management 主张\"强化医院管理\"，原文要质疑、要 rethink 的恰<br>恰是\"以医院为中心\"的模式，方向相反。<br>B)<br>无中生有<br>readjust healthcare regulations 把项目目的窄化为\"调整医疗法规\"，原文从未谈及法<br>规调整，是无中生有。<br>C)<br>✓ 正确<br>an \"urgent rethink\" of the hospital-centric model we retain ↔restructure the health system<br>预判\"重构以医院为中心的体系\"与 restructure the health system 完全同义，锁 C。<br>D)<br>过度推断<br>resume suspended health reforms 说\"重启已搁置的改革\"，原文虽提 two decades<br>of strategies and a number of major health reforms，但只是说\"未取得实质进展\"，<br>并未说改革已被搁置、要 resume。<br>为了最大化国民健康,作者建议________。<br>A) 引入相关税收政策<br>B) 对社会因素给予应有关注<br>C) 重新评估主要健康结果<br>D) 提升医疗保健质量<br>【答案】B （细节题）<br>【判型】题干 To maximise the nation's health, the author suggests ________ 问作者明确给出的<br>对策，是显性主张的指认，不属于隐含推理。<br>【拆句】To maximise the nation's health, the author suggests ________. To 不定式作目的状语前<br>置，主句 the author suggests 后接动名词宾语，选项都以 -ing 形式开头。注意 suggests<br>在此是\"建议\"而非\"暗示\"。<br>【定位】Much more important are the places we live, work and socialise—yet there is no clear cross-<br>government strategy for improving these social determinants of health.<br>更重要的是我们居住、工作和社交的场所——然而目前并没有清晰的跨政府战略来改善这些<br>健康的社会决定因素。",
+    "tips": "题干 To maximise the nation's health, the author suggests ________ 问作者明确给出的",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_30",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 30,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT2",
+    "title": "2025英二 阅读 Text 2 第30题 (2分)",
+    "stem": "<strong>30. It can be inferred that local leaders should ________.</strong>",
+    "options": [
+      "A. exercise their power more reasonably",
+      "B. develop a stronger sense of responsibility",
+      "C. play a bigger role in the health system",
+      "D. understand people's health needs better"
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>偷换概念<br>introducing relevant taxation policies 把原文 taxpayers are left with the heavy<br>price tag 中\"纳税人\"这个词放大为\"出台税收政策\"，原文是讲政策被废除导致纳税人买<br>单，并未建议引入税收政策。<br>B)<br>✓ 正确<br>Much more important are the places we live, work and socialise ↔<br>paying due attention to social factors<br>these social determinants of health ↔paying due attention to social factors<br>预判\"重视社会决定因素\"与 paying due attention to social factors 完全同义，锁 B。<br>C)<br>以偏概全<br>reevaluating major health outcomes 抓住原文 about 20% of health outcomes 一<br>处的 outcomes，把\"评估健康结果\"立为主张，但 20% 数据只是辅证作者论点，作者并<br>未呼吁\"reevaluate outcomes\"。<br>D)<br>与原文相反<br>enhancing the quality of healthcare 主张\"提升医疗服务质量\"，正是作者在本段开头<br>明确反对的\"fix the NHS\"路径，方向相反。<br>可以推断,地方领导人应该________。<br>A) 更合理地行使他们的权力<br>B) 培养更强的责任感<br>C) 在健康系统中发挥更大作用<br>D) 更好地理解人们的健康需求<br>【答案】C （推断题）<br>【判型】题干 It can be inferred that local leaders should ________ 含 inferred，属推断题。<br>【拆句】It can be inferred that local leaders should ________. 形式主语 It + can be inferred +<br>that 从句，that 从句中 local leaders 是真主语、should 是情态动词、待补谓语。结构常<br>见无陷阱，关键是不被 inferred 吓住、仍以原文为根。<br>【定位】What health functions should remain at the centre, and what should be given to local leaders,<br>often responsible for services that create health, and with a much better understanding of the<br>needs of their populations?<br>哪些卫生职能应当保留在中央，而哪些应当交给地方负责人——他们往往负责创造健康的相<br>关服务，并对其所辖人群的需求有更为深入的理解？",
+    "tips": "题干 It can be inferred that local leaders should ________ 含 inferred，属推断题。",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2025_31",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 31,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT3",
+    "title": "2025英二 阅读 Text 3 第31题 (2分)",
+    "stem": "<strong>31. According to Paragraph 1, Nagpur's plan proposes measures to ________.</strong>",
+    "options": [
+      "A. tackle extreme weather",
+      "B. ensure construction quality",
+      "C. monitor emergency warnings",
+      "D. address excessive workloads"
+    ],
+    "answer": "A",
+    "analysis": "根据第一段,Nagpur的计划提出了哪些措施?<br>A) 应对极端天气<br>B) 确保建筑质量<br>C) 监测紧急预警<br>D) 解决工作负荷过重问题",
+    "tips": "阅读理解定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 阅读理解"
+  },
+  {
+    "id": "E2025_32",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 32,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT3",
+    "title": "2025英二 阅读 Text 3 第32题 (2分)",
+    "stem": "<strong>32. One problem with existing HAPs is that they ________.</strong>",
+    "options": [
+      "A. prove too costly to be implemented",
+      "B. lack localized alert-issuing criteria",
+      "C. give delayed responses to heat waves",
+      "D. keep hospitals under great pressure"
+    ],
+    "answer": "A",
+    "analysis": "【答案】A （细节题）<br>【判型】According to Paragraph 1, Nagpur's plan proposes measures to ________ 既限定段落<br>又问具体措施，是典型细节题。<br>【拆句】According to Paragraph 1, Nagpur's plan proposes measures to ________ 主干<br>Nagpur's plan proposes measures，to 不定式接选项构成 propose measures to do<br>sth.「提出做某事的措施」。无陷阱，难点只在「目的状语 to 后的动作」要与原文对应。<br>【定位】Nagpur's plan, for instance, calls for hospitals to set aside \"cold wards\" in the summer for<br>treating heatstroke patients, and advises builders to give construction laborers a break from<br>work on very hot days.<br>比如 Nagpur 的方案要求医院在夏天专门预留「冷病房」以救治中暑患者，并建议建筑商在<br>极热天让建筑工人停工休息。<br>【选项】A)<br>✓ 正确<br>on very hot days ↔extreme weather<br>treating heatstroke patients ↔tackle<br>预判要的就是「应对高温」，tackle extreme weather 与两条措施全部对应，且选项里<br>只有 A 命中「热」这一核心，可直接锁定。<br>B)<br>偷换概念<br>原文只让建筑工人「在极热天 break from work」，目的是保护工人，不是保证工程质<br>量；ensure construction quality 把对工人的保护偷换成对工程质量的保证。<br>C)<br>偷换概念<br>原文是 HAP 在「发布」高温警报、提醒医院，monitor emergency warnings「监控应<br>急警报」把发布者偷换成监控者，动作主体与对象颠倒。<br>D)<br>无中生有<br>原文让工人在「极热天」停工是为了抗热，并非因为工作量过大；address excessive<br>workloads 把「天气过热」偷换成「工作量过大」，原文未提及工作量问题。<br>现有高温行动计划存在的一个问题是<br>A) 被证明成本过高而无法实施<br>B) 缺乏本地化的预警发布标准<br>C) 对热浪的响应延迟<br>D) 使医院承受巨大压力<br>【答案】B （细节题）<br>【判型】One problem with existing HAPs is that they ________ 问一个具体问题，不带<br>infer/suggest，是细节题。",
+    "tips": "According to Paragraph 1, Nagpur's plan proposes measures to ________ 既限定段落",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_33",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 33,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT3",
+    "title": "2025英二 阅读 Text 3 第33题 (2分)",
+    "stem": "<strong>33. Mumbai's case shows that India's heat alert systems need to ________.</strong>",
+    "options": [
+      "A. include other factors besides temperature",
+      "B. take subtle weather changes into account",
+      "C. prioritize potentially disastrous heat waves",
+      "D. draw further support from local authorities"
+    ],
+    "answer": "A",
+    "analysis": "【拆句】One problem with existing HAPs is that they ________ 是 One problem is that... 的同位<br>结构，that 从句的主语 they 指代 existing HAPs，选项内容直接做 they 的谓语部分。结<br>构无陷阱。<br>【定位】And their triggering thresholds often are not customized to the local climate.<br>并且，它们的触发阈值常常没有根据当地气候进行定制。<br>【选项】A)<br>偷换概念<br>原文是「资金不足」（lack adequate funding），选项 prove too costly to be<br>implemented「实施成本太高」把方向倒过来：缺钱不等于成本太高，更不能推出「无<br>法实施」。<br>B)<br>✓ 正确<br>triggering thresholds ↔alert-issuing criteria<br>are not customized to the local climate ↔lack localized<br>预判要的「预警门槛没本地化」与 lack localized alert-issuing criteria 字面对位，<br>可锁。<br>C)<br>无中生有<br>原文谈的是阈值不本地化、资金不够，从未谈到响应速度；give delayed responses to<br>heat waves 凭空引入 delayed 这一时间维度。<br>D)<br>张冠李戴<br>原文从未说现有 HAPs 给医院造成压力；keep hospitals under great pressure 借第 1<br>段 hospitals 的眼熟感骗考生。<br>Mumbai的案例表明印度的高温预警系统需要<br>A) 纳入温度以外的其他因素<br>B) 将细微的天气变化考虑在内<br>C) 优先关注可能造成灾难的热浪<br>D) 获得地方当局的进一步支持<br>【答案】A （细节题）<br>【判型】Mumbai's case shows that India's heat alert systems need to ________ 用一个具体案例<br>追问系统的改进方向，案例和改进点都在原文里直接说出，是细节题。<br>【拆句】Mumbai's case shows that India's heat alert systems need to ________ 主干 Mumbai's<br>case shows that...，宾语从句主语是 India's heat alert systems，need to 接选项形成不<br>定式。结构平铺，无陷阱。",
+    "tips": "Mumbai's case shows that India's heat alert systems need to ________ 用一个具体案例",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_34",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 34,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT3",
+    "title": "2025英二 阅读 Text 3 第34题 (2分)",
+    "stem": "<strong>34. Kotharkar holds that a vulnerability map can help ________.</strong>",
+    "options": [
+      "A. prevent the harm of high humidity",
+      "B. target areas needing special attention",
+      "C. expand the Nagpur project's coverage",
+      "D. make relief plans for heat-stricken people"
+    ],
+    "answer": "B",
+    "analysis": "【定位】But the effects of the heat were amplified by humidity—an often neglected factor in heat alert<br>systems—and the lack of shade at the late-morning outdoor ceremony.<br>但高温的影响被湿度（这是高温预警系统中常被忽视的一个因素）和上午晚些时候户外仪式<br>上缺乏遮蔽放大了。<br>【选项】A)<br>✓ 正确<br>humidity—an often neglected factor in heat alert systems ↔<br>other factors besides temperature<br>often neglected factor ↔include<br>预判「应当纳入温度以外的因素」与 include other factors besides temperature 字面<br>对位，可锁定。<br>B)<br>偷换概念<br>原文说湿度等因素被忽视，并未谈天气是否「细微变化」；take subtle weather<br>changes into account 把 neglected factor 偷换为 subtle change，方向错位。<br>C)<br>无中生有<br>原文要的是把更多因素纳入考量，并非要在多场热浪里挑「最可能造成灾难」的那一<br>场；prioritize potentially disastrous heat waves 凭空引入「排序」概念。<br>D)<br>无中生有<br>原文谈的是预警系统应纳入哪些气候因素，与地方政府支持无关；draw further<br>support from local authorities 凭空引入「找地方政府要资源」的话题。<br>Kotharkar认为脆弱性地图能够帮助<br>A) 预防高湿度的危害<br>B) 锁定需要特别关注的区域<br>C) 扩大Nagpur项目的覆盖范围<br>D) 为受高温影响的人群制定救援计划<br>【答案】B （细节题）<br>【判型】Kotharkar holds that a vulnerability map can help ________ 直接问 vulnerability map<br>能帮什么，是直问功能的细节题。<br>【拆句】Kotharkar holds that a vulnerability map can help ________ 主干 Kotharkar holds<br>that...，that 从句中 a vulnerability map can help 接选项作宾语或不定式。无陷阱。",
+    "tips": "Kotharkar holds that a vulnerability map can help ________ 直接问 vulnerability map",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_35",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 35,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT3",
+    "title": "2025英二 阅读 Text 3 第35题 (2分)",
+    "stem": "<strong>35. According to the last paragraph, researchers believe that HAPs should ________.</strong>",
+    "options": [
+      "A. focus more on heatstroke treatment",
+      "B. apply for more government grants",
+      "C. invite wider public participation",
+      "D. serve a broader range of purposes"
+    ],
+    "answer": "D",
+    "analysis": "【定位】For example, neighborhoods with a large elderly population or informal dwellings that cope<br>poorly with heat could get special warnings or be bolstered with cooling centers. The Nagpur<br>project has already created a risk and vulnerability map, which enabled Kotharkar to tell<br>officials which neighborhoods to focus on in the event of a heat wave this summer.<br>比如，老年人口多或难以抵御高温的非正式住宅集中的社区，可获得专项预警或被加强配备<br>冷却中心。Nagpur 项目已建立了一份风险与脆弱性地图，让 Kotharkar 能告诉官员热浪来<br>临时应重点关注哪些社区。<br>【选项】A)<br>张冠李戴<br>prevent the harm of high humidity 把 P3 中 Mumbai 段的湿度问题嫁接到<br>vulnerability map 的功能上；地图本身从不直接「防湿度伤害」。<br>B)<br>✓ 正确<br>which neighborhoods to focus on in the event of a heat wave ↔<br>target areas needing special attention<br>focus responses on the populations most at risk ↔areas needing special attention<br>预判「锁定该重点关注的社区」与 target areas needing special attention 在动词、对<br>象、限定语三处全部对位，可锁。<br>C)<br>偷换概念<br>原文 The Nagpur project has already created a risk and vulnerability map 只是说<br>Nagpur 项目已建好这张地图，并未说要靠这张地图去扩大 Nagpur 项目的覆盖范围；<br>expand the Nagpur project's coverage 把「项目里已有这张图」歪曲成「这张图去扩<br>大项目」。<br>D)<br>偷换概念<br>原文说地图用于「告诉官员重点关注哪些社区」，并未说用于「为已中暑的人做救援计<br>划」；make relief plans for heat-stricken people 把预防/聚焦的功能改成事后救援，<br>对象与时序都偏了。<br>根据最后一段,研究人员认为高温行动计划应该<br>A) 更多地关注中暑治疗<br>B) 申请更多政府拨款<br>C) 邀请更广泛的公众参与<br>D) 服务于更广泛的目的<br>【答案】D （细节题）<br>【判型】According to the last paragraph, researchers believe that HAPs should ________ 是<br>「指定段 + 转述 + should」的标准细节题题干。",
+    "tips": "According to the last paragraph, researchers believe that HAPs should ________ 是",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_36",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 36,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT4",
+    "title": "2025英二 阅读 Text 4 第36题 (2分)",
+    "stem": "<strong>36. According to Paragraph 1, desire paths are a result of ________.</strong>",
+    "options": [
+      "A. the curiosity to explore surrounding hills",
+      "B. the necessity to preserve green spaces",
+      "C. the tendency to pursue convenience",
+      "D. the wish to find comfort in solitude"
+    ],
+    "answer": "C",
+    "analysis": "根据第1段，欲望路径是什么的结果<br>A) 探索周围山丘的好奇心<br>B) 保护绿色空间的必要性<br>C) 追求便利的倾向<br>D) 在独处中寻找舒适的愿望<br>【答案】C （细节题）",
+    "tips": "细节题定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_37",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 37,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT4",
+    "title": "2025英二 阅读 Text 4 第37题 (2分)",
+    "stem": "<strong>37. It can be inferred that Ohio State University ________.</strong>",
+    "options": [
+      "A. intends to improve its desire paths",
+      "B. leads in the research on desire paths",
+      "C. guides the creation of its desire paths",
+      "D. takes a positive view of desire paths"
+    ],
+    "answer": "D",
+    "analysis": "【判型】According to Paragraph 1, desire paths are a result of ________要求基于第一段事实给出<br>desire paths 形成的原因，没有 infer/imply 等推断信号，属于细节题。<br>【拆句】Q36主干是 desire paths are a result of ________，be a result of 表示\"是……的结果\"，空<br>格里要填的是\"导致 desire paths 出现的原因\"，注意方向不是\"desire paths 导致了什么\"。<br>【定位】these routes of collective disobedience cut corners, bisect lawns and cross hills, representing<br>the natural capability of people (and animals) to go from point A to point B most effectively.<br>这些集体\"违规\"踩出的路径抄近路、横切草坪、翻越小山，体现了人（以及动物）从 A 点到<br>B 点尽可能高效行走的天性。<br>【选项】A)<br>偷换概念<br>原文 cross hills 只是描述路径会\"翻山\"，并非出于curiosity to explore surrounding<br>hills这种\"探山好奇\"的动机。<br>B)<br>与原文相反<br>原文说人们 bisect lawns 切草坪，正是不顾绿地保育的体现，与the necessity to<br>preserve green spaces\"为保护绿地\"刚好相反。<br>C)<br>✓ 正确<br>to go from point A to point B most effectively ↔the tendency to pursue convenience<br>the natural capability of people (and animals) ↔the tendency to<br>the tendency to pursue convenience精确对应原文\"以最高效方式从 A 到 B 的天<br>性\"，与预判完全一致。<br>D)<br>无中生有<br>the wish to find comfort in solitude谈\"在独处中找慰藉\"，第一段完全没有<br>solitude/comfort 的相关表述。<br>可以推断出Ohio State University<br>A) 打算改善其欲望路径<br>B) 在欲望路径研究方面处于领先地位<br>C) 引导其欲望路径的创建<br>D) 对欲望路径持积极看法<br>【答案】D （推断题）<br>【判型】It can be inferred that Ohio State University里的 inferred 直接亮明推断题身份，要求基<br>于事实推态度。<br>【拆句】Q37结构是 It can be inferred that + 主语 + 谓语，that 引导宾语从句，主语锁死在 Ohio<br>State University，要补出的是\"学校对 desire paths 的态度或做法\"。",
+    "tips": "According to Paragraph 1, desire paths are a result of ________要求基于第一段事实给出",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2025_38",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 38,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT4",
+    "title": "2025英二 阅读 Text 4 第38题 (2分)",
+    "stem": "<strong>38. The images on the Reddit webpage reflect ________.</strong>",
+    "options": [
+      "A. conflicting opinions on the use of desire paths",
+      "B. the call to upgrade the designing of public spaces",
+      "C. the demand for proper planning of desire paths",
+      "D. growing concerns over the loss of public spaces"
+    ],
+    "answer": "A",
+    "analysis": "【定位】Ohio State University allowed its students to navigate the Oval, a lawn in the centre of<br>campus, freely, then proceeded to pave the desire paths, creating a web of effective routes<br>students had established.<br>俄亥俄州立大学先允许学生在校园中央草坪 Oval 上自由行走，然后把学生踩出的小径铺设<br>固化，形成一张由学生确立的高效路径网。<br>【选项】A)<br>过度推断<br>原文只说学校已经把 desire paths 铺好，没说要去improve its desire paths\"再改良\"，<br>方向被多推了一步。<br>B)<br>无中生有<br>原文只举学校处理 Oval 的一例做法，无任何\"在 desire paths 研究领域领先\"的信息，<br>leads in the research on desire paths是无中生有。<br>C)<br>与原文相反<br>原文清楚说allowed its students to navigate...freely，路径是学生自由走出来的，不是<br>学校guides the creation引导的。<br>D)<br>✓ 正确<br>proceeded to pave the desire paths, creating a web of effective routes students had established<br>↔takes a positive view of desire paths<br>allowed its students to navigate the Oval...freely ↔positive view<br>takes a positive view of desire paths恰好对应学校\"允许踩+主动铺路\"所暗含的认可态<br>度，与预判一致。<br>Reddit网页上的图片反映了<br>A) 关于欲望路径使用的矛盾观点<br>B) 升级公共空间设计的呼吁<br>C) 对欲望路径进行适当规划的需求<br>D) 对公共空间丧失日益增长的担忧<br>【答案】A （细节题）<br>【判型】The images on the Reddit webpage reflect ________问的是图所反映的客观信息，需要回<br>原文找作者就这些图给出的解读。<br>【拆句】Q38主干是 The images...reflect ________，reflect 这里是\"反映/体现\"，宾语是要填的内<br>容，介词短语 on the Reddit webpage 修饰 images。",
+    "tips": "The images on the Reddit webpage reflect ________问的是图所反映的客观信息，需要回",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2025_39",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 39,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT4",
+    "title": "2025英二 阅读 Text 4 第39题 (2分)",
+    "stem": "<strong>39. The example of the Wickquasgeck Trail illustrates ________.</strong>",
+    "options": [
+      "A. the growth of New York City",
+      "B. the Dutch origin of desire paths",
+      "C. the importance of urban planning",
+      "D. the recognition of desire paths"
+    ],
+    "answer": "D",
+    "analysis": "【定位】A Reddit webpage devoted to the phenomenon, boasting nearly 50,000 members, showcases<br>images of local desire paths adorned with signs instructing pedestrians to adhere to<br>designated walkways, underscoring the rebellious nature inherent in these human-made<br>tracks. This clash highlights an ongoing struggle between the organic, user-driven evolution<br>of public spaces and the desire for a visually curated and controlled urban environment.<br>一个近五万成员的 Reddit 专题页展示了各地 desire paths 的照片，上面贴着\"请走指定步<br>道\"的告示牌，凸显了这些自发路径的反叛特性。这种碰撞凸显了一种持续较量：公共空间<br>里用户主导的自然演化 vs. 视觉规整、可控的城市环境的诉求。<br>【选项】A)<br>✓ 正确<br>This clash highlights an ongoing struggle ↔conflicting opinions on the use of desire paths<br>between the organic, user-driven evolution of public spaces and the desire for a visually curated<br>and controlled urban environment<br>↔on the use of desire paths<br>conflicting opinions on the use of desire paths精准把段末总结句的双方对立概括出<br>来，与预判一致。<br>B)<br>无中生有<br>原文谈的是\"该不该接纳踩径\"的对立，没有call to upgrade the designing of public<br>spaces\"号召升级设计\"的语义。<br>C)<br>偷换概念<br>原文反对方甚至要instructing pedestrians to adhere to designated walkways禁止走<br>desire paths，更谈不上demand for proper planning of desire paths要\"正规规划<br>desire paths\"。<br>D)<br>偷换概念<br>原文焦点是\"踩径与禁令的冲突\"，并非growing concerns over the loss of public<br>spaces担心公共空间\"流失\"。<br>Wickquasgeck Trail的例子说明了<br>A) 纽约市的发展<br>B) 欲望路径的荷兰起源<br>C) 城市规划的重要性<br>D) 对欲望路径的认可<br>【答案】D （例证目的题）<br>【判型】illustrates直接亮明例证题身份，问的是 Wickquasgeck Trail 这个例子在说明什么观点。<br>【拆句】Q39结构是 The example of X illustrates ________，主语是\"X 这个例子\"，谓语 illustrate<br>后接\"被说明的对象\"，要避开把例子内容当答案。",
+    "tips": "illustrates直接亮明例证题身份，问的是 Wickquasgeck Trail 这个例子在说明什么观点。",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2025_40",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 40,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2025_TEXT4",
+    "title": "2025英二 阅读 Text 4 第40题 (2分)",
+    "stem": "<strong>40. It can be learned from the last paragraph that desire paths ________.</strong>",
+    "options": [
+      "A. reveal humans' deep respect for nature",
+      "B. are crucial to humans' mental wellbeing",
+      "C. are a human imitation of animal behaviour",
+      "D. show a shared trait in humans and animals"
+    ],
+    "answer": "D",
+    "analysis": "【定位】The Wickquasgeck Trail is an example of a historical desire path, created by Native<br>Americans to cross the forests of Manhattan and move between settlements quickly.<br>Wickquasgeck Trail 是一条历史上的 desire path，由美洲原住民开辟，用以穿越曼哈顿森<br>林、在聚居点之间快速往返。<br>【选项】A)<br>答非所问<br>原文确实顺带提到Broadway演变史，但作者举例不是为了说the growth of New York<br>City\"纽约市的成长\"，纽约只是 desire path 留下的副产品。<br>B)<br>与原文相反<br>原文明说这条路径created by Native Americans，是原住民开辟的，荷兰人只是后来拓<br>宽，the Dutch origin of desire paths把起源颠倒了。<br>C)<br>与原文相反<br>整段是讲 desire paths 反过来塑造了城市的街道，恰好defies the grid-based system<br>违反了规划，而非证明the importance of urban planning规划的重要性。<br>D)<br>✓ 正确<br>The Wickquasgeck Trail is an example of a historical desire path ↔<br>the recognition of desire paths<br>Broadway stands out as one of the few areas in NYC that defies the grid-based system ↔<br>recognition<br>the recognition of desire paths恰是这条历史 desire path 被一代代沿用、保留至今的<br>论点概括，与预判一致。<br>从最后一段可以得知欲望路径<br>A) 揭示了人类对自然的深刻尊重<br>B) 对人类的心理健康至关重要<br>C) 是人类对动物行为的模仿<br>D) 显示了人类和动物的共同特征<br>【答案】D （推断题）<br>【判型】It can be learned from the last paragraph that desire paths ________里的 learned 等价<br>于 inferred，是末段推断题。<br>【拆句】Q40主干 It can be learned...that desire paths ________，that 后是宾语从句，主语锁死<br>desire paths，要补出的是它在末段被赋予的性质或意义。",
+    "tips": "It can be learned from the last paragraph that desire paths ________里的 learned 等价",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2025_41",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 41,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2025_PARTB",
+    "title": "2025英二 新题型 Part B 第41题 (2分)",
+    "stem": "请结合上方《2025年新题型 Part B》原文及 A–G 候选项，为 <strong>41. (41)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "F",
+    "analysis": "<strong>【正确答案】[F] Be a salesman.</strong><br>通篇归纳<br>【小标题】Be a salesman.<br>做一个推销员。<br>【主旨】要反复宣传、为主意争取认同<br>本段说好主意不会自己立住——Great ideas don't stand alone，提了一次不等于被采纳<br>you can't mention your suggestion once and expect it to be adopted，要主动为方案<br>造势、兜售它的好处 you'll need to champion your plan and sell its merits，还要经得起<br>质疑、面对不同听众反复解释。整段主旨就是\"像推销一样持续争取认同\"。<br>【依据】sell merits = 推销员<br>本段核心动作 champion your plan and sell its merits 正是\"推销\"，与 Be a salesman<br>的\"salesman（推销员）\"是同义概括——推销员就是反复宣传、为产品争取买单的人，恰<br>好概括了\"反复讲、经得起质疑、换方式解释\"这一整段。<br>【竞争】[ E ] 误读为\"招反对\"<br>段中有 stand up to scrutiny and criticism（经受质疑批评），容易让人联想到 Invite<br>resistance。但本段说的是\"被质疑时顶得住\"，是推销过程中的一环，并非\"主动去招来反<br>对\"；E 把\"承受批评\"偷换成\"主动邀请反对\"，概括不了\"sell its merits\"这条主线。<br>【验证】把 Be a salesman 放回本段：整段从 champion your plan and sell its merits 到反复解<br>释，讲的都是\"像推销员一样持续争取认同\"，覆盖全段而非某一句，与全文\"五步法各讲一<br>招\"的组织自洽。<br>[ A ] Stay positive.<br>[ B ] Respect the past.<br>[ C ] Use channels.<br>[ D ] Give it time.<br>[ E ] Invite resistance.<br>[ F ] Be a salesman.<br>[ G ] Be humble.",
+    "tips": "要反复宣传、为主意争取认同",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2025_42",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 42,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2025_PARTB",
+    "title": "2025英二 新题型 Part B 第42题 (2分)",
+    "stem": "请结合上方《2025年新题型 Part B》原文及 A–G 候选项，为 <strong>42. (42)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】[C] Use channels.</strong><br>通篇归纳<br>【小标题】Use channels.<br>利用渠道。<br>【主旨】经由同事、部门等渠道去推进<br>本段说有时先找老板，有时则要在同事或利益相关者中建立联盟 it's useful to build a<br>coalition among your co-workers or other stakeholders；举的例子是\"我已经联系了技<br>术部门的几个人讨论\" I connected with a few people in our tech department to<br>discuss。主旨是\"通过组织内的人和部门这些渠道去铺路、争取支持\"。<br>【依据】co-workers/department = channels<br>本段反复在讲经由\"哪些人、哪些路径\"推进——build a coalition among your co-<br>workers or other stakeholders 与 I connected with a few people in our tech<br>department，这些\"同事、利益相关者、技术部门\"正是 Use channels 里的\"channels（渠<br>道）\"。标题是对全段\"用渠道铺路\"的同义概括。<br>【竞争】[ F ] 已被 41 选走且非本段主旨<br>本段也涉及为建议争取支持，乍看像 Be a salesman。但本段重点不在\"反复宣传内容\"，而<br>在\"经由哪些人/部门这些渠道\"去推进；且 F 已是 41 段答案，每条候选只用一次。本段独有<br>的\"co-workers、stakeholders、tech department\"才是题眼，指向 C。<br>【验证】把 Use channels 放回本段：从 build a coalition among your co-workers or other<br>stakeholders 到联系技术部门的例子，全段都在讲\"走渠道、借人脉推进\"，概括的是整段而<br>非个别例子，与五步法并列结构一致。",
+    "tips": "经由同事、部门等渠道去推进",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2025_43",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 43,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2025_PARTB",
+    "title": "2025英二 新题型 Part B 第43题 (2分)",
+    "stem": "请结合上方《2025年新题型 Part B》原文及 A–G 候选项，为 <strong>43. (43)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "G",
+    "analysis": "<strong>【正确答案】[G] Be humble.</strong><br>段首<br>【小标题】Be humble.<br>保持谦逊。<br>【主旨】别自以为是，要谦逊倾听<br>段首点出最大障碍是被人看成爱争辩、好防卫、不接受意见 the owner of an idea is<br>viewed as argumentative, defensive, or close-minded，并直说\"没人喜欢万事通\" No<br>one likes a know-it-all；接着给做法：别气恼，要充分倾听、理解对方角度 listen to their<br>concerns fully, try to understand their perspective。主旨是\"放低姿态、不自负、虚心听<br>取他人\"。<br>【依据】not know-it-all = humble<br>本段反对当 know-it-all（万事通），主张 listen to their concerns fully, try to<br>understand their perspective，这正是 Be humble（谦逊）的内涵：不自负、肯听别人。<br>标题是对全段\"放低姿态\"主旨的同义概括。<br>【竞争】[ E ] 倾听≠主动招反对<br>段中 if people disagree with you, don't be indignant 谈到面对反对的态度，易让人联想<br>Invite resistance。但本段讲的是\"别人反对时要谦虚倾听\"，落点是\"谦逊\"这种自我姿态，<br>不是\"主动去邀请反对\"；E 把\"虚心对待异议\"偷换为\"主动招来异议\"，错在概括对象。<br>【验证】把 Be humble 放回本段：从批评 argumentative, defensive, or close-minded 到主张<br>listen to their concerns fully，整段都在讲\"谦逊待人\"，覆盖全段主旨，与五步法各占一招<br>的结构吻合。",
+    "tips": "别自以为是，要谦逊倾听",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2025_44",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 44,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2025_PARTB",
+    "title": "2025英二 新题型 Part B 第44题 (2分)",
+    "stem": "请结合上方《2025年新题型 Part B》原文及 A–G 候选项，为 <strong>44. (44)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】[B] Respect the past.</strong><br>通篇归纳<br>【小标题】Respect the past.<br>尊重过去。<br>【主旨】肯定旧方案、尊重过去<br>本段说新主意是旧主意的后代 New ideas are the grandchildren of old ones，劝你别贬<br>低旧方案 don't throw old solutions under the bus to make your improvement stand<br>out，要记得旧方案当年也是好主意，肯定先前的贡献能增强你新主意的可信度<br>Appreciating the older contributions。主旨是\"尊重并肯定过去的做法\"。<br>【依据】appreciate old = respect the past<br>本段核心是 Appreciating the older contributions 和不要 throw old solutions under<br>the bus，即珍视过往做法，正是 Respect the past（尊重过去）的同义概括<br>——\"old/older contributions\"对应\"past\"，\"appreciate/不贬低\"对应\"respect\"。<br>【竞争】[ D ] 无\"时间/等待\"之意<br>Give it time 的\"time\"会让人盯上段中 has failed to solve in recent memory 里的时间字<br>眼。但本段没有\"耐心等待\"之意，那句只是说旧方案近来没解决问题；D 与\"尊重旧方案\"的<br>主旨不搭，属话题对不上。<br>【验证】把 Respect the past 放回本段：从 New ideas are the grandchildren of old ones 到<br>Appreciating the older contributions，整段讲的都是\"尊重过去的方案\"，恰好概括全段、<br>不偏窄不偏宽，与并列五步结构自洽。",
+    "tips": "肯定旧方案、尊重过去",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2025_45",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 45,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2025_PARTB",
+    "title": "2025英二 新题型 Part B 第45题 (2分)",
+    "stem": "请结合上方《2025年新题型 Part B》原文及 A–G 候选项，为 <strong>45. (45)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】[A] Stay positive.</strong><br>段首<br>【小标题】Stay positive.<br>保持积极。<br>【主旨】用正面语言而非负面语言<br>段首立论：推介新主意要用\"丰盈的语言\"而非\"匮乏的语言\" use the language of<br>abundance instead of the language of deficit；不说哪里坏，要说哪里对、可改、理想<br>talk about what is right, fixable, or ideal，最后落到 Be optimistic but realistic。主旨<br>是\"用积极正面的措辞\"。<br>【依据】abundance/optimistic = positive<br>本段主张 the language of abundance、Be optimistic but realistic，强调正面乐观的<br>措辞，正是 Stay positive（保持积极）的同义概括——\"abundance/optimistic/right\"都<br>归到\"positive\"。<br>【竞争】[ D ] 积极≠耐心等待<br>Give it time 谈的是\"耐心、给时间\"，与本段毫无关联——本段从头到尾讲措辞要<br>optimistic、正面，没有任何\"等待\"之意。D 是被剩下的冗余项，话题完全对不上。<br>【验证】把 Stay positive 放回本段：从 use the language of abundance instead of the<br>language of deficit 到 Be optimistic but realistic，整段都在讲\"保持积极正面\"，覆盖全<br>段主旨，与全文五步并列收尾一致。<br>S Y N O P S I S · 全文导图<br>全文在讲什么、怎么组织的<br>小标题匹配（7选5）先通读全文，把握话题与组织方式（ 总起 + 分点罗列 ），这是逐空<br>判断「概括得对不对」的全局底图。<br>如何让职场新建议被认真采纳的五步法<br>全文是一篇\"总起 + 五个分点\"的指南。首段点题——光有好主意不够，How you share it is<br>as important as the suggestion itself，并明确给出框架 follow these steps；其后每个空位<br>段各讲让建议被采纳的一个具体做法，五个空各自承担一条独立步骤。<br>C H O I C E S · 候选库画像<br>A~G 共 7 个候选小标题各自在说什么<br><br>小标题匹配的候选比空位多 2 个。下面逐条给出小标题全文、中译与「这条自身的关键<br>词」，并标注它填入哪个空——始终填不进任何空的就是干扰项。<br>[ A ] Stay positive.<br>保持积极。<br>关键词<br> 积极、正面表达<br>填入第 45 空<br>[ B ] Respect the past.<br>尊重过去。<br>关键词<br> 尊重过往、旧方案<br>填入第 44 空<br>[ C ] Use channels.<br>善用渠道。<br>关键词<br> 走渠道、找人/找部门<br>填入第 42 空<br>[ D ] Give it time.<br>给它时间。<br>关键词<br> 耐心、等待时间<br>干扰项 · 未选用<br>[ E ] Invite resistance.<br>主动邀请反对意见。<br>关键词<br> 主动招来反对<br>干扰项 · 未选用<br>[ F ] Be a salesman.<br>做个推销员。<br>关键词<br> 推销、反复兜售主意<br>填入第 41 空<br><br>[ G ] Be humble.<br>保持谦逊。<br>关键词<br> 谦逊、不自负<br>填入第 43 空<br>D I S T R A C T O R S · 干扰项复盘<br>这 2 个候选小标题始终没被任何空选用<br>7选5 必有 2 条话题相关、看着像，却概括不了任何 区间主旨 。下面逐条剖析它们「像在<br>哪、为何放哪个空都不对」，读透干扰项才算读透全局。<br>[ D ] Give it time.<br>全文无\"耐心等待\"一段<br>Give it time 谈\"给时间、要耐心\"，最易被误塞进第 5 段——因那段有 has failed to solve in<br>recent memory 这样的时间字眼。但该段主旨是\"尊重旧方案\"，全文五段没有任何一段在<br>讲\"等待\"，D 概括不了任何一段，是冗余干扰项。<br>[ E ] Invite resistance.<br>\"承受批评\"被偷换成\"主动招反对\"<br>Invite resistance（主动邀请反对）很诱人，因第 2 段有 stand up to scrutiny and criticism、<br>第 4 段有 if people disagree with you，都涉及\"反对\"。但这两段分别讲\"推销时顶住质<br>疑\"和\"谦虚听取异议\"，没有一段在\"主动去招来反对\"；E 把\"承受/虚心对待反对\"偷换为\"主动<br>邀请反对\"，对不上任何一段主旨。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>18 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br><br>Everyone wants to be that person—the one who looks at the same information as<br>everyone else, but who sees a fresh, innovative solution.<br>第1段，第1句<br>破折号同位语加定语从句的组合在真题阅读中极其常见，具有很强的迁移学习价值。<br>However, it takes more than simply having a good idea.<br>第1段，第2句<br>\"it takes\" 句型和 \"more than\" 比较结构都是四六级、考研阅读中的高频句式;动名词短语作宾语也<br>是常考点;虽为简单句,但句式实用性强,掌握后可大量迁移到类似表达中。<br>How you share it is as important as the suggestion itself.<br>第1段，第3句<br>主语从句在四六级和考研阅读中频繁出现，尤其是由 How、What、Whether 等引导的主语从句常<br>见于说理和论证文本；\"as...as\" 比较结构也是高频考点。本句结构简洁但典型，掌握后可迁移至大<br>量类似句式，具有较高的学习复用价值。<br>Not to mention, if the process you're scrapping is one someone else suggested,<br>there's the possibility of hurt feelings.<br>第1段，第6句<br>这种“If..., there is...”配合从句嵌套的结构在学术和职场写作中极其常见，具有很强的迁移价值。<br>In other words, you can't mention your suggestion once and expect it to be<br>adopted.<br>第3段，第2句<br>情态动词加并列谓语的结构，以及\"expect + 宾语 + to do\"的复合宾语句型，都是四六级和考研英<br>语中的高频句式。掌握本句结构后可迁移到大量类似表达，典型性较高。<br>To see a change, you'll need to champion your plan and sell its merits.<br>第3段，第3句<br>\"不定式作目的状语 + 主句\" 以及 \"need to do\" 结构都是四六级和考研阅读中的常见句式，具有一<br>定代表性。不定式的并列用法也值得掌握。但本句缺少从句等更复杂的典型考点，迁移价值中等。<br><br>In addition, you need to be willing to stand up to scrutiny and criticism and be<br>prepared to explain your innovation in different ways for various audiences.<br>第3段，第4句<br>主语 + 谓语 + 不定式宾语的结构是四六级和考研阅读中的高频句式；宾语部分的并列不定式、介<br>词短语后置修饰等也是常考结构，学习后可迁移到大量类似句子<br>Sometimes it makes sense to go to your boss first.<br>第5段，第1句<br>形式主语 it + 谓语 + 不定式短语作真正主语是四六级和考研阅读中的高频句式,如 It is important<br>to..., It seems necessary to... 等,掌握本句结构后可直接迁移至大量类似句子,典型性较高。<br>But other times, it's useful to build a coalition among your co-workers or other<br>stakeholders.<br>第5段，第2句<br>\"it is + 形容词 + to do\" 是四六级和考研阅读中的高频句型，形式主语结构在学术和正式表达中大<br>量出现，掌握后迁移性强。<br>When it works, it works great—because you're ready for your stubborn<br>supervisor's pushback with answers like, \"Actually, I connected with a few people<br>in our tech department to discuss how much time these kinds of website updates<br>would take, and they suggested they have the bandwidth.\"<br>第5段，第3句<br>本句成分丰富，涵盖主语、谓语、状语、宾语等核心成分，还包括介词短语作状语、宾语从句、不<br>定式短语作目的状语等多种结构。特别是原因状语从句内部嵌套的多个宾语从句和并列谓语，能够<br>训练学生识别复杂句中的成分层级和从属关系，具有较高的练习价值。<br>One of the biggest barriers to gaining buy-in occurs when the owner of an idea is<br>viewed as argumentative, defensive, or close-minded.<br>第7段，第1句<br>\"when\" 引导的时间/条件状语从句和 \"be viewed as\" 被动结构都是四六级和考研阅读中的高频句<br>式。主句的 \"One of + 名词复数\" 作主语也是典型用法。整体结构代表性强，掌握后可迁移到大量<br>类似句子。<br><br>Instead, listen to their concerns fully, try to understand their perspective, and<br>include their concerns (and possible remedies) in future discussions.<br>第7段，第4句<br>成分划分训练价值中等偏上。本句覆盖主语省略、并列谓语、不定式作宾语、介词短语作宾语和状<br>语、程度状语等多种成分，且并列结构中嵌套了不定式，需要学生区分哪些是并列谓语、哪些是非<br>谓语。适合练习祈使句和并列结构的成分划分。<br>So, instead of saying, \"Martha, our current slogan is confusing and should be<br>updated,\" you could try, \"Martha raises a great point that our current slogan has a<br>long history for our stakeholders, but I wonder if we might be able to brainstorm a<br>tagline that could build on that—and be clearer for new customers.\"<br>第7段，第5句<br>涵盖了状语、宾语从句、限制性定语从句（含同位语性质）、并列结构以及情态动词等多种核心语<br>法点，是非常优质的综合分析练习句。<br>In other words, don't throw old solutions under the bus to make your<br>improvement stand out.<br>第9段，第2句<br>包含祈使句省略主语、习语状语\"under the bus\"、不定式目的状语、宾补结构\"make sth do\"等多种<br>成分,有一定训练价值,但成分搭配相对常规,挑战性不强<br>Remember that in light of whatever the problem the old system solved—or,<br>maybe, has failed to solve in recent memory—it was a great idea at the time.<br>第9段，第3句<br>四层嵌套:主句宾语从句内嵌 whatever 引导的从句,该从句又包含两个并列的定语从句(关系代词省<br>略),且定语从句之间用破折号和插入语 maybe 分隔,层层咬合,归属关系需反复回读才能理清。<br>When pitching a new idea, it's important to use the language of abundance instead<br>of the language of deficit.<br>第11段，第1句<br>\"it is + 形容词 + to do\" 结构和 \"When + 分词\" 引导的时间状语从句都是四六级和考研阅读中的高<br>频句式，具有较强的代表性。掌握这类结构后可以迁移到大量类似句型的理解中，实用价值高。<br><br>Instead of saying what is wrong, broken, or suboptimal, talk about what is right,<br>fixable, or ideal.<br>第11段，第2句<br>“Instead of ... , 动词原形 ...”和“动词或介词后接由‘what’引出的内容结构”都很常见，迁移性强。掌握<br>这种读法后，遇到同类建议句、对照句和抽象表达句都能复用。<br>For example, try, \"I can see lots of applications for this new approach\" rather than,<br>\"This innovation is the only way.\"<br>第11段，第3句<br>覆盖祈使句、宾语从句、情态动词、主系表结构等多种成分,且 try 后接完整句子作宾语的用法和<br>rather than 引出对比宾语的结构具有一定练习价值,适合训练宾语从句和对比结构的识别<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 37 个考研英语二真题高频词<br>下列单词既在本篇短文中出现，又是 考研英语二 历年真题的高频词（在该考试真题中出<br>现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查看该<br>词的释义、音标、词形与真题例句。<br>innovation<br>B2<br>n. 创新;革新(指行为或过程)<br>本篇3 次 · 真题 33 句<br>concern<br>B1<br>v. 涉及<br>本篇2 次 · 真题 60 句<br>gain<br>B1<br>v. 获得;赢得<br>本篇2 次 · 真题 43 句<br>actually<br>A2<br>adv. 实际上，事实上（用于纠正或补充信息）<br>本篇2 次 · 真题 42 句<br>current<br>B1<br>adj. 现在的<br>本篇2 次 · 真题 41 句<br>solution<br>B1<br>n. 解决办法<br>本篇2 次 · 真题 26 句<br><br>solve<br>A2<br>v. 解决（问题、困难）<br>本篇2 次 · 真题 16 句<br>innovative<br>B2<br>adj. 创新的<br>本篇2 次 · 真题 10 句<br>system<br>A2<br>n. 系统<br>本篇1 次 · 真题 107 句<br>view<br>A2<br>n. 观点，看法<br>本篇1 次 · 真题 91 句<br>process<br>B1<br>n. 过程<br>本篇1 次 · 真题 80 句<br>customer<br>A2<br>n. 顾客，客户<br>本篇1 次 · 真题 79 句<br>approach<br>B1<br>v. 靠近，接近（在空间或时间上）<br>本篇1 次 · 真题 51 句<br>simply<br>B1<br>adv. 仅仅，只不过<br>本篇1 次 · 真题 43 句<br>tech<br>B1<br>n. 技术<br>本篇1 次 · 真题 38 句<br>department<br>A2<br>n. 部门<br>本篇1 次 · 真题 35 句<br>criticism<br>B2<br>n. 批评<br>本篇1 次 · 真题 27 句<br>possibility<br>B1<br>n. 可能性<br>本篇1 次 · 真题 25 句<br>willing<br>B1<br>adj. 愿意的，乐意的<br>本篇1 次 · 真题 23 句<br>application<br>B1<br>n. 申请<br>本篇1 次 · 真题 22 句<br>ideal<br>B2<br>adj. 理想的<br>本篇1 次 · 真题 20 句<br>improvement<br>B1<br>n. 改进<br>本篇1 次 · 真题 20 句<br><br>various<br>B1<br>adj. 各种各样的<br>本篇1 次 · 真题 20 句<br>wrong<br>A2<br>adj. 错误的<br>本篇1 次 · 真题 20 句<br>fully<br>B1<br>adv. 完全地<br>本篇1 次 · 真题 18 句<br>occur<br>B1<br>v. 发生，出现<br>本篇1 次 · 真题 18 句<br>audience<br>A2<br>n. 观众<br>本篇1 次 · 真题 16 句<br>optimistic<br>B2<br>adj. 乐观的;抱乐观态度的<br>本篇1 次 · 真题 16 句<br>contribution<br>B2<br>n. 贡献<br>本篇1 次 · 真题 15 句<br>perspective<br>B2<br>n. 观点<br>本篇1 次 · 真题 15 句<br>adopt<br>B1<br>v. 采纳<br>本篇1 次 · 真题 14 句<br>disagree<br>A2<br>v. 不同意<br>本篇1 次 · 真题 14 句<br>adapt<br>B2<br>v. 适应，适合（新环境、新情况）<br>本篇1 次 · 真题 12 句<br>credibility<br>C1<br>n. 可信度<br>本篇1 次 · 真题 12 句<br>seriously<br>B1<br>adv. 严肃地<br>本篇1 次 · 真题 10 句<br>addition<br>A2<br>n. 增加<br>本篇1 次 · 真题 9 句<br>realistic<br>B2<br>adj. 现实的<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 195 词按 CEFR 难度累积覆盖<br><br>带空原文去重后共 195 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 9 个 ·<br>约 5%。<br>48%<br>A1<br>及以下<br>68%<br>A2<br>及以下<br>87%<br>B1<br>及以下<br>95%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 195 个 · 末柱为 100%<br>去重总词数<br>195<br>B2 以上难词<br>5%<br>B1 及以下覆盖<br>87%<br><br>考研英语二<br>2025年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>题目解析 →<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>段落小标题（7选5）<br>本题<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "用正面语言而非负面语言",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2025_46",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 46,
+    "qType": "solve",
+    "chapter": "e_ch4",
+    "title": "2025英二 翻译 Section III 第46题 (15分)",
+    "stem": "<strong>Section III Translation (15 points) — Directions: Translate the following text into Chinese.</strong><div class='formula-card'>P1 You know the moment—the conversation slows, then there's a pause. It's awkward, and so<br>awkward that some people will panic and say anything. Do we all find such silences so stressful?<br>P2 Researchers analysed the frequency and impact of gaps greater than 2 seconds during<br>conversations, including an overview of previous studies which indicate that the fear of awkward silences<br>can be so extreme that people avoid talking to strangers, even though doing so is likely to be an<br>enjoyable experience.<br>P3 During conversations with short gaps, people feel more connected to their conversation partners.<br>But such feelings of connection markedly dip when entering a long gap. Long gaps between strangers<br>are likely to be followed by a change in topic.<br>P4 But the opposite seems to be true for conversations between friends. Long gaps there saw<br>increased connection. Between friends, longer gaps seem to provide natural moments for reflection and<br>expression.</div>",
+    "options": null,
+    "answer": "详见解析中的参考译文与逐句精解",
+    "analysis": "<strong>【逐句拆分与核心采分点解析】</strong><br>2025年考研英语二 英译汉（段落翻译） Section III · 参考译文与逐<br>句解析<br>P A S S A G E & T R A N S L A T I O N · 题和解析<br>英译汉真题、参考译文与逐句解析<br>逐句译审整理。与试卷排版同一卷面：Directions 与整段英文原文连续排印——整段连<br>排、无题号无划线，把它切成一句句翻译单元本身就是解题动作。卷面之后先给按段定稿<br>的整篇参考译文，再按自切句序逐句拆分：意群直译、难点点破、语序调整、句内定稿中<br>译，答案直显。<br>英语二真题(2025)<br>Section III<br>Directions:<br>Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points)<br>P1 You know the moment—the conversation slows, then there's a pause. It's awkward, and so<br>awkward that some people will panic and say anything. Do we all find such silences so stressful?<br>P2 Researchers analysed the frequency and impact of gaps greater than 2 seconds during<br>conversations, including an overview of previous studies which indicate that the fear of awkward silences<br>can be so extreme that people avoid talking to strangers, even though doing so is likely to be an<br>enjoyable experience.<br>P3 During conversations with short gaps, people feel more connected to their conversation partners.<br>But such feelings of connection markedly dip when entering a long gap. Long gaps between strangers<br>are likely to be followed by a change in topic.<br>P4 But the opposite seems to be true for conversations between friends. Long gaps there saw<br>increased connection. Between friends, longer gaps seem to provide natural moments for reflection and<br>expression.<br>参考译文<br>按段定稿的整篇参考译文是复盘资产，考卷上只印英文原文——英语二英译汉满分 15 分，按「理解准确、表达通<br>顺连贯、无错译漏译」整篇四档评分。<br>P1 你一定遇到过这种情况——对话渐渐冷场，接着出现一阵停顿。这种停顿让人很尴尬，尴尬得<br>有人会一下慌了神，随口乱说点什么。可是，我们真的都觉得这种沉默那么让人难受吗？<br>P2 围绕这一问题，研究者分析了对话中超过 2 秒的停顿出现的频率和造成的影响，其中还包括对<br>此前研究的综述：这些研究表明，人们对尴尬沉默的害怕可能极端到让他们干脆回避和陌生人交谈，<br><br>尽管和陌生人聊聊往往会是一段愉快的体验。<br>P3 研究发现，在停顿较短的对话中，人们会觉得自己与对话对方更亲近。但是，一旦对话进入较<br>长的停顿，这种亲近感就会明显减弱。陌生人之间一旦出现较长的停顿，接下来往往就会换个话题。<br>P4 但在朋友之间的对话里，情况似乎正好相反——长停顿反而带来了更强的亲近感。在朋友之<br>间，较长的停顿反而成了一种自然的契机，让彼此沉下来思考，也把想说的话表达出来。<br>【衔接】P1 段末设问与 P2 研究介绍之间补「围绕这个问题」过渡<br>Do we all find such silences so stressful? 是 P1 段尾的设问，Researchers analysed the<br>frequency and impact of gaps greater than 2 seconds during conversations 直接给出研究。<br>两段之间是「问题—研究」逻辑，单纯按原顺序拼会显得突兀。建议把第 4 句开头处理成「围绕这<br>个问题 / 对此，研究者……」之类的小过渡，让段间逻辑显化。<br>P2 句末让步从句末尾承接 P3 转折<br>even though doing so is likely to be an enjoyable experience 与 During conversations with<br>short gaps, people feel more connected to their conversation partners. 之间没有显性连接<br>词。处理时在 P3 开头点出「研究结果显示 / 研究发现」之类的承上，让读者明白下面三句是研究<br>的具体结论。<br>P3 内部第 5、6 句之间靠「但是」对比<br>During conversations with short gaps, people feel more connected to their conversation<br>partners. 与 But such feelings of connection markedly dip when entering a long gap. 是<br>「短停顿→更亲近」与「长停顿→骤减」对比，But 翻成「但是 / 然而」即可显化。同时 such<br>feelings of connection 要回指上句的「亲近感」，避免重复名词，用「这种亲近感」承接。<br>P3→P4 用「但 / 反过来」承接 the opposite<br>But the opposite seems to be true for conversations between friends. 中的 the opposite 跨<br>段回指 P3 的整段结论。汉译时建议在段首点出「但在朋友之间 / 反过来，朋友之间……」让对比关<br>系一眼可见。<br>P4 内部第 8、9 句承接 there<br>Long gaps there saw increased connection. 的 there 指代上一句 conversations between<br>friends。中文里去掉 there 直译，把第 9 句的主语换成「这种长停顿」或并入上一句作为补充：<br>「但在朋友之间的对话里，情况似乎正好相反——长停顿反而让人感觉更亲近」，避免「那里 / 这<br>里」让读者困惑。<br>P4 第 9、10 句之间补「具体来说 / 因为」<br>Long gaps there saw increased connection. Between friends, longer gaps seem to provide<br>natural moments for reflection and expression. 第 9 句是结论、第 10 句是解释。汉语可在第<br>10 句前补「具体来说 / 这是因为」之类，把因果关系显化，比纯并列罗列流畅。<br>逐句解析<br>整段连排、无题号无划线——把原文切成一句句翻译单元本身就是解题动作，句前 N. 为逐句解析自切的句序号<br>（非考卷题号），与卷面原文逐字对应。<br><br>【来源】本文选自 Science Illustrated 澳大利亚版（《科学画刊》）2023年4月6日刊一篇标题为<br>“Why do we panic in silences during conversations?”（《为什么对话冷场时我们会慌<br>张？》）的文章（杂志问答体，未署名）。<br>【主旨】对话中长时间沉默的影响因人而异<br>全文围绕对话中超过 2 秒的「尴尬沉默」展开：开篇用 the conversation slows, then there's",
+    "tips": "先通读全文锁死核心术语译名，长难句按连词/介词/非谓语切分意群，定语从句短前长后。",
+    "kp": "2025英译汉真题精译与采分点"
+  },
+  {
+    "id": "E2025_47",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 47,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2025英二 小作文 Part A 第47题 (10分)",
+    "stem": "<strong>Section IV Part A (10 points) — Directions:</strong><div class='formula-card'>Suppose you are planning a short play based on a classic Chinese novel. Write your friend John an<br>email to<br>1) introduce the play, and<br>2) invite him to take part in it.<br>Write your answer in about 100 words on the ANSWER SHEET.<br>Do not use your own name in your email; Use “Li Ming” instead. (10 points)</div>",
+    "options": null,
+    "answer": "见参考范文与段落句架",
+    "analysis": "【参考范文 · 106 词】<br>写作无唯一标准答案，以下为达标示范<br>Dear John,<br>I hope this email finds you well. I am now planning a short play based on the classic Chinese novel Journey to<br>the West, and I want to tell you about it. The play retells how the Monkey King protects his master on the<br>journey west, showing courage and loyalty.<br>I am writing to invite you to take part in it. With your rich stage experience, you would be perfect for the role<br>of the Monkey King. We will start rehearsing next week. Could you please reply and let me know whether you<br>can join us?<br>Looking forward to your reply. Yours, Li Ming<br>【参考译文】<br>亲爱的约翰： 希望你一切安好。我正在筹备一部根据中国古典小说《西游记》改编的短剧，想跟你说一<br>说。这部剧讲的是孙悟空一路护送师父西行，展现出勇气与忠诚，全长约二十分钟。 我写信是想邀请你参<br>演。凭你丰富的舞台经验，你来演孙悟空再合适不过了。我们下周就开始排练。你能回信告诉我能否加入<br>吗？ 期待你的回复。 你的， 李明<br>【第 1 段】称呼到位。首行 Dear John, 立起邮件格式，明确收信人，对应 outline 第 1 块称呼功能。<br><br>【第 2 段】先问候再介绍剧。I hope this email finds you well 破冰，随后 a short play based on the<br>classic Chinese novel Journey to the West 点明名著，protects his master on the journey west,<br>showing courage and loyalty 交代情节主题，落实 introduce the play。<br>【第 3 段】邀请＋角色＋安排俱全。I am writing to invite you to take part in it 正式发出邀请，you<br>would be perfect for the role of the Monkey King 给角色，start rehearsing next week 给时间，<br>Could you please reply 请回信，落实 invite him to take part in it。<br>【第 4 段】礼貌收尾＋合规落款。Looking forward to your reply 礼貌收束，落款 Li Ming 严守不用真<br>名的规定，完成结尾块。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域 ，再定中心立意与要展开的要点 —— 这些<br>是本题特有的内容判断，不是通用套路。<br>核心任务<br>写邮件介绍短剧并邀 John 参演<br>本题核心交际目的是给朋友 John 写一封电子邮件，一要介绍这部剧，二要发出邀请，二者缺<br>一不可：introduce the play，and invite him to take part in it。且这部剧有明确来历——a<br>short play based on a classic Chinese novel，介绍时必须点出它改编自哪部中国古典名著。<br>读者 · 语域<br>写给朋友 John 的半正式邮件<br>读者是你的朋友 John：Write your friend John an email。朋友之间的邮件用半正式语域即可<br>——称呼用 Dear John，语气亲切但不粗俗，句子完整、不用网络缩写。身份是发起短剧的组<br>织者，落款按硬性规定用 Li Ming：Do not use your own name in your email。<br>中心立意<br>邀 John 加入我的中国古典名著改编短剧<br>本邮件要达成的交际目的：把我筹备的这部改编自中国古典名著的短剧介绍给 John，并诚恳邀<br>请他出演其中一个角色。它同时兜住了 introduce the play 和 invite him to take part in it 两个<br>任务。<br><br>要展开的要点<br>1. 点明短剧来历与故事<br>介绍这部 short play based on a classic Chinese novel：说清改编自哪部名著（如《西游<br>记》）、讲了什么核心情节与主题、大致时长，让邀请有说服力。<br>2. 发出参演邀请并给角色<br>落实 invite him to take part in it：明确邀请 John 参演，指定一个具体角色（如孙悟空），说<br>明为什么觉得他合适。<br>3. 给出排练安排与回信请求<br>补上真实情境的落脚点：告诉他何时开始排练，请他回信确认能否加入，让这封邮件构成一次<br>真实的往来。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>称呼<br>顶格写 Dear John，逗号收尾，确立收信人。<br>第 2 段<br>问候＋介绍短剧<br>一句寒暄破题，随后落实 introduce the play：点明改编名著、核心情节与时长。<br>第 3 段<br>发出邀请＋安排<br>落实 invite him to take part in it：邀他出演具体角色，说明排练时间并请回信确认。<br>第 4 段<br>礼貌语＋落款<br>一句期待回复的结束语，落款按规定写 Li Ming。<br><br>第 1 段<br>Dear John,<br>顶格写 Dear John，明确这封信是写给朋友 John 的：Write your friend John an email。<br>邮件称呼<br>· Dear ______, （横线处填收信人名字，如 John）<br>第 2 段<br>介绍改编自《西游记》的短剧<br>说明我正筹备一部 short play based on a classic Chinese novel，改编自《西游记》，讲孙悟<br>空护送师父西行、展现勇气与忠诚，约二十分钟，兑现 introduce the play。<br>寒暄开场<br>· I hope this email finds you well.<br>点明来意<br>· I am now planning a ______ based on ______, and I want to tell you<br>about it. （前空填作品类型，后空填改编来源）<br>简介内容<br>· It tells how ______, showing ______. （前空填核心情节，后空填主题）<br>第 3 段<br>邀 John 演孙悟空并约排练<br>正式邀请 John 参演，指定他演孙悟空，理由是他舞台经验丰富，告知下周开排并请回信确<br>认，兑现 invite him to take part in it。<br>正式邀请<br>· I am writing to invite you to ______. （空处填参与的事，如 take part in<br>it）<br>点名角色＋理由<br>· With your ______, you would be perfect for the role of ______.<br>（前空填对方优势，后空填角色）<br>请求回信<br>· Could you please reply and let me know whether you can join us?<br><br>第 4 段<br>期待回复＋署名 Li Ming<br>用一句 Looking forward to your reply 收尾，落款写 Yours, 与 Li Ming，遵守 Do not use your<br>own name in your email。<br>结束礼貌语<br>· Loo",
+    "tips": "小作文严格三段式：第1段表明写信目的，第2段逐一落实题干两个要点，第3段期待回复并规范署名 Li Ming。",
+    "kp": "2025英语二小作文应用文实战"
+  },
+  {
+    "id": "E2025_48",
+    "subject": "eng2",
+    "year": 2025,
+    "qNum": 48,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2025英二 大作文 Part B 第48题 (15分)",
+    "stem": "<strong>Section IV Part B (15 points) — Directions:</strong><div class='formula-card'>Write an essay based on the chart below. In your essay, you should<br>1) describe and interpret the chart, and<br>2) give your comments.<br>Write your answer in about 150 words on the ANSWER SHEET. (15 points)</div>",
+    "options": null,
+    "answer": "见图表描述与参考范文",
+    "analysis": "【参考范文 · 164 词】<br>写作无唯一标准答案，以下为达标示范<br><br>The bar chart clearly illustrates the main leisure activities of the elderly in a certain community. As is shown,<br>watching TV ranks far ahead of the rest, chosen by 90.8% of the respondents, followed by taking a walk at<br>68.3%. By contrast, growing flowers and reading account for only 34.7% and 31.8% respectively, while<br>playing chess sits at the bottom, favored by merely 18.4%.<br>These figures reveal that passive and effortless pastimes clearly dominate the daily lives of senior citizens.<br>Watching TV and walking cost little and demand neither special skills nor companions, so they naturally<br>appeal to the majority. In contrast, hobbies such as chess or gardening require more energy, patience or<br>partners, which explains their limited popularity.<br>In my view, this pattern deserves our attention. Physical and social activities benefit the health of the elderly far<br>more than sitting before a screen. Therefore, communities should organize richer events to encourage older<br>people to step outside and enjoy a more colorful later life.<br>【参考译文】<br>这张柱状图清楚地展示了某社区老年人主要的休闲活动。如图所示，看电视遥遥领先，被 90.8% 的受访<br>者选择，其次是散步，占 68.3%。相比之下，养花和阅读分别仅占 34.7% 和 31.8%，而下棋垫底，仅有<br>18.4% 的人选择。<br>这些数据表明，被动而省力的消遣明显主导着老年人的日常生活。看电视和散步花费很少，既不需要特殊<br>技能也不需要伙伴，因此自然吸引了大多数人。相比之下，下棋或养花这类爱好需要更多精力、耐心或搭<br>档，这解释了它们参与度有限的原因。<br>在我看来，这一现象值得我们关注。体育和社交活动对老年人健康的益处远胜于坐在屏幕前。因此，社区<br>应当组织更丰富的活动，鼓励老年人走出家门，享受更加多彩的晚年生活。<br>【第 1 段】总排名后分高低。本段落实『先总排名再分高低』：开头 The bar chart clearly illustrates…<br>引出主题，watching TV ranks far ahead… followed by… 读最高与次高，再用 By contrast…sits at<br>the bottom 拎出最低的 下棋，五项数据全覆盖且有主次，完成描述功能。<br>【第 2 段】过渡句析成因。本段落实『由数据推成因』：These figures reveal that… 一句把上段数字概<br>括成『省力活动主导』的趋势，作为描述到解读的过渡；随后 cost little…so they naturally appeal 与<br>In contrast…require more energy 成对解释高低两端，观点立得住。<br>【第 3 段】表态加建议。本段落实『亮态度加对策』：In my view…deserves our attention 明确表态，<br>benefit…far more than sitting before a screen 给出理由，Therefore, communities should<br>organize… 落到可行建议，兑现 give your comments 的得分点。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域、读懂配图 ，再定中心立意与要展开的要<br>点 —— 这些是本题特有的内容判断，不是通用套路。<br><br>核心任务<br>描述并评论老年人休闲活动图表<br>任务钉死为两件事：先 describe and interpret the chart——客观描述并解读一张展示某社区老<br>年人休闲活动比例的柱状图；再 give your comments——就图中反映的现象谈自己的看法与建<br>议。两块都要写到，只描述不评论只能拿一半分。<br>读者 · 语域<br>面向阅卷人的正式书面语<br>本题是大作文议论文，没有具体收信人，读者就是阅卷老师。因此用正式的书面英语即可：不<br>用 you/I think 口语堆砌，不用缩写口吻，观点段用 In my view 一类稳妥表达，保持客观、书<br>面、条理清楚。<br>配图要读出<br>看电视最高下棋最低<br>图表主题是 某社区老年人主要日常休闲活动调查。核心可写点：看电视 以 90.8% 遥遥领先，<br>散步 次之达 68.3%；养花 与 阅读 分别为 34.7% 和 31.8%，下棋 最低仅 18.4%。最大反差＝看<br>电视 vs 下棋，可读出的现象是：省力被动型活动远比费神费力型受欢迎。<br>中心立意<br>省力活动主导老年休闲值得关注<br>全篇中心：图表显示看电视、散步这类省力活动主导了老年人的日常休闲，而下棋、养花等费<br>神活动参与度低，这一失衡现象值得社会关注并加以引导。<br><br>要展开的要点<br>1. 客观描述关键数据<br>第一块内容：读出 看电视 最高 90.8%、下棋 最低 18.4% 及中间项，构成对图表的客观描述。<br>2. 概括趋势成因<br>第二块内容：概括规律并分析成因——省力、低成本、不需伙伴的活动更受欢迎，费体力或需<br>搭档的活动参与度自然偏低。<br>3. 个人评论与建议<br>第三块内容：落实 give your comments——表达看法（久坐看电视不利健康）并给出建议（社<br>区应组织活动、鼓励老人多样化休闲）。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>描述图表数据<br>引出图表主题，按『最高—次高—对比—最低』客观呈现五项活动的比例，完成<br>describe and interpret the chart 的描述部分。<br>第 2 段<br>概括趋势并析因<br>用过渡句概括『被动省力活动占主导』这一规律，并分析背后的原因，把描述自然引向<br>解读。<br>第 3 段<br>个人评论与建议<br>落实 give your comments，表达个人看法并给出改善建议，收束全文。<br><br>第 1 段<br>五项活动比例排序<br>本段落点：图表主题是 某社区老年人主要日常休闲活动调查；看电视 最高 90.8%，散步 次之<br>68.3%，养花 34.7% 与 阅读 31.8% 居中，下棋 垫底 18.4%。<br>引出图表<br>· The bar chart clearly illustrates the main ______ of ______ in ______.<br>（填『休闲活动 / 老年人 / 某社区』）<br>读最高值<br>· As is shown, ______ ranks far ahead of the rest, chosen by ____% of the<br>respondents, followed by ______ at ____%.（填最高项与次高项及其数值）<br>对比最低值<br>· By contrast, ______ sits at the botto",
+    "tips": "图表大作文三段式：第1段客观读图抓极值反差，第2段分析数据背后的两点原因，第3段总结展望与建议。",
+    "kp": "2025英语二大作文图表作文实战"
+  },
+  {
+    "id": "E2024_01",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第1题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>1</strong> 空的最佳选项：",
+    "options": [
+      "A. because",
+      "B. unless",
+      "C. whereas",
+      "D. until"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (whereas)</strong><br>逻辑关系<br>【线索】同句左右两半呈正反对照<br>原文 Some of us feel energised by spending lots of time with others, __(1)__ some of<br>us may feel drained, even if it's doing something we enjoy：左半 \"被激发能量\"，右半<br>\"被耗尽\"，且都是描述 \"我们中的一些人\"。线索指向：所填连词应表达 \"相反/对照\"。<br>【选项】A) because ✗错因：把 \"对照\" 误读成 \"因果\"<br>because 表因果，意为 \"因为他人感到 energised，所以另一些人 drained\"，逻辑上不成立——<br>两类人之间不是因果。<br>B) unless ✗错因：条件关系与原文无关<br>unless = if not，表 \"除非\"，会得出 \"除非他人 drained 否则被 energised\"，与原句平行对照的结<br>构对不上。<br>C) whereas ✓正解：典型对照连词<br>whereas = while，用于将两个并列主语的相反行为/感受作对照，恰好串起 feel energised 与<br>feel drained，并与下文 even if it's doing something we enjoy 的 \"即使是喜欢的事\" 的让步<br>语气配套。<br>D) until ✗错因：时间界限与本句无关<br>until 表 \"直到……为止\"，需要时间起止，本句两半没有时间先后关系，纯属逻辑误植。<br>【验证】代入后整句为 Some of us feel energised by spending lots of time with others, __(1)__<br>some of us may feel drained，\"一些人被激发能量，而另一些人却被耗尽\"——与 outline<br>中 P1 \"social life 因人而异\" 的对照定调完全契合。",
+    "tips": "同句左右两半呈正反对照",
+    "kp": "完形填空 · 第1空考点精析"
+  },
+  {
+    "id": "E2024_02",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第2题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>2</strong> 空的最佳选项：",
+    "options": [
+      "A. contrast",
+      "B. balance",
+      "C. link",
+      "D. gap"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (balance)</strong><br>词义辨析<br>【线索】P2 与 P4 一正一反共同呼应 \"平衡\" 主旨<br>P2 开篇 This is why finding a __(2)__ in your social life is key 后紧接 \"独处太多 → 孤<br>独\"；P4 On the other hand, it's __(14)__ possible to have too much of a social life 又<br>指出社交太多也不好。线索指向：空处所填名词必须能同时容纳 \"太少不好 + 太多也不好\"<br>这两端——即 \"中点/平衡\"。<br>【选项】A) contrast ✗错因：含义偏 \"对比\" 而非 \"调和\"<br>contrast 强调 \"差异\"，下文是 \"防止太少也防止太多\" 的中庸建议，不是讨论差异本身。<br>B) balance ✓正解：贯通 P2/P4 两端的 \"平衡\"<br>balance 恰好是 \"独处 vs 社交\" 两端之间的中点；与 P4 On the other hand 后的 \"too much\"<br>形成完整对话——\"找到平衡\" 才能既不太少也不太多。<br>C) link ✗错因：\"联系\" 与文章议题无关<br>link = 联系/纽带，常用于事物间关系（如 link between A and B），原句 a ___ in your social<br>life 不是讨论关联谁与谁。<br>D) gap ✗错因：方向相反<br>gap = 缺口/差距，\"在 social life 中找到 gap\" 反而暗示 \"留白/空缺\"，与文章后文 \"既要避免孤独<br>又要避免 burnout\" 的整体逻辑对不上。<br>【验证】代入后 finding a balance in your social life is key，对应 P4 的 too much of a social life<br>警示，正反两侧严丝合缝，符合 outline 的 \"双侧平衡\" 主轴。",
+    "tips": "P2 与 P4 一正一反共同呼应 \"平衡\" 主旨",
+    "kp": "完形填空 · 第2空考点精析"
+  },
+  {
+    "id": "E2024_03",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第3题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>3</strong> 空的最佳选项：",
+    "options": [
+      "A. seeing",
+      "B. pleasing",
+      "C. judging",
+      "D. teaching"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (seeing)</strong><br>词义辨析<br>【线索】上下文围绕 \"独处 → 孤独\"<br>原文 Spending too much time on your own, not __(3)__ others, can make you feel<br>lonely and __(4)__：左边 on your own 暗示 \"独处过多\"，右边导致 lonely——所填动作<br>应该是 \"会缓解孤独的、与他人面对面接触类\" 的动作，否定它就会孤独。<br>【选项】<br>A) seeing ✓正解：\"见面\" 直接对治 \"独处过多\"<br>seeing others = \"和别人见面\"，是 social life 最朴素的形式；\"不见人\" 自然 \"独处太多\" 进而<br>feel lonely。<br>B) pleasing ✗错因：与 social life 主线无关<br>pleasing others = \"取悦别人\"，原文不在讨论是否 \"讨好\" 他人，且 \"不讨好他人\" 与 \"孤独\" 之间<br>没有直接因果。<br>C) judging ✗错因：色彩偏负面，方向相反<br>judging others 是 \"评判他人\"，本身偏贬义，更不是缓解孤独的常规动作；\"不评判\" 反倒是<br>好事。<br>D) teaching ✗错因：动作过于具体、超出语境<br>teaching others = \"教别人\"，是非常具体的职业/学习动作；本文谈的是泛泛的 \"社交\"，无法用<br>\"不教别人\" 概括 \"独处\"。<br>【验证】代入后 Spending too much time on your own, not seeing others, can make you feel<br>lonely and __(4)__，\"独处过多、不见别人 → 孤独\"，因果链条朴素而自洽，与 P2 \"独处之<br>害\" 的脉络一致。",
+    "tips": "上下文围绕 \"独处 → 孤独\"",
+    "kp": "完形填空 · 第3空考点精析"
+  },
+  {
+    "id": "E2024_04",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第4题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>4</strong> 空的最佳选项：",
+    "options": [
+      "A. misguided",
+      "B. surprised",
+      "C. spoiled",
+      "D. disconnected"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (disconnected)</strong><br>词义辨析<br>【线索】lonely 决定并列形容词应同向<br>can make you feel lonely and __(4)__：lonely 是负面情绪、且强调 \"与他人无连接\"。所<br>填形容词应与之同向，且最好能呼应 \"无连接\" 的语义。<br>【选项】A) misguided ✗错因：语义场是 \"被误导\"，与孤独无关<br>misguided = 被误导的，常与 belief/decision 搭配，不与 lonely 共一情感场。<br>B) surprised ✗错因：情绪场不同<br>surprised = 惊讶，是中性偏即时反应词，和 \"长期独处\" 的低落情绪并列别扭。<br>C) spoiled ✗错因：方向反转<br>spoiled 作形容人时多为 \"被宠坏的\"，是社交关系密集的产物，恰恰与 \"独处过多\" 相反。<br>D) disconnected ✓正解：\"与他人脱节\" 与 lonely 同源同向<br>disconnected = 失去连接的，正对应上文 not __(3)__ others 的 \"不见他人\"——\"不见 → 失联<br>→ 孤独\"，语义场和因果链都顺。<br>【验证】代入后 can make you feel lonely and disconnected，\"孤独且与他人脱节\" 形成同向并<br>列，自然衔接上一句的 \"not seeing others\"，与 P2 主线一致。",
+    "tips": "lonely 决定并列形容词应同向",
+    "kp": "完形填空 · 第4空考点精析"
+  },
+  {
+    "id": "E2024_05",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第5题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>5</strong> 空的最佳选项：",
+    "options": [
+      "A. contribute to",
+      "B. rely on",
+      "C. interfere with",
+      "D. go against"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (contribute to)</strong><br>固定搭配<br>【线索】loneliness 的负面效应链<br>原文 Loneliness is known to impact on your mental health and __(5)__ a low mood：<br>和并列项 impact on your mental health 一致，本空也应表达 \"loneliness 对 low mood<br>的负面影响/促成\"。<br>【选项】<br>A) contribute to ✓正解：\"促成 → 低落\" 与前并列一致<br>contribute to 既可表 \"贡献于\" 也可表 \"促成（消极结果）\"——loneliness contribute to a low<br>mood 即 \"孤独感会促成低落情绪\"，方向与 impact on your mental health 同向。<br>B) rely on ✗错因：\"依赖\" 不符合主语角色<br>rely on = 依赖；\"孤独依赖于低落\" 句义颠倒、不通。<br>C) interfere with ✗错因：意为 \"干扰\"，与 a low mood 不搭<br>interfere with 的宾语通常是 \"被破坏的好东西\"（sleep, work），不会用 \"干扰一个低落情绪\"。<br>D) go against ✗错因：方向相反<br>go against = 违背/反对；\"孤独反对低落\" 把负面因果搞成对抗关系，方向全错。<br>【验证】代入后 Loneliness is known to impact on your mental health and contribute to a low<br>mood，\"孤独影响心理健康并促成低落\" 两动词同向并列，链路自洽。",
+    "tips": "loneliness 的负面效应链",
+    "kp": "完形填空 · 第5空考点精析"
+  },
+  {
+    "id": "E2024_06",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第6题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>6</strong> 空的最佳选项：",
+    "options": [
+      "A. in fact",
+      "B. of course",
+      "C. for example",
+      "D. on average"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (for example)</strong><br>逻辑关系<br>【线索】前句抽象、空后给出具体场景<br>原文 Anyone can feel lonely at any time. This might be especially true if, __(6)__, you<br>are working from home and you are __(7)__ on the usual social conversations that<br>happen in an office：前一句是抽象判断 \"任何人都可能孤独\"，空后接 \"在家工作\" 这一具<br>体生活场景——典型 \"抽象→举例\" 关系。<br>【选项】A) in fact ✗错因：常用于 \"递进强调或反差\"，与本句结构不符<br>in fact 多接 \"对前句的递进或修正\"，但空后是个具体例子，不是更强的事实。<br>B) of course ✗错因：表 \"理所当然\"，与举例不搭<br>of course = 当然，表共识/让步，不引具体事例。<br>C) for example ✓正解：抽象 → 具体的标准信号<br>for example 正好把前句 \"any time/特别真切\" 的抽象判断与 \"working from home\" 的具体场<br>景连接起来。<br>D) on average ✗错因：表 \"平均而言\"，需要数据语境<br>on average 需要前后涉及 \"数据/比例/统计趋势\"，本句无任何数字语境，硬塞别扭。<br>【验证】代入后 This might be especially true if, for example, you are working from<br>home，\"如果举个例子，比如在家工作时\"——一个完整的抽象到具体过渡，符合 outline<br>中 P2 \"用 working from home 举例论证孤独成因\" 的脉络。",
+    "tips": "前句抽象、空后给出具体场景",
+    "kp": "完形填空 · 第6空考点精析"
+  },
+  {
+    "id": "E2024_07",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第7题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>7</strong> 空的最佳选项：",
+    "options": [
+      "A. cutting back",
+      "B. missing out",
+      "C. breaking in",
+      "D. looking down"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (missing out)</strong><br>固定搭配<br>【线索】+on 的常用搭配 + 上下文 \"在家工作错失办公室寒暄\"<br>原文 if, __(6)__, you are working from home and you are __(7)__ on the usual social<br>conversations that happen in an office：在家工作 → 错过了办公室里日常社交对话。\"错<br>过\" 常用搭配是 miss out on。<br>【选项】A) cutting back ✗错因：搭配多用 on 但意为 \"削减\"，主观能动<br>cutting back on = 削减/缩减（如 cut back on sugar），表主动减少；本句是 \"被动错过\"，主语<br>\"你\" 不是在主动削减办公室寒暄。<br>B) missing out ✓正解：miss out on = 错过<br>missing out on = 错过（机会、活动）。\"在家工作 → 错过办公室日常社交对话\" 因果顺、搭配<br>地道，是考研英语二高频考点搭配。<br>C) breaking in ✗错因：搭配与语义都不对<br>breaking in 多与 on 搭配指 \"插话/打断（谈话）\"，但需要主语在场打断，与 \"在家工作\" 物理冲<br>突；且不是 \"错过\"。<br>D) looking down ✗错因：look down on = 看不起，色彩负面<br>looking down on = 鄙视/看低；\"看不起办公室寒暄\" 与上文 \"孤独\" 主线不搭。<br>【验证】代入后 you are working from home and you are missing out on the usual social<br>conversations that happen in an office——\"在家办公，错过了办公室里日常的社交对<br>话\"，正好为前文 \"working from home 容易孤独\" 提供原因。",
+    "tips": "+on 的常用搭配 + 上下文 \"在家工作错失办公室寒暄\"",
+    "kp": "完形填空 · 第7空考点精析"
+  },
+  {
+    "id": "E2024_08",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第8题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>8</strong> 空的最佳选项：",
+    "options": [
+      "A. shorten",
+      "B. trigger",
+      "C. follow",
+      "D. interrupt"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (trigger)</strong><br>词义辨析<br>【线索】举例支持 \"引发 → 孤独期\"<br>原文 Other life changes can __(8)__ periods of loneliness too, such as retirement,<br>changing jobs or becoming a parent：\"退休、换工作、成为父母\" 都是 \"导致一段孤独<br>期\" 的诱因；空所表达的应是 \"引发/触发\"。<br>【选项】A) shorten ✗错因：方向相反<br>shorten = 缩短，\"生活变化缩短孤独期\" 与 \"造成孤独\" 主线反。<br>B) trigger ✓正解：引发 / 触发，正好对应 \"诱因\"<br>trigger = 触发；\"生活变化触发孤独期\"，与 such as 列举的几种生活变迁因果顺畅，并呼应上<br>文 contribute to a low mood 的因果框架。<br>C) follow ✗错因：方向颠倒<br>follow = 跟随；\"生活变化跟随孤独期\" 把因果倒过来了。<br>D) interrupt ✗错因：意为 \"打断\"，与 \"造成\" 相反<br>interrupt = 打断，\"生活变化打断孤独期\" 反而是 \"缓解\"，与段落主张相反。<br>【验证】代入后 Other life changes can trigger periods of loneliness too, such as retirement,<br>changing jobs or becoming a parent——\"其他生活变化也会触发孤独期，比如退休/换<br>工作/为人父母\"，与 P2 \"孤独的多种成因\" 主旨一致。",
+    "tips": "举例支持 \"引发 → 孤独期\"",
+    "kp": "完形填空 · 第8空考点精析"
+  },
+  {
+    "id": "E2024_09",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第9题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>9</strong> 空的最佳选项：",
+    "options": [
+      "A. assess",
+      "B. interpret",
+      "C. provide",
+      "D. regain"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (regain)</strong><br>词义辨析<br>【线索】P3 提供 \"重建社交\" 的具体方法<br>原文 It's important to recognise these feelings of loneliness. There are ways to<br>__(9)__ a social life，下文给出 \"从兴趣入手、加入团体、结识 like-minded 的人\" 等做法<br>——这一切都是 \"重新建立 / 找回\" 社交生活的路径。<br>【选项】A) assess ✗错因：\"评估\" 与后文具体行动不接<br>assess = 评估，下文是 \"加入团体、结识朋友\"，不是评估社交质量。<br>B) interpret ✗错因：\"解释\" 不与 a social life 搭配<br>interpret = 解读 / 解释，宾语通常是文本、信号；\"解读一个社交生活\" 不通。<br>C) provide ✗错因：主体错位<br>provide = 提供，\"有方法去 provide a social life\" 暗含 \"由谁提供给谁\"，主体错位——文章是教<br>\"你自己\" 重建。<br>D) regain ✓正解：\"重新获得 / 找回\"<br>regain = 重新获得，紧承上文 \"孤独+丢失日常社交\"，下文又给出 \"重建路径\"——\"找回社交生<br>活\" 串成一体。<br>【验证】代入后 There are ways to regain a social life，\"有办法重新获得社交生活\"，与下文 \"从兴<br>趣入手、加入团体\" 等具体重建方法严丝合缝。",
+    "tips": "P3 提供 \"重建社交\" 的具体方法",
+    "kp": "完形填空 · 第9空考点精析"
+  },
+  {
+    "id": "E2024_10",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第10题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>10</strong> 空的最佳选项：",
+    "options": [
+      "A. at first",
+      "B. in turn",
+      "C. on time",
+      "D. by chance"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (at first)</strong><br>词义辨析<br>【线索】下一句紧接 \"先从兴趣入手\"——暗示 \"起步阶段\"<br>原文 There are ways to __(9)__ a social life, but it can feel overwhelming __(10)__. It's<br>a great idea to start by thinking about hobbies you enjoy：but 提示 \"虽有办法但起<br>步阶段会不堪重负\"，下一句给 start by 起步建议——所填状语必然修饰 \"起步阶段\"，即<br>\"起初\"。<br>【选项】<br>A) at first ✓正解：\"起初\" 与下句 start by 完全呼应<br>at first = 起初，\"起初会觉得 overwhelming，但可以从你喜欢的爱好入手\"——前后构成 \"起步<br>难 → 给入门法\" 的标准教学口吻。<br>B) in turn ✗错因：\"依次/反过来\" 与本句逻辑无关<br>in turn = 依次 / 反过来，需要 \"先后顺序或互相影响\"，本句没有这种链条。<br>C) on time ✗错因：意为 \"准时\"，与情绪 overwhelming 不搭<br>on time 修饰 \"是否准时\"，常用于交付/到达；情绪状态用 on time 修饰不合理。<br>D) by chance ✗错因：\"偶然\" 与 \"起步阶段\" 无关<br>by chance = 偶然地，强调随机；本句强调时间节点 \"开始时\"，不是偶然。<br>【验证】代入后 it can feel overwhelming at first. It's a great idea to start by thinking about<br>hobbies you enjoy——\"起初会让人不堪重负。可以从你喜欢的爱好开始着手\"，前 at first<br>与后 start by 形成时间链，自然顺。",
+    "tips": "下一句紧接 \"先从兴趣入手\"——暗示 \"起步阶段\"",
+    "kp": "完形填空 · 第10空考点精析"
+  },
+  {
+    "id": "E2024_11",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 11,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第11题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>11</strong> 空的最佳选项：",
+    "options": [
+      "A. far-sighted",
+      "B. strong-willed",
+      "C. kind-hearted",
+      "D. like-minded"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (like-minded)</strong><br>词义辨析<br>【线索】前文提兴趣团体，下文列同好群体<br>原文 find groups and activities related to those where you will be able to meet<br>__(11)__ people 紧接 There are groups aimed at new parents, at those who want to<br>__(12)__ a new sport for the first time, or networking events for those in the same<br>profession——所遇之人都是 \"志同道合者\"，与 \"兴趣/职业相同\" 直接对应。<br>【选项】A) far-sighted ✗错因：\"有远见的\" 与 \"兴趣团体\" 主线无关<br>far-sighted = 有远见的，常用于战略/投资类语境，不是 \"兴趣团体\" 的标签。<br>B) strong-willed ✗错因：\"意志坚定\" 与 \"共同爱好\" 不对应<br>strong-willed = 意志坚定的，描述个人意志品质，与 \"基于兴趣聚合\" 这一关系属性无关。<br>C) kind-hearted ✗错因：\"好心\" 偏品德，不指向 \"共同兴趣\"<br>kind-hearted = 好心肠的；下文几个团体的共同点是 \"做相同的事\"，不是 \"心地好\"——容易因<br>\"听着暖\" 误选，但与下文聚类标准对不上。<br>D) like-minded ✓正解：\"志同道合\" 直对应共同兴趣<br>like-minded = 志趣相投的，正好是 \"按兴趣/职业聚类的人群\" 的标签词。<br>【验证】代入后 you will be able to meet like-minded people——\"你将能遇到志趣相投的人\"，<br>与下文 \"新手父母 / 想尝试新运动者 / 同行\" 这些 \"共同兴趣团体\" 完全对位。",
+    "tips": "前文提兴趣团体，下文列同好群体",
+    "kp": "完形填空 · 第11空考点精析"
+  },
+  {
+    "id": "E2024_12",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 12,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第12题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>12</strong> 空的最佳选项：",
+    "options": [
+      "A. try",
+      "B. promote",
+      "C. watch",
+      "D. describe"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (try)</strong><br>词义辨析<br>【线索】for the first time 锁定 \"首次尝试\"<br>原文 those who want to __(12)__ a new sport for the first time——\"想第一次 ___ 一项<br>新运动的人\"。线索极强：能与 \"for the first time\" 自然搭配且最常被作动词的就是 try。<br>【选项】<br>A) try ✓正解：try a new sport for the first time = 第一次尝试一项新运动<br>try 与 for the first time 是黄金搭配，且下文 \"加入团体\" 的人群就是 \"想初次尝试某项运动<br>者\"，符合 P3 \"鼓励起步\" 的口吻。<br>B) promote ✗错因：\"推广\" 主体错位<br>promote = 推广，推广一项运动通常是机构 / 名人的事，不是 \"想第一次接触它的人\" 的事。<br>C) watch ✗错因：\"观看\" 与 social life 主线不符<br>watch 一项运动是被动接受；本段是讲 \"加入团体进行某项活动\"，主动尝试才能搭起<br>social connection。<br>D) describe ✗错因：\"描述\" 与 sport 搭配语义不通<br>describe = 描述，\"第一次描述一项新运动\" 句义怪、不符合 \"加入团体动手做\" 的语境。<br>【验证】代入后 those who want to try a new sport for the first time——\"想第一次尝试一项新<br>运动的人\"，与上文 like-minded people \"志趣相投者\" 一脉相承，体现 P3 \"以兴趣为入口<br>扩大社交\" 的脉络。",
+    "tips": "for the first time 锁定 \"首次尝试\"",
+    "kp": "完形填空 · 第12空考点精析"
+  },
+  {
+    "id": "E2024_13",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 13,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第13题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>13</strong> 空的最佳选项：",
+    "options": [
+      "A. test",
+      "B. share",
+      "C. accept",
+      "D. revise"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (share)</strong><br>词义辨析<br>【线索】networking events 目的=互通有无<br>原文 networking events for those in the same profession to meet up and __(13)__<br>ideas——\"同行 networking 见面\" 的常见目的是 \"交换/分享想法\"。<br>【选项】A) test ✗错因：\"测试\" 偏实验/产品语境<br>test ideas 多用于 \"检验假设\"，networking event 不是实验场合。<br>B) share ✓正解：分享想法是 networking 的标准动作<br>share ideas = 分享想法，是同行见面的最自然目的，与 meet up 并列毫无违和感。<br>C) accept ✗错因：\"接受\" 单向，networking 是双向交流<br>accept ideas = 接受想法，单向接受，不符合 networking 双向交流的常识。<br>D) revise ✗错因：\"修订\" 缺前提<br>revise = 修订，多用于稿件、计划；\"修订想法\" 需先有 \"已成型的方案\"，无上下文铺垫。<br>【验证】代入后 to meet up and share ideas——\"见面并分享想法\"，正是 networking 的典型目<br>的，亦与 P3 \"通过共同身份社交\" 主旨一致。",
+    "tips": "networking events 目的=互通有无",
+    "kp": "完形填空 · 第13空考点精析"
+  },
+  {
+    "id": "E2024_14",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 14,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第14题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>14</strong> 空的最佳选项：",
+    "options": [
+      "A. already",
+      "B. thus",
+      "C. also",
+      "D. only"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (also)</strong><br>逻辑关系<br>【线索】段首 On the other hand 暗示并列对立<br>原文 On the other hand, it's __(14)__ possible to have too much of a social life：On<br>the other hand 指向 \"和前面（过少之害）一样，另一面（过多之害）也存在\"。线索指向<br>\"也/同样\" 这类副词。<br>【选项】A) already ✗错因：\"已经\" 表示时间完成，与 possible 不搭<br>already = 已经；\"已经可能社交过多\" 句义不通，需要时间先后的语境。<br>B) thus ✗错因：\"因此\" 表因果，与对照矛盾<br>thus = 因此；段首已有 On the other hand 表 \"另一面\"，再 thus 因果会自相矛盾。<br>C) also ✓正解：\"也可能\" 与 \"另一面\" 并列同向<br>also = 也，表 \"另一面同样存在的可能性\"，与 On the other hand 构成 \"两侧均可能\" 的对照-<br>并列结构。<br>D) only ✗错因：\"仅仅\" 缩小范围，文意不符<br>only = 仅仅；\"只可能社交太多\" 把可能性窄化，与对照-并列逻辑相反。<br>【验证】代入后 On the other hand, it's also possible to have too much of a social life——\"另<br>一方面，社交太多也是可能的\"，与 P2 \"独处太多有害\" 形成完整 \"两侧均有害\" 平衡，呼应<br>outline 主轴。",
+    "tips": "段首 On the other hand 暗示并列对立",
+    "kp": "完形填空 · 第14空考点精析"
+  },
+  {
+    "id": "E2024_15",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 15,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第15题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>15</strong> 空的最佳选项：",
+    "options": [
+      "A. list",
+      "B. order",
+      "C. space",
+      "D. boundary"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (space)</strong><br>词义辨析<br>【线索】downtime 需要 \"留白\"<br>原文 If you feel like you're always doing something and there is never any __(15)__ in<br>your calendar for downtime：always doing something 与 never any ___ 形成对比，<br>downtime（放松时间）必须有 \"空档 / 空白\" 才能发生。<br>【选项】A) list ✗错因：list 与 downtime 不搭<br>list = 清单，\"日程表里没有给放松留清单\" 句义别扭，且 list 本身就是 calendar 的内容形式，并<br>非 \"留白\"。<br>B) order ✗错因：\"顺序/订单\" 与 downtime 无关<br>order = 顺序/订单，搭 calendar / downtime 无固定意义。<br>C) space ✓正解：\"留白 / 空档\" 正合 downtime 用<br>space in your calendar = 日程表里的空档，是英语对 \"留白时间\" 的标准表达，与 downtime<br>（停机时间）配套。<br>D) boundary ✗错因：\"边界\" 是 \"分割\" 而非 \"留出\"<br>boundary = 边界，强调划界、把两块分开；本句要的是 \"留出空白\"，不是 \"分界\"。<br>【验证】代入后 there is never any space in your calendar for downtime——\"日程表里从来没有<br>给停机留任何空档\"，与上文 always doing something 形成 \"满-空\" 自然反差，符合 P4<br>\"过满之害\" 主旨。",
+    "tips": "downtime 需要 \"留白\"",
+    "kp": "完形填空 · 第15空考点精析"
+  },
+  {
+    "id": "E2024_16",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 16,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第16题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>16</strong> 空的最佳选项：",
+    "options": [
+      "A. fatigue",
+      "B. criticism",
+      "C. injustice",
+      "D. dilemma"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (fatigue)</strong><br>词义辨析<br>【线索】social burnout = social ___ 同义替换<br>原文 you could suffer social burnout or social __(16)__：burnout 本意 \"精疲力竭\"；or<br>引出的等价名词应该是 \"疲劳/耗竭\" 同义词。<br>【选项】<br>A) fatigue ✓正解：social fatigue 与 social burnout 同义同向<br>fatigue = 疲劳；social fatigue 是 social burnout 的通用说法，or 并列同向，下文紧接 low<br>energy, irritability and trouble sleeping 也都是疲劳症状。<br>B) criticism ✗错因：\"批评\" 与 burnout 不同场<br>criticism = 批评，是言语行为，不是身心状态。<br>C) injustice ✗错因：\"不公正\" 与 burnout 无关<br>injustice = 不公正，与 \"社交耗竭\" 完全不同语域。<br>D) dilemma ✗错因：\"困境\" 偏决策，与 burnout 不同向<br>dilemma = 两难，强调选择困境，不是 \"心力耗竭\"。<br>【验证】代入后 you could suffer social burnout or social fatigue——\"你会经历社交耗竭或社交<br>疲劳\"，or 同义并列、下文又用 \"低能量/易怒/失眠\" 印证，链条一致。",
+    "tips": "social burnout = social ___ 同义替换",
+    "kp": "完形填空 · 第16空考点精析"
+  },
+  {
+    "id": "E2024_17",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 17,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第17题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>17</strong> 空的最佳选项：",
+    "options": [
+      "A. sources",
+      "B. standards",
+      "C. signs",
+      "D. scores"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (signs)</strong><br>词义辨析<br>【线索】列举出的都是 \"表现\"，不是 \"成因\"<br>原文 Low mood, low energy, irritability and trouble sleeping could all be __(17)__ of<br>poor social health：列举的都是 \"被社交健康差体现出的现象\"，属于症状/迹象。<br>【选项】A) sources ✗错因：\"来源\" 把因果倒置<br>sources = 来源/根源；列举的是 poor social health 的结果，不是它的源头。最易诱人，但方<br>向错。<br>B) standards ✗错因：\"标准\" 不合语义<br>standards = 标准，\"低落是不良社交健康的标准\" 句义别扭。<br>C) signs ✓正解：\"迹象\" 与 \"列举症状\" 完美对位<br>signs = 迹象/征兆；\"低落、低能、易怒、失眠都可能是社交健康不佳的迹象\"，是 P4 \"如何识别<br>social 过度\" 的总结句。<br>D) scores ✗错因：\"得分\" 需要量化语境<br>scores = 分数，需考试/打分语境，本句没有任何评分体系。<br>【验证】代入后 Low mood, low energy, irritability and trouble sleeping could all be signs of<br>poor social health——\"它们都可能是社交健康不佳的迹象\"，与 P4 \"识别 social 过度\" 的<br>承上启下完全一致。",
+    "tips": "列举出的都是 \"表现\"，不是 \"成因\"",
+    "kp": "完形填空 · 第17空考点精析"
+  },
+  {
+    "id": "E2024_18",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 18,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第18题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>18</strong> 空的最佳选项：",
+    "options": [
+      "A. take over",
+      "B. wipe off",
+      "C. add up",
+      "D. mark out"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (mark out)</strong><br>固定搭配<br>【线索】下文给出 \"留出来的目的\"——休息、放松、恢复<br>原文 Make sure you __(18)__ some time in your diary when you're __(19)__ for<br>socialising and use this time to relax, __(20)__ and recover：动作的目的是 \"用这段时间<br>relax / recover\"——即 \"专门划出一段时间\"。<br>【选项】A) take over ✗错因：\"接管\" 与 \"留时间\" 不同义<br>take over = 接管/接手，常用于 \"接手职位/任务\"，不能搭 some time。<br>B) wipe off ✗错因：\"擦去\" 方向相反<br>wipe off = 擦掉/抹去；\"擦掉日程里的时间\" 与 \"留出一段时间\" 相反。<br>C) add up ✗错因：\"累加/合计\" 不搭 \"日程留时\"<br>add up = 加起来/合计，宾语多为数字，搭 some time in your diary 不通。<br>D) mark out ✓正解：\"在日程里划/标出一段时间\"<br>mark out = 标出/划出，正合 \"在 diary 里专门划一段时间用于不社交、休息\"。<br>【验证】代入后 Make sure you mark out some time in your diary when you're __(19)__ for<br>socialising——\"务必在你的日程上标出一些时间，那段时间你不参加社交\"，与下文 use<br>this time to relax, __(20)__ and recover 衔接顺畅。",
+    "tips": "下文给出 \"留出来的目的\"——休息、放松、恢复",
+    "kp": "完形填空 · 第18空考点精析"
+  },
+  {
+    "id": "E2024_19",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 19,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第19题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>19</strong> 空的最佳选项：",
+    "options": [
+      "A. ungrateful",
+      "B. unavailable",
+      "C. responsible",
+      "D. regretful"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (unavailable)</strong><br>词义辨析<br>【线索】段意是 \"专门划出不社交的时间\"<br>原文 Make sure you __(18)__ some time in your diary when you're __(19)__ for<br>socialising and use this time to relax：when you're ___ for socialising 与 use this<br>time to relax 同义说一遍——这段时间不能用来社交。所填形容词应表 \"不可用 / 不可参加<br>社交\"。<br>【选项】A) ungrateful ✗错因：\"不感激\" 不搭 socialising<br>ungrateful = 不感激的，常 ungrateful to / for sb，且语义与 \"留时间放松\" 无关。<br>B) unavailable ✓正解：\"无法参加社交\" 与 \"专门留出\" 对位<br>unavailable for socialising = 没空 / 不能参加社交；与 \"在日程里划出一段时间专门用来不社<br>交\" 完全一致。<br>C) responsible ✗错因：\"对……负责\" 方向反<br>responsible for socialising = 对社交负责，意思偏 \"承担起社交任务\"，与 \"留出不社交的时间\"<br>反向。<br>D) regretful ✗错因：\"后悔\" 是情绪词，与 \"是否抽得开身\" 无关<br>regretful = 后悔的，不能解释 \"为什么这段时间能用来 relax\"。<br>【验证】代入后 some time in your diary when you're unavailable for socialising and use this<br>time to relax——\"日程上标出一些时间，这段时间你不能用于社交，要用来放松\"，与 P4<br>主旨 \"留白以恢复\" 一致。",
+    "tips": "段意是 \"专门划出不社交的时间\"",
+    "kp": "完形填空 · 第19空考点精析"
+  },
+  {
+    "id": "E2024_20",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 20,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2024_CLOZE",
+    "title": "2024英二 完形填空 第20题 (0.5分)",
+    "stem": "请结合上方《2024年完形填空》原文，选择第 <strong>20</strong> 空的最佳选项：",
+    "options": [
+      "A. react",
+      "B. repeat",
+      "C. return",
+      "D. rest"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (rest)</strong><br>词义辨析<br>【线索】三连并列里前后都是 \"休/恢复\"<br>原文 use this time to relax, __(20)__ and recover：左 relax（放松）、右 recover（恢<br>复），中间最自然的并列就是 rest（休息）。<br>【选项】A) react ✗错因：\"反应\" 与 \"休息\" 不同场<br>react = 反应，是输出动作，与 relax / recover 的 \"消耗修复\" 完全不同向。<br>B) repeat ✗错因：\"重复\" 与休息无关<br>repeat = 重复，描述动作模式而非状态，并列别扭。<br>C) return ✗错因：\"回归\" 单向，且需具体宾语<br>return = 回到（某处），需要 to 介词搭配宾语，本句是不及物的三连并列、无宾语。<br>D) rest ✓正解：与 relax / recover 同义同场<br>rest = 休息，与 relax（放松）、recover（恢复）构成 \"放松-休息-恢复\" 三连并列，是 P4 \"留<br>白以恢复\" 的最自然收束。<br>【验证】代入后 use this time to relax, rest and recover——\"用这段时间去放松、休息、恢复\"，<br>三动词同义并列收尾，呼应 outline 中 P4 \"避免 social 过度、留时间恢复\" 的对策主旨。<br>O V E R V I E W · 通读建境<br>全文主旨与行文脉络<br>完形是语篇题——单看空所在的半句往往四个选项都「像」。下面是全文主旨与行文脉<br>络，是每个空锁定线索、代入验证时核对的全局工作台。<br>全文主旨<br>社交生活贵在平衡，过少与过多都伤身心<br>全文围绕 social life 展开：开篇即把它定义为 the activities you do with other people, for<br>pleasure, when you are not working，并定调 It's important to have a social life, but what's<br>right for one person won't be right for another——好坏因人而异；随后两段讲 \"太少\" 之<br>害（孤独、低落），末段反向讲 \"太多\" 之害（social burnout）。作者基调中性、建议性，<br>主线一直围绕 \"找到平衡\"。<br>行文脉络<br>定义+定调 → 过少之害与成因 → 如何重建社交 → 过多之害与对策<br><br>四段四走向：P1 定义 social life 并提出 Some of us feel energised by spending lots of time<br>with others 与另一类人 feel drained 的对照；P2 提出 finding a __(2)__ in your social life is<br>key，转入 \"独处过多 → 孤独 → 低落\" 链条，并举 working from home 等场景；P3 给方法<br>——start by thinking about hobbies you enjoy，借兴趣团体找到 __(11)__ 的人；P4 用 On<br>the other hand 转向另一侧，说明 too much of a social life 也会带来 social burnout，最后<br>给出 \"留白\" 的建议。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>15 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>Your social life is defined as \"the activities you do with other people, for pleasure,<br>when you are not working\".<br>第1段，第1句<br>主句采用被动语态给出定义,定语从句修饰关键名词,状语从句说明时间条件,这种 \"定义句 + 定语从<br>句限定 + 状语从句补充\" 的结构在四六级和考研阅读中非常常见,特别是学术定义、概念解释类文<br>本,学习后可大量迁移。<br>It's important to have a social life, but what's right for one person won't be right<br>for another.<br>第1段，第2句<br>本句成分丰富且包含多个训练价值点：形式主语 \"It\" 与真正主语 \"to have a social life\" 的识别，主<br>语从句 \"what's right for one person\" 作主语的用法，以及并列主句中各自的主系表结构划分。这<br>些都是学生容易混淆的考点，练习价值较高。<br>Some of us feel energised by spending lots of time with others, whereas some of us<br>may feel drained, even if it's doing something we enjoy.<br>第1段，第3句<br>本句的 \"whereas\" 并列对比结构、\"even if\" 让步状语从句、以及定语从句中关系代词省略,都是四六<br>级和考研阅读中的高频句式。特别是并列对比和让步逻辑的组合,是议论文和说明文的典型结构,学<br>习者掌握后可大量复用,典型性较高。<br><br>Spending too much time on your own, not seeing others, can make you feel lonely<br>and disconnected.<br>第2段，第2句<br>本句涵盖动名词短语作主语、情态动词作谓语、代词作宾语、不定式短语作宾语补足语等多种成<br>分，主语由两个并列的动名词短语构成且占据篇幅较大，容易与谓语混淆，宾补结构中包含使役动<br>词 make 的用法，成分种类丰富且有易错点，适合作为划分成分的训练材料<br>Loneliness is known to impact on your mental health and contribute to a low<br>mood.<br>第2段，第3句<br>本句使用的 \"主语 + be known to do\" 被动结构（类似 be believed to、be considered to、be<br>reported to 等）在四六级和考研阅读中高频出现，是典型的书面语句式；掌握这一结构后可迁移<br>到大量类似句型，代表性很强。<br>This might be especially true if, for example, you are working from home and you<br>are missing out on the usual social conversations that happen in an office.<br>第2段，第5句<br>主句+条件状语从句+定语从句修饰从句宾语是四六级和考研阅读中的高频句式；条件从句内并列<br>结构和定语从句嵌套也是常考搭配；该句型掌握后可大量迁移到类似复合句分析，典型性很高。<br>It's important to recognise these feelings of loneliness.<br>第3段，第1句<br>形式主语句型('It is + 形容词 + to do')在四六级和考研阅读写作中高频出现,具有很强的代表性和迁<br>移性,掌握后可大量复用。<br>There are ways to regain a social life, but it can feel overwhelming at first.<br>第3段，第2句<br>并列句是四六级和考研阅读中的高频句式,存在句型和情态动词加系动词的搭配也较为常见,学生掌<br>握后可迁移到类似结构的句子,具有一定代表性,但本句结构过于简单,不及更复杂的典型考句。<br><br>It's a great idea to start by thinking about hobbies you enjoy.<br>第3段，第3句<br>形式主语加不定式的句型在四六级和考研阅读中高频出现,定语从句省略关系代词也是常考现象;该<br>句结构代表性强,掌握后可迁移到大量同类句子<br>You can then find groups and activities related to those where you will be able to<br>meet like-minded people.<br>第3段，第4句<br>\"主句 + where引导的定语从句修饰地点名词\" 是四六级和考研阅读中的高频句式,具有很强的代表<br>性。情态动词表达可能性、\"be able to\" 表达能力、定语从句说明先行词特征,这些都是考试常见的<br>表达方式,掌握后可大量迁移到类似句子<br>There are groups aimed at new parents, at those who want to try a new sport for<br>the first time, or networking events for those in the same profession to meet up<br>and share ideas.<br>第3段，第5句<br>本句的 there be 存在句结构、并列主语、后置定语(过去分词和不定式)、限定性定语从句等都是四<br>六级和考研阅读中常见的典型句式。掌握这类句子的分析方法后,可以迁移到大量类似结构的句子<br>中,具有较强的代表性和实用性。结构虽不算罕见特例,但也不是最高频的简单句或单一从句,属于常<br>考且值得掌握的中等复杂度典型句式。<br>On the other hand, it's also possible to have too much of a social life.<br>第4段，第1句<br>\"It is + 形容词 + to do\" 是四六级和考研阅读中的高频句式，形式主语结构在真题中反复出现，句<br>首状语过渡也是常见写法，结构典型性较高，掌握后可大量复用。<br>We all have our own social limit and it's important to recognise when you're<br>feeling like it's all too much.<br>第4段，第3句<br>全句的并列主句结构和形式主语 + 不定式真正主语的搭配，在四六级和考研真题中非常常见。\"It is<br>+ 形容词 + to do\" 句型和 when 引导的宾语从句都是高频考点；嵌套宾语从句的用法也具有一定代<br>表性。整体句式符合考试中 \"陈述事实 + 提出建议\" 的典型表达模式，掌握后可大量迁移到类似句<br>型的理解和分析中。<br><br>Low mood, low energy, irritability and trouble sleeping could all be signs of poor<br>social health.<br>第4段，第4句<br>本句涵盖主语（并列结构）、谓语（情态动词 + 系动词）、表语（名词短语）、定语（介词短<br>语）等多种成分，适合练习主系表结构和并列主语的识别。主语的并列结构（四个名词性短语）<br>和副词 \"all\" 的位置是易错点，具有一定训练价值。但缺少宾语、状语从句等更复杂成分，丰富度<br>有限。<br>Make sure you mark out some time in your diary when you're unavailable for<br>socialising and use this time to relax, rest and recover.<br>第4段，第5句<br>祈使句 + 宾语从句 + 定语从句的组合是考试常见句式。并列谓语、关系副词引导的定语从句、不<br>定式作目的状语都是典型结构，掌握后可迁移到大量类似句子，具有较好的代表性。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 15 个考研英语二真题高频词<br>下列单词既在本篇完形原文中出现，又是 考研英语二 历年真题的高频词（在该考试真题<br>中出现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查<br>看该词的释义、音标、词形与真题例句。<br>mood<br>A2<br>n. 心情<br>本篇2 次 · 真题 12 句<br>impact<br>B2<br>n. 影响<br>本篇1 次 · 真题 53 句<br>define<br>B1<br>v. 给……下定义<br>本篇1 次 · 真题 46 句<br>limit<br>B1<br>n. 限度<br>本篇1 次 · 真题 42 句<br>sign<br>A1<br>n. 标志<br>本篇1 次 · 真题 42 句<br>mental<br>B1<br>adj. 精神的<br>本篇1 次 · 真题 37 句<br><br>event<br>A2<br>n. 事件<br>本篇1 次 · 真题 36 句<br>aim<br>B1<br>v. 瞄准<br>本篇1 次 · 真题 35 句<br>contribute<br>B1<br>v. 捐献<br>本篇1 次 · 真题 34 句<br>balance<br>B1<br>n. 平衡<br>本篇1 次 · 真题 30 句<br>related<br>B1<br>adj. 相关的<br>本篇1 次 · 真题 23 句<br>suffer<br>B1<br>v. 遭受（痛苦、疾病、损失等）<br>本篇1 次 · 真题 22 句<br>retirement<br>B2<br>n. 退休<br>本篇1 次 · 真题 19 句<br>profession<br>B2<br>n. 职业（尤指需要专门技能和培训的）<br>本篇1 次 · 真题 18 句<br>trigger<br>B2<br>v. 引发<br>本篇1 次 · 真题 10 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 131 词按 CEFR 难度累积覆盖<br>带空短文去重后共 131 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 2 个 ·<br>约 2%。<br><br>62%<br>A1<br>及以下<br>82%<br>A2<br>及以下<br>90%<br>B1<br>及以下<br>98%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 131 个 · 末柱为 100%<br>去重总词数<br>131<br>B2 以上难词<br>2%<br>B1 及以下覆盖<br>90%<br>考研英语二<br>2024年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>本题<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>题目解析 →<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "三连并列里前后都是 \"休/恢复\"",
+    "kp": "完形填空 · 第20空考点精析"
+  },
+  {
+    "id": "E2024_21",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 21,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT1",
+    "title": "2024英二 阅读 Text 1 第21题 (2分)",
+    "stem": "<strong>21. Coyle argues in her new book that economic growth should_______.</strong>",
+    "options": [
+      "A. give rise to innovations",
+      "B. diversify career choices",
+      "C. benefit people equally",
+      "D. be promoted forcefully"
+    ],
+    "answer": "C",
+    "analysis": "Coyle在她的新书中认为经济增长应当_______。<br>A) 引发创新<br>B) 使职业选择多样化<br>C) 让人们平等受益<br>D) 被强力推动<br>【答案】C （细节题）<br>【判型】argues in her new book that economic growth should 直接问书中的具体主张，是对原<br>文一句话的转述。<br>【拆句】Coyle argues in her new book that economic growth should 主句主谓是 Coyle<br>argues，that 引导宾语从句，从句主语 economic growth，谓语 should + 选项内容，四<br>个选项是 should 后的动词原形并列。理解时把 should 之后的空缺填回去即可，无陷阱。<br>【定位】Whatever we mean by the economy growing, by things getting better, the gains will have to<br>be more evenly shared than in the recent past.<br>无论我们所说的经济增长、事情变好是什么意思，收益都必须比近期更均衡地分享。<br>【选项】A)<br>无中生有<br>give rise to innovations 谈的是经济增长应催生创新，但定位句只讲收益要均匀分享，<br>全文也未把创新列为 Coyle 在书中对增长本身提出的主张。<br>B)<br>偷换概念<br>diversify career choices 暗示多元化职业选择，原文 middle-income jobs undercut<br>by automation 只是描述被自动化削弱的现状，并未提出经济增长应使职业多元化的<br>主张。<br>C)<br>✓ 正确<br>the gains will have to be more evenly shared ↔benefit people equally<br>C 项 benefit people equally 与预判的“收益更平均分配”完全一致，是定位句的标准同<br>义替换。<br>D)<br>答非所问<br>be promoted forcefully 主张要强力推动增长，定位句强调的是分配方式而非推动力<br>度；原文亦无任何 promote/push/forcefully 类表述。",
+    "tips": "argues in her new book that economic growth should 直接问书中的具体主张，是对原",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_22",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 22,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT1",
+    "title": "2024英二 阅读 Text 1 第22题 (2分)",
+    "stem": "<strong>22. According to Paragraph 2, digital technologies should be used to_______.</strong>",
+    "options": [
+      "A. bring about instant prosperity",
+      "B. reduce people's workload",
+      "C. raise overall work efficiency",
+      "D. enhance cross-sector cooperation"
+    ],
+    "answer": "C",
+    "analysis": "根据第2段,数字技术应当被用来_______。<br>A) 带来即时繁荣<br>B) 减少人们的工作量<br>C) 提高整体工作效率<br>D) 增强跨部门合作<br>【答案】C （细节题）<br>【判型】digital technologies should be used to 直接对应原文某一目的状语，属于客观信息<br>回填。<br>【拆句】According to Paragraph 2, digital technologies should be used to 句首 According to<br>是来源状语，主句主语 digital technologies，谓语 should be used，to + 动词原形作目<br>的状语；四个选项替换 to 后内容。直接对应第 2 段目的状语句即可，结构无陷阱。<br>【定位】Improving living standards and increasing prosperity for more people will require greater use<br>of digital technologies to boost productivity in various sectors, including health care and<br>construction, says Coyle.<br>Coyle 说，要改善生活水平、让更多人富裕，就需要更广泛地使用数字技术，以提高包括医<br>疗和建筑在内的多个行业的生产率。<br>【选项】A)<br>过度推断<br>bring about instant prosperity 强调“立即带来繁荣”，原文 Improving living<br>standards and increasing prosperity for more people 只说要改善生活、增加更多人<br>富裕，从未限定时效为 instant，更未说技术本身直接带来繁荣。<br>B)<br>无中生有<br>reduce people's workload 谈减轻工作量，原文 good jobs being destroyed 是说好<br>岗位被毁，与减轻工作量无关。<br>C)<br>✓ 正确<br>boost productivity in various sectors ↔raise overall work efficiency<br>C 项把定位句的目的状语原样还原：提升整体的（多行业的）工作效率/生产率，与预判<br>完全一致。<br>D)<br>偷换概念<br>enhance cross-sector cooperation 主张促进跨部门合作，原文 in various sectors,<br>including health care and construction 只是列举技术应用的行业范围，并未提行业之<br>间合作。",
+    "tips": "digital technologies should be used to 直接对应原文某一目的状语，属于客观信息",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_23",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 23,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT1",
+    "title": "2024英二 阅读 Text 1 第23题 (2分)",
+    "stem": "<strong>23. What does Coyle fear about transformative technologies?</strong>",
+    "options": [
+      "A. They may affect work-life balance.",
+      "B. They may be impractical to deploy.",
+      "C. They may incur huge expenditure.",
+      "D. They may be unwelcome to the public."
+    ],
+    "answer": "D",
+    "analysis": "Coyle对变革性技术有什么担忧?<br>A) 它们可能影响工作与生活的平衡。<br>B) 它们可能不切实际而难以部署。<br>C) 它们可能招致巨额开支。<br>D) 它们可能不受公众欢迎。<br>【答案】D （细节题）<br>【判型】What does Coyle fear about transformative technologies 问她担忧的具体对象，对应<br>原文一句担忧表态。<br>【拆句】What does Coyle fear about transformative technologies? 特殊疑问句，What 作 fear<br>的宾语，about transformative technologies 是宾语限定范围。选项均为 They may + 动<br>词原形，主语 They 回指 transformative technologies。无陷阱。<br>【定位】Coyle said she fears that tech's inequality problem could be a roadblock to deploying AI. ...<br>To make such \"tremendous changes,\" she adds, you need social buy-in.<br>Coyle 说她担心科技业的不平等问题可能成为部署 AI 的障碍。……她补充说，要实现这种<br>“巨大变革”，需要社会的认同。<br>【选项】A)<br>偷换概念<br>affect work-life balance 谈工作生活平衡，原文 change the ways we spend our<br>time every day 是说改变日常时间安排，并非工作与生活的平衡问题。<br>B)<br>偷换概念<br>impractical to deploy 说技术不切实际、难以部署，原文 tech's inequality problem<br>could be a roadblock to deploying AI 说障碍来自不平等而非技术本身不实用；Coyle<br>担心的是“部署遇阻”，原因是社会因素，并未否定技术本身的可行性。<br>C)<br>无中生有<br>incur huge expenditure 谈巨额开支，全段乃至全文都未出现<br>cost/expenditure/spending 类经济成本表述。<br>D)<br>✓ 正确<br>you need social buy-in ↔unwelcome to the public<br>tech's inequality problem could be a roadblock to deploying AI ↔unwelcome to the public<br>她担忧的不是技术本身或费用，而是社会层面不买账，与 D 项的“可能不被公众欢迎”精<br>准对应。",
+    "tips": "What does Coyle fear about transformative technologies 问她担忧的具体对象，对应",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_24",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 24,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT1",
+    "title": "2024英二 阅读 Text 1 第24题 (2分)",
+    "stem": "<strong>24. Several American cities are mentioned to show______.</strong>",
+    "options": [
+      "A. the uneven distribution of AI technologies in the US",
+      "B. the disappointing prospect of tech jobs in the US",
+      "C. the fast progress of US regional economies",
+      "D. the increasing significance of US AI assets"
+    ],
+    "answer": "A",
+    "analysis": "提及几个美国城市是为了表明______。<br>A) AI技术在美国的分布不均<br>B) 美国技术类工作的前景令人失望<br>C) 美国区域经济的快速进步<br>D) 美国AI资产的重要性日益增加<br>【答案】A （例证目的题）<br>【判型】are mentioned to show 直接问列举目的，是典型例证题题干特征。<br>【拆句】Several American cities are mentioned to show 主语 Several American cities，被动谓<br>语 are mentioned，to show + 选项内容作目的状语。注意：答案在原文这些城市出现处<br>的前一句或后一句的论点，而不是城市数据本身。<br>【定位】According to the Brookings Institution, a short list of eight American cities that included San<br>Francisco, San Jose, Boston, and Seattle had roughly 38% of all tech jobs by 2019. New AI<br>technologies are particularly concentrated: Brookings's Mark Muro and Sifan Liu estimate<br>that just 15 cities account for two-thirds of the AI assets and capabilities in the United States.<br>据布鲁金斯学会，截至 2019 年，包括旧金山、圣何塞、波士顿和西雅图在内的八座美国城<br>市约占全部科技岗位的 38%。新 AI 技术尤其集中：布鲁金斯学会的 Mark Muro 和 Sifan<br>Liu 估算，仅 15 座城市就占了美国 AI 资产与能力的三分之二。",
+    "tips": "are mentioned to show 直接问列举目的，是典型例证题题干特征。",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2024_25",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 25,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT1",
+    "title": "2024英二 阅读 Text 1 第25题 (2分)",
+    "stem": "<strong>25. With regard to Coyle's concern, the author suggests______.</strong>",
+    "options": [
+      "A. raising funds to start new AI projects",
+      "B. encouraging collaboration in AI research",
+      "C. guarding against the side effects of AI",
+      "D. redefining the role of AI technologies"
+    ],
+    "answer": "D",
+    "analysis": "【选项】A)<br>✓ 正确<br>New AI technologies are particularly concentrated ↔<br>the uneven distribution of AI technologies in the US<br>just 15 cities account for two-thirds of the AI assets and capabilities in the United States ↔<br>uneven distribution of AI technologies in the US<br>几座城市占了大多数科技/AI 资源——正是“分布不均”的直接证据，A 项是这一论点的标<br>准转述。<br>B)<br>无中生有<br>the disappointing prospect of tech jobs 强调“令人失望的前景”，原文 had roughly<br>38% of all tech jobs by 2019 只是描述现状的分布数据，并未谈未来的失望走势。<br>C)<br>与原文相反<br>the fast progress of US regional economies 说区域经济快速发展，原文 hold back<br>the sorts of AI technologies needed for regional economies to grow 明确说区域经<br>济受到阻碍，方向相反。<br>D)<br>答非所问<br>the increasing significance of US AI assets 谈 AI 资产愈发重要，原文 two-thirds of<br>the AI assets and capabilities 谈的是 AI 资产的“分布集中”而非其“重要性增长”；题干<br>问举城市目的也指向分布而非重要性。<br>关于Coyle的担忧,作者建议______。<br>A) 筹集资金启动新的AI项目<br>B) 鼓励AI研究中的协作<br>C) 防范AI的副作用<br>D) 重新定义AI技术的角色<br>【答案】D （细节题）<br>【判型】the author suggests 直接问作者给出的具体建议，是末段事实层信息提取。<br>【拆句】With regard to Coyle's concern, the author suggests With regard to 引导话题状语，<br>主句主语 the author，谓语 suggests，宾语为选项内容（动名词短语）。选项均为 V-ing<br>短语，匹配 suggest 后的动名词宾语句法。无陷阱。<br>【定位】A more immediate response is to broaden our digital imaginations to conceive of AI<br>technologies that don't simply replace jobs but expand opportunities in the sectors that<br>different parts of the country care most about, like health care, education, and manufacturing.<br>更直接的应对是拓宽我们的数字想象力，去构想这样的 AI 技术：它们不只是替代岗位，而<br>是在全国各地最在乎的领域——如医疗、教育和制造业——扩大机会。",
+    "tips": "the author suggests 直接问作者给出的具体建议，是末段事实层信息提取。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_26",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 26,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT2",
+    "title": "2024英二 阅读 Text 2 第26题 (2分)",
+    "stem": "<strong>26. It can be learned from Paragraph 1 that the UK needs to______.</strong>",
+    "options": [
+      "A. increase its domestic wood supply",
+      "B. reduce its demand for timber",
+      "C. lower its wood production costs",
+      "D. lift its control on timber imports"
+    ],
+    "answer": "A",
+    "analysis": "从第1段可以得知，英国需要______。<br>A) 增加国内木材供应<br>B) 减少对木材的需求<br>C) 降低木材生产成本<br>D) 放宽对木材进口的管制<br>【答案】A （细节题）<br>【判型】题干用 It can be learned from Paragraph 1，要求从该段直接读出，未含<br>infer/imply/mainly about 等推断或主旨信号。<br>【拆句】It can be learned from Paragraph 1 that the UK needs to______ 句子主干是形式主语 It<br>+ 被动 can be learned，从句 that 引导宾语从句；空格是宾语从句里 needs to 之后的动<br>词原形位置，结构平铺直叙，无陷阱。",
+    "tips": "题干用 It can be learned from Paragraph 1，要求从该段直接读出，未含",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_27",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 27,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT2",
+    "title": "2024英二 阅读 Text 2 第27题 (2分)",
+    "stem": "<strong>27. According to Confor, the UK government's fresh incentives______.</strong>",
+    "options": [
+      "A. can hardly address a construction crisis",
+      "B. are believed to come at a wrong time",
+      "C. seem to be misleading for landowners",
+      "D. will be too costly to put into practice"
+    ],
+    "answer": "A",
+    "analysis": "【定位】Currently only 20 percent of the UK's wood requirement is home-grown while it remains the<br>second-largest net importer of timber in the world.<br>目前英国仅有 20% 的木材需求由本土生产，而它仍是世界第二大木材净进口国。<br>【选项】A)<br>✓ 正确<br>only 20 percent of the UK's wood requirement is home-grown ↔<br>increase its domestic wood supply<br>home-grown ↔domestic<br>预判\"提高本土供给\"与 increase its domestic wood supply 在动作（increase）、对象<br>（domestic wood supply）、方向（提升自给率）三处完全对位，故选 A。<br>B)<br>偷换概念<br>原文呼吁的是供给端扩产，而 reduce its demand for timber 把动作偷换成需求端\"减<br>少使用\"；段首甚至预警 future construction crisis，正是因为建筑需求不会减。<br>C)<br>无中生有<br>首段未涉及木材的生产成本，lower its wood production costs 中的 production<br>costs 在原文找不到对应。<br>D)<br>与原文相反<br>原文意在减少进口依赖，而 lift its control on timber imports 等于放开进口管制，反<br>向加重对进口的依赖，与首段诉求相反。<br>根据Confor的观点，英国政府的新激励措施______。<br>A) 难以解决建筑业危机<br>B) 被认为出台时机不当<br>C) 似乎会对土地所有者产生误导<br>D) 实施成本过高<br>【答案】A （细节题）<br>【判型】题干 According to Confor 限定来源，问 fresh incentives 的具体评价，是对原文一段话的<br>转述比对。<br>【拆句】According to Confor, the UK government's fresh incentives______ 主语是带定语的名词<br>短语 the UK government's fresh incentives，According to Confor 作状语指明信息源；<br>空格处缺谓语，选项即为该谓语短语，结构清晰。<br>【定位】Coming at a time of fresh incentives from the UK government for landowners to grow more<br>trees, the trade body says these don't go far enough and fail to promote the benefits of<br>planting them to boost timber supplies.<br>在英国政府推出鼓励土地所有者多种树的新激励措施之时，这家行业组织（Confor）表示这<br>些措施做得还不够，且未能宣传种树以增加木材供应的益处。",
+    "tips": "题干 According to Confor 限定来源，问 fresh incentives 的具体评价，是对原文一段话的",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_28",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 28,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT2",
+    "title": "2024英二 阅读 Text 2 第28题 (2分)",
+    "stem": "<strong>28. The UK's exposure to fluctuating wood prices is a result of______.</strong>",
+    "options": [
+      "A. the government's inaction on timber imports",
+      "B. inadequate investment in growing wood",
+      "C. the competition among timber traders at home",
+      "D. wood producers' motive to maximise profits"
+    ],
+    "answer": "B",
+    "analysis": "【选项】A)<br>✓ 正确<br>don't go far enough ↔can hardly address a construction crisis<br>a future construction crisis ↔a construction crisis<br>预判的\"力度不够、解决不了未来建筑危机\"在 can hardly address a construction<br>crisis 中以\"几乎无法应对建筑危机\"完整复现，故选 A。<br>B)<br>偷换概念<br>原文 Coming at a time of fresh incentives 只是表示\"在新激励出台之际\"的时间背景，<br>并未评价时机对错；come at a wrong time 把中性时间状语扭曲为负面评价。<br>C)<br>无中生有<br>原文批评激励\"做得不够\"，并未说激励本身误导 landowners；misleading for<br>landowners 凭空增加\"误导土地所有者\"这一负面属性。<br>D)<br>无中生有<br>too costly to put into practice 把评价点转到\"成本太高、执行不起\"，原文从未讨论激<br>励的财政成本，纯属无中生有。<br>英国面临木材价格波动的原因是______。<br>A) 政府对木材进口不作为<br>B) 对木材种植投资不足<br>C) 国内木材贸易商之间的竞争<br>D) 木材生产商追求利润最大化的动机<br>【答案】B （细节题）<br>【判型】题干 is a result of 直白追问原因，是原文中已明示因果关系的细节查找，未<br>含 infer/imply。<br>【拆句】The UK's exposure to fluctuating wood prices is a result of______ 主语 The UK's<br>exposure to fluctuating wood prices 较长，核心名词为 exposure；系动词 is + a result<br>of 构成原因关系，空格处填名词性短语，无复杂结构。<br>【定位】For decades we have not taken responsibility for investing in our domestic wood supply,<br>leaving us exposed to fluctuating prices and fighting for future supplies of wood as global<br>demand rises and our own supplies fall.<br>几十年来我们没有承担起投资本土木材供应的责任，这使我们暴露在波动的价格之下，并在<br>全球需求上涨、本国供应下降之时争夺未来的木材供应。",
+    "tips": "题干 is a result of 直白追问原因，是原文中已明示因果关系的细节查找，未",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_29",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 29,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT2",
+    "title": "2024英二 阅读 Text 2 第29题 (2分)",
+    "stem": "<strong>29. Which of the following causes the shortage of wood supply in the UK?</strong>",
+    "options": [
+      "A. Excessive timber consumption in construction.",
+      "B. Unfavourable conditions for growing wood.",
+      "C. Outdated technologies of the wood industry.",
+      "D. Farmers' unwillingness to plant trees."
+    ],
+    "answer": "D",
+    "analysis": "【选项】A)<br>偷换概念<br>原文把价格波动归因于\"未投资本土\"，并未指责政府在进口管制上\"不作为\"；inaction<br>on timber imports 把矛头转到 imports，与原文因果链脱节。<br>B)<br>✓ 正确<br>have not taken responsibility for investing in our domestic wood supply ↔<br>inadequate investment in growing wood<br>our domestic wood supply ↔growing wood<br>预判的\"几十年未投资本土供应\"在 inadequate investment in growing wood 中以\"对<br>种树投资不足\"重述，主语指向、动作方向、否定语气完全一致，故选 B。<br>C)<br>无中生有<br>competition among timber traders at home 在文本里找不到对应；原文谈的是与全<br>球争夺供应（fighting for future supplies of wood as global demand rises），不是<br>国内木材贸易商之间的竞争。<br>D)<br>无中生有<br>wood producers' motive to maximise profits 把价格波动归咎于木材生产商追求利润<br>最大化；原文对\"producers' motive/profits\"完全没提，纯属强加。<br>以下哪项导致了英国木材供应短缺？<br>A) 建筑业木材消耗过度。<br>B) 木材种植条件不利。<br>C) 木材行业技术陈旧。<br>D) 农民不愿种植树木。<br>【答案】D （细节题）<br>【判型】题干 Which of the following causes the shortage of wood supply 是从原文已列举原因<br>中挑出一项，不需推断、不需聚合全文。<br>【拆句】Which of the following causes the shortage of wood supply in the UK? 是一个 wh-词<br>作主语的疑问句，causes 是谓语动词，宾语为 the shortage of wood supply，结构直<br>白；四个选项是并列名词短语，作主语候选。<br>【定位】The causes of the UK's current position are complex and range from outdated perceptions of<br>productive forestry to the decimation of trees by grey squirrels. It also encompasses<br>significant hesitation on behalf of farmers and other landowners to invest in longer-term<br>planting projects.<br>造成英国目前处境的原因是复杂的，从对生产性林业的过时观念到灰松鼠对树木的毁灭性破<br>坏不一而足；此外还包括农民和其他土地所有者对长期种植项目投资的显著犹豫。",
+    "tips": "题干 Which of the following causes the shortage of wood supply 是从原文已列举原因",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_30",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 30,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT2",
+    "title": "2024英二 阅读 Text 2 第30题 (2分)",
+    "stem": "<strong>30. What does Goodall think the UK government should do?</strong>",
+    "options": [
+      "A. Subsidise the building of low-carbon homes.",
+      "B. Pay greater attention to boosting rural economies.",
+      "C. Provide more support for productive tree planting.",
+      "D. Give priority to pursuing its net-zero strategy."
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>无中生有<br>Excessive timber consumption in construction 原文从未把\"建筑业过度消耗\"列为原<br>因；本段只在 productive forestry 与 grey squirrels 与 hesitation 三项里列因，且全<br>文谈的是供给不足，而非消费过度。<br>B)<br>与原文相反<br>原文明确 The UK has ideal conditions for growing wood to build low-carbon<br>homes，Unfavourable conditions for growing wood 把\"理想条件\"反成\"不利条<br>件\"，方向恰相反。<br>C)<br>偷换概念<br>原文是 outdated perceptions of productive forestry，主语是 perceptions（观念/看<br>法）；选项 Outdated technologies of the wood industry 把 perceptions 偷换成<br>technologies（技术），属概念偷换。<br>D)<br>✓ 正确<br>significant hesitation on behalf of farmers and other landowners to invest in longer-term planting<br>projects<br>↔Farmers' unwillingness to plant trees<br>farmers and other landowners ↔Farmers'<br>原文清单中第三项 hesitation...to invest in longer-term planting projects 与<br>Farmers' unwillingness to plant trees 主体一致、心理一致、对象一致，故选 D。<br>Goodall认为英国政府应该做什么？<br>A) 补贴低碳住宅建设。<br>B) 更加重视促进农村经济。<br>C) 为生产性植树提供更多支持。<br>D) 优先推进净零排放战略。<br>【答案】C （细节题）<br>【判型】题干 What does Goodall think the UK government should do? 问的是 Goodall 的具体<br>主张，是引语段的客观转述，不属态度题或主旨题。<br>【拆句】What does Goodall think the UK government should do? 是 What 引导的特殊疑问<br>句，主句 What...should do 嵌套了 Goodall think 作插入语，实际是 What should the<br>UK government do (Goodall thinks)；结构紧凑但不绕。",
+    "tips": "题干 What does Goodall think the UK government should do? 问的是 Goodall 的具体",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_31",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 31,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT3",
+    "title": "2024英二 阅读 Text 3 第31题 (2分)",
+    "stem": "<strong>31. According to Paragraph l, keeping unsafe aging drivers off the road______.</strong>",
+    "options": [
+      "A. is a new safety measure",
+      "B. has become a disputed issue",
+      "C. can be a tough task to complete",
+      "D. will be beneficial to their health"
+    ],
+    "answer": "C",
+    "analysis": "根据第一段,让不安全的老年驾驶员远离道路______。<br>A) 是一项新的安全措施<br>B) 已成为一个有争议的问题<br>C) 可能是一项难以完成的艰巨任务<br>D) 将有益于他们的健康<br>【答案】C （细节题）",
+    "tips": "细节题定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_32",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 32,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT3",
+    "title": "2024英二 阅读 Text 3 第32题 (2分)",
+    "stem": "<strong>32. The American Medical Association's advice______.</strong>",
+    "options": [
+      "A. has won support from drivers",
+      "B. is generally considered unrealistic",
+      "C. is widely dismissed as unnecessary",
+      "D. has met with different responses"
+    ],
+    "answer": "D",
+    "analysis": "【判型】题干 According to Paragraph l, keeping unsafe aging drivers off the road______. 用<br>\"According to Paragraph X\" 限定信息源，要求对客观陈述做补全，没有 infer/imply 等推<br>断信号词。<br>【拆句】Q31 是一个待补全的陈述句，主句框架是 \"keeping unsafe aging drivers off the road<br>______\"，动名词短语 keeping unsafe aging drivers off the road 整体充当主语；选项是<br>表语或谓语部分的延续。无从句、无否定、无比较，结构平铺直叙，无陷阱。<br>【定位】One of the biggest challenges in keeping unsafe aging drivers off the road is convincing them<br>that it's time to turn over the keys.<br>让不安全的高龄司机远离道路，其最大挑战之一是说服他们：是时候交出车钥匙了。<br>【选项】A)<br>无中生有<br>a new safety measure 把\"挑战\"偷换为\"一项新的安全举措\"；原文只说这事难办，从未<br>提及\"新\"与否。<br>B)<br>无中生有<br>has become a disputed issue 把\"难办\"偷换为\"有争议\"；原文 P1 仅描述难度，未出现<br>controversy/debate/disputed 等争议信号。<br>C)<br>✓ 正确<br>One of the biggest challenges ↔a tough task to complete<br>预判\"难办的事\" → 锁定描述\"难度\"的 can be a tough task to complete；can be 与<br>One of the ... is 在语气上同为客观陈述，匹配成立。<br>D)<br>张冠李戴<br>will be beneficial to their health 把对\"道路安全/司机生活方式\"的描述偷换为对\"司机<br>健康\"的好处；P1 完全未涉及健康议题，且 their 指代回到\"司机自身\"也与原文受益群体<br>不符。<br>美国医学会的建议______。<br>A) 赢得了驾驶员的支持<br>B) 普遍被认为不切实际<br>C) 被广泛认为没有必要<br>D) 遇到了不同的反应<br>【答案】D （细节题）<br>【判型】题干 The American Medical Association's advice______. 要求补全对这条建议的事实性描<br>述，看 advice 在文中得到了什么样的反响，属于细节级事实判断。<br>【拆句】Q32 的主语是双重所有格短语 The American Medical Association's advice（机构名 +<br>'s + 中心名词 advice），中心名词是 advice；选项填谓语。无从句无修饰，结构清晰，无<br>陷阱。",
+    "tips": "题干 According to Paragraph l, keeping unsafe aging drivers off the road______. 用",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_33",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 33,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT3",
+    "title": "2024英二 阅读 Text 3 第33题 (2分)",
+    "stem": "<strong>33. According to Dugan, efforts to keep older drivers safe______.</strong>",
+    "options": [
+      "A. have brought about big changes",
+      "B. need to be well coordinated",
+      "C. have gained public recognition",
+      "D. call for relevant legal support"
+    ],
+    "answer": "B",
+    "analysis": "【定位】Some states require physicians to report, others allow but do not mandate reports, while a few<br>consider a report a breach of confidentiality.<br>一些州要求医生上报，另一些州允许但不强制上报，还有少数州把上报视为对保密义务的<br>违反。<br>【选项】A)<br>张冠李戴<br>has won support from drivers 把支持方设为 drivers（司机），但原文谈的是各州<br>（states）的不同立法反应，未涉及司机群体的态度。<br>B)<br>无中生有<br>is generally considered unrealistic 给建议贴上\"普遍被认为不现实\"的标签；P2 描述的<br>是各州的法律处理差异，从未对 AMA 建议本身做出\"不现实\"评价。<br>C)<br>以偏概全<br>is widely dismissed as unnecessary 中 widely（广泛）暗示\"大多数都拒绝\"，<br>dismissed as unnecessary（被斥为不必要）是负面评价；但 P2 仅有 \"a few consider<br>a report a breach of confidentiality\" 这种\"少数\"的反对意见，远未到 \"widely<br>dismissed\" 的程度。<br>D)<br>✓ 正确<br>Some states require physicians to report, others allow but do not mandate reports, while a few<br>consider a report a breach of confidentiality<br>↔met with different responses<br>预判\"回应分化\" → 锁定唯一描述\"分化\"的 has met with different responses；其余三<br>项都不涉及\"反应不一\"这层语义。<br>根据Dugan的说法,保障老年驾驶员安全的努力______。<br>A) 带来了重大变化<br>B) 需要良好协调<br>C) 获得了公众认可<br>D) 需要相关法律支持<br>【答案】B （细节题）<br>【判型】题干 According to Dugan, efforts to keep older drivers safe______. 用 \"According to +<br>人名\" 锚定信息源，要求转述该人物对此话题的明示观点，无 infer/suggest 等推断词。<br>【拆句】Q33 主句主语为 efforts to keep older drivers safe，其中 to keep older drivers safe 是<br>不定式作后置定语修饰 efforts；句首状语 According to Dugan 限定信息来源；无从句无<br>否定，结构常规。",
+    "tips": "题干 According to Dugan, efforts to keep older drivers safe______. 用 \"According to +",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_34",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 34,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT3",
+    "title": "2024英二 阅读 Text 3 第34题 (2分)",
+    "stem": "<strong>34. Some older drivers have trouble driving because they tend to______.</strong>",
+    "options": [
+      "A. stick with bad driving habits",
+      "B. have a weakened memory",
+      "C. suffer from chronic pains",
+      "D. neglect car maintenance"
+    ],
+    "answer": "B",
+    "analysis": "【定位】Part of the problem in keeping older drivers safe is that the difficulties are addressed<br>piecemeal by different professions with different focuses, including gerontologists, highway<br>administration officials, automotive engineers and others, said gerontologist Elizabeth Dugan.<br>Dugan 指出，保障老年司机安全的部分症结在于：这些难题正被不同专业、各执焦点地零<br>碎应对，参与者包括老年学家、高速公路管理官员、汽车工程师等。<br>【选项】A)<br>与原文相反<br>have brought about big changes 称这些努力\"带来了大的改变\"；但 P3 整段在批评现<br>状\"零敲碎打、缺乏统一研究机构、证据不足\"——原文立场是\"成效不足\"，与\"big<br>changes\"正相反。<br>B)<br>✓ 正确<br>addressed piecemeal by different professions with different focuses ↔<br>need to be well coordinated<br>预判\"需要协同统筹\" → 锁定唯一表达\"协调\"的 need to be well coordinated；need to<br>be 的语气也与 We need better evidence 同段呼吁口吻一致。<br>C)<br>无中生有<br>have gained public recognition 把话题滑向\"已获公众认可\"；P3 谈的是专业内部的整<br>合问题，从未涉及公众层面的认知或评价。<br>D)<br>偷换概念<br>call for relevant legal support 把出路偷换为\"呼吁相关法律支持\"；P3 中 Dugan 的呼<br>吁是 We need better evidence on what makes drivers unsafe——更好的证据，而<br>非法律支持。<br>一些老年驾驶员驾驶困难,因为他们往往______。<br>A) 坚持不良驾驶习惯<br>B) 记忆力减弱<br>C) 遭受慢性疼痛<br>D) 忽视汽车保养<br>【答案】B （细节题）<br>【判型】题干 Some older drivers have trouble driving because they tend to______. 已经把因果<br>句的果端给出，要求补全因端，仍属事实层面的客观转述。<br>【拆句】Q34 是 \"主句 + because + 从句\" 的复合句：主句 Some older drivers have trouble<br>driving，because 从句 they tend to______；trouble driving 中 driving 是动名词作<br>trouble 的宾语；tend to 后接选项里的动词原形。无否定无比较。",
+    "tips": "题干 Some older drivers have trouble driving because they tend to______. 已经把因果",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_35",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 35,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT3",
+    "title": "2024英二 阅读 Text 3 第35题 (2分)",
+    "stem": "<strong>35. Dugan thinks that the solution to the problems of crashes may lie in______.</strong>",
+    "options": [
+      "A. upgrading self-driving vehicles",
+      "B. developing senior-friendly cars",
+      "C. renovating transport facilities",
+      "D. adjusting the age limit for drivers"
+    ],
+    "answer": "B",
+    "analysis": "【定位】Primary care providers have their hands full and may not be able to follow through with<br>patients who have trouble driving because they can't turn their heads or remember where they<br>are going—or have gotten shorter and haven't changed their seat settings sufficiently to reach<br>car pedals easily.<br>初级保健医生分身乏术，可能无法跟进那些开车有困难的患者——这些患者要么不能转头、<br>要么记不住自己要去哪儿，要么个子变矮了又没把座椅调到能轻松踩到踏板的位置。<br>【选项】A)<br>无中生有<br>stick with bad driving habits 把原因归为\"坚持不良驾驶习惯\"；P5 列举的原因全是身<br>体机能的客观限制（转头/记忆/身高），从未提及\"习惯\"。<br>B)<br>✓ 正确<br>can't ... remember where they are going ↔have a weakened memory<br>预判\"记不住要去哪里\" → 锁定唯一表\"记忆衰退\"的 have a weakened memory；其余<br>三项均无对应原文并列项。<br>C)<br>偷换概念<br>suffer from chronic pains 把原因归为\"慢性疼痛\"；P5 提到的是不能转头（活动<br>度受限）、记不住目的地（认知衰退）、身高变矮（生理变化），均与\"chronic<br>pains\"无关。<br>D)<br>偷换概念<br>neglect car maintenance 把原因归为\"忽视汽车保养\"；P5 提到的是\"未调座椅\"——属<br>于驾驶前的人车适配，不是车辆机械层面的保养维护。<br>Dugan认为解决交通事故问题的办法可能在于______。<br>A) 升级自动驾驶车辆<br>B) 开发适合老年人的汽车<br>C) 改造交通设施<br>D) 调整驾驶员年龄限制<br>【答案】B （细节题）<br>【判型】题干 Dugan thinks that the solution to the problems of crashes may lie in______. 虽含<br>thinks，但要求的是 Dugan 对解决之道的明示主张（文中有原话支撑），不是让考生跨段<br>推断。<br>【拆句】Q35 是 \"主句 + that 宾语从句\" 结构：主句 Dugan thinks that ...；宾语从句主语 the<br>solution to the problems of crashes，其中 to the problems of crashes 是介词短语作<br>solution 的后置定语；谓语 may lie in 后接选项。lie in 意为\"在于\"，是该题型补全句的固<br>定考点。",
+    "tips": "题干 Dugan thinks that the solution to the problems of crashes may lie in______. 虽含",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_36",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 36,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT4",
+    "title": "2024英二 阅读 Text 4 第36题 (2分)",
+    "stem": "<strong>36. The research findings are cited in Paragraph 1 to show______.</strong>",
+    "options": [
+      "A. the prevalence of health apps",
+      "B. the public concern over health",
+      "C. the popularity of smartphones",
+      "D. the advancement of technology"
+    ],
+    "answer": "A",
+    "analysis": "第1段引用研究结果是为了表明______。<br>A) 健康应用程序的普及<br>B) 公众对健康的关注<br>C) 智能手机的流行<br>D) 技术的进步<br>【答案】A （例证目的题）<br>【判型】cited in Paragraph 1 to show 中 \"to show\" 直接询问引用研究数据的论证目的，是典型的<br>例证目的题。",
+    "tips": "cited in Paragraph 1 to show 中 \"to show\" 直接询问引用研究数据的论证目的，是典型的",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2024_37",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 37,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT4",
+    "title": "2024英二 阅读 Text 4 第37题 (2分)",
+    "stem": "<strong>37. What does the author imply about existing health privacy law?</strong>",
+    "options": [
+      "A. Its coverage needs to be extended.",
+      "B. Its enforcement needs strengthening.",
+      "C. It has discouraged medical misconduct.",
+      "D. It has disappointed insurance companies."
+    ],
+    "answer": "A",
+    "analysis": "【拆句】题干主干是 The research findings are cited...to show，被动句 + 不定式表目的，结构平<br>铺直叙，无陷阱。<br>【定位】Recent research from the Organization for the Review of Care and Health Applications<br>found that 350,000 health apps were available on the market, 90,000 of which launched in<br>2020 alone.<br>来自 Care and Health Applications 评估组织的最新研究发现，市场上共有 350,000 款健<br>康类应用，其中仅 2020 年就上市了 90,000 款。<br>【选项】A)<br>✓ 正确<br>350,000 health apps were available on the market, 90,000 of which launched in 2020 alone ↔<br>the prevalence of health apps<br>chances are you have at least one related to your health—and probably several ↔health apps<br>预判 \"证明健康 app 已普及\" 与 the prevalence of health apps 直接对应；又有<br>chances are you have at least one 这个铺垫从作者立场上也支持 prevalence 这个<br>判断。<br>B)<br>无中生有=原文找不到对应<br>段 1 只讲 app 数量庞大，未谈公众对健康本身的关注度，the public concern over<br>health 在原文无对应论点。<br>C)<br>偷换概念=主语对象替换<br>原文 If you look at the apps on your phone 只把手机当作 app 的载体提一句，数据<br>句讲的是 health apps 的数量而非智能手机的普及度，the popularity of smartphones<br>偷换了被普及的对象。<br>D)<br>过度推断=从数据跳到泛化结论<br>数据反映的是 app 数量，不是技术水平的进步；原文 taking advantage of this<br>technology 只是顺带提 technology，并未论证 \"技术在进步\"，the advancement of<br>technology 是过度推断。<br>作者对现有健康隐私法律有何暗示?<br>A) 其覆盖范围需要扩大。<br>B) 其执行力度需要加强。<br>C) 它遏制了医疗不当行为。<br>D) 它让保险公司失望了。<br>【答案】A （推断题）<br>【判型】题干 What does the author imply about existing health privacy law 中 imply 明确要求<br>推断作者对现行隐私法的隐含态度。",
+    "tips": "题干 What does the author imply about existing health privacy law 中 imply 明确要求",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2024_38",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 38,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT4",
+    "title": "2024英二 阅读 Text 4 第38题 (2分)",
+    "stem": "<strong>38. Before sharing its users' health information, Flo Health is required to______.</strong>",
+    "options": [
+      "A. seek the approval of the FTC",
+      "B. find qualified third parties",
+      "C. remove irrelevant personal data",
+      "D. obtain their explicit permission"
+    ],
+    "answer": "A",
+    "analysis": "【拆句】题干是宾语从句 What does the author imply about existing health privacy law，<br>about 引介话题对象，结构清晰，无陷阱。<br>【定位】Existing health privacy law, such as the Health Insurance Portability and Accountability Act,<br>is primarily focused on the way hospitals, doctors' offices, clinics and insurance companies<br>store health records online. The health information these apps and health data tracking<br>wearables are collecting typically does not receive the same legal protections.<br>现行的健康隐私法（例如《健康保险流通与责任法案》）主要管医院、诊所、保险公司在线<br>保存病历的方式。而这些 app 和健康数据追踪可穿戴设备所收集的健康信息，通常得不到<br>同等的法律保护。<br>【选项】A)<br>✓ 正确<br>is primarily focused on the way hospitals, doctors' offices, clinics and insurance companies store<br>health records online<br>↔Its coverage<br>The health information these apps and health data tracking wearables are collecting typically<br>does not receive the same legal protections<br>↔needs to be extended<br>预判 \"覆盖面需扩大\" 与 Its coverage needs to be extended 一一对应：Its 指<br>existing health privacy law，coverage 对应 focused on 的范围，needs to be<br>extended 对应 \"app 数据未受同等保护\" 这一缺口。<br>B)<br>无中生有=换维度<br>原文段 2 讨论的是法律 \"管不管\"（覆盖问题），不是 \"管得严不严\"（执法<br>问题）。enforcement 是另一维度，原文无任何句子支持 Its enforcement<br>needs strengthening。<br>C)<br>无中生有=横插无关话题<br>段 2 通篇没有 medical misconduct 或类似话题，It has discouraged medical<br>misconduct 与原文无任何对应。<br>D)<br>张冠李戴=对象角色错位<br>原文里 insurance companies 是被现行法管理的对象（store health records）之一，<br>原文没说它们对法律感到失望，It has disappointed insurance companies 把被管理<br>对象升格为情绪主体，与原文相反方向解读。<br>在共享其用户的健康信息之前,Flo Health 需要______。<br>A) 寻求FTC的批准<br>B) 找到合格的第三方<br>C) 删除不相关的个人数据<br>D) 获得他们的明确许可",
+    "tips": "阅读理解定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 阅读理解"
+  },
+  {
+    "id": "E2024_39",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 39,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT4",
+    "title": "2024英二 阅读 Text 4 第39题 (2分)",
+    "stem": "<strong>39. What challenge is the FTC currently faced with?</strong>",
+    "options": [
+      "A. The complexity of health information.",
+      "B. The rapid increase in new health apps.",
+      "C. The subtle deceptiveness of health apps.",
+      "D. The difficulty in assessing consumer harm."
+    ],
+    "answer": "D",
+    "analysis": "【答案】D （细节题）<br>【判型】Before sharing its users' health information, Flo Health is required to 问的是被强制履<br>行的具体动作，可在原文找到字面对应。<br>【拆句】题干 Before sharing its users' health information, Flo Health is required to 是 before<br>引导的时间状语 + 主句 is required to + 选项动词原形组成完整句，结构平铺直叙，无<br>陷阱。<br>【定位】Flo Health and the FTC settled the matter with a Consent Order requiring the company to get<br>app users' express affirmative consent before sharing their health information as well as to<br>instruct the third parties to delete the data they had obtained.<br>Flo Health 与 FTC 通过一份同意令了结此案：该同意令要求公司在分享用户健康信息之前<br>必须获得用户明确肯定的同意，并要求其指示第三方删除已获取的数据。<br>【选项】A)<br>张冠李戴=同意主体错位<br>原文要求 Flo Health 取得 app users' 同意，而非取得 FTC 的批准；FTC 在原文是调查<br>与达成同意令的一方，不是分享数据前的审批方，seek the approval of the FTC 把审<br>批方对象搞错。<br>B)<br>无中生有=蹭关键词造新要求<br>原文只命令公司 instruct the third parties to delete the data they had obtained<br>——指示第三方删除已得数据，没有任何 \"事前筛选合格第三方\" 的规定，find<br>qualified third parties 是无中生有。<br>C)<br>答非所问=时点错位<br>原文 to instruct the third parties to delete the data they had obtained 是命令第三<br>方删除已得数据，是事后清理动作；题干问的是 Before sharing 即分享前的前置条件。<br>时点错位，remove irrelevant personal data 是答非所问。<br>D)<br>✓ 正确<br>get app users' express affirmative consent ↔obtain their explicit permission<br>预判 \"事先取得用户明确同意\" 的三个语义成分（取得/用户/明确同意）在 obtain their<br>explicit permission 里被 obtain / their / explicit permission 一一对应替换。<br>FTC目前面临什么挑战?<br>A) 健康信息的复杂性。<br>B) 新健康应用程序的快速增长。<br>C) 健康应用程序的隐蔽欺骗性。<br>D) 评估消费者损害的困难。<br>【答案】B （细节题）",
+    "tips": "Before sharing its users' health information, Flo Health is required to 问的是被强制履",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2024_40",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 40,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2024_TEXT4",
+    "title": "2024英二 阅读 Text 4 第40题 (2分)",
+    "stem": "<strong>40. It can be learned from the last paragraph that health data protection______.</strong>",
+    "options": [
+      "A. has been embraced by health app developers",
+      "B. has been a focus of federal policy-making",
+      "C. has encountered opposition in California",
+      "D. has gained legislative support in some states"
+    ],
+    "answer": "D",
+    "analysis": "【判型】What challenge is the FTC currently faced with 问具体面临的挑战内容，可在原文里找<br>到字面对应。<br>【拆句】题干 What challenge is the FTC currently faced with 是疑问代词 What 作 challenge 的<br>修饰，be faced with 是被动短语 \"面临\"，结构常见，无陷阱。<br>【定位】While the FTC is doing what it can to ensure apps are keeping their promises to consumers<br>around the handling of their sensitive health information, the rate at which these health apps<br>are hitting the market demonstrates just how immense of a challenge this is.<br>尽管 FTC 正在竭尽所能确保这些 app 兑现对消费者关于敏感健康信息处置的承诺，但这些<br>健康 app 涌入市场的速度，显示出这一挑战何其巨大。<br>【选项】A)<br>无中生有=造新挑战维度<br>段 4 论述的是 FTC 权限（only act after the fact）和 app 上市速度，未提健康信息本<br>身的 complexity，The complexity of health information 是无中生有。<br>B)<br>✓ 正确<br>the rate at which these health apps are hitting the market ↔<br>The rapid increase in new health apps<br>预判 \"新 app 涌入速度太快\" 与 The rapid increase in new health apps 中 rapid<br>increase 完全等价——速度快即增量多，原文与选项指同一现象。<br>C)<br>偷换概念=移位+加修饰<br>原文 initiate enforcement action against unfair or deceptive acts 中的 deceptive<br>是 FTC 法定可执法对象的描述，且无 subtle（微妙的）这一修饰；同时挑战不来自<br>\"deceptive 程度\" 而来自 \"app 上市速度\"。The subtle deceptiveness of health apps<br>把法律术语挪到挑战位置，并杜撰 subtle 一词。<br>D)<br>无中生有=蹭术语造新难点<br>原文 unjustified consumer harm 是 FTC 法律条款里描述 \"不合理消费者损害\" 的术<br>语，并未讨论 \"评估损害的难度\"。The difficulty in assessing consumer harm 杜撰了<br>一个评估难度的新维度。<br>从最后一段可以得知,健康数据保护______。<br>A) 已被健康应用程序开发者接受<br>B) 已成为联邦政策制定的重点<br>C) 在加利福尼亚州遭遇了反对<br>D) 在一些州获得了立法支持<br>【答案】D （推断题）",
+    "tips": "What challenge is the FTC currently faced with 问具体面临的挑战内容，可在原文里找",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2024_41",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 41,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2024_PARTB",
+    "title": "2024英二 新题型 Part B 第41题 (2分)",
+    "stem": "请结合上方《2024年新题型 Part B》原文及 A–G 候选项，为 <strong>41. Sue Rexford</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】[C] Undertaking too many extracurricular activities will hardly be seen as a plus by colleges.</strong><br>信息在第 3 段<br>【候选项】Undertaking too many extracurricular activities will hardly be seen as a plus by colleges.<br>参加过多的课外活动几乎不会被大学视为加分项。<br>【定位】Sue Rexford, the director of college guidance at the Charles E. Smith Jewish Day School,<br>says it is not necessary for a student filling out the Common Application to list 10 activities in<br>the application.<br>查尔斯·E·史密斯犹太走读学校的升学指导主任苏·雷克斯福德说，学生在填写通用申请表时没<br>有必要列出 10 项活动。<br>【锚点】不必堆很多项活动<br>【对照】list 10 activities ↔too many extracurricular activities<br>具体数量改成程度词<br>it is not necessary ↔will hardly be seen as a plus<br>否定加分等于不必要<br>【依据】数量多并非加分",
+    "tips": "不必堆很多项活动",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2024_42",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 42,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2024_PARTB",
+    "title": "2024英二 新题型 Part B 第42题 (2分)",
+    "stem": "请结合上方《2024年新题型 Part B》原文及 A–G 候选项，为 <strong>42. Sara Harberson</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "E",
+    "analysis": "<strong>【正确答案】[E] High school students participating in a popular activity should excel in it.</strong><br>信息在第 6 段<br>【候选项】High school students participating in a popular activity should excel in it.<br>参加热门活动的高中生应当在其中表现优异。<br>【定位】\"The competition to stand out and make an impact is going to be much stiffer, and so if they're<br>going to do a popular activity, I'd say, be the best at it,\" says Sara Harberson, a college<br>admissions consultant.<br>\"想要脱颖而出、产生影响的竞争会激烈得多，所以如果他们要做一项热门活动，我会说，<br>那就在这项活动里做到最好，\"升学顾问萨拉·哈伯森说。<br>【锚点】做热门活动就要拔尖<br>【对照】a popular activity ↔a popular activity<br>同词照搬<br>be the best at it ↔should excel in it<br>做到最好等于做到拔尖<br>【依据】热门活动须做到最好<br>【辨邻】[ A ]<br>也讲\"在某项活动突出\"，眼熟点是 stand out，原文第 6 段确有 competition to stand<br>out。但 A 的对象是 a specific extracurricular activity（某一项专注的活动）且落点在<br>favored by top-tier institutions（受名校青睐），而 Harberson 限定在\"popular 热门活<br>动\"且只说要做到最好、没提名校青睐，对象和落点都偏了。<br>The competition to stand out and make an impact",
+    "tips": "做热门活动就要拔尖",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2024_43",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 43,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2024_PARTB",
+    "title": "2024英二 新题型 Part B 第43题 (2分)",
+    "stem": "请结合上方《2024年新题型 Part B》原文及 A–G 候选项，为 <strong>43. Katie Kelley</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】[A] Students who stand out in a specific extracurricular activity will be favored by top-</strong><br>信息在第 11 段<br>【候选项】Students who stand out in a specific extracurricular activity will be favored by top-<br>tier institutions.<br>在某项特定课外活动中表现突出的学生将受到顶尖院校的青睐。<br>【定位】\"Distinguishing yourself in one focused type of extracurricular activity can be a positive in the<br>admissions process, especially for highly selective institutions, where having top grades and test<br>scores is not enough,\" Katie Kelley, admissions counselor at IvyWise admissions consultancy,<br>wrote in an email.<br>\"在某一类专注的课外活动中让自己脱颖而出，在招生过程中会是一个加分项，对竞争尤为<br>激烈的名校更是如此——在这些名校，光有顶尖成绩和分数还不够，\"常春藤智慧升学咨询<br>机构的招生顾问凯蒂·凯利在邮件中写道。<br>【锚点】专注一项突出对名校加分<br>【对照】Distinguishing yourself in one focused type of extracurricular activity ↔<br>Students who stand out in a specific extracurricular activity<br>突出与专注一项的同义替换<br>especially for highly selective institutions ↔will be favored by top-tier institutions<br>名校加分等于受名校青睐<br>【依据】专注一项突出受名校青睐<br>【辨邻】[ E ]<br>也讲\"在一项活动里做到突出/拔尖\"，与 Kelley 的\"distinguishing yourself\"眼熟。但 E 限<br>定对象是 a popular activity（热门活动），且没提名校；Kelley 说的是 one focused type<br>（专注一类，不限热门）并特别强调 highly selective institutions。对象与强调点都不符，E<br>其实对应的是第 6 段 Harberson。<br>if they're going to do a popular activity, I'd say, be the best at it",
+    "tips": "专注一项突出对名校加分",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2024_44",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 44,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2024_PARTB",
+    "title": "2024英二 新题型 Part B 第44题 (2分)",
+    "stem": "请结合上方《2024年新题型 Part B》原文及 A–G 候选项，为 <strong>44. Mayghin Levine</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "G",
+    "analysis": "<strong>【正确答案】[G] It is advisable for students to choose an extracurricular activity that is related to their future</strong><br>信息在第 12 段<br>【候选项】It is advisable for students to choose an extracurricular activity that is related to their future<br>study at college.<br>建议学生选择与其大学未来学习相关的课外活动。<br>【定位】\"If you already know your major, having an extracurricular that fits into that major can be a big<br>plus,\" says Mayghin Levine, the manager of educational opportunities with The Cabbage Patch<br>Settlement House, a Louisville, Kentucky, nonprofit community center.<br>\"如果你已经确定了专业，那么有一项契合该专业的课外活动会是一个很大的加分项，\"路易<br>斯维尔（肯塔基州）一家非营利社区中心\"卷心菜地安置之家\"的教育机会经理梅金·莱文说。<br>【锚点】选契合专业的活动是加分<br>【对照】an extracurricular that fits into that major ↔<br>an extracurricular activity that is related to their future study at college<br>契合专业等于与大学学业相关<br>can be a big plus ↔It is advisable for students to choose<br>是加分项改写为建议去选<br>【依据】建议选与专业相关的活动",
+    "tips": "选契合专业的活动是加分",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2024_45",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 45,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2024_PARTB",
+    "title": "2024英二 新题型 Part B 第45题 (2分)",
+    "stem": "请结合上方《2024年新题型 Part B》原文及 A–G 候选项，为 <strong>45. Erica Gwyn</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】[B] Students whose extracurricular activity has benefited their community are likely to win</strong><br>信息在第 13 段<br>【候选项】Students whose extracurricular activity has benefited their community are likely to win<br>a scholarship.<br>课外活动使社区受益的学生有可能获得奖学金。<br>【定位】High school students who have had a strong positive influence on their community through an<br>extracurricular activity may impress a college and win a scholarship, says Erica Gwyn, a former<br>math and science magnet program assistant at a public high school who is now executive director<br>of the Kaleidoscope Careers Academy in Atlanta, a nonprofit organization.<br>通过一项课外活动给所在社区带来强烈正面影响的高中生，可能会打动大学并赢得奖学金，<br>曾任公立高中数理特长项目助理、现任亚特兰大非营利组织万花筒职业学院执行主任的埃丽<br>卡·格温说。<br>【锚点】活动惠及社区可得奖学金<br>【对照】a strong positive influence on their community ↔has benefited their community<br>正面影响等于使社区受益<br>win a scholarship ↔are likely to win a scholarship<br>may对应likely同词落点<br>【依据】惠及社区者有望得奖学金<br><br>C H O I C E S · 候选池地图<br>A~G 共 7 个候选项各自在说什么<br>候选项是经同义改写的句子，比题目多 2 个。下面逐条给出候选句原文、「它到底主张<br>什么」的中文压缩，并标注它对应哪道题——始终无人对应的就是多余干扰项。<br>[ A ] Students who stand out in a specific extracurricular activity will be favored by top-<br>tier institutions.<br>在某一项课外活动上做得突出，会受到顶尖名校的青睐。<br>对应第 43 题<br>[ B ] Students whose extracurricular activity has benefited their community are likely to<br>win a scholarship.<br>课外活动让所在社区受益的学生，有望拿到奖学金。<br>对应第 45 题<br>[ C ] Undertaking too many extracurricular activities will hardly be seen as a plus<br>by colleges.<br>参加太多课外活动并不会被大学当成加分项。<br>对应第 41 题<br>[ D ] A student who exhibits abilities in doing business can impress colleges.<br>展现出做生意能力的学生能打动大学。<br>多余项 · 无人对应<br>[ E ] High school students participating in a popular activity should excel in it.<br>参加热门活动的高中生，应当在这项活动里做到拔尖。<br>对应第 42 题<br><br>[ F ] Engaging in uncommon activities can demonstrate students' determination<br>and dedication.<br>参加冷门活动能展现学生的决心和投入。<br>多余项 · 无人对应<br>[ G ] It is advisable for students to choose an extracurricular activity that is related to<br>their future study at college.<br>建议学生选一项和将来大学专业相关的课外活动。<br>对应第 44 题<br>E X T R A C H O I C E S · 多余项交代<br>这 2 个候选项始终无人对应<br>多项对应必有 2 个候选项无人认领——往往最像文中某个没被问到的人/事物，或是对某<br>段的片面概括。下面逐条剖析它们「像在哪、差在哪、为何无人认领」，读透多余项才算<br>读透全局。<br>[ D ] A student who exhibits abilities in doing business can impress colleges.<br>讲 exhibits abilities in doing business can impress colleges（展现做生意能力能打动大学），<br>它对应的是第 8 段 a student with an interest in entrepreneurship could demonstrate skill<br>and potential by starting a profitable small business 那位 Olivia Valdes——而 Valdes 并未被<br>任何题问到，所以 D 始终无人认领。它\"像\"在确有出处、\"差\"在出处的人不在 5 道题里。<br>[ F ] Engaging in uncommon activities can demonstrate students' determination<br>and dedication.<br>讲 uncommon activities can demonstrate students' determination and dedication（冷门活动<br>能展现决心与投入），呼应第 7、9 段关于 uncommon/unconventional 活动与 serious<br>commitment 的内容，对应的是 Adegboyega-Edun 等没被问到的人。它\"像\"在文中确有这层<br>意思、\"差\"在所对应的人不在题干名单里，故无人认领。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>12 句真题句逐层精讲<br><br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>However, college admissions experts say that the quality of a college hopeful's<br>extracurricular activities matters more than the number of activities he or she<br>participates in.<br>第2段，第1句<br>本句结构在四六级和考研阅读中非常典型:主句 + 宾语从句 + 比较结构 + 定语从句的组合频繁出<br>现。比较结构中谓语承前省略、定语从句省略关系代词都是真题常见考点。掌握本句的分析方法可<br>以直接迁移到大量同类句型,代表性强<br>Sue Rexford, the director of college guidance at the Charles E. Smith Jewish Day<br>School, says it is not necessary for a student filling out the Common Application to<br>list 10 activities in the application.<br>第3段，第1句<br>主句 says 加宾语从句的结构在四六级和考研阅读中极为常见,宾语从句省略 that 也是典型用法。从<br>句中 it is + 形容词 + for sb + to do 句型是高频考点,同位语插入主语后也是常见修饰手法。整体句<br>式具有较高代表性,掌握后可大量迁移到类似句子。<br>\"No college will expect that a student has a huge laundry list of extracurriculars<br>that they have been passionately involved in each for an extended period of time,\"<br>Rexford wrote in an email.<br>第4段，第1句<br>引述句+宾语从句+定语从句的三层嵌套结构是四六级和考研阅读中的高频句式，尤其是 expect<br>that 和 that 引导的定语从句都是典型考点；掌握后可大量复用到其他长难句分析中。<br>Experts say it is tougher to distinguish oneself in a school-affiliated extracurricular<br>activity that is common among high school students than it is to stand out while<br>doing an uncommon activity.<br>第5段，第1句<br>主句 + 宾语从句 + 定语从句的三层嵌套结构，以及 it 作形式主语、比较级 + than 从句的搭配，都<br>是四六级和考研阅读中的高频句式；掌握后可大量复用到类似长难句的分析中。<br><br>\"The competition to stand out and make an impact is going to be much stiffer, and<br>so if they're going to do a popular activity, I'd say, be the best at it,\" says Sara<br>Harberson, a college admissions consultant.<br>第6段，第1句<br>涵盖了引述动词后置结构、直接引语作宾语、系动词将来时、条件状语从句、并列结构、后置定语<br>（不定式短语 to stand out and make an impact）以及同位语等多种成分类型。引述结构和并列从<br>句的交织为成分划分练习提供了丰富的训练点，尤其是引语内部的层级关系和条件从句的定位，对<br>基础较弱的学生有较好的练习价值。<br>High school students who have an impressive personal project they are working<br>on independently often impress colleges, experts say.<br>第7段，第1句<br>定语从句修饰主语、定语从句嵌套、关系代词省略、句末插入 \"experts say\" 标明观点来源，这些<br>都是四六级和考研阅读中的高频句式。掌握本句结构后，可直接迁移到大量同类长难句，典型性<br>极强。<br>\"Again, since one of the big questions high school seniors must consider is 'What<br>makes you unique?,' having an uncommon extracurricular activity vs. a<br>conventional one is an advantage,\" he wrote in an email.<br>第9段，第2句<br>这种“引语嵌套多层从句”是学术论述和新闻英语中的极其典型的句式，非常有复用价值。<br>\"Distinguishing yourself in one focused type of extracurricular activity can be a<br>positive in the admissions process, especially for highly selective institutions,<br>where having top grades and test scores is not enough,\" Katie Kelley, admissions<br>counselor at IvyWise admissions consultancy, wrote in an email.<br>第11段，第1句<br>本句覆盖动名词短语作主语（Distinguishing yourself ...）、情态动词+系动词结构（can be）、直<br>接引语作宾语、非限制性定语从句、多个状语（in the admissions process, especially for ...）等多<br>种成分。引号内的主系表结构和 where 从句的主系表结构都是典型考点，适合训练识别动名词主<br>语、系表结构和定语从句的能力。<br><br>\"Students need to have that quality or hook that will appeal to admissions officers<br>and allow them to visualize how the student might come and enrich their campus<br>community.\"<br>第11段，第2句<br>‘名词 + that引导的定语从句 + 动词 + 宾语从句’是典型的长难句构造模式，极具迁移学习价值。<br>High school students who have had a strong positive influence on their<br>community through an extracurricular activity may impress a college and win a<br>scholarship, says Erica Gwyn, a former math and science magnet program<br>assistant at a public high school who is now executive director of the Kaleidoscope<br>Careers Academy in Atlanta, a nonprofit organization.<br>第13段，第1句<br>覆盖成分丰富：包含并列谓语、宾语从句、双层同位语、限制性与非限制性定语从句、方式状语等<br>多种结构。特别是同位语嵌套定语从句、宾语从句嵌套定语从句等典型易错点，适合作为成分划分<br>的综合训练句。<br>Students whose extracurricular activity has benefited their community are likely to<br>win a scholarship.<br>选项B<br>限制性定语从句修饰主语、且从句使用关系代词 whose 的结构在四六级和考研阅读中非常常见。<br>be likely to do 表示可能性的句型也是高频考点。掌握本句的结构拆解方法后，可以直接迁移到大<br>量类似的长难句，典型性很强。<br>It is advisable for students to choose an extracurricular activity that is related to<br>their future study at college.<br>选项G<br>形式主语 It is + 形容词 + for sb to do 是四六级和考研常考句式，定语从句修饰名词也是高频结<br>构。本句结构规范、典型性强，掌握后可迁移到大量类似句子中，实用价值高。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 46 个考研英语二真题高频词<br>下列单词既在本篇长文中出现，又是 考研英语二 历年真题的高频词（在该考试真题中出<br>现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查看该<br><br>词的释义、音标、词形与真题例句。<br>extracurricular<br>B2<br>adj. 课外的;课程以外的<br>本篇15 次 · 真题 15 句<br>admission<br>B2<br>n. 承认（错误、罪行等）<br>本篇9 次 · 真题 13 句<br>expert<br>B1<br>n. 专家<br>本篇5 次 · 真题 42 句<br>community<br>B1<br>n. 社区<br>本篇4 次 · 真题 71 句<br>institution<br>B2<br>n. 机构<br>本篇4 次 · 真题 39 句<br>demonstrate<br>B2<br>v. 证明<br>本篇4 次 · 真题 21 句<br>email<br>A2<br>n. 电子邮件<br>本篇4 次 · 真题 8 句<br>process<br>B1<br>n. 过程<br>本篇3 次 · 真题 80 句<br>major<br>B1<br>adj. 主要的<br>本篇3 次 · 真题 56 句<br>application<br>B1<br>n. 申请<br>本篇3 次 · 真题 22 句<br>participate<br>B1<br>v. 参加<br>本篇3 次 · 真题 8 句<br>quality<br>A2<br>n. 质量<br>本篇2 次 · 真题 45 句<br>positive<br>B1<br>adj. 积极的<br>本篇2 次 · 真题 27 句<br>undergraduate<br>B2<br>n. 大学本科生<br>本篇2 次 · 真题 16 句<br>likely<br>A2<br>adj. 很可能的<br>本篇1 次 · 真题 89 句<br>benefit<br>B1<br>n. 好处<br>本篇1 次 · 真题 88 句<br><br>firm<br>B1<br>adj. 坚固的<br>本篇1 次 · 真题 66 句<br>least<br>A2<br>det. 最少的<br>本篇1 次 · 真题 63 句<br>involve<br>B1<br>v. 包含<br>本篇1 次 · 真题 61 句<br>impact<br>B2<br>n. 影响<br>本篇1 次 · 真题 53 句<br>opportunity<br>B1<br>n. 机会<br>本篇1 次 · 真题 50 句<br>potential<br>B2<br>adj. 潜在的<br>本篇1 次 · 真题 43 句<br>project<br>A2<br>n. 项目<br>本篇1 次 · 真题 40 句<br>executive<br>B2<br>n. 主管;经理;管理人员<br>本篇1 次 · 真题 39 句<br>type<br>A2<br>n. 类型<br>本篇1 次 · 真题 30 句<br>highly<br>B1<br>adv. 非常<br>本篇1 次 · 真题 28 句<br>organization<br>B1<br>n. 组织<br>本篇1 次 · 真题 28 句<br>specific<br>B2<br>adj. 具体的<br>本篇1 次 · 真题 28 句<br>appeal<br>B2<br>v. 呼吁<br>本篇1 次 · 真题 27 句<br>educational<br>B1<br>adj. 教育的<br>本篇1 次 · 真题 26 句<br>favor<br>B1<br>n. 帮忙<br>本篇1 次 · 真题 24 句<br>unique<br>B2<br>adj. 独特的<br>本篇1 次 · 真题 24 句<br><br>assume<br>B2<br>v. 假定<br>本篇1 次 · 真题 23 句<br>related<br>B1<br>adj. 相关的<br>本篇1 次 · 真题 23 句<br>senior<br>B1<br>adj. 级别高的<br>本篇1 次 · 真题 21 句<br>tough<br>B1<br>adj. 困难的<br>本篇1 次 · 真题 20 句<br>engage<br>B2<br>v. 参与;从事<br>本篇1 次 · 真题 19 句<br>former<br>B1<br>adj. 以前的，从前的<br>本篇1 次 · 真题 18 句<br>talent<br>B1<br>n. 天赋<br>本篇1 次 · 真题 14 句<br>relate<br>B1<br>v. 使有联系，把…联系起来<br>本篇1 次 · 真题 11 句<br>conventional<br>B2<br>adj. 传统的<br>本篇1 次 · 真题 10 句<br>exhibit<br>B2<br>v. 展览<br>本篇1 次 · 真题 10 句<br>assistant<br>A2<br>n. 助手<br>本篇1 次 · 真题 9 句<br>profitable<br>B2<br>adj. 盈利的，有利可图的<br>本篇1 次 · 真题 9 句<br>academy<br>B2<br>n. 学院<br>本篇1 次 · 真题 8 句<br>commitment<br>B2<br>n. 承诺<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 189 词按 CEFR 难度累积覆盖<br>数字标号长文去重后共 189 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以<br>下」的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 5 个<br>· 约 3%。<br><br>37%<br>A1<br>及以下<br>57%<br>A2<br>及以下<br>79%<br>B1<br>及以下<br>97%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 189 个 · 末柱为 100%<br>去重总词数<br>189<br>B2 以上难词<br>3%<br>B1 及以下覆盖<br>79%<br>考研英语二<br>2024年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>题目解析 →<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>本题<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "活动惠及社区可得奖学金",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2024_46",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 46,
+    "qType": "solve",
+    "chapter": "e_ch4",
+    "title": "2024英二 翻译 Section III 第46题 (15分)",
+    "stem": "<strong>Section III Translation (15 points) — Directions: Translate the following text into Chinese.</strong><div class='formula-card'>P1 With the smell of coffee and fresh bread floating in the air, stalls bursting with colourful<br>vegetables and tempting cheeses, and the buzz of friendly chats, farmers' markets are a feast for the<br>senses. They also provide an opportunity to talk to the people responsible for growing or raising your<br>food, support your local economy and pick up fresh seasonal produce—all at the same time.<br>P2 Farmers' markets are usually weekly or monthly events, most often with outdoor stalls, which<br>allow farmers or producers to sell their food directly to customers. The size or regularity of markets can<br>vary from season to season, depending on the area's agricultural calendar, and you're likely to find<br>different produce on sale at different times of the year. By cutting out the middlemen, the farmers secure<br>more profit for their produce. Shoppers also benefit from seeing exactly where—and to whom—their<br>money is going.</div>",
+    "options": null,
+    "answer": "详见解析中的参考译文与逐句精解",
+    "analysis": "<strong>【逐句拆分与核心采分点解析】</strong><br>2024年考研英语二 英译汉（段落翻译） Section III · 参考译文与逐<br>句解析<br>P A S S A G E & T R A N S L A T I O N · 题和解析<br>英译汉真题、参考译文与逐句解析<br>逐句译审整理。与试卷排版同一卷面：Directions 与整段英文原文连续排印——整段连<br>排、无题号无划线，把它切成一句句翻译单元本身就是解题动作。卷面之后先给按段定稿<br>的整篇参考译文，再按自切句序逐句拆分：意群直译、难点点破、语序调整、句内定稿中<br>译，答案直显。<br>英语二真题(2024)<br>Section III<br>Directions:<br>Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points)<br>P1 With the smell of coffee and fresh bread floating in the air, stalls bursting with colourful<br>vegetables and tempting cheeses, and the buzz of friendly chats, farmers' markets are a feast for the<br>senses. They also provide an opportunity to talk to the people responsible for growing or raising your<br>food, support your local economy and pick up fresh seasonal produce—all at the same time.<br>P2 Farmers' markets are usually weekly or monthly events, most often with outdoor stalls, which<br>allow farmers or producers to sell their food directly to customers. The size or regularity of markets can<br>vary from season to season, depending on the area's agricultural calendar, and you're likely to find<br>different produce on sale at different times of the year. By cutting out the middlemen, the farmers secure<br>more profit for their produce. Shoppers also benefit from seeing exactly where—and to whom—their<br>money is going.<br>参考译文<br>按段定稿的整篇参考译文是复盘资产，考卷上只印英文原文——英语二英译汉满分 15 分，按「理解准确、表达通<br>顺连贯、无错译漏译」整篇四档评分。<br>P1 空气中飘着咖啡和新鲜面包的香味，摊位上堆满五颜六色的蔬菜和诱人的奶酪，耳边是友善交<br>谈的阵阵热闹声——农夫市场，俨然是一场感官的盛宴。除此之外，它还提供了这样的机会：你可以<br>和那些负责种植或饲养你所吃食物的人直接交谈，可以支持当地经济，还能挑到新鲜的时令农产品<br>——而且一次就能全部做到。<br>P2 农夫市场通常每周或每月举办一次，大多采用露天摊位的形式，这让农户或生产者可以把自己<br>的食品直接卖给顾客。市场的规模和开办频率会因季节而异，这取决于当地的农事时令；一年中的不<br>同时节，往往也能看到不同的农产品在售。对农户而言，省去中间商之后，他们便能从自己的农产品<br><br>中获得更多利润；而对顾客来说，他们同样从中获益——能清清楚楚地看到自己的钱到底花到了哪<br>里、最终又流进了谁的口袋。<br>【衔接】首段两句之间用代词\"市场\"承接，避免重复\"农夫市场\"<br>farmers' markets are a feast for the senses 与 They also provide an opportunity to talk to<br>the people... 是相邻两句，They 在英文里承前指代农夫市场。译成中文时若两句都重复\"农夫市<br>场\"会显得啰嗦，可在第二句改用\"它\"或\"这种市场\"承接，也可承前省略主语；本译文第二句用\"农<br>夫市场还\"是为了在分段处明确话题，若想更紧凑可改作\"它还提供了这样的机会\"。<br>第二段前两句之间补\"另外/同时\"过渡，体现\"形式 + 变化\"两层信息<br>Farmers' markets are usually weekly or monthly events 介绍常规形式，The size or regularity<br>of markets can vary from season to season 紧接着说\"规模也会因季而异\"。两句话题相同、信<br>息递进，中间可用\"不过/同时\"过渡，提醒读者下面是\"在此基础上的变化\"。本译文用\"市场的规模<br>和开办频率会……\"自然承接，无需额外添词，因为汉语短句天然衔接。<br>第二段末两句用\"对农户而言……；对顾客来说……\"对仗收束<br>By cutting out the middlemen, the farmers secure more profit for their produce 和<br>Shoppers also benefit from seeing exactly where—and to whom—their money is going 是<br>分别从\"农户\"和\"顾客\"两个角度说\"双方都受益\"。Shoppers also 中的 also 提示\"也\"，正是两层并<br>列。汉化时用\"对农户而言……；而对顾客来说……\"或两句以分号衔接，可让两层信息对仗、双赢主<br>题立现。<br>把 produce 在第二段三处统一译作\"农产品\"<br>different produce on sale、more profit for their produce 两处 produce，加上第一段 fresh<br>seasonal produce，全文必须用同一个译名\"农产品\"，避免一会儿\"农产品\"、一会儿\"产品\"、一会<br>儿\"产出\"。术语统一是阅卷判断\"表达连贯\"的硬指标。<br>逐句解析<br>整段连排、无题号无划线——把原文切成一句句翻译单元本身就是解题动作，句前 N. 为逐句解析自切的句序号<br>（非考卷题号），与卷面原文逐字对应。<br>【来源】节选自Teen Breathe《青少年呼吸》杂志(第32期)的文章 From Farm Gate to Plate(从农场<br>大门至餐盘)。<br>【主旨】介绍农夫市场的多感官魅力与多方共赢<br>全文围绕 farmers' markets 展开：第一段以 farmers' markets are a feast for the senses 点出它<br>是一场感官盛宴，再列出它带来的三重价值（与种养人对话、支持本地经济、买到新鲜时令农产<br>品）；第二段进一步说明其运作方式（多为户外、周/月一次、规模随农时变化），并落到 By<br>cutting out the middlemen, the farmers secure more profit for their produce 与 Shoppers<br>also benefit from seeing exactly where—and to whom—their money is going，强调对农民<br>与顾客都是双赢。基调是中性偏褒义的介绍说明。<br><br>【术语】farmers' markets 统一译作\"农夫市场\"<br>farmers' markets 与 Farmers' markets 在全文反复出现，是核心话题词。主体考生易出现\"农贸市<br>场/农场主市场/农民市场\"等多种译法混用，应在动笔前先锁定一个统一译名——本篇推荐\"农夫市<br>场\"（也可统一为\"农贸市场\"），全篇保持一致。<br>produce 取名词义\"农产品\"，非动词\"生产\"<br>pick up fresh seasonal produce 与 different produce on sale、",
+    "tips": "先通读全文锁死核心术语译名，长难句按连词/介词/非谓语切分意群，定语从句短前长后。",
+    "kp": "2024英译汉真题精译与采分点"
+  },
+  {
+    "id": "E2024_47",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 47,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2024英二 小作文 Part A 第47题 (10分)",
+    "stem": "<strong>Section IV Part A (10 points) — Directions:</strong><div class='formula-card'>Suppose you and Jack are going to do a survey on the protection of old houses in an ancient town.<br>Write him an email to<br>1) put forward your plan, and<br>2) ask for his opinion.<br>Write your answer in about 100 words on the ANSWER SHEET.Do not use your own name in your<br>email; Use “Li Ming” instead. (10 points)</div>",
+    "options": null,
+    "answer": "见参考范文与段落句架",
+    "analysis": "【参考范文 · 98 词】<br>写作无唯一标准答案，以下为达标示范<br>Dear Jack,<br>I'm writing to share my plan for our survey on the protection of old houses in our ancient town, and to hear<br>what you think.<br>I suggest we begin next Saturday. In the morning, I will interview elderly residents about the houses' history,<br>while you photograph the buildings and record their present condition. In the afternoon, we can hand out<br>questionnaires to visitors to collect wider opinions on preservation.<br>Does this arrangement suit you? Please feel free to share any suggestions or changes you would prefer, and we<br>can discuss the details before we start.<br>Yours, Li Ming<br>【参考译文】<br>亲爱的杰克：<br>我写信是想和你分享我为咱们古镇老房子保护调查拟的计划，也想听听你的想法。<br>我建议下周六开始。上午我去访谈上了年纪的居民、了解这些房子的历史，你负责给建筑拍照并记录它们<br>目前的状况。下午我们可以向游客发放问卷，收集更广泛的保护意见。<br><br>这样安排你觉得可以吗？如果你有任何建议或想改动的地方，请尽管告诉我，我们可以在开始前先商量好<br>细节。<br>此致， 李明<br>【第 1 段】称呼到位。'Dear Jack,' 顶格另起，落实第 1 块'顶格称呼收件人'，一眼确立书信身份。<br>【第 2 段】一句表来意。'I'm writing to share my plan... and to hear what you think.' 用'表明来意'句<br>架，一句同时预告了计划与征询两件事。<br>【第 3 段】计划有细节。用 I suggest we begin...、In the morning...while you...、In the afternoon...<br>把计划落成时间、分工、方式，兑现'计划落到细节'。<br>【第 4 段】商量口吻。'Does this arrangement suit you? Please feel free to share any<br>suggestions...' 用疑问句加 feel free 把话语权交回 Jack，完成征询任务点。<br>【第 5 段】格式收尾。'Yours,' 换行 'Li Ming' 补齐结尾礼貌语与指定署名，兑现'礼貌语加落款'并守住署<br>名硬约束。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域 ，再定中心立意与要展开的要点 —— 这些<br>是本题特有的内容判断，不是通用套路。<br>核心任务<br>一封信办两件事<br>本题要 Write him an email，向搭档 Jack 做两件事：先 put forward your plan，再 ask for his<br>opinion，话题围绕 the protection of old houses in an ancient town 的调查。缺任一件都算<br>漏点。<br>读者 · 语域<br>写给搭档要商量<br>收件人是和你一起做调查的搭档 Jack，身份平等，宜用半正式、礼貌商量的邮件语气，而非命<br>令或公文腔。署名有硬性限制：Do not use your own name in your email，须改用 Li Ming。<br><br>中心立意<br>商定调查方案<br>本信交际目的：把我拟好的古镇老房子保护调查计划告诉 Jack，并请他一起把方案敲定——落<br>点在 ask for his opinion 上的'共同商量'，而非单方面通知。<br>要展开的要点<br>1. 亮出调查计划<br>对应 put forward your plan：给出调查的时间、你我分工、调查对象与方式等具体安排。<br>2. 征询搭档意见<br>对应 ask for his opinion：邀请 Jack 评估方案、提出修改建议，共同定案。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>顶格称呼<br>书信第一块：顶格写 Dear Jack, 确认收件人。<br>第 2 段<br>点明写信目的<br>一句话说明就调查一事与 Jack 商量，对应 Write him an email 的交际目的。<br>第 3 段<br>铺陈调查计划<br>落实第一个任务点 put forward your plan：写时间、分工、对象、方式。<br>第 4 段<br>征询并邀请<br>落实第二个任务点 ask for his opinion：请对方评估并提建议。<br>第 5 段<br>落款署名<br>结尾礼貌语加落款，按要求署 Li Ming。<br><br>第 1 段<br>称呼 Jack<br>收件人是搭档，直呼其名即可：Dear Jack,<br>邮件称呼<br>· Dear ___,（横线填收件人名字，顶格另起一行）<br>第 2 段<br>说明来意<br>点明是就 the protection of old houses in an ancient town 的调查找他商量，并想听他的<br>看法。<br>表明来意<br>· I'm writing to ___ and to hear what you think.（横线填本信要办的事）<br>第 3 段<br>给出分工时间<br>落实 put forward your plan：定下开始时间，分清你我各自任务（如我访谈、你拍照记录），<br>并安排问卷等调查方式。<br>提出建议<br>· I suggest we ___.（横线填具体时间或做法）<br>分工表达<br>· I will ___, while you ___.（两条横线填各自负责的任务）<br>第 4 段<br>请他提意见<br>落实 ask for his opinion：问方案是否可行，请 Jack 提出修改建议、一起定细节。<br>征询意见<br>· Does this ___ suit you? Please feel free to share any suggestions.（横线填<br>方案/安排）<br><br>第 5 段<br>署名 Li Ming<br>按硬性要求 Do not use your own name in your email，落款只能写 Li Ming，绝不署真名。<br>结尾落款<br>· Yours,（换行）Li Ming——结尾礼貌语＋指定署名<br>R E V I E W · 自检避坑<br>本题在四个评分维度怎样算达标、容易在哪丢分<br>按阅卷四维（内容切题 / 结构连贯 / 语言准确 / 字数格式）给出本题达标要点，并把最容<br>易踩的低分写法摆出来 + 给改法 —— 这是写作版的「狠拆诱人错项」。<br>内容切题<br>两点都要有<br>put forward your plan 与 ask for his opinion 两点缺一即大幅失分，别只顾着写计划<br>忘了征询。<br>结构连贯<br>格式块齐全<br>本题四块都不能少；计划段内用先后时间连接，读起来才不是零散罗列。<br>语言准确<br>计划用将来时<br>调查尚未发生，宜用 will / we can 表将来；注意 interview、hand out、a survey on<br>等搭配别写错。<br>字数格式<br>凑够约百词<br>要求 in about 100 words，字数不够应靠补充计划细节来撑，而非重复同一句话注<br>水。<br>典型低分写法 · 反面示例与改法<br>只写计划漏征询<br>反面：通篇只描述调查安排，结尾直接落款收尾，从没问过 Jack 的看法，漏掉第二个任务点。改<br>法：加一句 Does this arrangement suit you? Please share your suggestions.<br><br>署了真名<br>反面：落款写成自己的真实姓名 Zhang Wei。改法：按要求把落款改为 Li Ming。<br>计划空泛<br>反",
+    "tips": "小作文严格三段式：第1段表明写信目的，第2段逐一落实题干两个要点，第3段期待回复并规范署名 Li Ming。",
+    "kp": "2024英语二小作文应用文实战"
+  },
+  {
+    "id": "E2024_48",
+    "subject": "eng2",
+    "year": 2024,
+    "qNum": 48,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2024英二 大作文 Part B 第48题 (15分)",
+    "stem": "<strong>Section IV Part B (15 points) — Directions:</strong><div class='formula-card'>Write an essay based on the chart below, In your essay, you should<br>1) describe and interpret the chart, and<br>2) give your comments.<br>Write your answer in about 150 words on the ANSWER SHEET. (15 points)</div>",
+    "options": null,
+    "answer": "见图表描述与参考范文",
+    "analysis": "【参考范文 · 147 词】<br>写作无唯一标准答案，以下为达标示范<br>As is shown in the bar chart, a survey on students' main gains from a university's labor practice course lists<br>four benefits. Learning relevant knowledge tops the list at 91.3%, closely followed by improved hands-on<br>ability at 84.8%. Feeling relaxed accounts for 54.4%, while enhanced cooperation ranks lowest, at only 32.6%.<br>Behind these figures lies a clear message. That knowledge and practical skills score so high suggests such<br>courses effectively combine theory with practice, which is exactly their design purpose. The low figure for<br>cooperation, however, may indicate that most tasks are completed individually, offering students few chances<br>to work as a team.<br>In my view, labor practice deserves greater emphasis in schools, for it cultivates abilities that textbooks alone<br>cannot. Meanwhile, educators should redesign group-based tasks so that cooperation is strengthened. Only in<br>this way can such courses truly benefit students in an all-round manner.<br>【参考译文】<br>如条形图所示，一项关于某高校劳动实践课学生主要收获的调查列出了四项收益。学习相关知识以 91.3%<br>位居榜首，紧随其后的是动手能力的提升，为 84.8%。心情舒畅占 54.4%，而合作能力的增强排在最<br>末，仅为 32.6%。<br>这些数字背后传递着一个清晰的信息。知识与实践技能得分如此之高，说明这类课程有效地把理论与实践<br>结合了起来，而这正是其设计初衷。然而，合作一项的低数值或许表明，多数任务是学生各自独立完成<br>的，几乎没给他们团队协作的机会。<br>在我看来，劳动实践在学校里值得得到更多重视，因为它培养的是仅靠课本无法获得的能力。与此同时，<br>教育者应重新设计以小组为单位的任务，从而增强学生的合作能力。唯有如此，这类课程才能真正让学生<br>全面受益。<br>【第 1 段】一句引题后用对比句读出极值。本段落实读图段功能：先用 'As is shown in the bar chart'<br>引出 某高校劳动实践课学生主要收获调查 主题，再用 'tops the list at 91.3%' 与 'ranks lowest, at only<br>32.6%' 一升一降的对比句锁住最高最低，居中两项一笔带过，做到概括而不罗列，完成 describe。<br>【第 2 段】由数字追问原因，完成解读。本段用 'Behind these figures lies a clear message' 过渡到解<br>读，再以 'suggests' 和 'may indicate' 分别解释高值（理论实践结合好）与低值（任务多为个人完成）<br>的原因，把百分比翻成现象结论，完成 interpret。<br>【第 3 段】表态＋落地建议＋回扣收尾。本段用 'In my view' 亮立场，'Meanwhile, educators should<br>redesign group-based tasks' 给出针对最低项合作能力的具体建议，末句 'Only in this way' 回扣中<br>心，完成 give your comments，评论与图中数据紧扣不空泛。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域、读懂配图 ，再定中心立意与要展开的要<br>点 —— 这些是本题特有的内容判断，不是通用套路。<br><br>核心任务<br>先读图再评论，两件事都要做<br>本题要求 describe and interpret the chart 之后还要 give your comments，即先客观描述并解<br>读图表数据，再给出自己的看法。两个任务缺一不可：只描述不评论，等于只完成一半，直接<br>落到低档分。<br>读者 · 语域<br>面向阅卷人的正式书面语<br>本题是纯议论性质的图表短文，没有具体收信人，无需称呼与署名。只要用面向阅卷人的正式<br>书面英语即可：不用缩写口语、不用感叹句喊口号，句式完整、用词得体。<br>配图要读出<br>知识最高、合作最低的一升一降对比<br>本图统计 某高校劳动实践课学生主要收获调查，四项收获中 学习了相关知识 达 横向条形图数<br>值为91.3% 居首，提升了动手能力 为 横向条形图数值为84.8% 紧随其后；而 增强了合作能力<br>仅 横向条形图数值为32.6% 垫底，感觉到心情舒畅 为 横向条形图数值为54.4% 居中。可写点<br>就是'知识与动手能力高、合作能力低'这组反差。<br>中心立意<br>劳动课在长知识练动手上成效显著，但合作培养待补<br>本篇中心：劳动实践课在传授知识、锻炼动手能力上收获显著，但在培养合作能力上明显不<br>足，值得重视与改进。这个立场直接从 学习了相关知识 与 增强了合作能力 的巨大数值反差生<br>出，站得住、好展开。<br><br>要展开的要点<br>1. 描述：读出最高最低这组对比<br>第一要点是客观描述：点出 学习了相关知识 91.3% 最高、增强了合作能力 32.6% 最低这一对<br>极值，配上居中两项，用两三句概括而非罗列全部数字。<br>2. 解读：反差背后的原因<br>第二要点解读数据：知识与动手能力高，说明课程把理论与实践结合得好；合作能力低，可能<br>因为多数任务是学生各干各的，缺少团队协作的设计。<br>3. 评论：既肯定价值又提改进<br>第三要点给评论：肯定劳动实践课应受重视，同时建议多设计小组任务来补齐合作短板，让课<br>程收获更全面。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>客观读图＋点出关键对比<br>第一段用一句引出图表主题，再用两三句概括四项数据，突出 学习了相关知识 最高、增<br>强了合作能力 最低这组对比，完成'描述'。<br>第 2 段<br>解读数据背后的原因与意义<br>第二段分析：高数值说明课程理论与实践结合有效，低数值揭示合作训练不足，完成'解<br>读'。<br>第 3 段<br>给出评论与改进建议<br>第三段亮明态度：肯定劳动实践课价值，并建议增设小组任务补齐合作短板，完成 give<br>your comments。<br><br>第 1 段<br>四项收获：知识91.3%最高，合作32.6%最低<br>写出图表统计的是 某高校劳动实践课学生主要收获调查，学习了相关知识 以 91.3% 领先、提<br>升了动手能力 84.8% 紧随，感觉到心情舒畅 54.4% 居中，增强了合作能力 32.6% 垫底。<br>引出图表主题<br>· As is shown in the bar chart, ___ (主题/统计对象).<br>点出最高值<br>· ___ tops the list at ___%, closely followed by ___ at ___%.<br>对比出最低值<br>· By contrast, ___ ranks lowest, at only ___%.<br>第 2 段<br>高分＝理论实践结合好；低分＝缺团队设计<br>解释：知识与动手能力得分高，说明劳动课有效地把理论与实践结合；合作能力得分低，可<br>能因为任务多为个人独立完成，缺少协作机会。<br>由数",
+    "tips": "图表大作文三段式：第1段客观读图抓极值反差，第2段分析数据背后的两点原因，第3段总结展望与建议。",
+    "kp": "2024英语二大作文图表作文实战"
+  },
+  {
+    "id": "E2023_01",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第1题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>1</strong> 空的最佳选项：",
+    "options": [
+      "A. purchase",
+      "B. profit",
+      "C. connection",
+      "D. bet"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (profit)</strong><br>词义辨析<br>【线索】「生意做得不错却要更上一层」的小企业语境<br>线索在本句的后半句 you need to find a way to take it to the next level——「需要更上<br>一层楼」暗示目前已经做得「不错」，那个「不错」必须是经营层面的好结果。再结合本段<br>主语 you're the CEO of a small business，能让 CEO 描述「做得不错」的，自然是赚钱多<br>少，而不是关系、采购或赌注。<br>【选项】A) purchase ✗对象错——CEO 「做」的不是采购<br>purchase 意为「采购、购买」，是公司花钱的动作，与 making a nice __ 这种「做出好成果」的<br>语气不符。<br>B) profit ✓搭配地道且语义贴合<br>profit 意为「利润」，make a profit 是固定搭配，正好对应小企业 CEO 「赚得不错」的状态，<br>与下文 take it to the next level 形成「赚得不错→想做更大」的语义递进。<br>C) connection ✗话题偏离——下文没接「人脉」<br>connection 意为「人脉、关系」，虽搭配 make 也通，但全文从未谈人脉，下文也是讲业绩增<br>长，属于无中生有的话题。<br>D) bet ✗感情色彩冲突<br>bet 是「打赌、押注」，带投机色彩，而句中用了褒义词 nice 修饰，且语境是稳健经营要扩张，色<br>彩与语义都不对。<br>【验证】代入后整句为 you're making a nice __(1)__ = 「你赚着一份不错的利润」，与紧接其后的<br>you need to find a way to take it to the next level「但需要更上一层楼」逻辑顺承，也<br>契合全文「小企业谋求突破」的主线。",
+    "tips": "「生意做得不错却要更上一层」的小企业语境",
+    "kp": "完形填空 · 第1空考点精析"
+  },
+  {
+    "id": "E2023_02",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第2题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>2</strong> 空的最佳选项：",
+    "options": [
+      "A. define",
+      "B. predict",
+      "C. prioritize",
+      "D. appreciate"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (prioritize)</strong><br>词义辨析<br>【线索】全段在号召把增长放在第一位<br>线索在空后的 by establishing a growth team——专门组建团队来做这件事，等于把增长<br>摆到突出位置；再加上 it harnesses the power of collaboration to focus __(3)__ on<br>finding ways to grow 直接点出「专注于找增长之道」，作者主张的动作显然是「把增长当<br>头等大事」。<br>【选项】A) define ✗动作错位——不是「定义」是「去做」<br>define 意为「定义、界定」，是认知动作；作者要的是行动，与 establishing a growth team 这<br>种实干安排对不上。<br>B) predict ✗方向错——不是预测，是推动<br>predict 「预测」也是认知层面的，没法解释为什么要 establishing a growth team；且全文是讲<br>「推动增长」而非「预测增长」。<br>C) prioritize ✓完美契合「专设团队聚焦增长」<br>prioritize 意为「将…置于优先位置」，与「成立专门团队、专注于增长」直接对应；它正好回答<br>了 What you need to do 的「具体动作」。<br>D) appreciate ✗色彩与对象都不对<br>appreciate 意为「赏识、感激」，是态度词；CEO 不是来欣赏增长，而是要去做增长，与下文的<br>实干安排冲突。<br>【验证】代入后整句为「你需要做的是把增长放在第一位，办法是组建一支成长团队」，与紧接的<br>focus __(3)__ on finding ways to grow 形成「优先→专注」的同向加强。",
+    "tips": "全段在号召把增长放在第一位",
+    "kp": "完形填空 · 第2空考点精析"
+  },
+  {
+    "id": "E2023_03",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第3题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>3</strong> 空的最佳选项：",
+    "options": [
+      "A. exclusively",
+      "B. temporarily",
+      "C. potentially",
+      "D. initially"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (exclusively)</strong><br>词义辨析<br>【线索】团队的全部精力都给增长<br>线索在同一句 A growth team is made up of members from different departments<br>within your company, and it harnesses the power of collaboration to focus __(3)__<br>on finding ways to grow——专门攒一个团队做这件事，意味着精力是「只放在增长上」<br>而不是「暂时」「也许」「起初」。再回望第 2 题的 prioritize，本句正是 prioritize 的展<br>开：把增长拔高到唯一焦点。<br>【选项】<br>A) exclusively ✓把 focus 推到「只」的极致<br>exclusively 意为「专一地、唯一地」，与 focus on 搭配地道，正好表达「全部精力只放在找增<br>长之道上」，呼应上句的 prioritize。<br>B) temporarily ✗时间限定与「专门组队」相悖<br>temporarily 「暂时地」会把整个团队矮化为临时安排，与 prioritize、establishing a growth<br>team 的长期投入冲突。<br>C) potentially ✗语气太虚——不是「可能」<br>potentially 「潜在地、可能地」是不确定语气，但作者在确定地号召要做的事，色彩对不上。<br>D) initially ✗暗含「后来不再」与下文不符<br>initially 「起初」隐含「后来转向别处」，与下文一直围绕增长展开的整篇布局矛盾。<br>【验证】代入后为「团队靠协作的力量，专一地聚焦于寻找增长之道」，对内承接 prioritize、对外<br>铺垫了下文 BitTorrent 案例「全员动起来只为增长」的故事走向。",
+    "tips": "团队的全部精力都给增长",
+    "kp": "完形填空 · 第3空考点精析"
+  },
+  {
+    "id": "E2023_04",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第4题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>4</strong> 空的最佳选项：",
+    "options": [
+      "A. experiment",
+      "B. proposal",
+      "C. debate",
+      "D. example"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (example)</strong><br>词义辨析<br>【线索】下面是 BitTorrent 的故事而非实验或辩论<br>线索在紧接的 Prior to forming a growth team, the software company BitTorrent had<br>50 employees working in the __(5)__ departments of engineering, marketing and<br>product development——下文直接讲一家真实公司的经历，没有「实验设计」「正反方<br>辩论」「方案提议」的影子，这就是教学语境里典型的「举例说明」。<br>【选项】A) experiment ✗下文不是实验设计<br>experiment 「实验」会要求出现假设、对照、变量，而下文只是一家公司的事实回顾。<br>B) proposal ✗下文不是提议<br>proposal 「提议、方案」需要给出「我建议怎么做」的语气，但下文是讲发生过的事实。<br>C) debate ✗下文没有正反观点<br>debate 「辩论」需要双方观点交锋，下文是单向叙述一家公司案例，无对立面。<br>D) example ✓正是「举一个真实案例」<br>example 「例子」与下文「举出 BitTorrent 这家公司」精准匹配，且 a real-world example 在<br>英语里是高频固定说法。<br>【验证】代入后整句是「我们来看一个真实世界的例子」，与下文 BitTorrent 案例自然衔接，也呼应<br>了 overview 中「案例佐证」这一段的功能。",
+    "tips": "下面是 BitTorrent 的故事而非实验或辩论",
+    "kp": "完形填空 · 第4空考点精析"
+  },
+  {
+    "id": "E2023_05",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第5题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>5</strong> 空的最佳选项：",
+    "options": [
+      "A. identical",
+      "B. marginal",
+      "C. provisional",
+      "D. traditional"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (traditional)</strong><br>词义辨析<br>【线索】「成立成长团队前」的常规架构<br>线索在同句状语 Prior to forming a growth team 与全文对比框架：前文 A growth team<br>is made up of members from different departments 把成长团队定义为「跨部门」的新<br>做法；那么「之前」自然指的是公司沿用已久的、按 engineering/marketing/product<br>development 分立的「老套」结构。<br>【选项】A) identical ✗事实错——三个部门并不相同<br>identical 「完全相同的」明显与 engineering、marketing、product development 三种不同部<br>门并列冲突。<br>B) marginal ✗色彩冲突——这些是核心部门<br>marginal 「边缘的、次要的」与工程、营销、产品研发这种公司核心部门定位相反。<br>C) provisional ✗时态错——不是临时设置<br>provisional 「临时的、暂定的」与 Prior to forming a growth team 暗含的「长期常规架构」<br>冲突。<br>D) traditional ✓对「新做法」之前的「老套」精准对照<br>traditional 「传统的、老套的」正好与下文 growth team 这一「新做法」形成对照，也契合<br>BitTorrent 案例「旧架构走到瓶颈」的故事走向。<br>【验证】代入后「BitTorrent 在传统的工程、营销和产品研发部门里有 50 名员工」与紧接的 This<br>brought them good results until 2012, when their growth plateaued 形成「传统架构<br>曾管用、后来碰到天花板」的合理叙事。",
+    "tips": "「成立成长团队前」的常规架构",
+    "kp": "完形填空 · 第5空考点精析"
+  },
+  {
+    "id": "E2023_06",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第6题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>6</strong> 空的最佳选项：",
+    "options": [
+      "A. rumor",
+      "B. secret",
+      "C. myth",
+      "D. problem"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (problem)</strong><br>词义辨析<br>【线索】增长停滞 + 顾客不付费=问题<br>线索一在上句 until 2012, when their growth plateaued——增长停滞本身就是负面状<br>态；线索二在本句 that 从句 too many customers were using the basic, free version of<br>their product 与下句 few people were making the upgrade——这描述的是一个「不付<br>费的人太多」的不良局面，整段在讲「困境」，所填名词必然是「问题」一类负面词。<br>【选项】A) rumor ✗事实非「未经证实」<br>rumor 「谣言」指未经证实的说法，而句中描述的是真实发生的客户使用情况，不是道听途说。<br>B) secret ✗并非隐秘信息<br>secret 「秘密」指被隐藏的信息，但这里事实是公司自己都意识到的明面困境，与 secret 的「隐<br>藏」语义冲突。<br>C) myth ✗并非「广为流传的错误观念」<br>myth 「迷思、错误观念」指人们普遍以为却不真的事，但本句陈述的是真实数据，不是被破除的<br>偏见。<br>D) problem ✓完美匹配「困境」语境<br>problem 「问题」直接对接上句 their growth plateaued 的负面状态，把「免费用户太多、付<br>费升级少」定性为公司面临的问题，下文还要解决它。<br>【验证】代入后整段叙事变成「2012 年增长停滞 → 问题是太多人用免费版 → 故事接着要找答<br>案」，与第 3 段 Things changed... when ... 的「找到解决之道」节拍严丝合缝。",
+    "tips": "增长停滞 + 顾客不付费=问题",
+    "kp": "完形填空 · 第6空考点精析"
+  },
+  {
+    "id": "E2023_07",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第7题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>7</strong> 空的最佳选项：",
+    "options": [
+      "A. despite",
+      "B. unlike",
+      "C. through",
+      "D. besides"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (despite)</strong><br>逻辑关系<br>【线索】「付费版有改进」却「升级的人少」是让步<br>线索一是空后的 improvements to the premium, paid version——付费版有改进，是正<br>面事实；线索二是主句 few people were making the upgrade——结果却很少有人升<br>级，是负面事实。一正一反，标准的「尽管 A 但 B」让步关系。<br>【选项】<br>A) despite ✓正反差让步关系一拍即合<br>despite 「尽管」恰好引出让步：尽管付费版做了改进，升级的人却很少，与下段 Most<br>customers were simply unaware of the premium version 给出的真因配套。<br>B) unlike ✗对比对象错位<br>unlike 「不像、与…不同」要求空后是被对比的事物，而 improvements 不是用来与「升级少」相<br>对比的对象，逻辑站不住。<br>C) through ✗方式与结果矛盾<br>through 「通过」表示手段，会说成「通过改进，结果升级却少」，因果倒置；改进本应促进升<br>级，而非导致少升级。<br>D) besides ✗并列增量与反差结果不搭<br>besides 「除了…还」表并列累加，但主句是反差而非并列叠加，逻辑走向不对。<br>【验证】代入后整句变成「尽管付费版有所改进，却很少人愿意升级」，与下段提出的真因「客户其<br>实不知道有付费版」形成「让步陈述 → 揭示真因」的标准说理链条。",
+    "tips": "「付费版有改进」却「升级的人少」是让步",
+    "kp": "完形填空 · 第7空考点精析"
+  },
+  {
+    "id": "E2023_08",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第8题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>8</strong> 空的最佳选项：",
+    "options": [
+      "A. moreover",
+      "B. however",
+      "C. therefore",
+      "D. again"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (however)</strong><br>逻辑关系<br>【线索】上段是困境、本段是转机<br>线索一在 P2 末 few people were making the upgrade——困境停滞；线索二在本句<br>Things changed 与同句的 an innovative project-marketing manager came aboard<br>——出现转机；上下段语气一负一正，正是 however 该出场的地方。<br>【选项】A) moreover ✗并非追加同向信息<br>moreover 「此外」表同向追加，但 P3 是与 P2 反向的转折，方向相反。<br>B) however ✓上段困境到本段转机正需 however<br>however 「然而」恰恰把「困境」翻转为「事情起了变化」，并嵌在主语后作插入语，结构与语<br>义双重契合。<br>C) therefore ✗并非因果直接推出<br>therefore 「因此」要求 P2 是直接原因、P3 是必然结果；但 P2 没有任何「自动导致变化」的逻<br>辑，变化来源是新人加入，不是上段事件推导。<br>D) again ✗无重复语境<br>again 「再一次」需要前面已经发生过同类事件，文中没有任何「之前也有过 things changed」<br>的铺垫。<br>【验证】代入后段首读作「然而，事情发生了变化——一位富有创意的项目营销经理加入」，与 P2<br>末的困境形成清晰转折，并自然引出 P3-P4 的解决方案叙事。",
+    "tips": "上段是困境、本段是转机",
+    "kp": "完形填空 · 第8空考点精析"
+  },
+  {
+    "id": "E2023_09",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第9题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>9</strong> 空的最佳选项：",
+    "options": [
+      "A. inspected",
+      "B. created",
+      "C. expanded",
+      "D. reformed"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (created)</strong><br>词义辨析<br>【线索】P2 公司还没有成长团队<br>线索在 P2 开头 Prior to forming a growth team——明确点出此前没有成长团队；那<br>么新人来了之后才出现，动作只能是「创建」而非检查/扩张/改革（这三者都要求原本已<br>存在）。<br>【选项】A) inspected ✗无可检查的既有团队<br>inspected 「检查」要求成长团队已经存在，与 P2 明示的「此前没有」冲突。<br>B) created ✓从无到有的「组建」<br>created 「创建」精准对应「BitTorrent 此前没有成长团队，新人来后才组建」的事实，呼应 P1<br>的 establishing a growth team。<br>C) expanded ✗扩张需有原物<br>expanded 「扩张」同样要求已有团队，与上下文矛盾。<br>D) reformed ✗改革也要有原物<br>reformed 「改革、改造」也要求事先存在某团队，文中并无。<br>【验证】代入后整句为「一位富有创意的项目营销经理加入，创建了一支成长团队，激发出他们所需<br>的新视角」，把 P1 的方案（成立成长团队）与 P3 的故事节点（创建发生在 BitTorrent）<br>首尾呼应。",
+    "tips": "P2 公司还没有成长团队",
+    "kp": "完形填空 · 第9空考点精析"
+  },
+  {
+    "id": "E2023_10",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第10题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>10</strong> 空的最佳选项：",
+    "options": [
+      "A. cultural",
+      "B. objective",
+      "C. fresh",
+      "D. personal"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (fresh)</strong><br>词义辨析<br>【线索】「创新经理」+「跨部门视角」=新视角<br>线索一是同段 an innovative project-marketing manager came aboard 里的<br>innovative；线索二是紧接的解释句 By looking at engineering issues from a marketing<br>point of view, it became clear that the __(11)__ of upgrades wasn't due to a quality<br>issue——从营销视角看工程问题，正是「换个新角度」。两条线索都指向「新鲜的<br>视角」。<br>【选项】A) cultural ✗话题外延偏离<br>cultural 「文化的」全文未谈跨文化议题，属于无中生有。<br>B) objective ✗侧重「客观」与上下文不符<br>objective 「客观的」强调中立无偏，而文中强调的是换一个角度（从营销看工程），并非追求<br>客观。<br>C) fresh ✓与 innovative、跨部门视角共振<br>fresh 「新鲜的、新颖的」与同段 innovative、跨部门换视角的描述高度共振，「fresh<br>perspective」更是英语中固定说法。<br>D) personal ✗色彩与团队属性矛盾<br>personal 「个人的」与文章主张「跨部门协作」相反，团队视角恰恰不是个人视角。<br>【验证】代入后整句为「他激发出了他们所需的那种新鲜视角」，下句正好接上「从营销视角看工程<br>问题」，把「新视角」具象化，全段逻辑闭环。",
+    "tips": "「创新经理」+「跨部门视角」=新视角",
+    "kp": "完形填空 · 第10空考点精析"
+  },
+  {
+    "id": "E2023_11",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 11,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第11题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>11</strong> 空的最佳选项：",
+    "options": [
+      "A. end",
+      "B. burden",
+      "C. lack",
+      "D. decrease"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (lack)</strong><br>词义辨析<br>【线索】上一段「很少人升级」 = 升级少<br>线索一是 P2 末 few people were making the upgrade——少有人升级，本质是「缺乏升<br>级」；线索二是本句下文 Most customers were simply unaware of the premium<br>version 给出的原因「客户不知道有付费版」——这种原因导致的是「升级几乎没有」，不<br>是「升级量在下降」。所以是「缺乏升级」而非「升级减少」。<br>【选项】A) end ✗事实错——升级并未终结<br>end 「终结」会暗示升级业务已经停止，但文章既未停止也马上要好转。<br>B) burden ✗色彩错——升级不是负担<br>burden 「负担」一般用于「沉重的压力」，与升级业务的描述不匹配。<br>C) lack ✓对应「升级很少」的本质<br>lack 「缺乏」直接对应 few people were making the upgrade 的事实，且下文「客户不知道<br>有付费版」也是「缺乏」的合理原因。<br>D) decrease ✗走向错——文中没说在下降<br>decrease 「减少」要求有「过去多、现在少」的对比走向，但 P2 说「太多人在用免费版、<br>很少升级」，本就一直少，不是从多变少。这是考研二常见的「程度词偷换」陷阱：把 few 等<br>同 decrease。<br>【验证】代入后整句为「升级的缺乏并非源于质量问题」，下文紧接「真正原因是大多数客户不知道<br>有付费版」，「缺乏 → 真因」推理链顺畅。",
+    "tips": "上一段「很少人升级」 = 升级少",
+    "kp": "完形填空 · 第11空考点精析"
+  },
+  {
+    "id": "E2023_12",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 12,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第12题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>12</strong> 空的最佳选项：",
+    "options": [
+      "A. policy",
+      "B. suggestion",
+      "C. purpose",
+      "D. insight"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (insight)</strong><br>词义辨析<br>【线索】P3 末「发现真因」=洞察<br>线索是 P3 末整句 By looking at engineering issues from a marketing point of view, it<br>became clear that the __(11)__ of upgrades wasn't due to a quality issue. Most<br>customers were simply unaware of the premium version and what it offered——这是<br>「换视角看出真因」的发现过程，得到的是一种「洞见」，不是政策、建议或目的。<br>【选项】A) policy ✗上文未给出政策<br>policy 「政策」需要前文出现「公司定下规则」的内容，但 P3 给的是发现，不是制定。<br>B) suggestion ✗上文非「建议」<br>suggestion 「建议」需要「有人提议怎么做」的句子，但 P3 是诊断真因，不是建议。<br>C) purpose ✗目的与上文事实错位<br>purpose 「目的」需要前文交代「我们要达到什么」，但 P3 是揭示已知事实，不是设立目标。<br>D) insight ✓正是上段「发现」的同义提升<br>insight 「洞见、深入理解」精准对应上段「换视角发现真因」这一认知收获；armed with this<br>insight 是英语中常见说法。<br>【验证】代入后整句为「带着这条洞见，营销和工程团队联合起来…」，下文 raise awareness by<br>prominently __(13)__ the premium version 正是「洞见 → 行动」的自然落地。",
+    "tips": "P3 末「发现真因」=洞察",
+    "kp": "完形填空 · 第12空考点精析"
+  },
+  {
+    "id": "E2023_13",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 13,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第13题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>13</strong> 空的最佳选项：",
+    "options": [
+      "A. contributing",
+      "B. allocating",
+      "C. promoting",
+      "D. transferring"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (promoting)</strong><br>词义辨析<br>【线索】「提升认知」需要「推介/推广」型动作<br>线索一是同句目的状语 to raise awareness——目的是让人知道；线索二是下句结果<br>upgrades skyrocketed, and revenue increased by 92 percent——升级量暴涨、收入大<br>增，这都是营销推广导致的典型成效。两条线索都指向「向用户推介付费版」。<br>【选项】A) contributing ✗搭配错——contribute to 后才接名词<br>contributing 「贡献」常用 contribute to，直接接 the premium version 搭配不通；语义上也不<br>指向「让用户知道」。<br>B) allocating ✗动作对象错<br>allocating 「分配、分派」常用于资源分配（allocate funds），而这里要的是「让用户认识到付<br>费版」，语义错位。<br>C) promoting ✓「推广」精准对接「提升认知」<br>promoting 「推广、推介」与 raise awareness 是同向同步动作，下句的「升级暴涨」也是推广<br>典型成效。<br>D) transferring ✗对象错——不是「转让」<br>transferring 「转交、转让」会让句子变成「把付费版转交给用户」，与「让用户了解并升级付<br>费」的实际营销动作不符。<br>【验证】代入后整句为「通过把付费版突出地推介给免费版用户来提高认知度」，下句 upgrades<br>skyrocketed 正是推广奏效的结果，全段「方案-动作-结果」闭环。",
+    "tips": "「提升认知」需要「推介/推广」型动作",
+    "kp": "完形填空 · 第13空考点精析"
+  },
+  {
+    "id": "E2023_14",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 14,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第14题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>14</strong> 空的最佳选项：",
+    "options": [
+      "A. As a result",
+      "B. At any rate",
+      "C. By the way",
+      "D. In a sense"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (As a result)</strong><br>逻辑关系<br>【线索】上文「推广」=因，「升级暴涨」=果<br>线索是上句 raise awareness by prominently __(13)__ the premium version to users of<br>the free version——主动推广是原因；本句 upgrades skyrocketed, and revenue<br>increased by 92 percent 是结果。一因一果，标准的「因此/结果」关系。<br>【选项】<br>A) As a result ✓因果关系精准对应<br>As a result 「结果」直接对应「推广动作 → 升级暴涨」的因果链，整段叙事节奏完满。<br>B) At any rate ✗语气与因果链不符<br>At any rate 「无论如何、反正」用于让步或转换语气，与此处「水到渠成的成果」逻辑不符。<br>C) By the way ✗话题切换错——这里不是岔话<br>By the way 「顺便说一下」用于引出离题话题，与「升级暴涨」这种核心成果相反。<br>D) In a sense ✗限定语气不对<br>In a sense 「在某种意义上」是带保留的限定语，但本句陈述的是事实级的暴涨数据，无需打折。<br>【验证】代入后整句变成「于是，升级量暴涨，收入增长了 92%」，与上段「推广动作」形成清晰<br>的因果闭环，也为 P5 切到「领导者要求」做铺垫。",
+    "tips": "上文「推广」=因，「升级暴涨」=果",
+    "kp": "完形填空 · 第14空考点精析"
+  },
+  {
+    "id": "E2023_15",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 15,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第15题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>15</strong> 空的最佳选项：",
+    "options": [
+      "A. unite",
+      "B. finance",
+      "C. follow",
+      "D. choose"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (unite)</strong><br>词义辨析<br>【线索】「跨学科团队 + 让大家走在轨道上」=凝聚<br>线索一是空后宾语 the interdisciplinary team——「跨学科」意味着成员来自不同部门、<br>需要被「拧成一股绳」；线索二是并列动作 keep them on course for improvement——<br>把团队保持在轨道上，前提是先把团队聚拢。<br>【选项】<br>A) unite ✓「凝聚跨学科团队」是核心动作<br>unite 「使联合、凝聚」正好回应 interdisciplinary 这一「多元成员」属性，并与 keep them<br>on course 形成「先聚再带」的连续动作。<br>B) finance ✗话题错——leader 角色不是出钱<br>finance 「资助、出资」是 CFO 类角色的事，与 leader 的「带队」角色错位。<br>C) follow ✗主客倒置<br>follow 「跟随」会让 leader 反过来跟随团队，与下文「leader 要确定目标区域」的主导地位<br>矛盾。<br>D) choose ✗范围错——不是「挑选」<br>choose 「挑选」常用于选人组队，但此处团队已经存在，下文谈的是「带这支团队」，而非<br>组建。<br>【验证】代入后整句为「需要一个能凝聚这支跨学科团队并使其保持改进方向的人」，与下句 This<br>leader will __(16)__ the target area, set clear goals 中「leader 确定目标」的主导动作形<br>成连贯链条。",
+    "tips": "「跨学科团队 + 让大家走在轨道上」=凝聚",
+    "kp": "完形填空 · 第15空考点精析"
+  },
+  {
+    "id": "E2023_16",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 16,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第16题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>16</strong> 空的最佳选项：",
+    "options": [
+      "A. share",
+      "B. identify",
+      "C. divide",
+      "D. broaden"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (identify)</strong><br>词义辨析<br>【线索】「设定目标前」要先「确定目标区域」<br>线索是同句并列动作 set clear goals 与 establish a time frame——这两步发生前必须先<br>确定要攻的目标在哪儿，才能设目标、定时间；这种「先认准方向」的动作就是 identify。<br>【选项】A) share ✗动作错位——不是「分享」目标区<br>share 「分享」会变成「leader 把目标区域分享给别人」，但此处是 leader 主导决策动作，不是<br>传递。<br>B) identify ✓「确定目标区域」是首要动作<br>identify 「确定、识别」与 target area 是地道搭配：identify the target area「确定目标区<br>域」是先于 set goals 的标准步骤。<br>C) divide ✗动作错——不是切分<br>divide 「划分」让 leader 去把目标区域切块，但文中并未提任务分配，仅在谈认准方向。<br>D) broaden ✗方向错——不是扩大<br>broaden 「扩大、拓宽」与下句 keeping the team focused 的「聚焦」相反，会冲淡 target 的<br>「目标专一」含义。<br>【验证】代入后整句为「这位 leader 将确定目标区域，设定明确目标，并为完成这些目标制定时间<br>表」，三步行动一气呵成，与全文「先聚焦、再行动」的主旨吻合。",
+    "tips": "「设定目标前」要先「确定目标区域」",
+    "kp": "完形填空 · 第16空考点精析"
+  },
+  {
+    "id": "E2023_17",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 17,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第17题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>17</strong> 空的最佳选项：",
+    "options": [
+      "A. announcement",
+      "B. assessment",
+      "C. adjustment",
+      "D. accomplishment"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (accomplishment)</strong><br>词义辨析<br>【线索】目标是用来「完成」的<br>线索一是 set clear goals 与 establish a time frame——设目标定时限，对象只能是「实<br>现目标」；线索二是下段 keeping the team focused on moving forward——团队要不<br>停往前推进，正是「完成目标」的执行态。<br>【选项】A) announcement ✗动作错——不是宣布<br>announcement 「宣布」是一瞬间的动作，无需 time frame；并且 set clear goals 后接「宣布目<br>标」也属信息冗余。<br>B) assessment ✗对象错——评估不是目标的终点<br>assessment 「评估」是后续动作，但 time frame for 通常指向一个核心结果，而目标的核心结果<br>是被实现，不是被评估。<br>C) adjustment ✗前提错——目标不是用来调整的<br>adjustment 「调整」适合「计划/政策的调整」，而文中目标是用来去实现的，不是用来反复<br>调的。<br>D) accomplishment ✓「完成目标」是 time frame 的天然对象<br>accomplishment 「完成、达成」直接对接「为完成目标制定时间表」这一常识动作链，也与<br>P6 的 moving forward 同向。<br>【验证】代入后整句为「为完成这些目标制定时间表」，set goals → time frame for<br>accomplishment 是项目管理通用三步走，全文行文连贯。",
+    "tips": "目标是用来「完成」的",
+    "kp": "完形填空 · 第17空考点精析"
+  },
+  {
+    "id": "E2023_18",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 18,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第18题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>18</strong> 空的最佳选项：",
+    "options": [
+      "A. famous",
+      "B. responsible",
+      "C. available",
+      "D. respectable"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (responsible)</strong><br>固定搭配<br>【线索】句中 keeping ... 是 leader 的具体职责<br>线索是 keeping the team focused on moving forward and steering them clear of<br>distractions——这是非常具体的 leader 职责清单；上句 keep them on course for<br>improvement 也已经在交代 leader 的职责。故 be ___ for 是「负责…」之意。<br>【选项】A) famous ✗语义错位<br>famous for 「因…出名」会变成「leader 因为带队聚焦而出名」，话题与上下文「岗位职责」<br>错位。<br>B) responsible ✓「负责…」精准对接职责陈述<br>responsible for 「负责…」与「带队聚焦、避免分心」这类岗位职责描述无缝匹配。<br>C) available ✗状态错<br>available for 「可被…使用」让 leader 变成「资源」，与他主导团队的角色不符。<br>D) respectable ✗属性错——不是评价<br>respectable 「值得尊敬的」是评价性形容词，与 for + V-ing 也不构成自然搭配；语义不对。<br>【验证】代入后整句为「该 leader 还负责让团队保持聚焦、避开干扰」，与下句的「干扰识别」自<br>然连贯，整段「leader 职责」主题清晰。",
+    "tips": "句中 keeping ... 是 leader 的具体职责",
+    "kp": "完形填空 · 第18空考点精析"
+  },
+  {
+    "id": "E2023_19",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 19,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第19题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>19</strong> 空的最佳选项：",
+    "options": [
+      "A. Before",
+      "B. Once",
+      "C. While",
+      "D. Unless"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (While)</strong><br>逻辑关系<br>【线索】「吸引力 + 分心」一正一反 = 让步<br>线索是同句两半 attractive, new ideas 与 can be distracting——「虽然有吸引力但可能让<br>人分心」是典型让步；再看下句 must recognize when these ideas don't __(20)__ the<br>current goal——leader 要识别这些诱人想法的负面影响，对应「即便诱人也要警惕」这层<br>意思。<br>【选项】A) Before ✗时间关系不对<br>Before 「在…之前」会变「想法出现之前会让人分心」，时间逻辑紊乱。<br>B) Once ✗条件结果错<br>Once 「一旦」表示触发条件，会暗示「只要想法是吸引人的，就一定分心」，把可能性强化为必<br>然性，与 can be 这种模态语气冲突。<br>C) While ✓让步连词最契合「虽诱人却可能分心」<br>While 在此用作让步连词「虽然」，把「有吸引力」与「可能让人分心」的反差完美承接，并与<br>下句 leader 要警惕诱人想法的语气配套。<br>D) Unless ✗否定条件错<br>Unless 「除非」会变成「除非吸引人，否则不会分心」，逻辑颠倒。<br>【验证】代入后整句为「虽然新颖诱人的想法可能让人分心；团队领导者必须识别…」，与紧接的<br>must recognize 形成「让步铺垫 → 行动要求」的标准教学语气。",
+    "tips": "「吸引力 + 分心」一正一反 = 让步",
+    "kp": "完形填空 · 第19空考点精析"
+  },
+  {
+    "id": "E2023_20",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 20,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2023_CLOZE",
+    "title": "2023英二 完形填空 第20题 (0.5分)",
+    "stem": "请结合上方《2023年完形填空》原文，选择第 <strong>20</strong> 空的最佳选项：",
+    "options": [
+      "A. serve",
+      "B. limit",
+      "C. summarize",
+      "D. alter"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (serve)</strong><br>词义辨析<br>【线索】「服务于目标」才不该被搁置<br>线索一是同句 need to be put on the back burner——若想法不能服务于目标就该搁置；<br>线索二是上段反复强调 keep them on course for improvement、keeping the team<br>focused on moving forward——团队要紧扣目标。两条线索都指向「服务目标 = 留；不<br>服务 = 搁置」。<br>【选项】<br>A) serve ✓「服务于目标」是地道搭配<br>serve 「服务于、有助于」与 the goal 搭配地道（serve the goal），完美对接「不服务目标就<br>该搁置」的逻辑。<br>B) limit ✗方向错<br>limit 「限制」是负面动作，「不限制目标」反而是好事，应当留下而不是搁置，逻辑相反。<br>C) summarize ✗对象错<br>summarize 「概括、总结」搭配 a goal 不通顺，「不概括目标 → 搁置」的因果也不成立。<br>D) alter ✗方向错<br>alter 「改变」原义偏中性，「不改变目标」反而是稳定，不该搁置，逻辑颠倒。<br>【验证】代入后整句为「当这些想法不服务于当前目标，需要被搁置时…」，与上文「leader 让团队<br>聚焦」一脉相承，全文「围绕增长目标取舍想法」主线落地。<br>O V E R V I E W · 通读建境<br>全文主旨与行文脉络<br>完形是语篇题——单看空所在的半句往往四个选项都「像」。下面是全文主旨与行文脉<br>络，是每个空锁定线索、代入验证时核对的全局工作台。<br>全文主旨<br>用跨部门「成长团队」推动小企业突破增长瓶颈<br>全文围绕「小企业 CEO 想把生意做大」这一痛点展开，提出解决方案是组建一支由不同部<br>门成员构成的成长团队（growth team），并以 BitTorrent 的真实案例佐证其有效性，最后<br>落到对成长团队领导者的要求。开篇即定调：you're the CEO of a small business, and<br>though you're making a nice __(1)__, you need to find a way to take it to the next level，提<br>出 establishing a growth team 作为解。<br><br>行文脉络<br>提出方案→案例佐证→领导者要求三段式<br>P1 抛出 CEO 痛点并给出方案——组建成长团队（What you need to do is __(2)__ growth<br>by establishing a growth team）；P2-P4 用 BitTorrent 案例走完「问题→洞察→见效」闭<br>环：先是 their growth plateaued，再到 Most customers were simply unaware of the<br>premium version 的洞察，最后 upgrades skyrocketed, and revenue increased by 92<br>percent；P5-P6 转向团队领导者，强调他要 keep them on course for improvement 并<br>keeping the team focused on moving forward。识别出这三段走向，是逐空判断逻辑词、<br>感情色彩与照应关系的总地图。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>11 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>Here's a common scenario that any number of entrepreneurs face today: you're<br>the CEO of a small business, and though you're making a nice profit, you need to<br>find a way to take it to the next level.<br>第1段，第1句<br>本句结构典型，涵盖多种常考句式和成分类型，训练价值高。虽然时态难度较低，但主干识别需要<br>跨越多个层级，嵌套关系需要理顺，成分划分点丰富且具有代表性。综合来看，作为句子结构和时<br>态训练材料，优先级较高，适合目标读者重点练习。<br>What you need to do is prioritize growth by establishing a growth team.<br>第1段，第2句<br>主语从句在四六级和考研真题中频繁出现，\"What + 主谓结构 + is\" 这种模式是典型的主语从句句<br>式，掌握后可以应用到大量类似句子。主系表结构也是基础句型之一。因此本句具有较高的结构典<br>型性和迁移价值。<br><br>A growth team is made up of members from different departments within your<br>company, and it harnesses the power of collaboration to focus exclusively on<br>finding ways to grow.<br>第1段，第3句<br>并列复合句是四六级和考研阅读中的常见句式，\"be made up of\" 和不定式作目的状语也是高频考<br>点。句子结构简洁规范，具有较好的代表性，掌握后可以迁移到类似的并列句和被动语态句式中。<br>虽然不如包含复杂从句的句子典型性高，但作为基础并列句式仍有较强的复用价值。<br>Prior to forming a growth team, the software company BitTorrent had 50<br>employees working in the traditional departments of engineering, marketing and<br>product development.<br>第2段，第2句<br>本句是\"主语 + 谓语 + 宾语 + 宾语后置定语\"的典型简单句结构，这种结构在四六级和考研阅读中<br>非常常见。句首的时间状语前置（介词短语 + 逗号 + 主句）也是真题中高频出现的句式。宾语后<br>用现在分词短语作后置定语修饰名词（\"50 employees working in...\"），同样是真题常考的修饰手<br>法。掌握本句结构后，学习者可将同样的分析思路迁移到大量类似长度和复杂度的真题句子上。虽<br>然本句没有从句，但其修饰成分的排列方式具有较强的代表性，适合作为简单句的标准范例。<br>This brought them good results until 2012, when their growth plateaued.<br>第2段，第3句<br>主句的双宾语结构加时间状语,以及用 \"when\" 引导的非限制性定语从句修饰时间名词,都是四六级和<br>考研阅读中的高频句式。这种 \"主句陈述事实 + 非限制性定语从句补充时间背景\" 的组合在真题中<br>反复出现,学习迁移价值较高。<br>And despite improvements to the premium, paid version, few people were making<br>the upgrade.<br>第2段，第5句<br>简单句配句首介词短语状语是四六级和考研阅读中的常见句式，过去进行时表达\"过去某段时间内<br>的持续状态\"也是典型用法，具有一定代表性；但因句子整体较短且无从句，结构复杂度未达真题<br>中高频的长难句水平，典型性中等偏上。<br><br>Things changed, however, when an innovative project-marketing manager came<br>aboard, created a growth team and sparked the kind of fresh perspective they<br>needed.<br>第3段，第1句<br>\"主句 + when 引导的时间状语从句 + 嵌套定语从句\"是四六级和考研阅读中的高频句式，并列谓语<br>和关系代词省略也是常考点，句子结构具有较强的代表性和可迁移性。<br>By looking at engineering issues from a marketing point of view, it became clear<br>that the lack of upgrades wasn't due to a quality issue.<br>第3段，第2句<br>形式主语\"it\"加后置主语从句的结构(如\"It is clear that...\"\"It became obvious that...\")在四六级和考研<br>阅读中高频出现,是典型的书面语句式,掌握后可广泛迁移到类似结构<br>As a result, upgrades skyrocketed, and revenue increased by 92 percent.<br>第4段，第2句<br>并列句是常见句式,但本句过于简单,缺少定语从句、名词性从句等考试高频结构,代表性中等<br>It needs someone who can unite the interdisciplinary team and keep them on<br>course for improvement.<br>第5段，第2句<br>主句 + 限制性定语从句修饰宾语的结构在四六级和考研阅读中高频出现，句中并列谓语和 keep 加<br>宾补的用法也是考试常考句型，典型性较强，掌握后可迁移到大量类似句子。<br>The growth leader is also responsible for keeping the team focused on moving<br>forward and steering them clear of distractions.<br>第6段，第1句<br>本句虽然是简单句，但表语部分结构较丰富：包含两个并列的动名词短语作 for 的宾语，其中<br>\"keeping the team focused on moving forward\" 涉及 keep + 宾语 + 宾补（focused）结<br>构，\"focused on moving forward\" 中 on 后又接动名词；\"steering them clear of distractions\" 中<br>clear 作宾补，of distractions 作后置修饰。这些结构对于练习识别动名词、宾语补足语、介词短<br>语等成分有一定价值，可以帮助学生熟悉常见的搭配模式（如 keep sb focused、steer sb clear<br>of）。但由于没有从句，缺少定语从句、状语从句等更复杂成分的训练机会，整体训练价值中等<br>偏上。<br><br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 43 个考研英语二真题高频词<br>下列单词既在本篇完形原文中出现，又是 考研英语二 历年真题的高频词（在该考试真题<br>中出现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查<br>看该词的释义、音标、词形与真题例句。<br>growth<br>B1<br>n. 增长<br>本篇8 次 · 真题 80 句<br>version<br>B1<br>n. 版本<br>本篇5 次 · 真题 18 句<br>marketing<br>B1<br>n. 营销<br>本篇3 次 · 真题 34 句<br>upgrade<br>B2<br>v. 升级<br>本篇3 次 · 真题 16 句<br>engineering<br>B1<br>n. 工程学<br>本篇3 次 · 真题 8 句<br>issue<br>B1<br>n. 问题<br>本篇2 次 · 真题 89 句<br>customer<br>A2<br>n. 顾客，客户<br>本篇2 次 · 真题 79 句<br>product<br>A2<br>n. 产品<br>本篇2 次 · 真题 77 句<br>department<br>A2<br>n. 部门<br>本篇2 次 · 真题 35 句<br>establish<br>B2<br>v. 建立，创立（组织、机构、关系等）<br>本篇2 次 · 真题 27 句<br>improvement<br>B1<br>n. 改进<br>本篇2 次 · 真题 20 句<br>view<br>A2<br>n. 观点，看法<br>本篇1 次 · 真题 91 句<br>power<br>A2<br>n. 权力<br>本篇1 次 · 真题 90 句<br>focus<br>B1<br>n. 重点<br>本篇1 次 · 真题 77 句<br><br>user<br>A2<br>n. 使用者<br>本篇1 次 · 真题 52 句<br>quality<br>A2<br>n. 质量<br>本篇1 次 · 真题 45 句<br>simply<br>B1<br>adv. 仅仅，只不过<br>本篇1 次 · 真题 43 句<br>current<br>B1<br>adj. 现在的<br>本篇1 次 · 真题 41 句<br>lack<br>B1<br>v. 缺少<br>本篇1 次 · 真题 41 句<br>promote<br>B2<br>v. 促进<br>本篇1 次 · 真题 38 句<br>identify<br>B1<br>v. 识别<br>本篇1 次 · 真题 37 句<br>profit<br>B1<br>n. 利润，盈利<br>本篇1 次 · 真题 34 句<br>despite<br>B1<br>prep. 尽管<br>本篇1 次 · 真题 32 句<br>employee<br>A2<br>n. 雇员，员工<br>本篇1 次 · 真题 32 句<br>due<br>B1<br>adj. 预期的<br>本篇1 次 · 真题 31 句<br>revenue<br>B2<br>n. （公司、组织的）收入，收益<br>本篇1 次 · 真题 31 句<br>target<br>B1<br>n. 目标;靶子<br>本篇1 次 · 真题 29 句<br>traditional<br>B1<br>adj. 传统的<br>本篇1 次 · 真题 28 句<br>recognize<br>B1<br>v. 认出<br>本篇1 次 · 真题 24 句<br>responsible<br>B1<br>adj. 负责的<br>本篇1 次 · 真题 19 句<br><br>perspective<br>B2<br>n. 观点<br>本篇1 次 · 真题 15 句<br>software<br>B1<br>n. 软件（计算机程序）<br>本篇1 次 · 真题 14 句<br>attractive<br>B1<br>adj. 有吸引力的<br>本篇1 次 · 真题 12 句<br>awareness<br>B2<br>n. 意识<br>本篇1 次 · 真题 12 句<br>frame<br>B1<br>n. 框架<br>本篇1 次 · 真题 11 句<br>collaboration<br>B2<br>n. 合作<br>本篇1 次 · 真题 10 句<br>entrepreneur<br>C1<br>n. 企业家;创业者<br>本篇1 次 · 真题 10 句<br>innovative<br>B2<br>adj. 创新的<br>本篇1 次 · 真题 10 句<br>spark<br>B1<br>n. 火花<br>本篇1 次 · 真题 10 句<br>prior<br>B2<br>adj. 先前的，之前的<br>本篇1 次 · 真题 9 句<br>insight<br>B2<br>n. 洞察力<br>本篇1 次 · 真题 8 句<br>paid<br>A2<br>v. 付款<br>本篇1 次 · 真题 8 句<br>prioritize<br>B2<br>v. 优先处理<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 146 词按 CEFR 难度累积覆盖<br>带空短文去重后共 146 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 6 个 ·<br>约 4%。<br><br>47%<br>A1<br>及以下<br>64%<br>A2<br>及以下<br>85%<br>B1<br>及以下<br>96%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 146 个 · 末柱为 100%<br>去重总词数<br>146<br>B2 以上难词<br>4%<br>B1 及以下覆盖<br>85%<br>考研英语二<br>2023年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>本题<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>题目解析 →<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "「服务于目标」才不该被搁置",
+    "kp": "完形填空 · 第20空考点精析"
+  },
+  {
+    "id": "E2023_21",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 21,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT1",
+    "title": "2023英二 阅读 Text 1 第21题 (2分)",
+    "stem": "<strong>21. The RHS thinks that plastic grass_____.</strong>",
+    "options": [
+      "A. is harmful to the environment",
+      "B. is a hot topic in gardening circles",
+      "C. is overpraised in the annual show",
+      "D. is ruining the view of west London"
+    ],
+    "answer": "A",
+    "analysis": "RHS认为塑料草_____。<br>A) 对环境有害<br>B) 是园艺界的热门话题<br>C) 在年度展览中被过度赞扬<br>D) 正在破坏伦敦西部的景观<br>【答案】A （细节题）<br>【判型】题干 The RHS thinks that plastic grass 是不完整陈述，问 RHS 对 plastic grass 的具体看<br>法，属于事实细节复述题。",
+    "tips": "题干 The RHS thinks that plastic grass 是不完整陈述，问 RHS 对 plastic grass 的具体看",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_22",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 22,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT1",
+    "title": "2023英二 阅读 Text 1 第22题 (2分)",
+    "stem": "<strong>22. The petitions mentioned in Paragraph 3 reveal the campaigners'_____.</strong>",
+    "options": [
+      "A. disappointment with the RHS",
+      "B. resistance to fake grass use",
+      "C. anger over the proposed tax",
+      "D. concern about real grass supply"
+    ],
+    "answer": "B",
+    "analysis": "【拆句】The RHS thinks that plastic grass_____. 是 \"主语 + thinks + that 宾语从句\" 的简单结<br>构，下划线处即从句的表语，结构平直无陷阱。<br>【定位】The Royal Horticultural Society (RHS), which runs the annual show in west London, says<br>it has introduced the ban because of the damage plastic grass does to the environment<br>and biodiversity.<br>皇家园艺学会（RHS）——西伦敦那场年度花展的主办方——称之所以引入这一禁令，是因<br>为人造草坪会对环境和生物多样性造成损害。<br>【选项】A)<br>✓ 正确<br>the damage plastic grass does to the environment and biodiversity ↔<br>is harmful to the environment<br>is harmful to the environment 是对定位句 damage plastic grass does to the<br>environment and biodiversity 的直接同义转述，与预判一致，可锁定 A。<br>B)<br>偷换概念<br>is a hot topic in gardening circles 看似呼应 opposition has now spread to the<br>highest gardening circles，但原文说的是\"反对意见已扩散到园艺界最高层\"，并不等<br>于\"人造草坪本身是园艺界的热门话题\"，主体被偷换。<br>C)<br>无中生有<br>原文只说 The Chelsea Flower Show has banned fake grass，未提到\"被在花展上过度<br>赞誉\"。is overpraised in the annual show 在文中无对应。<br>D)<br>张冠李戴<br>is ruining the view of west London 把原文 the annual show in west London 中的<br>west London 抠出来当谓语对象，但原文从未说人造草坪在毁掉伦敦西区的景观。<br>第3段中提到的请愿书揭示了活动人士的_____。<br>A) 对RHS的失望<br>B) 对使用假草的抵制<br>C) 对拟议税收的愤怒<br>D) 对真草供应的担忧<br>【答案】B （细节题）<br>【判型】题干 reveal the campaigners' 问的是两份请愿书所反映的发起方诉求，是基于段内事实的<br>归纳，仍属细节题。<br>【拆句】The petitions mentioned in Paragraph 3 reveal the campaigners'_____. 主干是 \"The<br>petitions reveal the campaigners' X\"，mentioned in Paragraph 3 是 petitions 的后置<br>定语，整体平直。",
+    "tips": "题干 reveal the campaigners' 问的是两份请愿书所反映的发起方诉求，是基于段内事实的",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_23",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 23,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT1",
+    "title": "2023英二 阅读 Text 1 第23题 (2分)",
+    "stem": "<strong>23. In Paragraph 4, supporters of fake grass point out_____.</strong>",
+    "options": [
+      "A. the necessity to lower the costs of fake grass",
+      "B. the disadvantages of growing real grass",
+      "C. the way to take care of artificial lawns",
+      "D. the challenges of insect habitat protection"
+    ],
+    "answer": "B",
+    "analysis": "【定位】It is trying to encourage people to sign two petitions, one calling for a ban on the sale of<br>plastic grass and another calling for an \"ecological damage\" tax on such lawns.<br>它正在尝试鼓励人们签署两份请愿书，一份呼吁禁售人造草坪，另一份呼吁对这种草坪征<br>收\"生态破坏\"税。<br>【选项】A)<br>张冠李戴<br>disappointment with the RHS 把抵制对象从 fake grass 偷换为 RHS。原文中 RHS 与<br>活动人士立场一致，活动人士并未对 RHS 不满。<br>B)<br>✓ 正确<br>one calling for a ban on the sale of plastic grass and another calling for an \"ecological damage\"<br>tax on such lawns<br>↔resistance to fake grass use<br>禁售要求和\"生态破坏\"税都直接指向反对人造草坪，与预判\"反对使用人造草坪\"完全吻<br>合，锁 B。<br>C)<br>与原文相反<br>原文是 campaigners 自己呼吁征 \"ecological damage\" tax，他们是这项税的提议者；<br>anger over the proposed tax 反而说他们\"愤怒于这项税\"，与事实相反。<br>D)<br>无中生有<br>原文第 3 段未提及 real grass（真草）的供应问题；concern about real grass supply<br>在文中无对应。<br>在第4段中,假草的支持者指出_____。<br>A) 降低假草成本的必要性<br>B) 种植真草的缺点<br>C) 打理人造草坪的方法<br>D) 保护昆虫栖息地的挑战<br>【答案】B （细节题）<br>【判型】题干 supporters of fake grass point out 问的是支持方在第 4 段所列的具体观点，按细节<br>题处理。<br>【拆句】In Paragraph 4, supporters of fake grass point out_____. 主干是 \"supporters point out<br>X\"，In Paragraph 4 是状语，结构无难点。",
+    "tips": "题干 supporters of fake grass point out 问的是支持方在第 4 段所列的具体观点，按细节",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_24",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 24,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT1",
+    "title": "2023英二 阅读 Text 1 第24题 (2分)",
+    "stem": "<strong>24. What would the government do with regard to artificial grass?</strong>",
+    "options": [
+      "A. Urge legislation to restrict its use.",
+      "B. Take measures to guarantee its quality.",
+      "C. Remind its users to obey existing rules.",
+      "D. Replace it with sustainable alternatives."
+    ],
+    "answer": "C",
+    "analysis": "【定位】However, supporters of fake grass point out that there is also an environmental impact with<br>natural lawns, which need mowing and therefore usually consume electricity or petrol. The<br>industry also points out that real grass requires considerable amounts of water, weed killer or<br>other treatments and that people who lay fake grass tend to use their garden more.<br>然而，人造草坪的支持者指出，天然草坪也有环境代价——它需要修剪，因而通常要耗电或<br>耗汽油。行业也指出，真草需要大量水、除草剂或其他处理，而铺设人造草坪的人往往会更<br>多地使用自家花园。<br>【选项】A)<br>无中生有<br>原文支持方谈的是\"真草也有代价\"，从未提及\"需要降低人造草坪的成本\"；lower the<br>costs of fake grass 在文中无对应。<br>B)<br>✓ 正确<br>natural lawns, which need mowing and therefore usually consume electricity or petrol ↔<br>the disadvantages of growing real grass<br>real grass requires considerable amounts of water, weed killer or other treatments ↔<br>growing real grass<br>支持方所列的真草维护成本与环境代价，正是 the disadvantages of growing real<br>grass 的具象化，与预判一致，锁 B。<br>C)<br>答非所问<br>题干问的是支持方\"指出了什么\"，选项却给\"养护人造草坪的方法\"。the way to take<br>care of artificial lawns 与题问的核心错位。<br>D)<br>偷换概念<br>原文说铺人造草坪的人会花约 500 英镑买 trees or shrubs for their garden, which<br>provides habitat for insects，这是\"维护昆虫栖息\"的正面举证，而非\"昆虫栖息地保护<br>面临的挑战\"。选项把这种支持举证扭曲成\"挑战\"。<br>政府对人造草会采取什么措施?<br>A) 敦促立法限制其使用。<br>B) 采取措施保证其质量。<br>C) 提醒使用者遵守现有规定。<br>D) 用可持续的替代品取代它。<br>【答案】C （细节题）<br>【判型】题干 What would the government do with regard to artificial grass? 问的是政府针对<br>人造草坪要采取的行动，是对原文政府表态的复述，按细节题处理。<br>【拆句】What would the government do with regard to artificial grass? 是 wh- 一般疑问句，<br>with regard to 引导话题状语\"就……而言\"，无理解陷阱。",
+    "tips": "题干 What would the government do with regard to artificial grass? 问的是政府针对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_25",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 25,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT1",
+    "title": "2023英二 阅读 Text 1 第25题 (2分)",
+    "stem": "<strong>25. It can be learned from the text that fake grass_____.</strong>",
+    "options": [
+      "A. is being improved continuously",
+      "B. has seen a market share decline",
+      "C. is becoming increasingly affordable",
+      "D. has been a controversial product"
+    ],
+    "answer": "D",
+    "analysis": "【定位】We prefer to help people and organisations make the right choice rather than legislating on<br>such matters. However, the use of artificial grass must comply with the legal and policy<br>safeguards in place to protect biodiversity and ensure sustainable drainage, while measures<br>such as the strengthened biodiversity duty should serve to encourage public authorities to<br>consider sustainable alternatives.<br>我们更愿意帮助公众和组织做出正确选择，而不是就此类事项立法。但是，使用人造草坪必<br>须遵守现行的、用以保护生物多样性与确保可持续排水的法律与政策保障；同时，诸如强化<br>的生物多样性义务等措施应当推动公共部门考虑可持续的替代方案。<br>【选项】A)<br>与原文相反<br>Urge legislation to restrict its use. 与原文 no plans to ban the use of artificial<br>grass 及 rather than legislating on such matters 正相反。<br>B)<br>无中生有<br>Take measures to guarantee its quality. 涉及\"保证产品质量\"，原文政府表态从未涉及<br>人造草坪产品的质量管控。<br>C)<br>✓ 正确<br>the use of artificial grass must comply with the legal and policy safeguards in place to protect<br>biodiversity and ensure sustainable drainage<br>↔Remind its users to obey existing rules.<br>prefer to help people and organisations make the right choice rather than legislating on such<br>matters<br>↔Remind its users<br>C 既反映\"政府选择引导而非立法\"，又反映\"要求使用者守现行规则\"，与定位句和预判完<br>全一致。<br>D)<br>过度推断<br>Replace it with sustainable alternatives. 借 consider sustainable alternatives 的眼<br>熟造势，但原文只是\"鼓励公共部门考虑可持续替代方案\"，并未说政府要替换掉<br>artificial grass。<br>从文中可以了解到假草_____。<br>A) 正在不断改进<br>B) 市场份额出现下降<br>C) 正变得越来越便宜<br>D) 一直是一个有争议的产品<br>【答案】D （主旨题）<br>【判型】题干 It can be learned from the text that fake grass 要求基于全文判断 fake grass 的整<br>体属性，属于主旨/综合题。",
+    "tips": "题干 It can be learned from the text that fake grass 要求基于全文判断 fake grass 的整",
+    "kp": "阅读理解 Part A · 主旨题"
+  },
+  {
+    "id": "E2023_26",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 26,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT2",
+    "title": "2023英二 阅读 Text 2 第26题 (2分)",
+    "stem": "<strong>26. What problem are U.S. national parks faced with?</strong>",
+    "options": [
+      "A. Decline of business profits.",
+      "B. Inadequate commercialization.",
+      "C. Lack of transportation services.",
+      "D. Poorly maintained infrastructure."
+    ],
+    "answer": "D",
+    "analysis": "美国国家公园面临什么问题?<br>A) 商业利润下降。<br>B) 商业化不足。<br>C) 缺乏交通服务。<br>D) 基础设施维护不善。<br>【答案】D （细节题）<br>【判型】What problem are U.S. national parks faced with? 直接问国家公园面临的问题，要求在<br>原文中找到客观对应的表述，没有 infer/suggest/imply 等推断信号词。<br>【拆句】题干 What problem are U.S. national parks faced with? 是常规的「What + 名词 + be<br>+ 主语 + 被动短语」结构，核心是 be faced with，意为「面临」，语序无倒装陷阱，无需<br>特别警惕。",
+    "tips": "What problem are U.S. national parks faced with? 直接问国家公园面临的问题，要求在",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_27",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 27,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT2",
+    "title": "2023英二 阅读 Text 2 第27题 (2分)",
+    "stem": "<strong>27. Increased privatization of the campgrounds may_____.</strong>",
+    "options": [
+      "A. spoil visitor experience",
+      "B. help preserve nature",
+      "C. bring operational pressure",
+      "D. boost visits to parks"
+    ],
+    "answer": "A",
+    "analysis": "【定位】But the government is right about one thing: U.S. national parks are in crisis. Collectively,<br>they have a maintenance backlog of more than $12 billion. Roads, trails, restrooms, visitor<br>centers and other infrastructure are crumbling.<br>但政府说对了一件事：美国国家公园陷入危机。它们整体上有超过 120 亿美元的维护积压。<br>道路、步道、洗手间、游客中心和其他基础设施正在崩塌。<br>【选项】A)<br>偷换概念<br>原文从未说公园本身利润下滑，businesses in the parks hand over, on average, only<br>about 5% of their revenues 谈的是企业上缴比例低，非公园利润下降，Decline of<br>business profits 既偷换对象（企业 vs 公园）又无中生有「下降」一说。<br>B)<br>与原文相反<br>原文明确反对增加商业化（increased privatization would certainly undercut one of<br>the major reasons），Inadequate commercialization 却暗示「商业化不够」是问题<br>——与作者立场完全相反。<br>C)<br>以偏概全<br>原文 Roads, trails, restrooms, visitor centers and other infrastructure are<br>crumbling 列举的是整个基础设施集群，Lack of transportation services 只截取了<br>roads/trails，且把它们偷换为「交通服务缺失」，无中生有「服务」一说。<br>D)<br>✓ 正确<br>other infrastructure are crumbling ↔Poorly maintained infrastructure<br>maintenance backlog of more than $12 billion ↔Poorly maintained<br>预判「基础设施年久失修」与 Poorly maintained infrastructure 完全对应，且 D 的两<br>词都能在第二段找到原文支撑，故锁定 D。<br>露营地私有化程度提高可能会_____。<br>A) 破坏游客体验<br>B) 有助于保护自然<br>C) 带来运营压力<br>D) 促进公园游客量增加<br>【答案】A （细节题）<br>【判型】Increased privatization of the campgrounds may_____. 问「私有化增加可能导致什<br>么」，要求在原文找出明确写出的后果，而非自行延伸。<br>【拆句】Increased privatization of the campgrounds may_____. 是待补全的陈述句，Increased<br>privatization 作主语，情态动词 may 表示「可能」，提示选项是预测性后果，不是确定性<br>结论，但仍须有原文依据。",
+    "tips": "Increased privatization of the campgrounds may_____. 问「私有化增加可能导致什",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_28",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 28,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT2",
+    "title": "2023英二 阅读 Text 2 第28题 (2分)",
+    "stem": "<strong>28. According to Paragraph 5, most respondents in the survey would_____.</strong>",
+    "options": [
+      "A. go to the national parks on a regular basis",
+      "B. advocate a bigger budget for the national parks",
+      "C. agree to pay extra for the national parks",
+      "D. support the national parks' recent reforms"
+    ],
+    "answer": "C",
+    "analysis": "【定位】Moreover, increased privatization would certainly undercut one of the major reasons why 300<br>million visitors come to the parks each year: to enjoy nature and get a break from the<br>commercial drumbeat that overwhelms daily life.<br>而且，增加私有化必然会破坏 3 亿游客每年前来公园的主要理由之一：享受自然，并从日常<br>生活里铺天盖地的商业喧嚣中得到喘息。<br>【选项】A)<br>✓ 正确<br>undercut one of the major reasons why 300 million visitors come to the parks each year: to<br>enjoy nature and get a break from the commercial drumbeat<br>↔spoil visitor experience<br>预判「破坏游客游园体验」与 spoil visitor experience 一一对应：spoil 等值<br>undercut，visitor experience 概括 enjoy nature + get a break，故锁定 A。<br>B)<br>与原文相反<br>原文明确说私有化会破坏「享受自然」这一游园动机 undercut one of the major<br>reasons，help preserve nature 反而把私有化说成保护自然，方向完全相反。<br>C)<br>无中生有<br>全文未讨论「私有化是否给运营带来压力」，bring operational pressure 是凭空捏造<br>的后果。<br>D)<br>与原文相反<br>原文说私有化会破坏游客来公园的理由，逻辑上会减少游客或损害体验，boost visits to<br>parks 说私有化会「促进游客访问」，方向反了。<br>根据第5段,调查中大多数受访者会_____。<br>A) 定期去国家公园<br>B) 主张为国家公园增加预算<br>C) 同意为国家公园支付额外费用<br>D) 支持国家公园最近的改革<br>【答案】C （细节题）<br>【判型】According to Paragraph 5, most respondents in the survey would_____. 用<br>「According to」明确锁定段落，问大多数受访者的行为/意愿，答案要求与原文表述客观<br>一致。<br>【拆句】most respondents in the survey would_____. 是不完整陈述句；情态动词 would 在此表<br>示受访者表达的「意愿/会做的事」，提示选项是「愿意做」类的动作，而非已发生事实。",
+    "tips": "According to Paragraph 5, most respondents in the survey would_____. 用",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_29",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 29,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT2",
+    "title": "2023英二 阅读 Text 2 第29题 (2分)",
+    "stem": "<strong>29. The national parks are valuable in that they_____.</strong>",
+    "options": [
+      "A. lead the way in tourism",
+      "B. have historical significance",
+      "C. sponsor research on climate",
+      "D. provide an income for the locals"
+    ],
+    "answer": "B",
+    "analysis": "【定位】Some 81% of respondents said they would be willing to pay additional taxes for the next 10<br>years to avoid any cuts to the national parks.<br>约 81% 的受访者表示，他们愿意在未来 10 年缴纳额外税款，以避免对国家公园的任何<br>削减。<br>【选项】A)<br>无中生有<br>原文只说受访者愿意付钱，并未提受访者是否「定期去公园」，go to the national<br>parks on a regular basis 凭空给受访者添加了行为。<br>B)<br>偷换概念<br>原文是受访者「愿意自己掏钱」——通过缴税资助公园（would be willing to pay<br>additional taxes），而 advocate a bigger budget for the national parks 把行为偷<br>换成「呼吁政府增加预算」——预算来自政府，与「自己缴税」是两件事。<br>C)<br>✓ 正确<br>would be willing to pay additional taxes for the next 10 years ↔<br>agree to pay extra for the national parks<br>to avoid any cuts to the national parks ↔for the national parks<br>预判的「愿意多缴税保公园」三要素——意愿(willing/agree)、多付<br>(additional/extra)、目的(avoid cuts/for parks)——在 agree to pay extra for the<br>national parks 中全部对应，故锁定 C。<br>D)<br>无中生有<br>原文段未提及「公园近期有改革」一事，更未提受访者对此态度，support the<br>national parks' recent reforms 凭空捏造。<br>国家公园的价值在于它们_____。<br>A) 在旅游业中处于领先地位<br>B) 具有历史意义<br>C) 资助气候研究<br>D) 为当地居民提供收入<br>【答案】B （细节题）<br>【判型】The national parks are valuable in that they_____. 问公园「在哪一点上有价值」，是问<br>某个具体方面，选项必是原文列举价值中的一项。<br>【拆句】The national parks are valuable in that they_____. 是不完整陈述句；in that 在书面语中<br>等于 because，引导原因状语从句，主语 they 指代 the national parks，选项是公园做了<br>什么使它们有价值。",
+    "tips": "The national parks are valuable in that they_____. 问公园「在哪一点上有价值」，是问",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_30",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 30,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT2",
+    "title": "2023英二 阅读 Text 2 第30题 (2分)",
+    "stem": "<strong>30. It can be concluded from the text that the national park system _____.</strong>",
+    "options": [
+      "A. is able to cope with staff shortages",
+      "B. is able to meet visitors' demands",
+      "C. is in need of a new pricing policy",
+      "D. is in need of a funding increase"
+    ],
+    "answer": "D",
+    "analysis": "【定位】The parks also help keep America's past alive, working with thousands of local jurisdictions<br>around the country to protect historical sites and to bring the stories of these places to life.<br>公园还帮助保留美国的过去——与全国数千个地方司法管辖区合作，保护历史遗址，让这些<br>地方的故事鲜活起来。<br>【选项】A)<br>过度推断<br>原文 of course through tourism 只承认公园通过旅游创造价值，并未说「公园领跑/引<br>领旅游业」，lead the way in tourism 把「贡献价值」过度推断成「行业领跑」。<br>B)<br>✓ 正确<br>help keep America's past alive ↔have historical significance<br>protect historical sites ↔historical significance<br>预判中「保护历史遗址、让历史故事鲜活」这一价值项与 have historical significance<br>完全对应，且无其他选项能在段中找到完整支撑，故锁定 B。<br>C)<br>偷换概念<br>原文 positive impact on the climate through carbon sequestration 说公园通过碳<br>封存「对气候有正面影响」，而 sponsor research on climate 把「自身有正面影响」<br>偷换成「赞助气候研究」——一个是公园本身的生态功能，一个是资助科研活动，两<br>件事。<br>D)<br>无中生有<br>原文 bring the stories of these places to life 和 through tourism 都没说公园「给当<br>地人提供收入」，provide an income for the locals 凭空把价值改造成「为当地居民<br>创收」。<br>从文中可以得出结论,国家公园系统_____。<br>A) 能够应对人员短缺<br>B) 能够满足游客需求<br>C) 需要新的定价政策<br>D) 需要增加资金<br>【答案】D （主旨题）<br>【判型】It can be concluded from the text that the national park system _____. 用 conclude<br>from the text 明确要求基于全文得出结论，是典型主旨题信号。<br>【拆句】It can be concluded from the text that the national park system _____. 是 it 形式主语<br>+ that 从句的不完整陈述；选项填入 that 从句的谓语部分，要描述「系统的整体状态」。",
+    "tips": "It can be concluded from the text that the national park system _____. 用 conclude",
+    "kp": "阅读理解 Part A · 主旨题"
+  },
+  {
+    "id": "E2023_31",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 31,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT3",
+    "title": "2023英二 阅读 Text 3 第31题 (2分)",
+    "stem": "<strong>31. Sparrow's study shows that with the Internet, the human brain will_____.</strong>",
+    "options": [
+      "A. analyze information in detail",
+      "B. collect information efficiently",
+      "C. switch its focus of memory",
+      "D. extend its memory duration"
+    ],
+    "answer": "C",
+    "analysis": "Sparrow的研究表明,有了互联网,人类大脑会_____。<br>A) 详细分析信息<br>B) 高效收集信息<br>C) 转移其记忆重点<br>D) 延长其记忆持续时间<br>【答案】C （细节题）<br>【判型】题干 Sparrow's study shows that with the Internet, the human brain will 用 shows 引<br>出一个具体研究的具体发现，不含 infer/imply 等推断信号，属于对原文研究结论的直接<br>转述<br>【拆句】题干 Sparrow's study shows that with the Internet, the human brain will 是带 that 宾<br>语从句的陈述句被切断、留出空位让选项续完。with the Internet 是伴随状语，主句主语是<br>the human brain、谓语只剩助动词 will，要从选项里挑一个动词短语补上。结构平铺直<br>叙，无陷阱",
+    "tips": "题干 Sparrow's study shows that with the Internet, the human brain will 用 shows 引",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_32",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 32,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT3",
+    "title": "2023英二 阅读 Text 3 第32题 (2分)",
+    "stem": "<strong>32. The process of \"cognitive offloading\" _____.</strong>",
+    "options": [
+      "A. helps us identify false information",
+      "B. keeps our memory from failing",
+      "C. enables us to classify trivial facts",
+      "D. lessens our memory burdens"
+    ],
+    "answer": "D",
+    "analysis": "【定位】In other words, human memory is not deteriorating but \"adapting to new communications<br>technology,\" Sparrow says.<br>换句话说，人类记忆并未退化，而是在\"适应新的通讯技术\"，Sparrow 这样说。<br>【选项】A)<br>无中生有<br>analyze information in detail 中\"详细分析信息\"在原文中根本未出现；Sparrow 的研<br>究只讨论\"记不记得\"与\"记什么\"，从未谈到大脑会因此更擅长分析<br>B)<br>无中生有<br>collect information efficiently 中\"高效收集信息\"原文从未提及；研究讨论的是记忆策<br>略变化，没有涉及收集信息的效率高低<br>C)<br>✓ 正确<br>They didn't remember the information, but they remembered how to find the folders ↔<br>switch its focus of memory<br>human memory is not deteriorating but \"adapting to new communications technology\" ↔<br>switch its focus of memory<br>预判是\"换了记什么\"，C 项 switch its focus of memory 把\"换了记什么\"翻译成 switch<br>focus，与预判精确对齐<br>D)<br>与原文相反<br>extend its memory duration 中\"延长记忆保持时间\"与 Sparrow 研究结论方向相反<br>——研究里那组知道信息会被保存的人反而 made no effort to recall the<br>information，根本不是延长记忆<br>\"认知卸载\"的过程_____。<br>A) 帮助我们识别虚假信息<br>B) 使我们的记忆免于衰退<br>C) 使我们能够分类琐碎事实<br>D) 减轻我们的记忆负担<br>【答案】D （细节题）<br>【判型】题干 The process of \"cognitive offloading\" 留白让选项续完，问的是这一过程做了什么，<br>答案应在原文给出该术语定义或描述的句子里直接读到<br>【拆句】题干 The process of \"cognitive offloading\" 是一个待补全的不完整陈述句，主语是 the<br>process of \"cognitive offloading\"，谓语和宾语都由选项补上。结构简单，无陷阱<br>【定位】In a very practical way, the Internet is becoming an external hard drive for our memories, a<br>process known as \"cognitive offloading.\"<br>从非常实用的角度说，互联网正变成我们记忆的外接硬盘，这一过程被称为\"认知卸载\"。",
+    "tips": "题干 The process of \"cognitive offloading\" 留白让选项续完，问的是这一过程做了什么，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_33",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 33,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT3",
+    "title": "2023英二 阅读 Text 3 第33题 (2分)",
+    "stem": "<strong>33. Which of the following would Sparrow support about the Internet?</strong>",
+    "options": [
+      "A. It may reform our learning approach.",
+      "B. It may impact our society negatively.",
+      "C. It may enhance our adaptability to technology.",
+      "D. It may interfere with our conceptual thinking."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>无中生有<br>helps us identify false information 中\"帮我们识别假信息\"原文完全未涉及——<br>cognitive offloading 只讲存储外包，不涉及真伪判断<br>B)<br>偷换概念<br>keeps our memory from failing 中\"防止我们记忆衰退\"与原文不符——Sparrow 在<br>P1 明确说 human memory is not deteriorating，是\"本来就没退化\"，不是\"被<br>cognitive offloading 防住才没退化\"<br>C)<br>无中生有<br>enables us to classify trivial facts 中\"使我们能分类琐碎事实\"——原文从未提到<br>cognitive offloading 让我们具备\"分类\"能力；P1 实验中那组人只是\"知道在哪能找<br>到\"，并非\"会分类\"<br>D)<br>✓ 正确<br>the Internet is becoming an external hard drive for our memories ↔<br>lessens our memory burdens<br>预判\"减轻记忆负担\"，D 项 lessens our memory burdens 与之逐词对应，无需推理<br>关于互联网,以下哪项是Sparrow会支持的?<br>A) 它可能改革我们的学习方式。<br>B) 它可能对我们的社会产生负面影响。<br>C) 它可能增强我们对技术的适应能力。<br>D) 它可能干扰我们的概念思维。<br>【答案】A （细节题）<br>【判型】题干 Which of the following would Sparrow support about the Internet? 问 Sparrow<br>支持哪一项，本质是对她原文表态的复述，不需要外推<br>【拆句】题干 Which of the following would Sparrow support about the Internet? 是 wh-疑问<br>句，which 作主语、would support 是谓语、Sparrow 是主语补位后的执行者；about the<br>Internet 是限定 support 内容的介词短语。无陷阱<br>【定位】Perhaps, she suggests, the trend will change our approach to learning from a focus on<br>individual facts and memorization to an emphasis on more conceptual thinking—something<br>that is not available on the Internet.<br>她暗示，也许这一趋势会把我们的学习方式从专注于零散事实和死记硬背，转向强调更概念<br>化的思考——而后者在互联网上是找不到的。",
+    "tips": "题干 Which of the following would Sparrow support about the Internet? 问 Sparrow",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_34",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 34,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT3",
+    "title": "2023英二 阅读 Text 3 第34题 (2分)",
+    "stem": "<strong>34. It is indicated in Paragraph 3 that how the Internet affects our brains_____.</strong>",
+    "options": [
+      "A. requires further academic research",
+      "B. is most studied in older adults",
+      "C. is reflected in our reading speed",
+      "D. depends on our web-surfing habits"
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>✓ 正确<br>the trend will change our approach to learning from a focus on individual facts and<br>memorization to an emphasis on more conceptual thinking<br>↔It may reform our learning approach<br>Sparrow sees an upside ↔It may reform our learning approach<br>预判\"会重塑学习方式\"，A 项 It may reform our learning approach 在情态<br>（Perhaps↔may）与动作（change↔reform）上双重对齐<br>B)<br>张冠李戴<br>It may impact our society negatively 中\"对社会有负面影响\"是原文 Some worry that<br>this is having a destructive effect on society 里 Some 的观点，紧接着 but Sparrow<br>sees an upside 表明 Sparrow 立场与之相反<br>C)<br>偷换概念<br>It may enhance our adaptability to technology 中\"提升我们对技术的适应力\"——原<br>文 human memory...adapting to new communications technology 说的是\"记忆在<br>适应技术\"，主语是 memory，不是\"互联网在提升我们的适应力\"；且这是 Sparrow 对<br>实验现象的客观描述，不是她支持互联网的理由<br>D)<br>与原文相反<br>It may interfere with our conceptual thinking 中\"会干扰我们的概念化思考\"与原文相<br>反——Sparrow 称概念化思考是 something that is not available on the Internet，<br>是互联网\"做不到\"的，她希望学习转向这一互联网取代不了的能力，互联网不\"干扰\"它<br>第3段指出,互联网如何影响我们的大脑_____。<br>A) 需要进一步的学术研究<br>B) 在老年人中研究最多<br>C) 反映在我们的阅读速度上<br>D) 取决于我们的网页浏览习惯<br>【答案】A （细节题）<br>【判型】题干 It is indicated in Paragraph 3 that how the Internet affects our brains 用<br>indicated 引出原文中明示的内容，对应原文必有直接表态<br>【拆句】题干 It is indicated in Paragraph 3 that how the Internet affects our brains 是 It is +<br>过去分词 + that 从句的强调结构，It 是形式主语、that 从句是真主语；从句主语 how the<br>Internet affects our brains 本身是名词性从句、谓语由选项补上。结构稍绕，注意真正待<br>补的是从句里 brains 之后的谓语<br>【定位】Still other experts say it's too soon to understand how the Internet affects our brains.<br>另一些专家则表示，要弄清互联网如何影响我们的大脑，现在还为时尚早。",
+    "tips": "题干 It is indicated in Paragraph 3 that how the Internet affects our brains 用",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_35",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 35,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT3",
+    "title": "2023英二 阅读 Text 3 第35题 (2分)",
+    "stem": "<strong>35. Neither Sparrow nor Storm would agree that_____.</strong>",
+    "options": [
+      "A. our reliance on the Internet will be costly",
+      "B. the Internet is weakening our memory",
+      "C. memory exercise is a must for our brains",
+      "D. our ability to focus declines with age"
+    ],
+    "answer": "B",
+    "analysis": "【选项】A)<br>✓ 正确<br>it's too soon to understand how the Internet affects our brains ↔<br>requires further academic research<br>There is no experimental evidence showing that it interferes with our ability to focus ↔<br>requires further academic research<br>预判\"结论未定、需更多研究\"，A 项 requires further academic research 把这一语义<br>直接表述出来，是首句立场的同义改写<br>B)<br>以偏概全<br>is most studied in older adults 中\"在老年人中研究得最多\"利用了 older adults in a<br>2008 study 一处提到老年人就把它扩大化成\"最多\"——原文只引用了一项 2008 年研究<br>中的老年用户，没有任何\"研究最多\"的比较或最高级支撑<br>C)<br>偷换概念<br>is reflected in our reading speed 中\"反映在我们的阅读速度上\"原文从未提及——段内<br>只提到 surfing the web exercised the brain more than reading did，比较的是\"大脑<br>锻炼\"，不是\"阅读速度\"<br>D)<br>过度推断<br>depends on our web-surfing habits 中\"取决于我们的上网习惯\"——原文只在一项研<br>究中限定了 computer-savvy older adults 这一群体，没有给出\"互联网对大脑的影响取<br>决于上网习惯\"这一普适结论<br>Sparrow和Storm都不会同意_____。<br>A) 我们对互联网的依赖将付出代价<br>B) 互联网正在削弱我们的记忆<br>C) 记忆锻炼对我们的大脑是必需的<br>D) 我们的专注能力随年龄下降<br>【答案】B （细节题）<br>【判型】题干 Neither Sparrow nor Storm would agree that 问的是两人共同反对的具体命题，对<br>应原文两人各自的表态句，是事实层面对比，不属于推断<br>【拆句】题干 Neither Sparrow nor Storm would agree that 是 Neither A nor B + 谓语 + that<br>从句的结构，Neither...nor... 引导双重否定主语，would agree 是谓语，that 从句的内容由<br>选项补上。注意 neither...nor... 已自带否定，选项本身保持陈述形式即可",
+    "tips": "题干 Neither Sparrow nor Storm would agree that 问的是两人共同反对的具体命题，对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_36",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 36,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT4",
+    "title": "2023英二 阅读 Text 4 第36题 (2分)",
+    "stem": "<strong>36. According to Paragraph 1, children growing into adolescence tend to_____.</strong>",
+    "options": [
+      "A. develop opposite personality traits",
+      "B. see the world in an unreasonable way",
+      "C. have fond memories of their past",
+      "D. show affection for their parents"
+    ],
+    "answer": "A",
+    "analysis": "根据第1段,步入青春期的儿童往往会_____。<br>A) 形成相反的人格特征<br>B) 以不合理的方式看待世界<br>C) 对过去怀有美好的回忆<br>D) 对父母表现出感情<br>【答案】A （细节题）<br>【判型】According to Paragraph 1, children growing into adolescence tend to_____. 句式是<br>According to + 段号 + 客观陈述补全，问的是该段内一项可被直接读出的事实倾向。<br>【拆句】题干主句省略实义动词宾语，由 tend to_____ 留出空位，四个选项分别充当 to 后的动词原<br>形短语；理解时把 children growing into adolescence 看作主语、空位是其谓语方向，没<br>有从句和否定陷阱。<br>【定位】In adolescence, helpless and dependent children who have relied on grown-ups for just<br>about everything become independent people who can take care of themselves and help each<br>other. At the same time, once cheerful and compliant children become rebellious teenage<br>risk-takers.<br>在青春期，原本无助、依赖、几乎事事都靠成年人的孩子变成了能照顾自己也能互相帮助的<br>独立个体；与此同时，原本快乐顺从的孩子变成了叛逆爱冒险的少年。",
+    "tips": "According to Paragraph 1, children growing into adolescence tend to_____. 句式是",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_37",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 37,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT4",
+    "title": "2023英二 阅读 Text 4 第37题 (2分)",
+    "stem": "<strong>37. It can be learned from Paragraph 2 that Crone's study_____.</strong>",
+    "options": [
+      "A. explores teenagers' social responsibilities",
+      "B. examines teenagers' emotional problems",
+      "C. provides a new insight into adolescence",
+      "D. highlights negative adolescent behavior"
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>✓ 正确<br>helpless and dependent children ... become independent people ↔<br>develop opposite personality traits<br>helpless and dependent children ... become independent people who can take care of themselves<br>and help each other<br>↔develop<br>预判要求「同时朝相反方向变化」，A 项 develop opposite personality traits 正是对<br>两组 become 对立平行句的最简概括，与预判一一吻合。<br>B)<br>无中生有<br>see the world in an unreasonable way 在第 1 段无任何对应信息：原文只说青少年自<br>身变化矛盾，并未说他们用「不理性」的方式看世界。<br>C)<br>偷换概念<br>have fond memories of their past 借第 1 段 paradox / paradoxical 的「对照过去与<br>现在」勾起联想，但原文是描述「现在的青少年与从前儿童期的对照」，不是「青少年<br>怀念过去」。<br>D)<br>与原文相反<br>show affection for their parents 把原文中作为依赖对象提到的 grown-ups 偷换为<br>parents，并把「依赖」误读为「情感表达」，方向与原文「从依赖走向独立」相反。<br>从第2段可以得知,Crone的研究_____。<br>A) 探索青少年的社会责任<br>B) 考察青少年的情绪问题<br>C) 为青春期提供了新的见解<br>D) 强调青少年的消极行为<br>【答案】C （细节题）<br>【判型】题干 It can be learned from Paragraph 2 that Crone's study_____. 问的是「该段所言这<br>项研究做了什么」，是段内可读出的事实，而非全段推断。<br>【拆句】句子主干是 It can be learned that 引导的同位语从句，that 后由 Crone's study 作主语、<br>空位是谓语短语；It 为形式主语，无理解难点。<br>【定位】The study is part of a new wave of thinking about adolescence. For a long time, scientists and<br>policy makers concentrated on the idea that teenagers were a problem that needed to be<br>solved. The new work emphasizes that adolescence is a time of opportunity as well as risk.<br>这项研究是关于青春期的一波新思潮的一部分。长期以来，科学家和决策者一直把青少年视<br>为需要被「解决」的问题；而这项新研究强调，青春期既是风险期、也是机会期。",
+    "tips": "题干 It can be learned from Paragraph 2 that Crone's study_____. 问的是「该段所言这",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_38",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 38,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT4",
+    "title": "2023英二 阅读 Text 4 第38题 (2分)",
+    "stem": "<strong>38. What does Crone's study find about prosocial behavior?</strong>",
+    "options": [
+      "A. It results from the wish to cooperate.",
+      "B. It is cultivated through education.",
+      "C. It is subject to family influence.",
+      "D. It tends to peak in adolescence."
+    ],
+    "answer": "D",
+    "analysis": "【选项】A)<br>偷换概念<br>explores teenagers' social responsibilities 把后文出现的 prosocial behavior 误读为<br>social responsibilities；原文从未把研究主题描述成「社会责任感的探讨」，而是「亲<br>社会与叛逆并行」。<br>B)<br>与原文相反<br>examines teenagers' emotional problems 利用读者对「青少年=情绪问题」的刻板印<br>象诱导；原文恰恰否定了「青少年=问题」的旧看法。<br>C)<br>✓ 正确<br>a new wave of thinking about adolescence ↔a new insight into adolescence<br>emphasizes that adolescence is a time of opportunity as well as risk ↔provides<br>预判要的是「新视角 / 新认识」，C 项 provides a new insight into adolescence 是对<br>a new wave of thinking + emphasizes that adolescence is a time of opportunity<br>as well as risk 最精确的概括。<br>D)<br>以偏概全<br>highlights negative adolescent behavior 抓住 risk 一词，无视并列的 opportunity；<br>原文用 as well as 把机会与风险并列，研究强调的是两者并存，而非突出负面。<br>Crone的研究对亲社会行为有何发现?<br>A) 它源于合作的愿望。<br>B) 它是通过教育培养的。<br>C) 它受到家庭影响的制约。<br>D) 它往往在青春期达到顶峰。<br>【答案】D （细节题）<br>【判型】What does Crone's study find about prosocial behavior? 直接问研究「发现了什么」，<br>是对研究结论句的同义转述，属于典型细节题。<br>【拆句】题干是 wh-疑问句：What does Crone's study find about prosocial behavior?，What<br>作 find 的宾语，about 引介话题范围；无从句、无否定。<br>【定位】But the new study shows that, interestingly, the same pattern holds for prosocial behavior.<br>Teenagers were more likely than younger children or adults to report that they did things like<br>unselfishly helping a friend.<br>但这项新研究显示，有趣的是，同样的模式也出现在亲社会行为上：青少年比更小的孩子或<br>成年人更容易报告自己做出了无私帮助朋友这类事情。",
+    "tips": "What does Crone's study find about prosocial behavior? 直接问研究「发现了什么」，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2023_39",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 39,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT4",
+    "title": "2023英二 阅读 Text 4 第39题 (2分)",
+    "stem": "<strong>39. It can be learned from the last two paragraphs that teenagers_____.</strong>",
+    "options": [
+      "A. overstress their influence on others",
+      "B. care a lot about social recognition",
+      "C. become anxious about their future",
+      "D. endeavor to live a joyful life"
+    ],
+    "answer": "B",
+    "analysis": "【选项】A)<br>无中生有<br>It results from the wish to cooperate 把亲社会行为归因于「想要合作的愿望」，<br>但第 3–5 段全程描述「现象与相关性」，从未提及亲社会行为的成因，更未提 wish<br>或 cooperate。<br>B)<br>无中生有<br>It is cultivated through education 把亲社会行为说成「通过教育培养」，但原文未提<br>及任何教育干预或培养过程，只是问卷自陈研究。<br>C)<br>张冠李戴<br>It is subject to family influence 借第 1 段出现的 grown-ups / parents 联想，强行把<br>亲社会行为说成「受家庭影响」；定位段 P3–P5 中无任何家庭变量。<br>D)<br>✓ 正确<br>rebellious behavior increases as you become a teenager and then fades away as you grow older<br>↔peak in adolescence<br>the same pattern holds for prosocial behavior ↔It tends to peak in adolescence<br>Teenagers were more likely than younger children or adults to report that they did things like<br>unselfishly helping a friend<br>↔in adolescence<br>预判要的是「青春期最旺、之后回落」，D 项 It tends to peak in adolescence 正是这<br>一曲线的最简概括，且主语 It 准确回指 prosocial behavior。<br>从最后两段可以得知,青少年_____。<br>A) 过分强调自己对他人的影响<br>B) 非常在意社会认可<br>C) 对自己的未来感到焦虑<br>D) 努力过上快乐的生活<br>【答案】B （推断题）<br>【判型】It can be learned from the last two paragraphs that teenagers_____. 要求把两段事实合<br>并后对青少年下一个总括性判断，已超出单句转述。<br>【拆句】结构同 37 题，是 It can be learned from ... that ... 引导的同位语从句；主干清晰，主语<br>teenagers 后接空位即谓语方向。<br>【定位】Teenagers are particularly sensitive to social rewards—winning the game, impressing a new<br>friend, getting that boy to notice you.<br>青少年对社交奖赏特别敏感——比如赢得比赛、给新朋友留下深刻印象、让那个男孩注意<br>到你。",
+    "tips": "It can be learned from the last two paragraphs that teenagers_____. 要求把两段事实合",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2023_40",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 40,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2023_TEXT4",
+    "title": "2023英二 阅读 Text 4 第40题 (2分)",
+    "stem": "<strong>40. What is the text mainly about?</strong>",
+    "options": [
+      "A. Why teenagers are self-contradictory.",
+      "B. Why teenagers are risk-sensitive.",
+      "C. How teenagers develop prosociality.",
+      "D. How teenagers become independent."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>与原文相反<br>overstress their influence on others 把「在意他人对我的看法」反向偷换为「夸大我<br>对他人的影响」，主客易位；且 over- 暗含「过度」的贬义评价，原文无此色彩。<br>B)<br>✓ 正确<br>Teenagers are particularly sensitive to social rewards ↔care a lot about social recognition<br>winning the game, impressing a new friend, getting that boy to notice you ↔<br>social recognition<br>预判要的是「在意社会认可」，B 项 care a lot about social recognition 正是<br>particularly sensitive to social rewards 加上三项列举的最简概括，与预判一致。<br>C)<br>无中生有<br>become anxious about their future 用日常对青少年的刻板印象诱导，但第 6、7 段无<br>任何与「未来」或「焦虑」相关的措辞；原文谈的是奖赏敏感度，而非情绪困扰。<br>D)<br>偷换概念<br>endeavor to live a joyful life 把第 7 段 something exciting and new 误读为「追求<br>快乐生活」；原文是说青少年比成年人更容易被「新鲜刺激」吸引，而不是说他们「努<br>力追求快乐人生」。<br>本文主要关于什么?<br>A) 为什么青少年自相矛盾。<br>B) 为什么青少年对风险敏感。<br>C) 青少年如何发展亲社会性。<br>D) 青少年如何变得独立。<br>【答案】A （主旨题）<br>【判型】What is the text mainly about? 问「整篇文章主要讲什么」，是全文级别的概括，需要在<br>所有题做完后整合各区间功能再作答。<br>【拆句】题干是简单疑问句 What is the text mainly about?，主旨题常见句式，无从句、无修饰，<br>理解零障碍。",
+    "tips": "What is the text mainly about? 问「整篇文章主要讲什么」，是全文级别的概括，需要在",
+    "kp": "阅读理解 Part A · 主旨题"
+  },
+  {
+    "id": "E2023_41",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 41,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2023_PARTB",
+    "title": "2023英二 新题型 Part B 第41题 (2分)",
+    "stem": "请结合上方《2023年新题型 Part B》原文及 A–G 候选项，为 <strong>41. Brian Berry</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】[D] The new rules will take home prices to an even higher level.</strong><br>信息在第 4 段<br>【候选项】The new rules will take home prices to an even higher level.<br>新规定将使房价升至更高水平。<br>【定位】\"All this comes at an increased cost during a time when prices are already sky high. Inevitably,<br>consumers will have to pay more,\" he says.<br>\"这一切都会带来成本上升,而此时价格本就已经高得离谱。消费者将不可避免地要付更多<br>钱,\"他说。<br>【锚点】消费者必然要多付钱<br>【对照】consumers will have to pay more ↔take home prices to an even higher level<br>多付钱=更高水平<br>All this comes at an increased cost ↔The new rules will take home prices<br>新规=涨价主语<br>【依据】涨价主张配 D<br>【辨邻】[ E ]<br>谈的是\"人们觉得房价已超出承受能力\",和 Berry 说的\"价格本已高、还要再涨\"有点像,都涉<br>及\"价格高\"。但 Berry 的落点是\"新规将使价格更高 pay more\",讲的是\"会涨\";E 讲的是\"已经<br>买不起\"这种既有状态,且\"买不起\"这层意思是另一个人 Jonathan Rolande 说的 many<br>already feel that they are priced out of homeownership,不是 Berry。<br>many already feel that they are priced out of homeownership",
+    "tips": "消费者必然要多付钱",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2023_42",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 42,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2023_PARTB",
+    "title": "2023英二 新题型 Part B 第42题 (2分)",
+    "stem": "请结合上方《2023年新题型 Part B》原文及 A–G 候选项，为 <strong>42. Gareth Belsham</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "F",
+    "analysis": "<strong>【正确答案】[F] The new rules will affect people whose home extensions include new windows or doors.</strong><br>信息在第 5 段<br>【候选项】The new rules will affect people whose home extensions include new windows or doors.<br>新规定将影响那些房屋扩建包含新窗户或门的人。<br>【定位】\"There are new rules concerning the amount of glazing used in extensions, and any new<br>windows or doors must be highly insulated.\"<br>\"有关于扩建中所用玻璃量的新规定,而且任何新的门窗都必须高度隔热。\"<br>【锚点】扩建含新门窗者受影响<br>【对照】people who are upgrading, or extending their home, will be directly affected ↔<br>The new rules will affect people whose home extensions<br>受影响的人对位<br>any new windows or doors must be highly insulated ↔include new windows or doors<br>新门窗为限定条件<br>【依据】扩建含门窗配 F<br>【辨邻】[ C ]<br>说\"会对扩建设具体限制以防热量流失\",和 Belsham 谈的\"扩建中玻璃量的新规\"有重合词<br>extensions、glazing,很像。但 Belsham 的落点是\"哪些人会受影响\"(含新门窗的扩建者),不<br>是\"防止热量流失的具体限制\";\"防止热量流失\"这层意思属于另一处 Glazing on windows,<br>doors and roof lights must cover no more than 25% of the floor area to prevent<br>heat loss,是 Thomas Goodman 说的,不是 Belsham。<br>to prevent heat loss",
+    "tips": "扩建含新门窗者受影响",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2023_43",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 43,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2023_PARTB",
+    "title": "2023英二 新题型 Part B 第43题 (2分)",
+    "stem": "请结合上方《2023年新题型 Part B》原文及 A–G 候选项，为 <strong>43. Marcus Jefford</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】[B] Builders possibly need to submit new estimates of their projects.</strong><br>信息在第 9 段<br>【候选项】Builders possibly need to submit new estimates of their projects.<br>建筑商可能需要提交其项目的新估算。<br>【定位】Builders which have costed projects, but have not filed the paperwork, may need to go back and<br>submit fresh estimates, says Marcus Jefford of Build Aviator.<br>已经为项目估过价、但还没提交文件的建筑商,可能需要回头重新提交新的估价,Build<br>Aviator 的 Marcus Jefford 说。<br>【锚点】建筑商或需重交估价<br>【对照】submit fresh estimates ↔submit new estimates<br>fresh=new 同义<br>may need to go back and submit fresh estimates ↔possibly need to submit new estimates<br>may=possibly 程度对齐<br>【依据】重交估价配 B",
+    "tips": "建筑商或需重交估价",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2023_44",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 44,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2023_PARTB",
+    "title": "2023英二 新题型 Part B 第44题 (2分)",
+    "stem": "请结合上方《2023年新题型 Part B》原文及 A–G 候选项，为 <strong>44. John Kelly</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】[A] The rise of home prices is a temporary matter.</strong><br>信息在第 11 段<br>【候选项】The rise of home prices is a temporary matter.<br>房价上涨是暂时现象。<br>【定位】John Kelly, a construction lawyer at Freeths law firm, believes prices will eventually come<br>down. But not in the immediate future.<br>Freeths 律所的建筑律师 John Kelly 认为价格最终会回落。但不会在短期内。<br>【锚点】涨价是暂时、终会回落<br>【对照】prices will eventually come down ↔The rise of home prices is a temporary matter<br>终会回落=暂时<br>but in the short term, we will all have to pay the price ↔The rise of home prices<br>短期付代价印证有涨<br>【依据】暂时上涨配 A<br>【辨邻】[ G ]<br>说\"规则变化最终会让房主受益\",和 Kelly 的 eventually come down共享 eventually 一词,<br>且都带\"长期向好\"的味道,极像。但 Kelly 谈的是\"价格最终回落\",讲的是成本侧;G 谈的是\"房主<br>获益\",这层\"受益\"的意思属于另一个人 Andrew Mellor 的 Homeowners will probably<br>recoup that cost over time in energy bill savings,不是 Kelly。<br>Homeowners will probably recoup that cost over time in energy bill savings",
+    "tips": "涨价是暂时、终会回落",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2023_45",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 45,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2023_PARTB",
+    "title": "2023英二 新题型 Part B 第45题 (2分)",
+    "stem": "请结合上方《2023年新题型 Part B》原文及 A–G 候选项，为 <strong>45. Andrew Mellor</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "G",
+    "analysis": "<strong>【正确答案】[G] The rule changes will benefit homeowners eventually.</strong><br>信息在第 12 段<br>【候选项】The rule changes will benefit homeowners eventually.<br>规则变化最终将使房主受益。<br>【定位】\"Homeowners will probably recoup that cost over time in energy bill savings. It will obviously<br>be very volatile at the moment, but they will have that benefit over time.\"<br>\"房主很可能会随时间推移、通过节省能源账单把那笔成本赚回来。眼下显然会非常波动,但<br>他们终将获得那份好处。\"<br>【锚点】房主长期终将获益<br>【对照】they will have that benefit over time ↔The rule changes will benefit homeowners eventually<br>获益=benefit对位<br>over time ↔eventually<br>over time=eventually<br>【依据】长期受益配 G<br>【辨邻】[ A ]<br>说\"房价上涨是暂时的\",和 Mellor 的\"短期波动、长期向好\"在\"长期会好转\"上有点像。但<br>Mellor 的落点是 homeowners ... benefit(房主获益,靠省能源账单赚回成本),不是\"房价<br>本身回落\";\"价格最终回落\"是 John Kelly 的主张 prices will eventually come down,不<br>是 Mellor。<br>prices will eventually come down<br>C H O I C E S · 候选池地图<br>A~G 共 7 个候选项各自在说什么<br>候选项是经同义改写的句子，比题目多 2 个。下面逐条给出候选句原文、「它到底主张<br>什么」的中文压缩，并标注它对应哪道题——始终无人对应的就是多余干扰项。<br>[ A ] The rise of home prices is a temporary matter.<br>房价上涨只是暂时的、终会回落。<br>对应第 44 题<br>[ B ] Builders possibly need to submit new estimates of their projects.<br>建筑商可能需要重新提交项目报价。<br>对应第 43 题<br><br>[ C ] There will be specific limits on home extensions to prevent heat loss.<br>为防止热量流失,会对房屋扩建设置具体限制。<br>多余项 · 无人对应<br>[ D ] The new rules will take home prices to an even higher level.<br>新规会把房价推到更高水平。<br>对应第 41 题<br>[ E ] Many people feel that home prices are already beyond what they can afford.<br>很多人觉得房价已经超出了自己的承受能力。<br>多余项 · 无人对应<br>[ F ] The new rules will affect people whose home extensions include new windows<br>or doors.<br>新规会影响那些扩建中含有新门窗的人。<br>对应第 42 题<br>[ G ] The rule changes will benefit homeowners eventually.<br>规则变化最终会让房主受益。<br>对应第 45 题<br>E X T R A C H O I C E S · 多余项交代<br>这 2 个候选项始终无人对应<br>多项对应必有 2 个候选项无人认领——往往最像文中某个没被问到的人/事物，或是对某<br>段的片面概括。下面逐条剖析它们「像在哪、差在哪、为何无人认领」，读透多余项才算<br>读透全局。<br><br>[ C ] There will be specific limits on home extensions to prevent heat loss.<br>There will be specific limits on home extensions to prevent heat loss.最像 42 题 Gareth<br>Belsham,因为都谈 extensions 与 glazing。但 C 的核心\"具体限制+防热量流失\"实际对应的是<br>没被问到的 Thomas Goodman Glazing on windows, doors and roof lights must cover no<br>more than 25% of the floor area to prevent heat loss。因为 Goodman 不在本卷题干里,C 最<br>终无人认领。<br>[ E ] Many people feel that home prices are already beyond what they can afford.<br>Many people feel that home prices are already beyond what they can afford.最像 41 题 Brian<br>Berry,因为都涉及\"价格高\"。但 E 的核心\"很多人觉得已买不起\"实际对应没被问到的 Jonathan<br>Rolande many already feel that they are priced out of homeownership。因为 Rolande 不在<br>本卷题干里,E 最终无人认领。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>12 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>The moves are the most significant change to building regulations in years, and<br>industry experts say they will inevitably lead to higher prices at a time when a<br>shortage of materials and high labour costs are already driving up bills.<br>第3段，第1句<br>本句的结构非常典型：并列主句 + 宾语从句 + 定语从句的组合在四六级和考研阅读中极为常见。<br>省略 that 的宾语从句、when 引导的限制性定语从句、现在进行时表示当前趋势、一般将来时表示<br>预测等用法都是高频考点。掌握本句的拆解方法可直接迁移到大量真题句式，代表性很强。<br>\"All this comes at an increased cost during a time when prices are already sky<br>high. Inevitably, consumers will have to pay more,\" he says.<br>第4段，第2句<br>句子包含直接引语加引述动词的结构（\"...\" he says），这是新闻报道和学术文献中的常见句式。第<br>一个主句中 \"during a time when...\" 的时间状语结构（介词短语 + 定语从句修饰时间名词）在四六<br>级和考研阅读中频繁出现。第二个主句 \"will have to\" 表达义务和预测，也是常考句式。整体结构<br>具有较高的典型性和复用价值。<br><br>Windows and doors will have to adhere to higher standards, while there are new<br>limits on the amount of glazing you can have to reduce unwanted heat from the<br>sun.<br>第6段，第1句<br>while 引导的状语从句与主句并列，定语从句省略关系代词，这些都是四六级和考研阅读中的高频<br>句式。there be 存在句、情态动词 can、不定式表目的等结构也是典型考点。整体结构具有较强的<br>代表性和复用价值。<br>Any plans submitted before that date are considered to be under the previous<br>rules, and can go ahead as long as work starts before 15 June next year.<br>第8段，第2句<br>句中覆盖主语(含后置定语)、并列谓语、宾语补足语、条件状语从句、时间状语等多种成分,且被动<br>语态中的宾补保留形式和条件从句的时态用法都是值得练习的典型考点,训练价值较高。<br>Builders which have costed projects, but have not filed the paperwork, may need<br>to go back and submit fresh estimates, says Marcus Jefford of Build Aviator.<br>第9段，第1句<br>句子包含丰富的成分:主语被定语从句修饰,定语从句内有并列谓语和各自的宾语,主句谓语后接不定<br>式作宾语(且不定式内部有并列动词),引述结构包含倒装的主谓和一个完整句子作宾语。覆盖了定语<br>从句、并列谓语、不定式宾语、引述倒装等多个易错点,适合作为成分划分的综合练习。<br>How much overall prices will increase as a result of the rule changes is not clear.<br>第10段，第2句<br>本句覆盖了主语从句充当主句主语这一重要句型,从句内部包含程度状语 How much 和原因状语 as<br>a result of the rule changes,主句是系表结构,成分种类丰富。主语从句作主语是学生常混淆的难点<br>(容易误判为疑问句),具有较高的训练价值,适合反复练习以掌握名词性从句的识别和成分划分。<br><br>\"Whilst admirable in their intentions, they will add to the cost of housebuilding at<br>a time when many already feel that they are priced out of homeownership,\" says<br>Jonathan Rolande of the National Association of Property Buyers.<br>第10段，第3句<br>直接引语加引述倒装、定语从句修饰时间名词、宾语从句说明感受内容，这些都是四六级和考研阅<br>读中的高频句式。特别是 at a time when 这种定语从句结构和引述倒装在学术和新闻语体中极为常<br>见，掌握后迁移价值高。<br>\"An average extension will probably see around £3,000 additional cost thanks to<br>the new regs.\"<br>第10段，第4句<br>简单句结构在考试中常见，\"主语 + will + 动词原形 + 宾语 + 原因状语\" 的模式具有一定代表性，<br>但本句的 \"see\" 用作\"经历、遭遇\"的引申义在真题中不算高频，且缺乏从句等更典型的考点结构。<br>John Kelly, a construction lawyer at Freeths law firm, believes prices will<br>eventually come down.<br>第11段，第1句<br>主句 + 宾语从句(省略 that)是四六级和考研阅读中的高频句式,同位语插入也常见,该结构在真题中<br>反复出现,掌握后可广泛迁移<br>\"As the marketplace adapts to the new requirements, and the technologies that<br>support them, the scaling up of these technologies will eventually bring costs<br>down, but in the short term, we will all have to pay the price of the necessary<br>transition,\" he says.<br>第11段，第3句<br>本句结构高度典型：状语从句（特别是 \"As\" 引导的时间或原因从句）+ 并列主句（由 \"but\" 连接的<br>转折关系）+ 引述动词是考试阅读理解中的常见句式；定语从句修饰名词、动名词短语作主语、情<br>态动词加不定式等结构也都是高频考点；学生掌握本句后可将其模式迁移到大量类似长难句，代表<br>性很强。<br><br>The new rules will affect people whose home extensions include new windows or<br>doors.<br>选项F<br>“主句 + 关系词引导的限定性定语从句”是英语阅读里非常常见的句式，这里的 \"people whose...\" 也<br>很有代表性。掌握这种读法后，迁移到大量同类句子都有效。<br>The rule changes will benefit homeowners eventually.<br>选项G<br>简单的主谓宾加状语结构在考试中虽然常见,但此类过于直白的简单句在真题阅读中出现频率不高,<br>真题更多考查复杂句式,因此本句作为句式样本的代表性一般。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 58 个考研英语二真题高频词<br>下列单词既在本篇长文中出现，又是 考研英语二 历年真题的高频词（在该考试真题中出<br>现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查看该<br>词的释义、音标、词形与真题例句。<br>extension<br>B2<br>n. 延长;延期<br>本篇7 次 · 真题 11 句<br>effect<br>A2<br>n. 影响<br>本篇3 次 · 真题 80 句<br>material<br>B1<br>n. 材料<br>本篇3 次 · 真题 41 句<br>eventually<br>B1<br>adv. 最终<br>本篇3 次 · 真题 20 句<br>benefit<br>B1<br>n. 好处<br>本篇2 次 · 真题 88 句<br>reduce<br>B1<br>v. 减少，降低（数量、大小、程度等）<br>本篇2 次 · 真题 75 句<br>loss<br>B1<br>n. 丧失<br>本篇2 次 · 真题 43 句<br>limit<br>B1<br>n. 限度<br>本篇2 次 · 真题 42 句<br><br>project<br>A2<br>n. 项目<br>本篇2 次 · 真题 40 句<br>affect<br>B1<br>v. 影响<br>本篇2 次 · 真题 39 句<br>amount<br>A2<br>n. 数量<br>本篇2 次 · 真题 30 句<br>regulation<br>B2<br>n. 规则，条例<br>本篇2 次 · 真题 28 句<br>efficiency<br>B2<br>n. 效率<br>本篇2 次 · 真题 20 句<br>estimate<br>B2<br>v. 估计<br>本篇2 次 · 真题 19 句<br>property<br>B1<br>n. 财产<br>本篇2 次 · 真题 11 句<br>file<br>A2<br>n. 文件<br>本篇2 次 · 真题 10 句<br>inevitably<br>B2<br>adv. 不可避免地<br>本篇2 次 · 真题 10 句<br>system<br>A2<br>n. 系统<br>本篇1 次 · 真题 107 句<br>support<br>A2<br>v. 支持<br>本篇1 次 · 真题 87 句<br>product<br>A2<br>n. 产品<br>本篇1 次 · 真题 77 句<br>consumer<br>B1<br>n. 消费者<br>本篇1 次 · 真题 72 句<br>firm<br>B1<br>adj. 坚固的<br>本篇1 次 · 真题 66 句<br>measure<br>B1<br>v. 测量<br>本篇1 次 · 真题 65 句<br>average<br>A2<br>adj. 平均的<br>本篇1 次 · 真题 55 句<br><br>significant<br>B2<br>adj. 重要的<br>本篇1 次 · 真题 47 句<br>expert<br>B1<br>n. 专家<br>本篇1 次 · 真题 42 句<br>executive<br>B2<br>n. 主管;经理;管理人员<br>本篇1 次 · 真题 39 句<br>aim<br>B1<br>v. 瞄准<br>本篇1 次 · 真题 35 句<br>overall<br>B1<br>adj. 总体的<br>本篇1 次 · 真题 32 句<br>lawyer<br>B1<br>n. 律师<br>本篇1 次 · 真题 29 句<br>highly<br>B1<br>adv. 非常<br>本篇1 次 · 真题 28 句<br>specific<br>B2<br>adj. 具体的<br>本篇1 次 · 真题 28 句<br>association<br>B2<br>n. 协会<br>本篇1 次 · 真题 27 句<br>requirement<br>B2<br>n. 要求<br>本篇1 次 · 真题 26 句<br>construction<br>B1<br>n. 建造<br>本篇1 次 · 真题 24 句<br>previous<br>B1<br>adj. 先前的<br>本篇1 次 · 真题 24 句<br>directly<br>B1<br>adv. 直接地<br>本篇1 次 · 真题 23 句<br>net<br>A2<br>n. 网<br>本篇1 次 · 真题 23 句<br>carbon<br>B2<br>n. 碳（化学元素）<br>本篇1 次 · 真题 20 句<br>chief<br>B1<br>n. 首领<br>本篇1 次 · 真题 20 句<br><br>extend<br>B1<br>v. 延伸;延长<br>本篇1 次 · 真题 20 句<br>testing<br>B1<br>n. 测试<br>本篇1 次 · 真题 19 句<br>shortage<br>B2<br>n. 短缺<br>本篇1 次 · 真题 17 句<br>upgrade<br>B2<br>v. 升级<br>本篇1 次 · 真题 16 句<br>additional<br>B1<br>adj. 额外的<br>本篇1 次 · 真题 15 句<br>vehicle<br>B1<br>n. 交通工具<br>本篇1 次 · 真题 15 句<br>immediate<br>B2<br>adj. 立即的，即刻的<br>本篇1 次 · 真题 14 句<br>adapt<br>B2<br>v. 适应，适合（新环境、新情况）<br>本篇1 次 · 真题 12 句<br>possibly<br>B1<br>adv. 可能，也许<br>本篇1 次 · 真题 12 句<br>ahead<br>A2<br>adv. 在前面<br>本篇1 次 · 真题 11 句<br>emission<br>B2<br>n. 排放物<br>本篇1 次 · 真题 11 句<br>increased<br>A2<br>v. 增加了<br>本篇1 次 · 真题 11 句<br>relate<br>B1<br>v. 使有联系，把…联系起来<br>本篇1 次 · 真题 11 句<br>buyer<br>B1<br>n. 买方<br>本篇1 次 · 真题 10 句<br>existing<br>B1<br>adj. 现有的<br>本篇1 次 · 真题 10 句<br>obviously<br>B1<br>adv. 显然,明显地<br>本篇1 次 · 真题 10 句<br><br>restriction<br>B2<br>n. 限制<br>本篇1 次 · 真题 10 句<br>developer<br>B1<br>n. 开发者<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 210 词按 CEFR 难度累积覆盖<br>数字标号长文去重后共 210 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以<br>下」的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 8 个<br>· 约 4%。<br>38%<br>A1<br>及以下<br>59%<br>A2<br>及以下<br>86%<br>B1<br>及以下<br>96%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 210 个 · 末柱为 100%<br>去重总词数<br>210<br>B2 以上难词<br>4%<br>B1 及以下覆盖<br>86%<br><br>考研英语二<br>2023年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>题目解析 →<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>多项对应（信息匹配）<br>本题<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "房主长期终将获益",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2023_46",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 46,
+    "qType": "solve",
+    "chapter": "e_ch4",
+    "title": "2023英二 翻译 Section III 第46题 (15分)",
+    "stem": "<strong>Section III Translation (15 points) — Directions: Translate the following text into Chinese.</strong><div class='formula-card'>P1 In the late 18th century, William Wordsworth became famous for his poems about nature. And<br>he was one of the founders of a movement called Romanticism, which celebrated the wonders of the<br>natural world.<br>P2 Poetry is powerful. Its energy and rhythm can capture a reader, transport them to another world<br>and make them see things differently. Through carefully selected words and phrases, poems can be<br>dramatic, funny, beautiful, moving and inspiring.<br>P3 No one knows for sure when poetry began but it has been around for thousands of years, even<br>before people could write. It was a way to tell stories and pass down history. It is closely related to<br>song and even when written it is usually created to be performed out loud. Poems really come to life<br>when they are recited. This can also help with understanding them too, because the rhythm and sounds<br>of the words become clearer.</div>",
+    "options": null,
+    "answer": "详见解析中的参考译文与逐句精解",
+    "analysis": "<strong>【逐句拆分与核心采分点解析】</strong><br>2023年考研英语二 英译汉（段落翻译） Section III · 参考译文与逐<br>句解析<br>P A S S A G E & T R A N S L A T I O N · 题和解析<br>英译汉真题、参考译文与逐句解析<br>逐句译审整理。与试卷排版同一卷面：Directions 与整段英文原文连续排印——整段连<br>排、无题号无划线，把它切成一句句翻译单元本身就是解题动作。卷面之后先给按段定稿<br>的整篇参考译文，再按自切句序逐句拆分：意群直译、难点点破、语序调整、句内定稿中<br>译，答案直显。<br>英语二真题(2023)<br>Section III<br>Directions:<br>Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points)<br>P1 In the late 18th century, William Wordsworth became famous for his poems about nature. And<br>he was one of the founders of a movement called Romanticism, which celebrated the wonders of the<br>natural world.<br>P2 Poetry is powerful. Its energy and rhythm can capture a reader, transport them to another world<br>and make them see things differently. Through carefully selected words and phrases, poems can be<br>dramatic, funny, beautiful, moving and inspiring.<br>P3 No one knows for sure when poetry began but it has been around for thousands of years, even<br>before people could write. It was a way to tell stories and pass down history. It is closely related to<br>song and even when written it is usually created to be performed out loud. Poems really come to life<br>when they are recited. This can also help with understanding them too, because the rhythm and sounds<br>of the words become clearer.<br>参考译文<br>按段定稿的整篇参考译文是复盘资产，考卷上只印英文原文——英语二英译汉满分 15 分，按「理解准确、表达通<br>顺连贯、无错译漏译」整篇四档评分。<br>P1 18世纪晚期,威廉·华兹华斯因创作描写自然的诗歌而声名远扬。他还是一场名为浪漫主义的运<br>动的发起人之一,这场运动讴歌自然界的神奇。<br>P2 诗歌极具感染力。它的活力与韵律能够吸引读者,把他们带入另一个世界,让他们以全新的视角<br>看待事物。借助精心遴选的词句,诗歌可以富有戏剧性、风趣幽默、优美动人,且催人奋进。<br><br>P3 没有人确切知道诗歌起源于何时,但它已经存在了数千年,甚至早在人类掌握文字之前就已出<br>现。诗歌曾是讲述故事、传承历史的一种方式。它与歌唱密切相关,即便写成文字,通常也是为了供人大<br>声诵读而创作的。当诗歌被大声诵读时,它们才真正鲜活灵动起来。这样做还有助于理解诗歌,因为如此<br>一来,词句的韵律与声音会变得更加清晰。<br>【衔接】第1段两句间:用「还」承接华兹华斯的双重身份<br>第1句说华兹华斯 became famous for his poems about nature(因诗成名),第2句 And he was<br>one of the founders of a movement 用 And 承接,补充他的另一重身份。译文用「他还是…的发<br>起人之一」中的「还」字接住 And,显出「既是诗人、又是浪漫主义发起人」的递进,而不是生硬地<br>新起一句。<br>第2段内:首句「感染力」与次句「吸引读者」呼应成段<br>第2段首句 Poetry is powerful 译「诗歌极具感染力」是总起,次句 Its energy and rhythm can<br>capture a reader 具体展开「如何感染」。译文让「感染力」与「吸引读者、带入另一个世界」前<br>后呼应,读者一看就知道后两句是在解释首句的「感染力」,段落浑然一体。<br>第3段:连串 it/This 统一承接「诗歌」,避免重复主语<br>第3段多句以 it 开头(it has been around、It was a way、It is closely related to song)。译文首<br>次明确点出「诗歌」,其后各句承前省略主语或用「它」,如「诗歌已存在数千年…曾是讲故事的方<br>式…与歌唱密切相关」,既保持指代统一,又不必每句重复「诗歌」二字,读着连贯。<br>第3段末两句:用「这样一来」把诵读与「更易理解」勾连<br>Poems really come to life when they are recited 讲诵读使诗鲜活,末句 This can also help with<br>understanding them 的 This 正承接「诵读」。译文用「大声诵读还有助于理解诗歌,因为这样一<br>来…」中的「还」与「这样一来」把两句焊牢,让 This 的指代落到实处。<br>逐句解析<br>整段连排、无题号无划线——把原文切成一句句翻译单元本身就是解题动作，句前 N. 为逐句解析自切的句序号<br>（非考卷题号），与卷面原文逐字对应。<br>【来源】The Week Junior杂志2020年4月4日文章 The Power of Poetry(诗歌的力量)。<br>【主旨】诗歌的魅力与悠久历史<br>全文围绕「诗歌」展开:先由华兹华斯与浪漫主义引出诗歌主题,再讲诗歌的感染力,最后追溯诗歌的<br>起源及其与歌唱、朗诵的紧密关系。基调是赞赏、推崇,如 Poetry is powerful 与 its energy and<br>rhythm can capture a reader 都是正面肯定。第一段虽从诗人 William Wordsworth 切入,但落<br>点是 a movement called Romanticism, which celebrated the wonders of the natural world,<br>为后文谈诗歌张本。译时整体取褒义、平实科普的语气。<br><br>【术语】poetry / poems 统一译「诗歌 / 诗」<br>全篇核心名词是 poetry(诗歌)与 poems(诗)。his poems about nature 译「他描写自然的诗」、<br>Poetry is powerful 译「诗歌的力量是强大的」、when poetry began 译「诗歌何时起源」——<br>同一概念前后只用「诗歌/诗」一种译法,不要一会儿「诗作」一会儿「诗词」,保证术语统一。<br>第3段连串 it 都指「诗歌(poetry)」<br>第3段 it has been around for thousands of years、It was a way to tell stories、It is closely<br>related to song 中的 it,以及 even when written it is usually created to be performed 里的 it,<br>回指都是开头的 poetry(诗歌)。翻译时把这些 it 还原成「诗歌/它(诗歌)」,指代链才不会断。<br>them / they 指「读者 reader」与「诗歌 poems」两类,需分辨<br>第2段 transport them to another world and make them see things differently 的 them 指前<br>面的 a reader(读者);而第3段末 This can als",
+    "tips": "先通读全文锁死核心术语译名，长难句按连词/介词/非谓语切分意群，定语从句短前长后。",
+    "kp": "2023英译汉真题精译与采分点"
+  },
+  {
+    "id": "E2023_47",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 47,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2023英二 小作文 Part A 第47题 (10分)",
+    "stem": "<strong>Section IV Part A (10 points) — Directions:</strong><div class='formula-card'>An art exhibition and a robot show are to be held on Sunday, and your friend David asks you which<br>one he should go to. Write him an email to<br>1) make a suggestion, and<br>2) give your reason(s).<br>Write your answer in about 100 words on the ANSWER SHEET.<br>Do not use your own name in your email, use “Li Ming\" instead. (10 points)</div>",
+    "options": null,
+    "answer": "见参考范文与段落句架",
+    "analysis": "【参考范文 · 108 词】<br>写作无唯一标准答案，以下为达标示范<br>Dear David, I'm glad you asked and happy to give you my advice about this Sunday's two events.<br>I'd strongly suggest that you go to the robot show rather than the art exhibition.<br>The main reason is that the show suits your interests perfectly. As a technology lover, you will be amazed by<br>the intelligent robots on display, which can walk, talk and even play chess. Seeing them in action is far more<br>exciting than merely looking at still paintings, and it may spark fresh ideas for your own study.<br>I hope you have a wonderful time there. Do let me know how it goes! Yours, Li Ming<br>【参考译文】<br>亲爱的David： 很高兴你来问我，我很乐意就这周日的两场活动给你点建议。<br>我强烈建议你去机器人秀，而不是艺术展。<br>主要原因是这场秀正合你的兴趣。作为一个科技爱好者，你一定会被展出的智能机器人惊艳到——它们能<br>走、能说，甚至会下棋。亲眼看它们运作，可比只是静静看画有意思多了，说不定还能给你自己的学习带<br>来新点子。<br>希望你在那儿玩得开心。记得告诉我怎么样！ 此致， 李明<br><br>【第 1 段】称呼＋一句入题。Dear David 顶格锁定读者，I'm glad you asked 接住他的提问、定下朋友<br>间的语域，happy to give you my advice about this Sunday's two events 引出下文，落实第一段‘称<br>呼＋开场点题’的功能。<br>【第 2 段】一句话选边。I'd strongly suggest that you go to the robot show rather than the art<br>exhibition 用 suggest＋rather than 把‘选机器人秀、不选艺术展’说死，明确完成 make a<br>suggestion，不骑墙。<br>【第 3 段】理由三层递进。先 suits your interests perfectly 把理由绑到 David 身上，再用 which can<br>walk, talk and even play chess 给出可想象的具体看点，最后 far more exciting than... and it may<br>spark fresh ideas 落到对方收获，扎实完成 give your reason(s)。<br>【第 4 段】收尾＋合规署名。Do let me know how it goes 一句体现朋友口吻自然收束；Yours, 换行 Li<br>Ming 规范落款，严守 Do not use your own name in your email，没有出现真名。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域 ，再定中心立意与要展开的要点 —— 这些<br>是本题特有的内容判断，不是通用套路。<br>核心任务<br>二选一给建议＋讲清理由<br>本题的核心交际任务只有两件事，缺一不可：一是 make a suggestion，即在艺术展和机器人<br>秀之间替 David 拍板选一个；二是 give your reason(s)，把为什么选它说明白。注意题目问的<br>是 which one he should go to——是二选一，不是两个都去，所以建议必须明确选边。<br>读者 · 语域<br>写给好友的半正式邮件<br>读者是 your friend David asks you which one he should go to 里的朋友 David，身份是朋友对<br>朋友，语域走亲切但不失礼的半正式：顶格用 Dear David 称呼，正文可用 I'd suggest、you'll<br>love 这类口语化但得体的表达，结尾说句期待或祝福。署名有硬性限制——Do not use your<br>own name in your email，必须落款 Li Ming，绝不能写自己真名。<br><br>中心立意<br>推荐 David 去机器人秀<br>本邮件的交际目的：明确建议 David 去机器人秀而非艺术展，并让他相信这个选择更适合他。<br>立场唯一、不摇摆，全篇一切理由都为这个建议服务。<br>要展开的要点<br>1. 任务点一：明确给出建议<br>落实 make a suggestion——用一句话直接说‘我建议你去机器人秀，而不是艺术展’，态度干<br>脆，不把两个都夸一遍让对方自己选。<br>2. 理由一：契合 David 的兴趣<br>落实 give your reason(s) 的第一层——机器人秀正对 David 爱科技的胃口，智能机器人能走能<br>说甚至下棋，看点十足。<br>3. 理由二：现场体验更震撼、有启发<br>补强理由——亲眼看机器人运作远比静静看画更有冲击力，还可能给他自己的学习或点子带来<br>灵感，把好处落到‘他能得到什么’上。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>称呼＋开场点题<br>顶格写 Dear David，一句话回应他的纠结、引出下文，让邮件自然开头。<br>第 2 段<br>给出明确建议<br>直接说出推荐去机器人秀、不去艺术展，完成 make a suggestion 这个任务点。<br>第 3 段<br>展开推荐理由<br>结合 David 的兴趣与活动看点讲清为什么，完成 give your reason(s)。<br><br>第 4 段<br>礼貌收尾＋落款<br>加一句期待回复的话收束，落款 Yours, / Li Ming，满足署名硬要求。<br>第 1 段<br>Dear David＋回应他的纠结<br>称呼 Dear David；正文首句回应他 which one he should go to 的纠结，表示乐意给建议，自<br>然过渡到下一段。<br>友好称呼<br>· Dear ___,（顶格写收信人名字，朋友间直接用名）<br>接住来意的开场<br>· I'm glad you asked and happy to give you my advice about ___.（先<br>呼应对方的提问，再引出建议）<br>第 2 段<br>推荐机器人秀、放弃艺术展<br>明确建议 David 去机器人秀而不是艺术展，态度唯一，直接落实 make a suggestion。<br>亮明建议<br>· I'd strongly suggest that you go to ___ rather than ___.（用 rather than 点<br>出落选项，选边清楚）<br>替换句型备用<br>· If you ask me, ___ would be a better choice for you.（换一种口吻给建<br>议，避免句式单调）<br><br>第 3 段<br>兴趣契合＋现场看点＋收获<br>先说机器人秀契合 David 爱科技的兴趣，再举智能机器人能走能说会下棋的看点，最后点出<br>现场体验比看画更震撼、还能启发他，落实 give your reason(s)。<br>亮出核心理由<br>· The main reason is that ___ suits your interests perfectly.（一句话把理<br>由和对方兴趣绑定）<br>举具体看点<br>· As a ___ lover, you will be amazed by ___, which can ___.（用 which 引<br>出具体、可想象的细节）<br>对比＋收获收束<br>· ___ is far more exciting than ___, and it may ___ for you.（用比较<br>级强化",
+    "tips": "小作文严格三段式：第1段表明写信目的，第2段逐一落实题干两个要点，第3段期待回复并规范署名 Li Ming。",
+    "kp": "2023英语二小作文应用文实战"
+  },
+  {
+    "id": "E2023_48",
+    "subject": "eng2",
+    "year": 2023,
+    "qNum": 48,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2023英二 大作文 Part B 第48题 (15分)",
+    "stem": "<strong>Section IV Part B (15 points) — Directions:</strong><div class='formula-card'>Write an essay based on the chart below. In your essay, you should<br>1) describe and interpret the chart, and<br>2) give your comments.<br>Write your answer in about 150 words on the ANSWER SHEET. (15 points)</div>",
+    "options": null,
+    "answer": "见图表描述与参考范文",
+    "analysis": "【参考范文 · 147 词】<br>写作无唯一标准答案，以下为达标示范<br><br>The line chart illustrates the changing health literacy level of Chinese residents from 2012 to 2021. As is shown<br>in the chart, the proportion of people with basic health literacy climbed steadily from a mere 8.80% in 2012 to<br>25.40% in 2021, nearly tripling over the decade. Notably, the growth accelerated after 2016, rising more<br>sharply in recent years.<br>Several factors account for this encouraging upward trend. On the one hand, the government has invested<br>heavily in public health education and disease prevention campaigns. On the other hand, with rising incomes<br>and easier access to online information, ordinary people have grown more willing to learn how to protect their<br>own health.<br>In my view, this rising curve reflects genuine social progress. Nevertheless, since three quarters of residents<br>still lack adequate health literacy, both the authorities and individuals should keep making joint efforts to<br>spread reliable health knowledge.<br>【参考译文】<br>这张折线图展示了 2012 年至 2021 年我国居民健康素养水平的变化。如图所示，具备基本健康素养的人<br>口比例从 2012 年仅 8.80% 稳步攀升至 2021 年的 25.40%，十年间几乎翻了三倍。值得注意的是，这一<br>增长在 2016 年后明显加快，近几年上升更为陡峭。<br>多种因素造成了这一令人鼓舞的上升趋势。一方面，政府在公共卫生教育和疾病预防宣传上投入巨大。另<br>一方面，随着收入提高、上网获取信息更加便利，普通民众也越来越愿意学习如何维护自身健康。<br>在我看来，这条上升曲线反映了实实在在的社会进步。然而，由于仍有约四分之三的居民缺乏足够的健康<br>素养，政府与个人都应继续共同努力，传播可靠的健康知识。<br>【第 1 段】读数加概括。首段用 As is shown in the chart 引出，给出 8.80% 与 25.40% 两个关键数并<br>说 nearly tripling，再用 Notably 一句概括 2016 年后加速的转折，落实了描述段『先读数再概括』的走<br>法，没有逐年罗列。<br>【第 2 段】两方面找原因。第二段以 Several factors account for... 起句，再用 On the one hand / On<br>the other hand 分列政府投入与个人意识两个原因，正是『双因分析』的落地，逻辑清楚、内容充实。<br>【第 3 段】表态加让步建议。末段 In my view 亮出态度、把趋势升为社会进步，再用 Nevertheless 让<br>步指出四分之三居民仍不足，收于 joint efforts 的建议，完整落实评论段功能。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域、读懂配图 ，再定中心立意与要展开的要<br>点 —— 这些是本题特有的内容判断，不是通用套路。<br><br>核心任务<br>描述并评论健康素养图<br>本题要求 describe and interpret the chart，并 give your comments，即先客观描述并解读这张<br>健康素养折线图的数据与趋势，再对它反映的现象发表自己的看法。两件事缺一不可。<br>读者 · 语域<br>写给阅卷人的正式书面语<br>本题没有指定收信人或具体情境，属纯议论短文，只需面向阅卷人使用正式书面英语；无须称<br>呼、落款，也不得写出自己的真实姓名。<br>配图要读出<br>十年从8.80%升到25.40%<br>图示 2012年至2021年期间我国居民健康素养水平的变化，比例由 健康素养的比例在2012年是<br>8.80% 一路升至 2021年是25.40%，整体持续上升、2016 年后加速；注释指出健康素养是 个人<br>获取和理解基本健康信息和服务，并运用这些信息和服务作出正确决策，以维护和促进自身健<br>康的能力，可作为背景理解。<br>中心立意<br>健康素养提升是可喜进步<br>本篇中心：图中 2012年至2021年期间我国居民健康素养水平的变化 呈持续上升，说明国民健<br>康素养显著提高，这是值得肯定的社会进步，但仍有提升空间。<br><br>要展开的要点<br>1. 客观描述上升趋势<br>读出起点 健康素养的比例在2012年是8.80%、终点 2021年是25.40% 与总体上升幅度，并概括<br>『近十年约翻三倍、2016 后加速』，不逐年罗列。<br>2. 分析上升原因<br>从政府与个人两方面找原因：政府加强公共卫生宣传与疾病预防教育；个人收入提高、上网获<br>取健康信息更便利，更愿主动学习护健康。<br>3. 评论并提出展望<br>肯定这是社会进步，同时指出仍有约四分之三居民不具备基本健康素养，呼吁政府与个人继续<br>共同努力。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>描述图表并概括趋势<br>客观转述关键数据与整体走向，落实 describe and interpret the chart 的描述部分。<br>第 2 段<br>分析上升原因<br>解读数据背后的原因，起到承上启下、衔接描述与评论的作用。<br>第 3 段<br>评论与展望收束<br>落实 give your comments，表明态度并给出建设性看法收尾。<br><br>第 1 段<br>健康素养从8.80%升到25.40%<br>写图示 2012年至2021年期间我国居民健康素养水平的变化，比例由 8.80% 升至 25.40%，近<br>十年约翻三倍，2016 年后上升更快。<br>总起点题<br>· As is shown in the chart, the proportion of ... rose from ...% in [year] to ...%<br>in [year].<br>概括幅度<br>· Over the [period], the figure showed a steady upward trend, nearly tripling.<br>第 2 段<br>政府宣传与个人意识双驱动<br>原因一：政府加大公共卫生教育与疾病预防宣传；原因二：居民收入提高、上网获取健康信<br>息更便利，更愿意主动学习护健康知识。<br>引出原因<br>· Several factors account for this trend.<br>并列展开<br>· On the one hand, ...; on the other hand, ...<br>第 3 段<br>肯定进步并呼吁继续努力<br>评论：上升曲线反映真实的社会进步；但仍有约四分之三居民缺乏基本健康素养，呼吁政府<br>与个人共同努力普及可靠健康知识。<br>亮明评论<br>· In my view, this change reflects ...<br>让步收束<br>· Nevertheless, since ..., both ... and ... should make joint efforts to ...<br>R E V I E W · 自检避坑<br>本题在四个评分维度怎样算达标、容易在哪丢分<br>按阅卷四维（内容切题 / 结构连贯 / 语",
+    "tips": "图表大作文三段式：第1段客观读图抓极值反差，第2段分析数据背后的两点原因，第3段总结展望与建议。",
+    "kp": "2023英语二大作文图表作文实战"
+  },
+  {
+    "id": "E2022_01",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 1,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第1题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>1</strong> 空的最佳选项：",
+    "options": [
+      "A. difficult",
+      "B. normal",
+      "C. steady",
+      "D. pleasant"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (normal)</strong><br>词义辨析<br>【线索】破折号后的同位复述就是答案近义词<br>破折号后紧跟 a job like any other，“和其他工作一样”正是对空格形容词的同位解释；再加<br>a plumber doesn't wake up and say that he can't work with pipes today 把写作类比成<br>水管工的日常活，进一步把“普通、不特殊”的语义钉死。<br>【选项】A) difficult ✗与“和其他工作一样”矛盾<br>difficult 意为“困难的”，但下文 a job like any other 强调写作和别的工作没两样，并未把它说得更<br>难，逻辑相反。<br>B) normal ✓与“like any other”同义改写<br>normal “普通的”与同位语 a job like any other 完全对应，也契合下文把写作比作水管工日常活<br>的类比。<br>C) steady ✗义近但偷换维度<br>steady 强调“稳定的”收入/状态，文中说的是“和别的工作一样”的“普通性”，维度不对，且第 2 段还<br>提到作家常需兼职，并不“稳定”。<br>D) pleasant ✗色彩与原句无关<br>pleasant “愉快的”加入了原文没有的情感色彩，空格要的是“和别的工作没两样”，并非“令人<br>愉快”。<br>【验证】代入后：writing is a __(1)__ job—a job like any other 读作 writing is a normal job—a<br>job like any other，前后完全同义复述，且与全文“把写作当普通工作来对待”的基调一致。",
+    "tips": "破折号后的同位复述就是答案近义词",
+    "kp": "完形填空 · 第1空考点精析"
+  },
+  {
+    "id": "E2022_02",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 2,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第2题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>2</strong> 空的最佳选项：",
+    "options": [
+      "A. combined",
+      "B. compared",
+      "C. confused",
+      "D. confronted"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (compared)</strong><br>固定搭配<br>【线索】下句“水管工不会说不干”是类比内容<br>紧接着 pointing out that a plumber doesn't wake up and say that he can't work with<br>pipes today，把写作和水管工的活并列做类比；这告诉空格的动词必须表达“拿写作和<br>plumbing 作比较/类比”。<br>【选项】A) combined ✗搭配可，语义错<br>combined with 意为“把…与…合并/结合”，但原文是把写作“比作”水管工活，不是把两者合并。<br>B) compared ✓compare A with B 正中类比之义<br>compared with 正是“把…与…相比/类比”，与下句 a plumber doesn't wake up and say that<br>he can't work with pipes today 的类比展开完全吻合。<br>C) confused ✗搭配可，语义反向<br>confused with 意为“把…和…弄混”，原文是有意识地做对比，并非把两者混淆。<br>D) confronted ✗搭配可，对象不符<br>confronted with 意为“面对/遭遇”，主语应是“人 be confronted with 困难”，与“把写作和水管工<br>活并列”无关。<br>【验证】代入后：He has compared it with plumbing，pointing out that a plumber...——动<br>词、介词、对象与下句类比展开三方自洽，且全段“写作是普通工作”的立论也被进一步<br>坐实。",
+    "tips": "下句“水管工不会说不干”是类比内容",
+    "kp": "完形填空 · 第2空考点精析"
+  },
+  {
+    "id": "E2022_03",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 3,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第3题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>3</strong> 空的最佳选项：",
+    "options": [
+      "A. If",
+      "B. Though",
+      "C. Once",
+      "D. Unless"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (If)</strong><br>逻辑关系<br>【线索】主句是中性结果，需要假设引出<br>从句 like most writers these days, you're holding down a job to pay the bills（像大多<br>数作家一样兼职糊口）；主句 it's not __(4)__ to find the time to write. But it's not<br>impossible（找时间写作不容易，但并非不可能）。从句是一个具体情境的设定，主句给出<br>该情境下的判断——典型“如果……那么……”的假设-结果关系。<br>【选项】<br>A) If ✓条件—结果链条吻合<br>If 引出“如果你像大多数作家一样兼职”这一假设，主句给出该假设下的结果“找时间不容易但并非<br>不可能”，完全自洽。<br>B) Though ✗无让步—反向关系<br>Though 要求主从句意义相反，但“兼职糊口”与“难找时间写作”是顺承因果，并非让步。<br>C) Once ✗时间节点不符<br>Once “一旦……就”强调时点上的触发，可原文是描述一种长期身份（兼职作家），不是“一旦兼职<br>就如何”，语义略偏。<br>D) Unless ✗否定条件指向相反<br>Unless 等于“如果不”，代入会变成“如果你不像大多数作家那样兼职，就难找时间写作”，与现实和<br>上下文都相反。<br>【验证】代入后：__(3)__, like most writers these days, you're holding down a job to pay the<br>bills, it's not __(4)__ to find the time to write 读作 If, like most writers these days,<br>you're holding down a job..., it's not easy to find the time to write，从句给情境、主句<br>给结论，全篇“现实困境”的脉络承接立论段。",
+    "tips": "主句是中性结果，需要假设引出",
+    "kp": "完形填空 · 第3空考点精析"
+  },
+  {
+    "id": "E2022_04",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 4,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第4题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>4</strong> 空的最佳选项：",
+    "options": [
+      "A. enough",
+      "B. strange",
+      "C. wrong",
+      "D. easy"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (easy)</strong><br>词义辨析<br>【线索】But not impossible 反推前文是 not easy<br>But it's not impossible “但并非不可能”暗示前句应是“虽然不容易”——只有 not easy 与<br>not impossible 才能构成“承认困难但仍可为”的标准让步—转折链条。<br>【选项】A) enough ✗搭配不当<br>enough 通常用作 not enough to do 表“不够……以致于”，但 it is not enough to do 表“做某事<br>还不够”，与“找时间写作够不够”语义不搭。<br>B) strange ✗色彩无关<br>strange “奇怪的”与“难易”维度无关，无法与 But not impossible 形成对照。<br>C) wrong ✗评价维度跑偏<br>wrong “错误的”是道德/对错判断，原文谈的是难易度，方向偏。<br>D) easy ✓not easy 与 not impossible 完美呼应<br>easy 让 not easy ... But not impossible 形成“不容易但并非不可能”的经典让步-转折，与全段<br>“困难但可为”的基调一致。<br>【验证】代入后：it's not __(4)__ to find the time to write. But it's not impossible 读作 it's not<br>easy to find the time to write. But it's not impossible——两句一气呵成，承上启下 It<br>requires determination and single-mindedness。",
+    "tips": "But not impossible 反推前文是 not easy",
+    "kp": "完形填空 · 第4空考点精析"
+  },
+  {
+    "id": "E2022_05",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 5,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第5题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>5</strong> 空的最佳选项：",
+    "options": [
+      "A. Accept",
+      "B. Explain",
+      "C. Remember",
+      "D. Suppose"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (Remember)</strong><br>词义辨析<br>【线索】that 从句是一个事实，且服务于鼓励读者<br>that 从句 most bestselling authors began writing when they were doing other things<br>to earn a living 是一个客观事实，与上文 But it's not impossible. It requires<br>determination and single-mindedness 衔接——作者在用“前辈榜样”鼓励读者，意在让<br>读者“记住”这一事实。<br>【选项】A) Accept ✗色彩偏负，无不情愿语境<br>Accept 暗含“勉强承认不愉快的事实”，但这里是正面鼓励，并无让读者忍受什么的意思。<br>B) Explain ✗对象错位<br>Explain 是“解释”，主语应是“作者向读者解释”，而非命令读者去解释别人。<br>C) Remember ✓祈使读者记住榜样事实<br>Remember “记住”恰好引出“畅销作家也是边糊口边起步”这一鼓励性事实，与上句“困难但可为”<br>的转折顺承衔接。<br>D) Suppose ✗把事实降成假设<br>Suppose 是“假设”，但 that 从句陈述的是确凿事实，不应被弱化成假设。<br>【验证】代入后：Remember that most bestselling authors began writing when they were<br>doing other things to earn a living——劝勉口吻自然，且为下句 even writers who are<br>fairly __(6)__ often have to do other work to __(7)__ their writing income 提供逻辑<br>铺垫。",
+    "tips": "that 从句是一个事实，且服务于鼓励读者",
+    "kp": "完形填空 · 第5空考点精析"
+  },
+  {
+    "id": "E2022_06",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 6,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第6题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>6</strong> 空的最佳选项：",
+    "options": [
+      "A. well-known",
+      "B. well-advised",
+      "C. well-informed",
+      "D. well-chosen"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (well-known)</strong><br>词义辨析<br>【线索】上句“畅销作家”提示同维度词<br>上句 most bestselling authors began writing when they were doing other things to<br>earn a living 在谈“畅销/出名”作家，本句用 even 顺承，说“即使是 fairly ___ 的作家也得做<br>别的工作补贴”——“fairly ___”必然指“小有名气”这一维度，才能形成“按理不需补贴还得补<br>贴”的让步反差。<br>【选项】<br>A) well-known ✓与“畅销作家”同维度且形成 even 反差<br>well-known “知名的”与上句 bestselling 同属“名气”维度，知名作家“按理”不必再兼职，正好让<br>even ... often have to ... 形成预期反差。<br>B) well-advised ✗维度跑偏<br>well-advised “明智的”是“决策好坏”维度，与“是否需要靠副业补收入”无直接因果反差。<br>C) well-informed ✗维度跑偏<br>well-informed “消息灵通的”与作家是否要兼职无关，也无法承接“畅销”的语义。<br>D) well-chosen ✗搭配对象不对<br>well-chosen “精心挑选的”通常修饰 words/team，不修饰人；“被挑中的作家”也与上下文无关。<br>【验证】代入后：even writers who are fairly well-known often have to do other work to<br>supplement their writing income——“即使相当出名的作家也常需兼职补贴写作收入”，<br>与上句“畅销作家也是边糊口边起步”完美呼应。",
+    "tips": "上句“畅销作家”提示同维度词",
+    "kp": "完形填空 · 第6空考点精析"
+  },
+  {
+    "id": "E2022_07",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 7,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第7题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>7</strong> 空的最佳选项：",
+    "options": [
+      "A. donate",
+      "B. generate",
+      "C. supplement",
+      "D. calculate"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (supplement)</strong><br>词义辨析<br>【线索】上文写作收入不够才兼职<br>本句承接 even writers who are fairly __(6)__ often have to do other work，写作收入显<br>然不足，所以才要做别的工作；对应的动词必须是“补足、补充”。<br>【选项】A) donate ✗搭配错<br>donate “捐赠”通常 donate sth to sb，不会出现“做别的工作以捐赠自己的写作收入”这种荒谬<br>意图。<br>B) generate ✗对象错位<br>generate “产生”通常说 generate income，但 writing income 已是既有收入，再“产生”writing<br>income 自相矛盾——产生的是 extra income，不是 writing income。<br>C) supplement ✓supplement income 是固定且语义最贴的搭配<br>supplement “补充”与 income 形成“用副业补主业收入”的标准搭配，与上文“写作收入不足”的因<br>果直接呼应。<br>D) calculate ✗动作类型不符<br>calculate “计算”是一种核算动作，与“做别的工作”的目的无关。<br>【验证】代入后：often have to do other work to supplement their writing income——“常需做<br>别的工作以补贴写作收入”，与全段“写作不易养活自己”的现实判断一致。",
+    "tips": "上文写作收入不够才兼职",
+    "kp": "完形填空 · 第7空考点精析"
+  },
+  {
+    "id": "E2022_08",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 8,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第8题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>8</strong> 空的最佳选项：",
+    "options": [
+      "A. cause",
+      "B. purpose",
+      "C. question",
+      "D. condition"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (question)</strong><br>词义辨析<br>【线索】下句把“优先级”解释为要做取舍<br>下句 To make writing a priority, you'll have to __(9)__ some of your day-to-day<br>activities and some things you really enjoy，把“写作要成为优先级”具体化为“要牺牲日<br>常活动”——意味着“是不是优先级”本身就是一个待回答/待决断的“问题”。<br>【选项】A) cause ✗搭配不通<br>cause of priorities 字面“优先级的原因”，原文并未在说写作是优先级的“起因”。<br>B) purpose ✗对象错位<br>purpose of priorities “优先级的目的”语义空洞，与下文“取舍”无对应。<br>C) question ✓a question of priorities 是固定表达<br>question of priorities “事关优先级的问题”是地道搭配，且与下句“要牺牲什么”的展开吻合。<br>D) condition ✗搭配无该用法<br>condition of priorities 不构成固定/常用搭配，语义也未触及“取舍”。<br>【验证】代入后：it's a question of priorities——“这是一个关于优先级的问题”，顺接 Coben 的观<br>点，并自然引出下句“要让写作成为优先级，必须取舍”。",
+    "tips": "下句把“优先级”解释为要做取舍",
+    "kp": "完形填空 · 第8空考点精析"
+  },
+  {
+    "id": "E2022_09",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 9,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第9题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>9</strong> 空的最佳选项：",
+    "options": [
+      "A. highlight",
+      "B. sacrifice",
+      "C. continue",
+      "D. explore"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (sacrifice)</strong><br>词义辨析<br>【线索】下文细数被让位的活动<br>下文 that might mean spending less time watching television or listening to music 和<br>There'll probably have to be less socialising with your friends and less time with<br>your family 都在列举“被让位的活动”，反推空格动词必是“牺牲/放弃”之义。<br>【选项】A) highlight ✗方向相反<br>highlight “突出”等于“加强”，与下文“减少/让位”完全相反。<br>B) sacrifice ✓sacrifice activities 与下文“减少”系列契合<br>sacrifice “牺牲”与下文 less time / cut down on / less socialising 的减少链条完全对应。<br>C) continue ✗方向相反<br>continue “继续”与“为优先级让位”相悖，继续做就谈不上让位。<br>D) explore ✗对象错位<br>explore “探索”通常宾语是 possibility/area，与“日常活动和喜欢的事”搭配不自然，也不指向<br>“取舍”。<br>【验证】代入后：To make writing a priority, you'll have to sacrifice some of your day-to-day<br>activities and some things you really enjoy——“为让写作成为优先级，你得牺牲一些日<br>常活动和你真正享受的事”，与第 3 段后续每一句“减少/削减”细则一致。",
+    "tips": "下文细数被让位的活动",
+    "kp": "完形填空 · 第9空考点精析"
+  },
+  {
+    "id": "E2022_10",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 10,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第10题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>10</strong> 空的最佳选项：",
+    "options": [
+      "A. relations",
+      "B. interests",
+      "C. memories",
+      "D. skills"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (interests)</strong><br>词义辨析<br>【线索】举例皆为“爱好类活动”<br>举例 that might mean spending less time watching television or listening to music 谈<br>的全是“个人爱好”，跟人际关系/技能/记忆没关；唯一对应的概念名词只能是 interests（兴<br>趣/爱好）。<br>【选项】A) relations ✗维度错位<br>relations “人际关系”与“看电视/听音乐”的具体爱好维度不同。<br>B) interests ✓interests 与爱好类举例同维<br>interests “兴趣”是看电视、听音乐等爱好活动的上位概念，且与 lifestyle 并列读着自然。<br>C) memories ✗搭配与语义双错<br>memories “记忆”与“看电视/听音乐取舍”无关，也不与 lifestyle 并列。<br>D) skills ✗维度错位<br>skills “技能”是能力维度，与“个人爱好取舍”完全不同。<br>【验证】代入后：Depending on your interests and your lifestyle, that might mean spending<br>less time watching television or listening to music——“取决于你的兴趣和生活方式，这<br>可能意味着少看电视少听音乐”，逻辑顺畅。",
+    "tips": "举例皆为“爱好类活动”",
+    "kp": "完形填空 · 第10空考点精析"
+  },
+  {
+    "id": "E2022_11",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 11,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第11题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>11</strong> 空的最佳选项：",
+    "options": [
+      "A. until",
+      "B. because",
+      "C. while",
+      "D. before"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (while)</strong><br>逻辑关系<br>【线索】上句说“听音乐与写作冲突”，本句让步给出例外<br>上句 that might mean spending less time watching television or listening to music 把<br>听音乐列为要减少的事，本句 though some people can write __(11)__ they listen to<br>music 用 though 给出例外——“写作的同时还能听音乐”，从句与主句动作并行同步。<br>【选项】A) until ✗时间节点不符<br>until “直到”暗示写作在听音乐之前停止，与原意“边听边写”不符。<br>B) because ✗因果不成立<br>because 暗示“因为听音乐所以能写”，是过度推断，原文只说同时可行。<br>C) while ✓while 表两动作并行<br>while “在……期间/同时”恰好表达“边听音乐边写作”的并行状态。<br>D) before ✗时间节点不符<br>before “在……之前”也不是“同时”，且与“少听音乐”的让步背景不搭。<br>【验证】代入后：though some people can write while they listen to music——“虽然有些人可<br>以边听音乐边写作”，与上文“通常要少听音乐”形成自然让步。",
+    "tips": "上句说“听音乐与写作冲突”，本句让步给出例外",
+    "kp": "完形填空 · 第11空考点精析"
+  },
+  {
+    "id": "E2022_12",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 12,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第12题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>12</strong> 空的最佳选项：",
+    "options": [
+      "A. put up with",
+      "B. make up for",
+      "C. hang on to",
+      "D. cut down on"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (cut down on)</strong><br>固定搭配<br>【线索】整段“减少”链条延续<br>本段 To make writing a priority, you'll have to __(9)__ some of your day-to-day<br>activities 与 There'll probably have to be less socialising with your friends and less<br>time with your family 都是减少链条；空格必填“减少”义短语。<br>【选项】A) put up with ✗义为“忍受”<br>put up with “忍受”，与“减少运动量”无关。<br>B) make up for ✗义为“弥补”<br>make up for “弥补”，与“减少运动量”语义相反。<br>C) hang on to ✗义为“保留”<br>hang on to “紧紧抓住/保留”，与“减少”相反。<br>D) cut down on ✓cut down on the amount 正中减少之义<br>cut down on “削减”恰与 the amount of exercise or sport 搭配，承接全段“减少”链条。<br>【验证】代入后：You might have to cut down on the amount of exercise or sport you do<br>——“你可能得削减运动量”，与上一句“少看电视少听音乐”风向一致。",
+    "tips": "整段“减少”链条延续",
+    "kp": "完形填空 · 第12空考点精析"
+  },
+  {
+    "id": "E2022_13",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 13,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第13题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>13</strong> 空的最佳选项：",
+    "options": [
+      "A. intelligent",
+      "B. occasional",
+      "C. intensive",
+      "D. emotional"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】B (occasional)</strong><br>词义辨析<br>【线索】rather than 后 daily 暗示前空“偶尔”<br>rather than a daily, time-consuming __(14)__ 中 daily（每天的）正是 X 的反面，故空格<br>必表“非每天/偶尔的”——只有 occasional 符合。<br>【选项】A) intelligent ✗维度跑偏<br>intelligent “聪明的”与“频率”维度无关。<br>B) occasional ✓occasional 正是 daily 的对照面<br>occasional “偶尔的”与 daily 形成“偶尔 vs 每天”完美对照。<br>C) intensive ✗方向相反<br>intensive “密集的”反而是更频繁、更耗时，与作者“少花时间”主张相悖。<br>D) emotional ✗维度跑偏<br>emotional “情绪化的”与频率/时间维度无关。<br>【验证】代入后：make social media an occasional activity rather than a daily, time-<br>consuming __(14)__——“把社交媒体当作偶尔之举，而非每日耗时的……”，与全段减少链<br>条一致。",
+    "tips": "rather than 后 daily 暗示前空“偶尔”",
+    "kp": "完形填空 · 第13空考点精析"
+  },
+  {
+    "id": "E2022_14",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 14,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第14题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>14</strong> 空的最佳选项：",
+    "options": [
+      "A. habit",
+      "B. test",
+      "C. decision",
+      "D. plan"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (habit)</strong><br>词义辨析<br>【线索】social media 的日常行为本质<br>前句把 social media 定位为 make social media an __(13)__ activity，活动天天做且耗<br>时，最自然的名词正是 habit（习惯）；上文“取舍日常活动”语境也支持把它视为应改掉的<br>“习惯”。<br>【选项】<br>A) habit ✓daily habit 标准搭配<br>habit “习惯”与 daily, time-consuming 修饰天然兼容，且 a daily habit 本身是高频搭配。<br>B) test ✗搭配与语义错<br>test “测试”不会被描述为“每天且耗时”，且与社交媒体语境无关。<br>C) decision ✗搭配错<br>decision “决定”是离散动作，不会“daily, time-consuming”。<br>D) plan ✗搭配错<br>plan “计划”通常不被 time-consuming 修饰，且与“刷社交媒体”的行为属性不符。<br>【验证】代入后：rather than a daily, time-consuming habit——“而不是一种每日耗时的习惯”，<br>与 occasional activity 形成“偶尔活动 vs 日常习惯”对照。",
+    "tips": "social media 的日常行为本质",
+    "kp": "完形填空 · 第14空考点精析"
+  },
+  {
+    "id": "E2022_15",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 15,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第15题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>15</strong> 空的最佳选项：",
+    "options": [
+      "A. tough",
+      "B. gentle",
+      "C. rapid",
+      "D. funny"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (tough)</strong><br>词义辨析<br>【线索】won't always make you popular 暗示前句负面<br>it won't always make you popular “不会总让你受欢迎”明显带负面色彩；与之并列的空格<br>形容词应同样偏负面/严峻——tough 正是。<br>【选项】<br>A) tough ✓tough learning curve 是高频搭配且色彩负面<br>tough “艰难的”与 learning curve 形成 a tough learning curve（一段艰难的学习过程）的标准<br>搭配，并与下句“未必受欢迎”的负面色彩一致。<br>B) gentle ✗色彩相反<br>gentle “温柔的”与下句负面色彩相反，且 gentle learning curve 暗示“容易”，与全文取舍艰苦<br>不符。<br>C) rapid ✗维度跑偏<br>rapid “迅速的”指速度，与“艰难还是不艰难”无关。<br>D) funny ✗色彩相反<br>funny “有趣的”是正面色彩，与下句负面预警冲突。<br>【验证】代入后：It's a tough learning curve and it won't always make you popular——“这是<br>一段艰难的学习曲线，也不会总让你受欢迎”，色彩与语义双重自洽。",
+    "tips": "won't always make you popular 暗示前句负面",
+    "kp": "完形填空 · 第15空考点精析"
+  },
+  {
+    "id": "E2022_16",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 16,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第16题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>16</strong> 空的最佳选项：",
+    "options": [
+      "A. in place of",
+      "B. in charge of",
+      "C. in response to",
+      "D. in addition to"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (in addition to)</strong><br>固定搭配<br>【线索】“除写作外还要保留读书时间”<br>上文 To make writing a priority, you'll have to __(9)__ some of your day-to-day<br>activities 是要为写作让位；本句话锋一转：还有一件事除写作之外也要留时间——读书<br>and that's reading。逻辑是“除 A 之外还有 B”。<br>【选项】A) in place of ✗方向相反<br>in place of “代替”会变成“用读书代替写作”，与“写作仍是优先级”矛盾。<br>B) in charge of ✗搭配错位<br>in charge of “负责”主语应是人，“读书负责写作”不通。<br>C) in response to ✗对象错位<br>in response to “回应”指对事件的反应，与上下文无对应。<br>D) in addition to ✓in addition to writing 表“除写作外还有读书”<br>in addition to “除……之外（还）”正好引出“除写作之外还要保留时间的另一件事”——读书。<br>【验证】代入后：keep at least some time for, in addition to your writing—and that's reading<br>——“除写作之外还要保留时间的另一件事——就是阅读”，过渡自然。",
+    "tips": "“除写作外还要保留读书时间”",
+    "kp": "完形填空 · 第16空考点精析"
+  },
+  {
+    "id": "E2022_17",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 17,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第17题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>17</strong> 空的最佳选项：",
+    "options": [
+      "A. indispensable",
+      "B. innovative",
+      "C. invisible",
+      "D. instant"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】A (indispensable)</strong><br>词义辨析<br>【线索】破折号后“something you can't do without”<br>something you can't do without “你不能没有的东西”即“不可或缺”，与 indispensable 是<br>1:1 的同义改写。<br>【选项】<br>A) indispensable ✓indispensable=cannot do without<br>indispensable “不可或缺的”与 something you can't do without 是教科书式同义改写。<br>B) innovative ✗维度跑偏<br>innovative “创新的”与“不可或缺”维度无关。<br>C) invisible ✗形近义错<br>invisible “隐形的”形近 indispensable，是典型陷阱；但同位短语强调“不能没有”而非“看不见”。<br>D) instant ✗维度跑偏<br>instant “即时的”强调速度，与“不可或缺”无关。<br>【验证】代入后：it's the one indispensable supporter—something you can't do without<br>——“它是不可或缺的支撑——你不能没有的东西”，破折号前后完美呼应。",
+    "tips": "破折号后“something you can't do without”",
+    "kp": "完形填空 · 第17空考点精析"
+  },
+  {
+    "id": "E2022_18",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 18,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第18题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>18</strong> 空的最佳选项：",
+    "options": [
+      "A. duller",
+      "B. harder",
+      "C. quieter",
+      "D. quicker"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (quicker)</strong><br>词义辨析<br>【线索】常识＋主旨：年纪越大时间越快<br>本段主旨 Time is finite 与下句 We need to use it as carefully and as __(19)__ as we can<br>都在强调要珍惜时间——前提是它过得越来越快，否则就没有珍惜的紧迫感。<br>【选项】A) duller ✗搭配不当<br>duller “更乏味的”形容时间流逝节奏不自然。<br>B) harder ✗对象错位<br>harder “更艰难的”修饰 it seems to go 不通，go 不与 hard 搭。<br>C) quieter ✗维度跑偏<br>quieter “更安静的”与“时间流速”无关。<br>D) quicker ✓quicker it goes 是固定共识表达<br>quicker “更快”与“年纪越大时间过得越快”的常识吻合，引出下句“必须更高效地用时间”。<br>【验证】代入后：The older you get, the quicker it seems to go——“年纪越大，时间似乎过得越<br>快”，自然承接 Time is finite 并引出下文“高效用时”。",
+    "tips": "常识＋主旨：年纪越大时间越快",
+    "kp": "完形填空 · 第18空考点精析"
+  },
+  {
+    "id": "E2022_19",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 19,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第19题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>19</strong> 空的最佳选项：",
+    "options": [
+      "A. peacefully",
+      "B. generously",
+      "C. productively",
+      "D. gratefully"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】C (productively)</strong><br>词义辨析<br>【线索】that means 把“高效用时”具体化<br>that means prioritising our activities so that we spend most time on the things we<br>really want to do “意味着把时间用在最想做的事上”正是“高效（productively）”使用时间<br>的定义。<br>【选项】A) peacefully ✗维度跑偏<br>peacefully “平静地”与“高效安排时间”维度无关。<br>B) generously ✗方向相反<br>generously “慷慨地”暗示挥霍，与“time is finite”主旨相悖。<br>C) productively ✓productively＝高效，正合后文同位释义<br>productively “高效地”与 carefully 并列谈“用时方式”，并被下文“把最多时间花在最想做的事上”<br>直接定义。<br>D) gratefully ✗维度跑偏<br>gratefully “感激地”是情绪态度，与“使用时间的方式”维度无关。<br>【验证】代入后：use it as carefully and as productively as we can——“尽可能小心而高效地使用<br>时间”，与下文“prioritising our activities”完美吻合。",
+    "tips": "that means 把“高效用时”具体化",
+    "kp": "完形填空 · 第19空考点精析"
+  },
+  {
+    "id": "E2022_20",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 20,
+    "qType": "choice",
+    "chapter": "e_ch1",
+    "passageId": "E2022_CLOZE",
+    "title": "2022英二 完形填空 第20题 (0.5分)",
+    "stem": "请结合上方《2022年完形填空》原文，选择第 <strong>20</strong> 空的最佳选项：",
+    "options": [
+      "A. at most",
+      "B. in turn",
+      "C. on average",
+      "D. above all"
+    ],
+    "answer": "D",
+    "analysis": "<strong>【正确答案】D (above all)</strong><br>固定搭配<br>【线索】整篇“写作是优先级”的最终升华<br>整篇 To make writing a priority, you'll have to __(9)__ some of your day-to-day<br>activities 与 we spend most time on the things we really want to do 都把“写作”摆在最<br>优先位置；最后一句要呼应“写作就是首要的事”——only above all 才能传达“最重要的是写<br>作”的强调。<br>【选项】A) at most ✗方向相反<br>at most “至多”是数量上限，且暗示“写作只是顶多写一下”，与全文“把写作摆首位”相悖。<br>B) in turn ✗维度跑偏<br>in turn “依次/反过来”是顺序词，与“重要程度”无关。<br>C) on average ✗维度跑偏<br>on average “平均而言”是统计语，结尾升华不需要统计口吻。<br>D) above all ✓above all 收束全文<br>above all “最重要的是”恰好把“写作是首要”的全文主旨钉在结尾，符合作者升华意图。<br>【验证】代入后：If you're a writer, that means—above all—writing——“如果你是作家，那意味<br>着——最重要的是——写作”，与全文“把写作作为优先级”完美闭环。<br>O V E R V I E W · 通读建境<br>全文主旨与行文脉络<br>完形是语篇题——单看空所在的半句往往四个选项都「像」。下面是全文主旨与行文脉<br>络，是每个空锁定线索、代入验证时核对的全局工作台。<br>全文主旨<br>写作要当成普通工作，靠优先级取舍挤出时间<br>全文借作家 Harlan Coben 的观点立论：writing is a __(1)__ job—a job like any other，并把<br>写作类比成水管工的活；随后告诉读者要写作就得做优先级取舍——To make writing a<br>priority, you'll have to __(9)__ some of your day-to-day activities and some things you<br>really enjoy，最后落到时间有限、要把精力放在最想做的事上：Time is finite。基调务实、<br>劝勉，无明显褒贬转折。<br>行文脉络<br><br>立论→现实困境→具体取舍清单→唯一例外→升华收束<br>第 1 段立论：写作是份普通工作（writing is a __(1)__ job—a job like any other）；第 2 段<br>承认现实——多数作家要兼职糊口，时间难找但并非不可能（it's not __(4)__ to find the<br>time to write. But it's not impossible）；第 3 段铺开具体要牺牲什么——电视、运动、社<br>交、家人时间都得让位（To make writing a priority, you'll have to __(9)__ some of your<br>day-to-day activities）；第 4 段给出唯一例外——阅读必须保留（There's just one thing<br>you should try to keep at least some time for, __(16)__ your writing—and that's<br>reading）；第 5 段升华：时间有限，要把它用在最想做的事上（we spend most time on<br>the things we really want to do）。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>10 句真题句逐层精讲<br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>Harlan Coben believes that if you're a writer, you'll find the time; and that if you<br>can't find the time, then writing isn't a priority and you're not a writer.<br>第1段，第1句<br>\"主句 + 并列宾语从句 + 条件状语从句\" 的组合是四六级和考研阅读中的高频句式。句子展示了宾<br>语从句的并列用法以及条件状语从句嵌套在宾语从句中的典型结构，学生掌握后可大量复用到类似<br>长难句的分析中。<br>He has compared it with plumbing, pointing out that a plumber doesn't wake up<br>and say that he can't work with pipes today.<br>第1段，第3句<br>本句在主干识别、嵌套层次、时态辨析、成分划分等方面都有一定训练价值，且结构典型，适合作<br>为\"结构 + 时态\"分析的综合练习句。虽然难度不算极高，但覆盖的知识点较全面，对基础较弱的学<br>习者来说是很好的进阶材料，建议优先安排练习。<br><br>If, like most writers these days, you're holding down a job to pay the bills, it's not<br>easy to find the time to write.<br>第2段，第1句<br>条件状语从句 + 主句的结构在四六级和考研阅读中非常常见，是典型的复合句式。形式主语 \"it<br>is + 形容词 + to do\" 也是高频句型。掌握本句的分析方法可以直接迁移到大量类似句子，实用<br>性强。<br>Depending on your interests and your lifestyle, that might mean spending less<br>time watching television or listening to music, though some people can write while<br>they listen to music.<br>第3段，第3句<br>本句结构典型,涵盖情态动词、动名词宾语、嵌套状语从句等多个考点,成分丰富且具有代表性。虽<br>然主干识别和时态判断难度不高,但嵌套从句的归属关系和成分划分对基础较弱的学习者有较好的<br>训练效果,综合推荐度较高。<br>You might have to cut down on the amount of exercise or sport you do.<br>第3段，第4句<br>情态动词+半助动词+短语动词 的谓语结构,以及后置定语从句省略关系代词,都是四六级和考研阅<br>读中的高频句式。这种 名词+定语从句 的搭配在真题中反复出现,掌握后迁移性强,属于典型的常考<br>结构。<br>You'll have to make social media an occasional activity rather than a daily, time-<br>consuming habit.<br>第3段，第5句<br>\"make + 宾语 + 宾补\" 是四六级和考研中高频考查的句型，尤其宾补为名词短语且带有对比结构时<br>更为典型。本句的将来时态 + 情态意义（\"will have to\"）也是常考结构。学生掌握后可在阅读理解<br>和写作中广泛迁移，实用性强。<br>There's just one thing you should try to keep at least some time for, in addition to<br>your writing—and that's reading.<br>第4段，第1句<br>存在句结构和限制性定语从句（尤其是关系代词省略的定语从句）在四六级和考研阅读中频繁出<br>现，是典型的常考句式。破折号引出解释性并列分句也是常见的书面语用法。掌握本句结构后，可<br>迁移到大量类似句型，代表性较强。<br><br>The older you get, the quicker it seems to go.<br>第5段，第2句<br>\"the + 比较级..., the + 比较级...\" 是四六级和考研阅读中常见的经典句式，用于表达比例关系或因果<br>递进。掌握此结构后，学生可以快速识别和理解大量类似句子，迁移价值高。<br>We need to use it as carefully and as productively as we can, that means<br>prioritising our activities so that we spend most time on the things we really want<br>to do.<br>第5段，第3句<br>并列句 + 目的状语从句 + 定语从句的组合是考试阅读中的常见句式，且句中出现的 so that 引导目<br>的、关系代词省略、动名词作宾语等都是典型考点。掌握本句结构后可以迁移到大量类似句型，具<br>有较高的代表性。<br>If you're a writer, that means—above all writing.<br>第5段，第4句<br>条件状语从句加主句的结构在考试中较常见，且\"that means\"这种承接式主句在论述文中有一定代<br>表性。但整体句式偏简短，不如多层嵌套或复杂修饰的长句典型。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 19 个考研英语二真题高频词<br>下列单词既在本篇完形原文中出现，又是 考研英语二 历年真题的高频词（在该考试真题<br>中出现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查<br>看该词的释义、音标、词形与真题例句。<br>writing<br>A2<br>n. 写作<br>本篇6 次 · 真题 33 句<br>less<br>A1<br>det. 较少的<br>本篇3 次 · 真题 150 句<br>priority<br>B2<br>n. 优先事项<br>本篇3 次 · 真题 17 句<br>author<br>A2<br>n. 作者<br>本篇1 次 · 真题 209 句<br><br>least<br>A2<br>det. 最少的<br>本篇1 次 · 真题 63 句<br>reading<br>A1<br>n. 阅读<br>本篇1 次 · 真题 42 句<br>medium<br>B1<br>adj. 中等的<br>本篇1 次 · 真题 35 句<br>earn<br>A2<br>v. 赚得，挣得（金钱）<br>本篇1 次 · 真题 32 句<br>income<br>B1<br>n. 收入<br>本篇1 次 · 真题 31 句<br>amount<br>A2<br>n. 数量<br>本篇1 次 · 真题 30 句<br>lifestyle<br>B1<br>n. 生活方式<br>本篇1 次 · 真题 23 句<br>learning<br>A1<br>n. 学习<br>本篇1 次 · 真题 22 句<br>widely<br>B1<br>adv. 广泛地<br>本篇1 次 · 真题 21 句<br>tough<br>B1<br>adj. 困难的<br>本篇1 次 · 真题 20 句<br>fairly<br>B1<br>adv. 相当<br>本篇1 次 · 真题 12 句<br>supporter<br>B1<br>n. 支持者<br>本篇1 次 · 真题 12 句<br>addition<br>A2<br>n. 增加<br>本篇1 次 · 真题 9 句<br>carefully<br>A2<br>adv. 仔细地<br>本篇1 次 · 真题 9 句<br>indispensable<br>C1<br>adj. 必不可少的<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 119 词按 CEFR 难度累积覆盖<br><br>带空短文去重后共 119 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 1 个 ·<br>约 1%。<br>55%<br>A1<br>及以下<br>81%<br>A2<br>及以下<br>94%<br>B1<br>及以下<br>99%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 119 个 · 末柱为 100%<br>去重总词数<br>119<br>B2 以上难词<br>1%<br>B1 及以下覆盖<br>94%<br><br>考研英语二<br>2022年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>本题<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>段落小标题（7选5）<br>题目解析 →<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "整篇“写作是优先级”的最终升华",
+    "kp": "完形填空 · 第20空考点精析"
+  },
+  {
+    "id": "E2022_21",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 21,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT1",
+    "title": "2022英二 阅读 Text 1 第21题 (2分)",
+    "stem": "<strong>21. The climate-friendly eggs are produced____</strong>",
+    "options": [
+      "A. at a considerably low cost.",
+      "B. at the demand of regular shoppers.",
+      "C. as a replacement for organic eggs.",
+      "D. on specially designed farms."
+    ],
+    "answer": "D",
+    "analysis": "气候友好型鸡蛋的生产方式是____<br>A) 成本相当低。<br>B) 应普通消费者的需求。<br>C) 作为有机鸡蛋的替代品。<br>D) 在专门设计的农场上。<br>【答案】D （细节题）",
+    "tips": "细节题定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_22",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 22,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT1",
+    "title": "2022英二 阅读 Text 1 第22题 (2分)",
+    "stem": "<strong>22. Larry Brown is excited about his progress in____</strong>",
+    "options": [
+      "A. reducing the damage of worms.",
+      "B. accelerating the disposal of waste.",
+      "C. creating a sustainable system.",
+      "D. attracting customers to his products."
+    ],
+    "answer": "A",
+    "analysis": "【判型】Q21 是一个待补全句 The climate-friendly eggs are produced____，选项给出四种生产方<br>式，要求回原文比对哪一种与原文一致。<br>【拆句】The climate-friendly eggs are produced____ 主谓被动结构，主语是 The climate-<br>friendly eggs，谓语 are produced 被动，选项是补足状语成分（条件/地点/方式），没有<br>从句陷阱。<br>【定位】These eggs, which are making their debut now on shelves for as much as $8 a dozen, are<br>still labeled organic and animal-friendly, but they're also from birds that live on farms<br>using regenerative agriculture—special techniques to cultivate rich soils that can trap<br>greenhouse gases.<br>这些鸡蛋如今正以高达每打 8 美元的价格首次上架，它们仍贴着有机和善待动物的标签，但<br>同时来自饲养在使用「再生农业」——一种通过特殊技术蓄养富含温室气体的土壤的农场里<br>的鸡。<br>【选项】A)<br>无中生有<br>原文明确说 for as much as $8 a dozen，即售价昂贵；全文也未涉及生产成本是高是<br>低。at a considerably low cost 既无原文依据又与已知售价信息相悖。<br>B)<br>偷换概念<br>原文说这是 the $6.1 billion U.S. egg industry bets will be its next big thing，是行<br>业自己押注；P6 说目标是 consumers paying more for premium attributes，即愿意<br>付高价的特定群体，而非 regular shoppers。<br>C)<br>与原文相反<br>are still labeled organic and animal-friendly 表明这种蛋仍贴有机标签，是有机标签<br>的「扩展叠加」，绝非取代。选项把并列关系篡改为取代关系。<br>D)<br>✓ 正确<br>from birds that live on farms using regenerative agriculture—special techniques to cultivate rich<br>soils<br>↔on specially designed farms<br>预判要的「特殊农场」与 specially designed farms 在语义上一致——specially<br>designed 是 using regenerative agriculture—special techniques 的高度概括，没有<br>改变范围。<br>Larry Brown 对他在____方面取得的进展感到兴奋<br>A) 减少蠕虫造成的损害。<br>B) 加速废弃物的处理。<br>C) 创建可持续系统。<br>D) 吸引顾客购买他的产品。",
+    "tips": "Q21 是一个待补全句 The climate-friendly eggs are produced____，选项给出四种生产方",
+    "kp": "阅读理解 Part A · 阅读理解"
+  },
+  {
+    "id": "E2022_23",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 23,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT1",
+    "title": "2022英二 阅读 Text 1 第23题 (2分)",
+    "stem": "<strong>23. The example of organic eggs is used in Paragraph 4 to suggest____</strong>",
+    "options": [
+      "A. the doubts over natural feeds.",
+      "B. the setbacks in the egg industry.",
+      "C. the potential of regenerative products.",
+      "D. the promotional success of supermarkets."
+    ],
+    "answer": "C",
+    "analysis": "【答案】C （细节题）<br>【判型】Larry Brown is excited about his progress in____ 问的是 Brown 对哪方面进展感到兴<br>奋，答案在他的引语里，属于事实定位。<br>【拆句】Larry Brown is excited about his progress in____ 主系表+介词短语，be excited about<br>表「对…感到兴奋」，in 后接他兴奋的具体方面，结构平铺无陷阱。<br>【定位】\"I'm excited about our progress,\" says Brown, who harvests eggs for Denver-based Nest<br>Fresh Eggs and is adding more cover crops that draw worms and crickets for the chickens to<br>eat. The birds' waste then fertilizes fields. Such improvements \"allow our hens to forage for<br>higher-quality natural feed that will be good for the land, the hens, and the eggs that we<br>supply to our customers.\"<br>「我对我们取得的进展感到兴奋，」Brown 说道——他为总部位于丹佛的 Nest Fresh<br>Eggs 收蛋，正在种更多吸引蠕虫和蟋蟀供鸡食用的覆盖作物。鸡的粪便再肥沃田地。这些<br>改进「让我们的母鸡能觅食更高质量的天然饲料，这有益于土地、母鸡，以及我们供给客户<br>的鸡蛋。」<br>【选项】A)<br>与原文相反<br>原文 cover crops that draw worms and crickets for the chickens to eat 中 worms<br>是给鸡当食物的有益昆虫，Brown 主动「吸引」它们；选项却说 reducing the<br>damage of worms，把 worms 当成害物在削减，与原文角色完全相反。<br>B)<br>无中生有<br>原文 The birds' waste then fertilizes fields 只说鸡粪用来肥田，没有任何关于「加快<br>处理」的时间/速度维度；选项 accelerating 是凭空加上的速度概念。<br>C)<br>✓ 正确<br>cover crops that draw worms and crickets for the chickens to eat. The birds' waste then fertilizes<br>fields<br>↔creating a sustainable system<br>good for the land, the hens, and the eggs that we supply to our customers ↔sustainable<br>C 项的 sustainable system 恰好覆盖循环链与三方共益两层信息，与预判一字不差。<br>D)<br>偷换概念<br>原文只说 the eggs that we supply to our customers，仅交代「供应给客户」，没有<br>任何「吸引/招徕新客户」的论述；Brown 兴奋的对象是生产循环，不是营销战果。<br>第4段中使用有机鸡蛋的例子是为了表明____<br>A) 对天然饲料的质疑。<br>B) 鸡蛋行业的挫折。<br>C) 再生产品的潜力。<br>D) 超市的促销成功。",
+    "tips": "Larry Brown is excited about his progress in____ 问的是 Brown 对哪方面进展感到兴",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_24",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 24,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT1",
+    "title": "2022英二 阅读 Text 1 第24题 (2分)",
+    "stem": "<strong>24. It can be learned from the last paragraph that young people____</strong>",
+    "options": [
+      "A. are reluctant to change their diet.",
+      "B. are likely to buy climate-friendly eggs.",
+      "C. are curious about new food.",
+      "D. are amazed at agriculture advances."
+    ],
+    "answer": "C",
+    "analysis": "【答案】C （例证目的题）<br>【判型】The example of organic eggs is used in Paragraph 4 to suggest____ 含 The example<br>of ... is used to suggest 这一标准例证题句式。<br>【拆句】The example of organic eggs is used in Paragraph 4 to suggest____ 主谓被动+不定式<br>目的状语 to suggest，重点是 suggest 后接的论点意图；考点不在例子本身。<br>【定位】The egg industry's push is the first major test of whether animal products from regenerative<br>farms can become the next premium offering. In barely more than a decade, organic eggs<br>went from being dismissed as a niche product in natural foods stores to being sold at<br>Walmart. More recently there were similar doubts about probiotics and plant-based meats, but<br>both have exploded into major supermarket categories. If the sustainable-egg rollout is<br>successful, it could open the floodgates for regenerative beef, broccoli, and beyond.<br>蛋业的此次推动，是检验「再生农场动物产品能否成为下一类高端品」的首次重大试金石。<br>短短十多年里，有机蛋从被视作天然食品店里的小众品发展到沃尔玛上架。最近益生菌和植<br>物肉也曾遭遇类似怀疑，如今两者都已变成超市主要品类。如果可持续蛋的推广成功，将为<br>再生牛肉、西兰花等打开闸门。<br>【选项】A)<br>偷换概念<br>原文 there were similar doubts about probiotics and plant-based meats 中的<br>doubts 是对益生菌和植物肉的怀疑，且这些怀疑已被证伪——doubts 是被反驳的对<br>象。选项 doubts over natural feeds 把怀疑对象偷换为 natural feeds（天然饲料），<br>原文从未提及。<br>B)<br>与原文相反<br>段落基调全是「从小众走向沃尔玛」「成为超市主要品类」「打开闸门」，全部为成功<br>叙事；选项 the setbacks in the egg industry（蛋业受挫）与全段基调相反。<br>C)<br>✓ 正确<br>If the sustainable-egg rollout is successful, it could open the floodgates for regenerative beef,<br>broccoli, and beyond<br>↔the potential of regenerative products<br>regenerative beef, broccoli, and beyond ↔regenerative products<br>预判「再生类产品有潜力」与 the potential of regenerative products 完全对应；只<br>有 C 抓住了例证服务的真正论点。<br>D)<br>张冠李戴<br>原文功劳归于产品本身和消费偏好转变，沃尔玛只是渠道结果，并未论及超市做了什么<br>营销；选项 the promotional success of supermarkets 把主语从「产品」偷换成「超<br>市的营销」。<br><br>从最后一段可以了解到年轻人____<br>A) 不愿意改变他们的饮食。<br>B) 可能会购买气候友好型鸡蛋。<br>C) 对新食品感到好奇。<br>D) 对农业进步感到惊讶。<br>【答案】B （推断题）<br>【判型】It can be learned from the last paragraph that young people____ 含 It can be learned<br>from，是典型推断题句式。<br>【拆句】It can be learned from the last paragraph that young people____ 形式主语 It + 被动<br>can be learned + from 状语 + that 宾语从句，从句主语 young people 是真正的考查<br>对象。<br>【定位】The industry is betting that the same consumers paying more for premium attributes such as<br>free-range, non-GMO, and pasture-raised eggs will embrace sustainability. Surveys show that<br>younger generations are more concerned about climate change, and some of the success of<br>plant-based meat can be chalked up to shoppers wanting to signal their desire to protect the<br>environment. Young adults \"really care about the planet,\" says John Brunnquell, president of<br>Egg Innovations.<br>业界押注：那些已经为散养、非转基因、牧场放养等高端属性多付钱的消费者，也会拥抱可<br>持续性。调查显示年轻一代更关注气候变化，植物肉的部分成功可归因于消费者想表达保护<br>环境的意愿。Brunnquell 说，年轻人「真心关心地球」。",
+    "tips": "The example of organic eggs is used in Paragraph 4 to suggest____ 含 The example",
+    "kp": "阅读理解 Part A · 例证目的题"
+  },
+  {
+    "id": "E2022_25",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 25,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT1",
+    "title": "2022英二 阅读 Text 1 第25题 (2分)",
+    "stem": "<strong>25. John Brunnquell would disagree with Julie Stanton over regenerative products'____</strong>",
+    "options": [
+      "A. market prospects.",
+      "B. standard definition.",
+      "C. nutritional value.",
+      "D. moral implication."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>与原文相反<br>原文说年轻人 absolutely altering the food chain（正在彻底改变食物链），即正在主<br>动改变饮食；选项 are reluctant to change their diet 与之方向完全相反。<br>B)<br>✓ 正确<br>younger generations are more concerned about climate change ↔<br>are likely to buy climate-friendly eggs<br>the same consumers paying more for premium attributes...will embrace sustainability ↔<br>climate-friendly eggs<br>B 正好把「关心气候 + 愿为环保付钱」推到「会买气候友好蛋」，恰好一步、未跨步，<br>与预判完全契合。<br>C)<br>无中生有<br>原文谈的是 concerned about climate change 和 wanting to signal their desire to<br>protect the environment——动机是环保关切与价值观表达，不是 curious（好奇）。<br>新食品的「新颖性」原文未涉。<br>D)<br>无中生有<br>原文末段聚焦消费者动机与代际差异，不评年轻人对「农业进步」的反应；amazed 这<br>种「惊叹」情绪也未出现。<br>John Brunnquell 会在再生产品的____方面与 Julie Stanton 持不同意见<br>A) 市场前景。<br>B) 标准定义。<br>C) 营养价值。<br>D) 道德含义。<br>【答案】A （细节题）<br>【判型】John Brunnquell would disagree with Julie Stanton over regenerative products'____<br>问两人在哪个方面分歧，答案靠原文两段直接引语比对，是细节题。<br>【拆句】John Brunnquell would disagree with Julie Stanton over regenerative products'____<br>主谓+with+宾，over 后接分歧的具体方面，regenerative products' 所有格意味答案应是<br>regenerative products 的某一属性。<br>【定位】Regenerative products could be a hard sell, because the concept is tough to define quickly,<br>says Julie Stanton, associate professor of agricultural economics at Pennsylvania State<br>University Brandywine. Such farming also brings minimal, if any, improvement to the food<br>products (though some producers say their eggs have more protein).<br>宾州州立大学布兰迪万分校农业经济学副教授 Julie Stanton 说，再生类产品可能很难卖，<br>因为「再生」这个概念很难一句话讲清楚。这种农法对食品本身的改善也微乎其微，甚至几<br>乎没有（尽管有些生产者说他们的蛋蛋白质更多）。",
+    "tips": "John Brunnquell would disagree with Julie Stanton over regenerative products'____",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_26",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 26,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT2",
+    "title": "2022英二 阅读 Text 2 第26题 (2分)",
+    "stem": "<strong>26. The survey conducted by Harris Poll indicates that____</strong>",
+    "options": [
+      "A. over half of the retirees are physically fit for work.",
+      "B. the old workforce is as active as the younger one.",
+      "C. one in three Americans enjoy earlier retirement.",
+      "D. more Americans are willing to work in retirement."
+    ],
+    "answer": "D",
+    "analysis": "Harris Poll 进行的调查表明____<br>A) 超过半数的退休人员身体状况适合工作。<br>B) 老年劳动力与年轻劳动力一样活跃。<br>C) 三分之一的美国人享受提前退休。<br>D) 更多美国人愿意在退休后工作。<br>【答案】D （细节题）<br>【判型】The survey conducted by Harris Poll indicates that 直问调查显示了什么，属客观转<br>述类。<br>【拆句】The survey conducted by Harris Poll indicates that____：主干是 The survey indicates<br>that...，过去分词短语 conducted by Harris Poll 作 survey 的后置定语，结构平铺、无<br>陷阱。<br>【定位】One in three Americans who are at least 40 have or plan to have a job in retirement to prepare<br>for a longer life, according to a survey conducted by Harris Poll for TD Ameritrade. Even<br>more surprising is that more than half of \"unretirees\"—those who plan to work in retirement<br>or went back to work after retiring—said they would be employed in their later years even if<br>they had enough money to settle down, the survey showed.<br>据 Harris Poll 为 TD Ameritrade 做的一项调查，40 岁以上美国人中每三人就有一人已有<br>或计划在退休后工作，以应对更长寿命；更令人惊讶的是，超过半数的\"unretirees\"（即计<br>划退休后继续工作或退休后又回到工作岗位者）表示，即便钱够了也仍愿在晚年继续就业。",
+    "tips": "The survey conducted by Harris Poll indicates that 直问调查显示了什么，属客观转",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_27",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 27,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT2",
+    "title": "2022英二 阅读 Text 2 第27题 (2分)",
+    "stem": "<strong>27. It can be inferred from Paragraph 3 that Americans tend to think that____</strong>",
+    "options": [
+      "A. retirement may cause problems for them.",
+      "B. boredom can be relieved after retirement.",
+      "C. the mental health of retirees is overlooked.",
+      "D. \"unretirement\" contributes to the economy."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>偷换概念<br>原文说\"过半 unretirees 钱够也愿工作\"，谈的是意愿；A 改成了 physically fit for work<br>（身体能干），属偷换概念。<br>B)<br>无中生有<br>原文只谈年长者的就业趋势，未与 the younger one 做活跃度比较，属无中生有。<br>C)<br>与原文相反<br>原文谈的是更多人愿\"晚\"工作（即延迟退休），C 却说 enjoy earlier retirement（更早<br>退休），与原文方向相反。<br>D)<br>✓ 正确<br>One in three Americans who are at least 40 have or plan to have a job in retirement ↔<br>more Americans are willing to work in retirement<br>more than half of \"unretirees\"…said they would be employed in their later years even if they<br>had enough money to settle down<br>↔willing to work in retirement<br>D 同时覆盖了\"1/3 计划退休后工作\"和\"过半 unretirees 钱够也愿继续\"两组数据的共同<br>指向，与预判一致。<br>从第三段可以推断,美国人倾向于认为____<br>A) 退休可能给他们带来问题。<br>B) 退休后无聊可以得到缓解。<br>C) 退休人员的心理健康被忽视了。<br>D) \"非退休\"有助于经济发展。<br>【答案】A （推断题）<br>【判型】It can be inferred from Paragraph 3 明含 inferred，是典型的段落推断题。<br>【拆句】It can be inferred from Paragraph 3 that Americans tend to think that____：It 作形式<br>主语，真正主语是后面的 that 从句；两层 that 嵌套——第一层引出推断内容，第二层是<br>Americans tend to think 的宾语从句，结构平铺、无陷阱。<br>【定位】Financial needs aren't the only culprit for the \"unretirement\" trend. Other reasons, according<br>to the study, include personal fulfillment such as staying mentally fit, preventing boredom or<br>avoiding depression.<br>财务需要并非\"unretirement\"现象的唯一原因。据该研究，其他原因还包括获得个人成就<br>感，比如保持心智健康、防止无聊或避免抑郁。",
+    "tips": "It can be inferred from Paragraph 3 明含 inferred，是典型的段落推断题。",
+    "kp": "阅读理解 Part A · 推断题"
+  },
+  {
+    "id": "E2022_28",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 28,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT2",
+    "title": "2022英二 阅读 Text 2 第28题 (2分)",
+    "stem": "<strong>28. Retirement patterns are changing partly due to____</strong>",
+    "options": [
+      "A. labor shortage.",
+      "B. population growth.",
+      "C. longer life expectancy.",
+      "D. rising living costs."
+    ],
+    "answer": "C",
+    "analysis": "【选项】A)<br>✓ 正确<br>staying mentally fit, preventing boredom or avoiding depression ↔<br>retirement may cause problems for them<br>三条原因都把退休的负面可能视为应预防的目标，其最大公约数正是\"退休可能给人带来<br>问题\"，与预判完全对应。<br>B)<br>与原文相反<br>原文是\"工作可防无聊\"，B 改成 boredom can be relieved after retirement（退休后<br>无聊能被缓解），等于让退休变成解药，与原文方向相反。<br>C)<br>无中生有<br>原文只列出心智健康是复出原因之一，未说退休者的心理健康被 overlooked（忽视），<br>属无中生有。<br>D)<br>答非所问<br>原文谈的是个人层面的退休复出动机，并未谈\"unretirement\"是否 contributes to the<br>economy（推动经济），属答非所问。<br>退休模式正在发生变化,部分原因是____<br>A) 劳动力短缺。<br>B) 人口增长。<br>C) 预期寿命延长。<br>D) 生活成本上升。<br>【答案】C （细节题）<br>【判型】Retirement patterns are changing partly due to____ 直接问改变的部分原因，属客观信<br>息检索。<br>【拆句】Retirement patterns are changing partly due to____：主干是 Retirement patterns are<br>changing，partly due to 引出原因状语，副词 partly 提示原因是多因素之一、不是全部。<br>【定位】One reason for the change in retirement patterns: Americans are living longer.<br>退休模式改变的一个原因：美国人活得更久。",
+    "tips": "Retirement patterns are changing partly due to____ 直接问改变的部分原因，属客观信",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_29",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 29,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT2",
+    "title": "2022英二 阅读 Text 2 第29题 (2分)",
+    "stem": "<strong>29. Many \"unretirees\" are increasing their savings by____</strong>",
+    "options": [
+      "A. investing more in stocks.",
+      "B. taking up odd jobs.",
+      "C. getting well-paid work.",
+      "D. spending less."
+    ],
+    "answer": "D",
+    "analysis": "【选项】A)<br>无中生有<br>原文未提 labor shortage（劳动力短缺）是导致退休模式改变的原因，属无中生有。<br>B)<br>偷换概念<br>原文涨的是 65 and older 的占比与该群体的就业比例，是\"老龄人口结构\"的变化；B 说<br>成 population growth（人口总增长），是把局部结构性增长偷换为整体人口增长，属<br>偷换概念。<br>C)<br>✓ 正确<br>Americans are living longer. ↔longer life expectancy<br>选项 C 即定位句 Americans are living longer. 的术语化转写，与预判完全一致。<br>D)<br>答非所问<br>原文 P5 谈的是寿命延长，未谈 rising living costs（生活成本上升）；rising costs 这<br>一话题虽然 P7 有 making ends meet 暗合，但与 Q28 题干所问的 retirement<br>patterns 改变之原因不挂钩，属答非所问。<br>许多\"非退休者\"通过____增加储蓄<br>A) 在股票上投资更多。<br>B) 从事零工。<br>C) 获得高薪工作。<br>D) 减少支出。<br>【答案】D （细节题）<br>【判型】Many \"unretirees\" are increasing their savings by____ 直接问通过何种方式，属客观<br>转述。<br>【拆句】Many \"unretirees\" are increasing their savings by____：主干是 Many unretirees are<br>increasing their savings，by 引导方式状语，待补全成分是 by 的宾语（动名词或名词短<br>语），故选项均以动名词起首。<br>【定位】Among the most popular ways they are doing this, the company said, is by reducing<br>their overall expenses, securing life insurance or maximizing their contributions to<br>retirement accounts.<br>据该公司称，他们这么做（增加储蓄）最常见的方式包括：削减总体开支、购买寿险或将退<br>休账户缴款最大化。",
+    "tips": "Many \"unretirees\" are increasing their savings by____ 直接问通过何种方式，属客观",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_30",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 30,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT2",
+    "title": "2022英二 阅读 Text 2 第30题 (2分)",
+    "stem": "<strong>30. With regard to retirement, Brent Weiss thinks that many people are____</strong>",
+    "options": [
+      "A. unprepared.",
+      "B. unafraid.",
+      "C. disappointed.",
+      "D. enthusiastic."
+    ],
+    "answer": "A",
+    "analysis": "【选项】A)<br>无中生有<br>原文清单只列减开支/买寿险/最大化退休账户缴款，未提 investing more in stocks（多<br>投股票），属无中生有。<br>B)<br>无中生有<br>原文 P6 整段未出现 odd jobs（零工）这一概念，属无中生有。<br>C)<br>偷换概念<br>原文 maximizing their contributions to retirement accounts 谈的是把退休账户缴款<br>做到最大化，C 改成 getting well-paid work（找高薪工作），把账户缴款偷换为找高<br>薪工作，属偷换概念。<br>D)<br>✓ 正确<br>reducing their overall expenses ↔spending less<br>D 精准对应清单第一项 reducing their overall expenses，与预判中的三项之一吻合。<br>关于退休,Brent Weiss 认为许多人____<br>A) 没有做好准备。<br>B) 毫不畏惧。<br>C) 感到失望。<br>D) 充满热情。<br>【答案】A （细节题）<br>【判型】With regard to retirement, Brent Weiss thinks that many people are____ 问 Weiss 对<br>人们退休状态的判断，属观点转述类。<br>【拆句】With regard to retirement, Brent Weiss thinks that many people are____：With<br>regard to retirement 为话题状语，主干 Brent Weiss thinks that many people are...，<br>that 引导宾语从句，待补全的是表语形容词。<br>【定位】Unfortunately, many people who are opting to work in retirement are preparing to do so<br>because they are worried about making ends meet in their later years, said Brent Weiss, a co-<br>founder at Baltimore-based financial-planning firm Facet Wealth. He suggested that<br>preretirees should speak with a financial adviser to set long-term financial goals.<br>Brent Weiss（巴尔的摩 Facet Wealth 理财公司联合创始人）说，遗憾的是，许多选择退休<br>后继续工作的人之所以这样准备，是因为他们担心晚年入不敷出。他建议未退休者与理财顾<br>问沟通以设定长期财务目标。",
+    "tips": "With regard to retirement, Brent Weiss thinks that many people are____ 问 Weiss 对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_31",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 31,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT3",
+    "title": "2022英二 阅读 Text 3 第31题 (2分)",
+    "stem": "<strong>31. It can be learned from the first two paragraphs that dark patterns____</strong>",
+    "options": [
+      "A. improve user experiences",
+      "B. leak user information for profit",
+      "C. undermine users' decision-making",
+      "D. remind users of hidden costs"
+    ],
+    "answer": "A",
+    "analysis": "从前两段可以得知，黑暗模式____<br>A) 改善用户体验<br>B) 泄露用户信息以牟利<br>C) 削弱用户的决策能力<br>D) 提醒用户注意隐藏费用",
+    "tips": "阅读理解定位与同义替换分析。",
+    "kp": "阅读理解 Part A · 阅读理解"
+  },
+  {
+    "id": "E2022_32",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 32,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT3",
+    "title": "2022英二 阅读 Text 3 第32题 (2分)",
+    "stem": "<strong>32. The 2019 study on dark patterns is mentioned to show____</strong>",
+    "options": [
+      "A. their major flaws",
+      "B. their complex designs",
+      "C. their severe damage",
+      "D. their strong presence"
+    ],
+    "answer": "C",
+    "analysis": "【答案】C （细节题）<br>【判型】It can be learned from the first two paragraphs that dark patterns____ 把范围与对象都<br>给死，问的是文本可证的客观属性，不要求跨段综合。<br>【拆句】It can be learned from the first two paragraphs that dark patterns____ 是 it 作形式主<br>语的从句结构，that 后接待补全陈述；考生只需把 dark patterns 当作主语，从四个选项里<br>挑出能与前两段证据接上的谓语短语即可，无陷阱。<br>【定位】First coined in 2010 by user experience expert Harry Brignull, \"dark patterns\" is a catch-all<br>term for practices that manipulate user interfaces to influence the decision-making ability<br>of users.<br>用户体验专家 Harry Brignull 于 2010 年首创了\"黑暗模式\"这一统称，用以指代那些操纵用<br>户界面、影响用户决策能力的设计手法。<br>【选项】A)<br>与原文相反<br>improve user experiences 把负向的操纵说成正向的改善，与原文 manipulate 的贬义<br>语义彻底相反。<br>B)<br>无中生有<br>前两段从未提到 leak user information for profit，原文谈的是 manipulate user<br>interfaces，不是泄露用户信息谋利。<br>C)<br>✓ 正确<br>influence the decision-making ability of users ↔undermine users' decision-making<br>manipulate user interfaces ↔undermine users' decision-making<br>预判要的是\"损害决策\"，选项 C 用 undermine 这一明确贬义动词承接 decision-<br>making，与定位句意一一对应，唯一吻合。<br>D)<br>偷换概念<br>原文第二段提及 hidden costs 只是 12 类黑暗模式中的一种，remind users of hidden<br>costs 把\"黑暗模式包含隐藏费用\"偷换成\"黑暗模式提醒用户隐藏费用\"，且提醒与制造隐<br>藏正好相反。<br>提到2019年关于黑暗模式的研究是为了表明____<br>A) 它们的主要缺陷<br>B) 它们的复杂设计<br>C) 它们的严重危害<br>D) 它们的广泛存在<br>【答案】D （例证目的题）<br>【判型】The 2019 study on dark patterns is mentioned to show____ 直接问 mentioned to<br>show，标准例证目的题问法。",
+    "tips": "It can be learned from the first two paragraphs that dark patterns____ 把范围与对象都",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_33",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 33,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT3",
+    "title": "2022英二 阅读 Text 3 第33题 (2分)",
+    "stem": "<strong>33. To handle digital deception, businesses should____</strong>",
+    "options": [
+      "A. listen to customer feedback",
+      "B. talk with relevant teams",
+      "C. turn to independent agencies",
+      "D. rely on professional training"
+    ],
+    "answer": "B",
+    "analysis": "【拆句】The 2019 study on dark patterns is mentioned to show____ 主干 The study is<br>mentioned to show X，被动语态加不定式表目的，关键看不定式 show 的宾语；句式平铺<br>直叙，无陷阱。<br>【定位】In a 2019 study of 53,000 product pages and 11,000 websites, researchers found that about<br>one in 10 employs these design practices. Though widely prevalent, the concept of dark<br>patterns is still not well understood.<br>在一项 2019 年涉及 5.3 万个产品页面和 1.1 万个网站的研究中，研究者发现大约十分之一<br>采用了这类设计手法。尽管广泛流行，黑暗模式这一概念却仍未被充分理解。<br>【选项】A)<br>无中生有<br>第三段全程未谈 their major flaws——研究只统计了使用比例，没分析黑暗模式自身的<br>缺陷。<br>B)<br>无中生有<br>原文第二段说有 12 类黑暗模式，但 2019 年的研究并未\"展示其复杂设计\"，研究只统计<br>了使用比例，their complex designs 在第三段无据。<br>C)<br>过度推断<br>原文只说 widely prevalent，没有说造成了严重危害；their severe damage 把\"普<br>遍\"过度推断成\"严重伤害\"，跳了一步。<br>D)<br>✓ 正确<br>widely prevalent ↔their strong presence<br>about one in 10 employs these design practices ↔their strong presence<br>预判要的是\"很普遍\"，strong presence 是普遍存在的名词化表述，与 widely<br>prevalent 直接同义。<br>为了应对数字欺骗，企业应当____<br>A) 倾听客户反馈<br>B) 与相关团队沟通<br>C) 求助于独立机构<br>D) 依靠专业培训<br>【答案】B （细节题）<br>【判型】To handle digital deception, businesses should____ 问商家应该做某件具体的事，需要从<br>原文找到对应建议句。<br>【拆句】To handle digital deception, businesses should____ To 引导目的状语，主句主语<br>businesses，谓语缺位待补；考生只需把四个选项依次填入 should 后看哪个与原文给商家<br>的建议吻合即可，无陷阱。",
+    "tips": "To handle digital deception, businesses should____ 问商家应该做某件具体的事，需要从",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_34",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 34,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT3",
+    "title": "2022英二 阅读 Text 3 第34题 (2分)",
+    "stem": "<strong>34. The additional regulations under the CCPA are intended to____</strong>",
+    "options": [
+      "A. guide users through opt-out processes",
+      "B. protect consumers from being tricked",
+      "C. grant companies data privacy rights",
+      "D. restrict access to problematic content"
+    ],
+    "answer": "B",
+    "analysis": "【定位】Businesses should engage in conversations with IT, compliance, risk, and legal teams to<br>review their privacy policy, and include in the discussion the customer/user experience<br>designers and coders responsible for the company's user interface, as well as the marketers<br>and advertisers responsible for sign-ups, checkout baskets, pricing, and promotions.<br>商家应当与 IT、合规、风控和法务团队展开对话以审查隐私政策，并把负责公司用户界面<br>的用户体验设计师与程序员，以及负责注册、结账、定价和促销的营销与广告团队都纳入<br>讨论。<br>【选项】A)<br>张冠李戴<br>原文要商家与公司内部团队对话，不是听 customer feedback——对话对象是内部职能<br>团队，不是消费者。<br>B)<br>✓ 正确<br>engage in conversations with IT, compliance, risk, and legal teams ↔<br>talk with relevant teams<br>预判要的是\"和相关团队对话\"，talk with relevant teams 在动作（talk）和对象<br>（relevant teams）两个维度都与定位句一一对应，唯一吻合。<br>C)<br>无中生有<br>原文从未提到求助 independent agencies——讨论范围全在公司内部团队，未涉及第<br>三方机构。<br>D)<br>无中生有<br>professional training 在第四段不存在；原文说的是对话与审查隐私政策，不是培训。<br>CCPA下的附加法规旨在____<br>A) 引导用户完成退出流程<br>B) 保护消费者免受欺骗<br>C) 授予企业数据隐私权<br>D) 限制对问题内容的访问<br>【答案】B （细节题）<br>【判型】The additional regulations under the CCPA are intended to____ 问的是条例的明确意<br>图，原文有 aim to 或 ensure 等同义信号句直接给答案。<br>【拆句】The additional regulations under the CCPA are intended to____ 主语 The additional<br>regulations 加介词短语 under the CCPA 作后置定语，谓语 are intended to 后接待补不<br>定式；考生抓 are intended to 等价于 aim to 即可，无陷阱。",
+    "tips": "The additional regulations under the CCPA are intended to____ 问的是条例的明确意",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_35",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 35,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT3",
+    "title": "2022英二 阅读 Text 3 第35题 (2分)",
+    "stem": "<strong>35. According to the last paragraph, a key to coping with dark patterns is ____</strong>",
+    "options": [
+      "A. new legal requirements",
+      "B. businesses' self-discipline",
+      "C. strict regulatory standards",
+      "D. consumers' safety awareness"
+    ],
+    "answer": "B",
+    "analysis": "【定位】In March, the California Attorney General announced the approval of additional regulations<br>under the California Consumer Privacy Act (CCPA) that \"ensure that consumers will not be<br>confused or misled when seeking to exercise their data privacy rights.<br>三月，加州总检察长宣布批准了《加州消费者隐私法案》（CCPA）下的新增条例，旨在\"确<br>保消费者在行使数据隐私权时不会被混淆或误导\"。<br>【选项】A)<br>与原文相反<br>原文要禁止 forcing them to click through multiple screens 这种走流程套路，guide<br>users through opt-out processes 反而把这种引导用户走流程包装成立法目的，与法<br>规意图相反。<br>B)<br>✓ 正确<br>ensure that consumers will not be confused or misled ↔<br>protect consumers from being tricked<br>预判要的是\"保护消费者不被误导\"，protect consumers from being tricked 在目的<br>（protect）与对象（consumers）两个维度都与定位句一一对应。<br>C)<br>张冠李戴<br>data privacy rights 属于 consumers，不属于 companies；grant companies data<br>privacy rights 把权利主体偷换成商家，主体彻底错。<br>D)<br>无中生有<br>restrict access to problematic content 在第五段无对应；原文说的是\"禁止公司使用混<br>淆性语言或不必要步骤\"，不是限制内容访问。<br>根据最后一段,应对黑暗模式的关键在于____<br>A) 新的法律要求<br>B) 企业的自律<br>C) 严格的监管标准<br>D) 消费者的安全意识<br>【答案】B （细节题）<br>【判型】According to the last paragraph, a key to coping with dark patterns is ____ 范围被锁<br>死在末段，问该段所主张的关键解法，按细节题精读末段即可。<br>【拆句】According to the last paragraph, a key to coping with dark patterns is ____<br>According to 介词短语作状语，主语 a key 后接介词短语 to coping with dark patterns<br>作后置定语，is 后接待补表语；考生只需把 a key 当作末段强调的解法，无陷阱。",
+    "tips": "According to the last paragraph, a key to coping with dark patterns is ____ 范围被锁",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_36",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 36,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT4",
+    "title": "2022英二 阅读 Text 4 第36题 (2分)",
+    "stem": "<strong>36. Scientists generally believe that the effects of ethics classes are____</strong>",
+    "options": [
+      "A. hard to determine.",
+      "B. narrowly interpreted.",
+      "C. difficult to ignore.",
+      "D. poorly summarized."
+    ],
+    "answer": "A",
+    "analysis": "科学家普遍认为伦理课程的效果是____<br>A) 难以确定。<br>B) 被狭隘地解释。<br>C) 难以忽视。<br>D) 总结得很差。<br>【答案】A （细节题）<br>【判型】Scientists generally believe that the effects of ethics classes are____ 是不完整陈述句，<br>要求从原文找出科学家普遍看法的客观转述，不涉及推断或主旨。",
+    "tips": "Scientists generally believe that the effects of ethics classes are____ 是不完整陈述句，",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_37",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 37,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT4",
+    "title": "2022英二 阅读 Text 4 第37题 (2分)",
+    "stem": "<strong>37. Which of the following is a reason for the researchers to study meat eating?</strong>",
+    "options": [
+      "A. It is common among students.",
+      "B. It is a behavior easy to measure.",
+      "C. It is important to students' health.",
+      "D. It is a hot topic in ethics classes."
+    ],
+    "answer": "B",
+    "analysis": "【拆句】Scientists generally believe that the effects of ethics classes are____ 是\"主语+谓语<br>+that 宾语从句\"的简单结构，主句 Scientists generally believe 引出从句，从句主语是<br>the effects of ethics classes，系动词 are 后留空。无陷阱。<br>【定位】Although ethics classes are common around the world, scientists are unsure if their lessons<br>can actually change behavior; evidence either way is weak, relying on contrived laboratory<br>tests or sometimes unreliable self-reports.<br>尽管伦理课在世界各地都很普遍，科学家们却不确定这些课的内容能否真的改变行为；正反<br>两方面的证据都很薄弱，要么依赖人为设计的实验室测试，要么依赖有时并不可靠的自我<br>报告。<br>【选项】A)<br>✓ 正确<br>scientists are unsure if their lessons can actually change behavior ↔hard to determine<br>evidence either way is weak ↔hard to determine<br>预判要的是\"不确定/难以判定\"，四个选项中只有 hard to determine 直接命中这一<br>语义。<br>B)<br>无中生有<br>原文没有提到学界把伦理课效果\"解读得过窄\"，narrowly interpreted 是凭空增加的评<br>价维度。<br>C)<br>与原文相反<br>difficult to ignore 暗示效果显著、不可忽视，与定位句 scientists are unsure if their<br>lessons can actually change behavior 的不确定态度直接相反。<br>D)<br>答非所问<br>原文谈的是证据本身薄弱、结论无法确定，并未提\"总结得不好\"。poorly summarized<br>把焦点从\"是否能确定\"偷换到\"总结的质量\"。<br>以下哪项是研究人员研究肉食行为的原因?<br>A) 这在学生中很常见。<br>B) 这是一种容易测量的行为。<br>C) 这对学生的健康很重要。<br>D) 这是伦理课程中的热门话题。<br>【答案】B （细节题）<br>【判型】Which of the following is a reason for the researchers to study meat eating? 直接对<br>照原文列举的若干 reasons，逐项核对即可，不涉及推理。<br>【拆句】Which of the following is a reason for the researchers to study meat eating? 是<br>Which-疑问句，主语 Which of the following，系动词 is，表语 a reason，后接不定式<br>for the researchers to study meat eating 作 reason 的修饰。无陷阱。",
+    "tips": "Which of the following is a reason for the researchers to study meat eating? 直接对",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_38",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 38,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT4",
+    "title": "2022英二 阅读 Text 4 第38题 (2分)",
+    "stem": "<strong>38. Eric Schwitzgebel's previous findings suggest that ethics professors____</strong>",
+    "options": [
+      "A. are seldom critical of their students.",
+      "B. are less sociable than other professors.",
+      "C. are not sensitive to political issues.",
+      "D. are not necessarily ethically better."
+    ],
+    "answer": "D",
+    "analysis": "【定位】They chose this particular behavior for three reasons, according to study co-author Eric<br>Schwitzgebel, a philosopher at the University of California, Riverside: students' attitudes<br>on the topic are variable and unstable, behavior is easily measurable, and ethics literature<br>largely agrees that eating less meat is good because it reduces environmental harm and<br>animal suffering.<br>据研究合作者、加州大学河滨分校哲学家 Eric Schwitzgebel 介绍，他们选择这种特定行为<br>出于三个原因：学生对该话题的态度可变且不稳定，该行为易于测量，伦理学文献普遍认同<br>少吃肉是好事，因为这能减少对环境的伤害与对动物的痛苦。<br>【选项】A)<br>无中生有<br>原文未提\"吃肉在学生中很常见\"。It is common among students 把\"学生对吃肉的态<br>度可变\"偷换成了\"吃肉本身在学生中很普遍\"。<br>B)<br>✓ 正确<br>behavior is easily measurable ↔It is a behavior easy to measure<br>It is a behavior easy to measure 与预判清单的第二条 behavior is easily measurable<br>一一对应，是原文事实的同义改写。<br>C)<br>无中生有<br>原文谈的是减少 environmental harm and animal suffering，未提对学生健康的影<br>响。It is important to students' health 把环境与动物维度偷换为健康维度。<br>D)<br>无中生有<br>原文没有把吃肉描述为伦理课上的\"热门话题\"，而是说该话题适合作为研究对象。It is a<br>hot topic in ethics classes 是凭空增加。<br>Eric Schwitzgebel之前的研究发现表明伦理学教授____<br>A) 很少批评他们的学生。<br>B) 比其他教授更不善于社交。<br>C) 对政治问题不敏感。<br>D) 在伦理道德方面不一定更好。<br>【答案】D （细节题）<br>【判型】Eric Schwitzgebel's previous findings suggest that ethics professors____ 要的是过往研<br>究结论的客观转述，可以在原文一句话内找到对应。<br>【拆句】Eric Schwitzgebel's previous findings suggest that ethics professors____ 主语 Eric<br>Schwitzgebel's previous findings，谓语 suggest，that 后是宾语从句，从句主语 ethics<br>professors，谓语留空。无陷阱。",
+    "tips": "Eric Schwitzgebel's previous findings suggest that ethics professors____ 要的是过往研",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_39",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 39,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT4",
+    "title": "2022英二 阅读 Text 4 第39题 (2分)",
+    "stem": "<strong>39. Nina Strohminger thinks that the effect of the intervention is____</strong>",
+    "options": [
+      "A. permanent.",
+      "B. predictable.",
+      "C. uncertain.",
+      "D. unrepeatable."
+    ],
+    "answer": "C",
+    "analysis": "【定位】Schwitzgebel predicted the intervention would have no effect; he had previously found that<br>ethics professors do not differ from other professors on a range of behaviors, including voting<br>rates, blood donation and returning library books.<br>Schwitzgebel 此前预测该干预不会产生效果；他先前发现，伦理学教授在投票率、献血和<br>归还图书等一系列行为上与其他教授并无差别。<br>【选项】A)<br>无中生有<br>原文未提伦理教授对学生的态度。are seldom critical of their students 是凭空引入的<br>师生关系话题。<br>B)<br>无中生有<br>原文未将伦理教授与他人在\"社交性\"上做比较。are less sociable than other<br>professors 是凭空构造的属性比较。<br>C)<br>以偏概全<br>原文只是把 voting rates 当作\"行为列表\"中的一项说明无差别，并未说伦理教授\"对政治<br>议题不敏感\"。are not sensitive to political issues 把单一行为示例放大成整体政治敏<br>感度判断。<br>D)<br>✓ 正确<br>ethics professors do not differ from other professors on a range of behaviors, including voting<br>rates, blood donation and returning library books<br>↔are not necessarily ethically better<br>预判要的是\"伦理教授在伦理行为上与他人无异\"，四项中只有 are not necessarily<br>ethically better 直接对应这一上位结论。<br>Nina Strohminger认为干预措施的效果是____<br>A) 持久的。<br>B) 可预测的。<br>C) 不确定的。<br>D) 不可重复的。<br>【答案】C （态度题）<br>【判型】Nina Strohminger thinks that the effect of the intervention is____ 要求识别这位心理学<br>家对干预效果的态度倾向，需聚合其评价性用词。<br>【拆句】Nina Strohminger thinks that the effect of the intervention is____ 主语 Nina<br>Strohminger，谓语 thinks，that 后宾语从句，从句主语 the effect of the<br>intervention，系动词 is，表语留空。无陷阱。",
+    "tips": "Nina Strohminger thinks that the effect of the intervention is____ 要求识别这位心理学",
+    "kp": "阅读理解 Part A · 态度题"
+  },
+  {
+    "id": "E2022_40",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 40,
+    "qType": "choice",
+    "chapter": "e_ch2",
+    "passageId": "E2022_TEXT4",
+    "title": "2022英二 阅读 Text 4 第40题 (2分)",
+    "stem": "<strong>40. Eric Schwitzgebel suspects that the students' change in behavior____</strong>",
+    "options": [
+      "A. can bring psychological benefits.",
+      "B. can be analyzed statistically.",
+      "C. is a result of multiple factors.",
+      "D. is a sign of self-development."
+    ],
+    "answer": "C",
+    "analysis": "【定位】Psychologist Nina Strohminger at the University of Pennsylvania, who was not involved<br>in the study, says she wants the effect to be real but cannot rule out some unknown<br>confounding variable.<br>未参与该研究的宾夕法尼亚大学心理学家 Nina Strohminger 表示，她希望这种效应是真实<br>的，但不能排除存在某种未知的混杂变量。<br>【选项】A)<br>与原文相反<br>permanent 表示\"永久\"，与原文 Easy come, easy go 暗示的\"可能被另一推力逆转\"完<br>全相反。<br>B)<br>无中生有<br>原文未表述效应是否\"可预测\"。predictable 是凭空引入的属性。<br>C)<br>✓ 正确<br>she wants the effect to be real but cannot rule out some unknown confounding variable ↔<br>uncertain<br>it might be reversible by another nudge ↔uncertain<br>预判要的是\"不下定论、保留怀疑\"，四项中只有 uncertain 直接命中。<br>D)<br>无中生有<br>原文未谈\"是否可重复\"。unrepeatable 与 reversible（可逆）混淆，不是同一概念。<br>Eric Schwitzgebel怀疑学生行为的改变____<br>A) 能带来心理上的益处。<br>B) 可以进行统计分析。<br>C) 是多种因素共同作用的结果。<br>D) 是自我发展的标志。<br>【答案】C （细节题）<br>【判型】Eric Schwitzgebel suspects that the students' change in behavior____ 询问<br>Schwitzgebel 给出的解释，原文应当列出他归因的具体内容，逐项核对即可。<br>【拆句】Eric Schwitzgebel suspects that the students' change in behavior____ 主语 Eric<br>Schwitzgebel，谓语 suspects，that 后宾语从句，从句主语 the students' change in<br>behavior，谓语留空。无陷阱。",
+    "tips": "Eric Schwitzgebel suspects that the students' change in behavior____ 询问",
+    "kp": "阅读理解 Part A · 细节题"
+  },
+  {
+    "id": "E2022_41",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 41,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2022_PARTB",
+    "title": "2022英二 新题型 Part B 第41题 (2分)",
+    "stem": "请结合上方《2022年新题型 Part B》原文及 A–G 候选项，为 <strong>41. (41)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "C",
+    "analysis": "<strong>【正确答案】[C] Start Low, Go Slow.</strong><br>通篇归纳<br>【小标题】Start Low, Go Slow.<br>起点要低，进度要慢。<br>【主旨】重启时把运动量减半、循序渐进地加<br>本段反复讲一件事——不要一上来就回到中断前的水平，要把量降下来再慢慢加。段首<br>Don't try to go back to what you were doing before your break 立论，随后用走路、<br>打高尔夫、举哑铃三个例子说明都要减到原来的一半左右，再以 Increase time, distance,<br>and intensity gradually 收口，引用专家话 This isn't something you can do overnight<br>强化\"慢\"。三个数字例子是论据，归到\"从低起点、慢慢增量\"这句主旨上即可。<br>【依据】Start Low, Go Slow 正是减半加缓慢的同义改写<br>标题 Start Low, Go Slow 两半恰好对上本段两层主旨：Start Low 对应把活动量减到一半<br>reduce activity to half a mile every other day，Go Slow 对应 Increase time, distance,<br>and intensity gradually 与 This isn't something you can do overnight。这是主旨层的<br>完整同义概括，覆盖全段而非某个例子。<br>【竞争】[ A ] 习惯主题贴边但本段重点是量而非规律<br>Make It a Habit 也属\"重启锻炼\"大话题、看着沾边，但本段通篇讲的是\"运动量从低起、慢<br>慢加\"，没有一句在讲\"每天坚持、养成规律\"；把它放在这段会丢掉\"减半、循序渐进\"这一真<br>正主旨，属范围对不上。Habit 的真正归宿是第 4 段。<br>【验证】把 Start Low, Go Slow 代回本段：它既概括了\"先把量降到一半\"reduce activity to half a<br>mile every other day，又概括了\"再慢慢加\"Increase time, distance, and intensity<br>gradually，不偏窄也不偏宽，与全文\"逐条给重启策略\"的组织方式完全自洽。<br>[ A ] Make It a Habit.<br>[ B ] Don't Go It Alone.<br>[ C ] Start Low, Go Slow.<br>[ D ] Talk With Your Doctor.<br>[ E ] Listen to Your Body.<br>[ F ] Go Through the Motions.<br>[ G ] Round Out Your Routine.",
+    "tips": "重启时把运动量减半、循序渐进地加",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2022_42",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 42,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2022_PARTB",
+    "title": "2022英二 新题型 Part B 第42题 (2分)",
+    "stem": "请结合上方《2022年新题型 Part B》原文及 A–G 候选项，为 <strong>42. (42)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "E",
+    "analysis": "<strong>【正确答案】[E] Listen to Your Body.</strong><br>通篇归纳<br>【小标题】Listen to Your Body.<br>倾听身体的声音。<br>【主旨】按身体当下的感觉来增减强度、警觉异常<br>本段全是\"根据身体反应来调整\"的具体指令：喘到说不出整句就 back off，感觉好就练久点<br>快点，练完累垮 Go easier next time，并要对胸痛、严重气短、头晕等 stay alert to<br>serious symptoms。整段的共同主旨是\"以自身身体信号为依据来决定怎么练\"。<br>【依据】Listen to Your Body 概括以身体信号为准则<br>Listen to Your Body 正是本段每条指令的共同准绳：是否减量看 breathing too hard to<br>talk in complete sentences，是否加量看 If you feel good，以及对 serious symptoms<br>保持警觉——全是\"听身体的\"，是整段主旨的同义概括。<br>【竞争】[ D ] 提到症状求医，但主张是自察非主动看医生<br>段末 seek medical attention immediately 出现\"医疗\"字眼，极易诱人选 Talk With Your<br>Doctor。但这只是\"自察身体后发现危险症状才去就医\"的一个结果，整段主张是\"凭自身感<br>觉调整\"，并非\"开始锻炼前先找医生咨询\"。D 把一个局部后果当成了整段主题，属词面复<br>现导致的概括偏窄。<br>【验证】把 Listen to Your Body 代回本段：从 If you feel good, go a little longer or faster 到<br>stay alert to serious symptoms，每条都是\"看身体反应再决定\"，E 恰好概括全段、不偏不<br>倚，与全文逐条给策略的结构一致。",
+    "tips": "按身体当下的感觉来增减强度、警觉异常",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2022_43",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 43,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2022_PARTB",
+    "title": "2022英二 新题型 Part B 第43题 (2分)",
+    "stem": "请结合上方《2022年新题型 Part B》原文及 A–G 候选项，为 <strong>43. (43)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "A",
+    "analysis": "<strong>【正确答案】[A] Make It a Habit.</strong><br>段首<br>【小标题】Make It a Habit.<br>养成习惯。<br>【主旨】靠每天坚持的规律性来变强增耐力<br>段首即点题 Consistency is the key to getting stronger and building endurance and<br>stamina，主旨是\"规律坚持\"。随后 Ten minutes of activity per day is a good start 和力<br>推走路，都是为\"每天都能坚持\"服务的具体落实手段——走路被推荐正因为它最易做到、便<br>于天天进行。<br>【依据】Make It a Habit 同义于 Consistency is the key<br>Make It a Habit 与段首主旨 Consistency is the key to getting stronger 是同义改写——<br>habit（习惯）正是 consistency（持之以恒、规律性）的同义表达，Ten minutes of<br>activity per day 里的 per day 也呼应\"每天形成习惯\"。这是主旨层的对应，非词面重合。<br>【竞争】[ G ] 出现 routine 词面像 G，但本段讲坚持不讲补全<br>本段力推 walking、提到回到 Zumba、网球、骑行等多种活动，Round Out Your Routine<br>里 routine 一词加上这串活动名极易诱人。但本段主旨是\"靠规律坚持变强\"，提走路是因为<br>它最易坚持，并非在讲\"把锻炼安排做得更全面多样\"；G 概括的方向（丰富计划）与本段<br>（坚持规律）错位。<br>【验证】把 Make It a Habit 代回：它统摄了 Consistency is the key to getting stronger and<br>building endurance and stamina 这一定调句，每天十分钟、推荐走路都是养成习惯的落<br>地办法，A 恰好概括全段且与全文\"逐条策略\"自洽。",
+    "tips": "靠每天坚持的规律性来变强增耐力",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2022_44",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 44,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2022_PARTB",
+    "title": "2022英二 新题型 Part B 第44题 (2分)",
+    "stem": "请结合上方《2022年新题型 Part B》原文及 A–G 候选项，为 <strong>44. (44)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "F",
+    "analysis": "<strong>【正确答案】[F] Go Through the Motions.</strong><br>段首<br>【小标题】Go Through the Motions.<br>坚持做动作。<br>【主旨】做不了真项目时，先空练那套动作<br>段首 Even if you can't yet do a favorite activity, you can practice the moves 立论，随<br>后全是同一意思的例子——空挥球拍、模仿划船、模拟游泳动作，prime your muscles for<br>when you can get out there again 点明目的。整段主旨是\"暂时无法真做某运动时，比划<br>着把动作走一遍\"。<br>【依据】Go Through the Motions 正是空练动作的同义短语<br>Go Through the Motions 字面即\"把动作走一遍\"，精准对应段首 you can practice the<br>moves——motions 与 moves 同义，go through 与 practice 同义；段中 swing like<br>you're hitting the ball 等全是\"走动作\"的实例。F 是整段主旨的同义概括。<br>【竞争】[ G ] 都涉及多种活动看着像 G，但本段讲模拟非补全<br>本段列了球拍、皮划艇、游泳多种活动，与 Round Out Your Routine 的\"丰富计划\"似乎沾<br>边。但本段主旨是\"做不了真活动时先模拟动作\"you can practice the moves，这些活动只<br>是\"模拟\"的举例，不是在劝你增加项目种类；G 把举例当成了主题，概括方向跑偏。<br>【验证】把 Go Through the Motions 代回：它直接对应 Even if you can't yet do a favorite<br>activity, you can practice the moves 这句段首论断，下面空挥、模仿划船、模拟游泳都<br>是\"走动作\"的实例，F 概括全段、不偏窄，与全文策略并列结构一致。",
+    "tips": "做不了真项目时，先空练那套动作",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2022_45",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 45,
+    "qType": "choice",
+    "chapter": "e_ch3",
+    "passageId": "E2022_PARTB",
+    "title": "2022英二 新题型 Part B 第45题 (2分)",
+    "stem": "请结合上方《2022年新题型 Part B》原文及 A–G 候选项，为 <strong>45. (45)____</strong> 选择匹配项（A–G）：",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "answer": "B",
+    "analysis": "<strong>【正确答案】[B] Don't Go It Alone.</strong><br>段首<br>【小标题】Don't Go It Alone.<br>不要单打独斗。<br>【主旨】和别人一起练，必要时借技术远程连接<br>段首引专家话点明好处 can keep you accountable and make it more fun，主旨是\"和他<br>人一起锻炼\"。随后给出落实办法——可与人保持社交距离一起活动，when you can't<br>connect in person, consider using technology，电话、视频、直播课都是\"即便不能面对<br>面也设法与人连接\"的手段。整段主旨是\"别一个人练、想办法有人陪\"。<br>【依据】Don't Go It Alone 含蓄否定即和他人一起<br>Don't Go It Alone 是含蓄否定——\"别独自练\"等于\"和他人一起练\"，正对段首 Exercising<br>with others 的好处与 Chat on the phone with a friend while you walk 等\"设法连接他<br>人\"的办法。B 是整段主旨的同义概括，覆盖全段。<br>【竞争】[ G ] 活动种类多看着像 G，但本段核心是结伴非补全<br>段中提到高尔夫、网球、散步、直播课等多种活动，与 Round Out Your Routine 的\"丰富<br>计划\"似有交集。但本段主旨是\"和别人一起、别独自练\"Exercising with others，列这些活<br>动是为说明\"怎样和人一起\"，不是劝你增加项目；G 与本段真正主旨错位，且 G 全卷无任何<br>一段可填，是冗余项。<br>【验证】把 Don't Go It Alone 代回：它统摄了 Exercising with others 的好处与 when you can't<br>connect in person, consider using technology 这一退而求其次的连接办法，恰好概<br>括\"想办法不独自练\"的全段，与全文逐条策略结构自洽。<br>S Y N O P S I S · 全文导图<br>全文在讲什么、怎么组织的<br>小标题匹配（7选5）先通读全文，把握话题与组织方式（ 总起 + 分点罗列 ），这是逐空<br>判断「概括得对不对」的全局底图。<br>疫情下安全重启锻炼的若干策略，总起加分点罗列<br>全文是一篇生活实用类指南，标题即点题 How to Get Active Again。首段引言交代背景与<br>总纲——居家无法去健身房，重启锻炼要讲方法、要把握运动量，The following simple<br>strategies will help you return to exercise safely after a break 明确预告下文将逐条给出策<br><br>略。其后第 2 至 6 段每段各讲一条独立的策略，呈典型的\"总起 + 分点并列\"结构，每个空<br>就是为这一段的策略起一个概括性小标题。<br>C H O I C E S · 候选库画像<br>A~G 共 7 个候选小标题各自在说什么<br>小标题匹配的候选比空位多 2 个。下面逐条给出小标题全文、中译与「这条自身的关键<br>词」，并标注它填入哪个空——始终填不进任何空的就是干扰项。<br>[ A ] Make It a Habit.<br>让它成为一种习惯。<br>关键词<br> 习惯 / 持之以恒 habit<br>填入第 43 空<br>[ B ] Don't Go It Alone.<br>别独自一人去做。<br>关键词<br> 别独自做 / 找人一起 alone<br>填入第 45 空<br>[ C ] Start Low, Go Slow.<br>起点要低，进度要慢。<br>关键词<br> 起点低、慢慢加量 low, slow<br>填入第 41 空<br>[ D ] Talk With Your Doctor.<br>和你的医生谈一谈。<br>关键词<br> 咨询医生 doctor<br>干扰项 · 未选用<br>[ E ] Listen to Your Body.<br>倾听你身体的声音。<br>关键词<br> 倾听身体反应 body<br>填入第 42 空<br><br>[ F ] Go Through the Motions.<br>把动作走一遍（模拟练习）。<br>关键词<br> 模拟动作 / 空练 motions<br>填入第 44 空<br>[ G ] Round Out Your Routine.<br>让你的锻炼计划更完整全面。<br>关键词<br> 丰富完善整套计划 round out<br>干扰项 · 未选用<br>D I S T R A C T O R S · 干扰项复盘<br>这 2 个候选小标题始终没被任何空选用<br>7选5 必有 2 条话题相关、看着像，却概括不了任何 区间主旨 。下面逐条剖析它们「像在<br>哪、为何放哪个空都不对」，读透干扰项才算读透全局。<br>[ D ] Talk With Your Doctor.<br>诱在第 3 段的求医字眼，错在主旨是自察非看医生<br>Talk With Your Doctor 最容易被误塞进第 3 段，因为段末有 seek medical attention<br>immediately 这处\"医疗\"字眼，与 doctor 词面呼应。但第 3 段整段主旨是\"凭身体感觉自行调<br>整\"，求医只是发现危险症状后的一个下游动作，没有任何一段在讲\"开始前先找医生咨询\"这<br>件事；D 概括不了任何一段，是命题人设的冗余干扰项。<br>[ G ] Round Out Your Routine.<br>诱在多段都罗列活动名，错在没一段主旨是补全计划<br>Round Out Your Routine 里 routine 一词，加上第 4 段的 Zumba、网球、骑行和第 5、6 段的<br>多种活动，让它读着像能配进好几段。但 round out 意为\"把计划补全、做得更全面多样\"，<br>而这些段的真正主旨分别是\"坚持成习惯\"\"模拟动作\"\"结伴而练\"——列活动名只是各自的举<br>例，没有任何一段在讲\"丰富、补全你的锻炼安排\"；G 范围对不上任何一段，是另一条冗余干<br>扰项。<br>S E N T E N C E I N S I G H T S · 句子精讲<br>9 句真题句逐层精讲<br><br>下列真题句各有独立的句子解析页——中文翻译、结构树逐层拆解、成分与时态、考点讲<br>解与真题高频词。点击句子进入完整解析。<br>And it's important to get the right dose of activity.<br>第1段，第2句<br>it is + 形容词 + to do 是四六级和考研中高频出现的句式，用于表达观点或评价，结构典型且常<br>考，掌握后可大量迁移到类似句式（如 it is necessary/possible/difficult to do 等）。<br>Don't try to go back to what you were doing before your break.<br>第3段，第1句<br>否定祈使句结构常见于口语和应用文，宾语从句由 what 引导也是高频句式，不定式短语作宾语在<br>考试中经常出现。整体句式在四六级和考研阅读中具有一定代表性，掌握后可应用于多种语境。<br>If you're breathing too hard to talk in complete sentences, back off.<br>第5段，第1句<br>\"If + 条件从句，祈使句\" 是四六级和考研阅读中常见的句式，用于表达建议或警告；\"too...to...\" 结<br>构也是高频考点。整体结构具有较强的代表性和实用性。<br>Even if you can't yet do a favorite activity, you can practice the moves.<br>第9段，第1句<br>\"Even if\" 引导的让步状语从句是考试中常见的句式，用于表达在不利条件下仍可采取的行动，逻辑<br>关系典型且实用。情态动词结构在各类考试中频繁出现。整体句式具有较强的代表性，掌握后可迁<br>移到类似让步转折场景。<br>With or without a club or racket, swing like you're hitting the ball.<br>第9段，第2句<br>本句涵盖祈使句的谓语识别、方式状语从句的划分、介词短语作状语的判断，以及从句内部主谓宾<br>的完整分析。特别是 like 的连词用法和祈使句省略主语的特点，都是值得练习的知识点。成分种类<br>较为丰富，适合巩固基础句型。<br><br>Paddle like you're in a kayak or canoe.<br>第9段，第3句<br>‘祈使句 + 像……一样的方式修饰’是很常见、可迁移的结构；从句内部的“主语 + 系动词 + 表语”也<br>很典型。掌握这种读法后，遇到类似指导性句子容易迁移。<br>The action will remind you of the joy the activity brought you and prime your<br>muscles for when you can get out there again.<br>第9段，第5句<br>句中包含并列谓语、双宾语结构（定语从句中）、介词短语作状语、定语从句省略关系代词、时间<br>状语从句作介词宾语等多种成分类型，成分种类较丰富，且定语从句省略关系代词是常见易错点，<br>有较好的训练价值<br>Exercising with others \"can keep you accountable and make it more fun, so you're<br>more likely to do it again,\" Jackovitz says.<br>第11段，第1句<br>本句展示了典型的\"引语动词 + 宾语从句\"结构，宾语从句内又嵌套因果状语从句（so 引导），且<br>包含\"情态动词 + 并列谓语 + 宾补\"和\"主系表 + 不定式\"等常考句式。这些结构在四六级、考研阅<br>读和写作中频繁出现，学习迁移价值高。<br>But when you can't connect in person, consider using technology.<br>第11段，第3句<br>时间状语从句 + 主句祈使句是常见句式,在写作建议、条件假设类文章中频繁出现。情态动词和动<br>名词作宾语也是高频结构。整体句式实用性强,有一定代表性,但不属于特别复杂的典型考点句。<br>H I G H - F R E Q U E N C Y · 真题高频词<br>本篇出现的 31 个考研英语二真题高频词<br>下列单词既在本篇短文中出现，又是 考研英语二 历年真题的高频词（在该考试真题中出<br>现的句子数均不少于 8）。每个词标注本篇 出现次数与该考试真题句频，点击可查看该<br>词的释义、音标、词形与真题例句。<br><br>benefit<br>B1<br>n. 好处<br>本篇2 次 · 真题 88 句<br>motion<br>B1<br>n. 运动<br>本篇2 次 · 真题 10 句<br>author<br>A2<br>n. 作者<br>本篇1 次 · 真题 209 句<br>less<br>A1<br>det. 较少的<br>本篇1 次 · 真题 150 句<br>following<br>B1<br>adj. 接下来的<br>本篇1 次 · 真题 91 句<br>likely<br>A2<br>adj. 很可能的<br>本篇1 次 · 真题 89 句<br>reduce<br>B1<br>v. 减少，降低（数量、大小、程度等）<br>本篇1 次 · 真题 75 句<br>challenge<br>B1<br>n. 挑战<br>本篇1 次 · 真题 57 句<br>pressure<br>B1<br>n. 心理压力<br>本篇1 次 · 真题 55 句<br>expert<br>B1<br>n. 专家<br>本篇1 次 · 真题 42 句<br>physical<br>B1<br>adj. 身体的<br>本篇1 次 · 真题 40 句<br>seek<br>B1<br>v. 寻找<br>本篇1 次 · 真题 40 句<br>department<br>A2<br>n. 部门<br>本篇1 次 · 真题 35 句<br>highly<br>B1<br>adv. 非常<br>本篇1 次 · 真题 28 句<br>strategy<br>B2<br>n. 策略<br>本篇1 次 · 真题 28 句<br>per<br>B1<br>prep. 每<br>本篇1 次 · 真题 27 句<br><br>pain<br>A2<br>n. 疼痛<br>本篇1 次 · 真题 20 句<br>recommend<br>B1<br>v. 推荐<br>本篇1 次 · 真题 18 句<br>severe<br>B2<br>adj. 严重的<br>本篇1 次 · 真题 17 句<br>neighborhood<br>B1<br>n. 街区<br>本篇1 次 · 真题 14 句<br>anxiety<br>B2<br>n. 焦虑<br>本篇1 次 · 真题 12 句<br>routine<br>B1<br>n. 常规<br>本篇1 次 · 真题 12 句<br>strength<br>B1<br>n. 力量<br>本篇1 次 · 真题 12 句<br>overlook<br>B2<br>v. 忽略，没注意到<br>本篇1 次 · 真题 11 句<br>alert<br>B2<br>adj. 警觉的<br>本篇1 次 · 真题 10 句<br>muscle<br>A2<br>n. 肌肉<br>本篇1 次 · 真题 10 句<br>remind<br>A2<br>v. 提醒<br>本篇1 次 · 真题 10 句<br>accessible<br>B2<br>adj. 可到达的<br>本篇1 次 · 真题 8 句<br>distance<br>A2<br>n. 距离<br>本篇1 次 · 真题 8 句<br>injury<br>B1<br>n. （身体）伤害，损伤<br>本篇1 次 · 真题 8 句<br>relative<br>B1<br>n. 亲戚，亲属<br>本篇1 次 · 真题 8 句<br>V O C A B U L A R Y · 词汇难度分布<br>全文 217 词按 CEFR 难度累积覆盖<br><br>带空原文去重后共 217 个单词，按欧框 CEFR 等级统计。每根柱表示「该等级及以下」<br>的累积占比（CDF），最右一柱为 100%。B2 以上（C1/C2）为高阶词，本篇共 4 个 ·<br>约 2%。<br>51%<br>A1<br>及以下<br>72%<br>A2<br>及以下<br>89%<br>B1<br>及以下<br>98%<br>B2<br>及以下<br>100%<br>C1<br>及以下<br>100%<br>C2<br>及以下<br>每柱为「按 CEFR 等级及以下」的累积覆盖率（CDF）· 数据为全文去重词 217 个 · 末柱为 100%<br>去重总词数<br>217<br>B2 以上难词<br>2%<br>B1 及以下覆盖<br>89%<br><br>考研英语二<br>2022年 · 全卷构成<br>Section I<br>完形填空（四选一）<br>题目解析 →<br>Section II Part A (1)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (2)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (3)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part A (4)<br>阅读理解（四选一）<br>题目解析 →<br>Section II Part B<br>段落小标题（7选5）<br>本题<br>Section III<br>英译汉（段落翻译）<br>题目解析 →<br>Section IV Part A<br>写作<br>题目解析 →<br>Section IV Part B<br>写作<br>题目解析 →",
+    "tips": "和别人一起练，必要时借技术远程连接",
+    "kp": "新题型 Part B · 信息匹配/小标题"
+  },
+  {
+    "id": "E2022_46",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 46,
+    "qType": "solve",
+    "chapter": "e_ch4",
+    "title": "2022英二 翻译 Section III 第46题 (15分)",
+    "stem": "<strong>Section III Translation (15 points) — Directions: Translate the following text into Chinese.</strong><div class='formula-card'>P1 Although we try our best, sometimes our paintings rarely turn out as originally planned. Changes<br>in the light, the limitations of your painting materials, and the lack of experience and technique mean<br>that what you start out trying to achieve may not come to life the way that you expected.<br>P2 Although this can be frustrating and disappointing, it turns out that this can actually be good for<br>you. Unexpected results have two benefits: you pretty quickly learn to deal with disappointment and<br>realise that when one door closes, another opens. You also quickly learn to adapt and come up with<br>creative solutions to the problems the painting presents, and thinking outside the box will become your<br>second nature.<br>P3 In fact, creative problem-solving skills are incredibly useful in daily life, with which you're more<br>likely to be able to find a solution when a problem arises.</div>",
+    "options": null,
+    "answer": "详见解析中的参考译文与逐句精解",
+    "analysis": "<strong>【逐句拆分与核心采分点解析】</strong><br>2022年考研英语二 英译汉（段落翻译） Section III · 参考译文与逐<br>句解析<br>P A S S A G E & T R A N S L A T I O N · 题和解析<br>英译汉真题、参考译文与逐句解析<br>逐句译审整理。与试卷排版同一卷面：Directions 与整段英文原文连续排印——整段连<br>排、无题号无划线，把它切成一句句翻译单元本身就是解题动作。卷面之后先给按段定稿<br>的整篇参考译文，再按自切句序逐句拆分：意群直译、难点点破、语序调整、句内定稿中<br>译，答案直显。<br>英语二真题(2022)<br>Section III<br>Directions:<br>Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points)<br>P1 Although we try our best, sometimes our paintings rarely turn out as originally planned. Changes<br>in the light, the limitations of your painting materials, and the lack of experience and technique mean<br>that what you start out trying to achieve may not come to life the way that you expected.<br>P2 Although this can be frustrating and disappointing, it turns out that this can actually be good for<br>you. Unexpected results have two benefits: you pretty quickly learn to deal with disappointment and<br>realise that when one door closes, another opens. You also quickly learn to adapt and come up with<br>creative solutions to the problems the painting presents, and thinking outside the box will become your<br>second nature.<br>P3 In fact, creative problem-solving skills are incredibly useful in daily life, with which you're more<br>likely to be able to find a solution when a problem arises.<br>参考译文<br>按段定稿的整篇参考译文是复盘资产，考卷上只印英文原文——英语二英译汉满分 15 分，按「理解准确、表达通<br>顺连贯、无错译漏译」整篇四档评分。<br>P1 尽管我们竭尽全力，有时我们的画作却很少能按最初计划的样子呈现出来。光线的变化、你所<br>用绘画材料的局限，以及经验和技巧的欠缺，都意味着你最初想要达成的目标，未必能按你预期的那<br>样实现。<br>P2 尽管这种情况可能令人沮丧和失望，但结果证明，它其实对你是有好处的。意外的结果有两个<br>好处：你会很快学会应对失望，并认识到当一扇门关闭时，另一扇门便会打开。你还会很快学会随机<br><br>应变，针对绘画带来的种种问题想出富有创造性的解决办法，而跳出思维定式也会逐渐成为你的本<br>能。<br>P3 事实上，创造性解决问题的能力在日常生活中也极其有用：凭借这种能力，当问题出现时，你<br>就更有可能找到解决办法。<br>【衔接】第3句开头：把 this 显化为『这种情况』承接首段<br>第3句的 Although this can be frustrating and disappointing 紧接首段『画不成原计划』，译时<br>把 this 显化为『这种情况』，让 P2 开头明确回扣 P1 内容，读者不会断链。<br>第3、4句之间：用『不过／而且』顺出由『反转』到『展开好处』<br>第3句已点明『其实有好处』，第4句 Unexpected results have two benefits 是对『好处』的具<br>体展开。两句间可顺势承接，第4句开头保留『意外的结果有两个好处』即可自然衔接，不必另加<br>转折词，避免逻辑割裂。<br>第4、5句之间：用『还』承接两个并列好处<br>第4句讲第一个好处（you pretty quickly learn to deal with disappointment），第5句讲第二个<br>（You also quickly learn to adapt）。把 also 译成句首的『还』（你还会……），让两个好处并<br>列对齐、节奏一致。<br>第6句开头：用『也』『冒号』把 P3 与 P2 的好处链打通<br>第6句 creative problem-solving skills are incredibly useful in daily life 把上段『绘画里练出的<br>创造性解题』推广到日常生活。译文用『也极其有用』里的『也』承上，并用冒号引出『凭借这种<br>能力……』，使段间的递进顺畅、不突兀。<br>逐句解析<br>整段连排、无题号无划线——把原文切成一句句翻译单元本身就是解题动作，句前 N. 为逐句解析自切的句序号<br>（非考卷题号），与卷面原文逐字对应。<br>【主旨】绘画的意外结果反而有益、能练出创造性解题力<br>全文讲绘画时作品常常画不成原计划的样子，Although this can be frustrating and<br>disappointing, it turns out that this can actually be good for you 一句把基调从『沮丧』翻转<br>为『其实有好处』，是全篇的转折与立意；结尾 creative problem-solving skills are incredibly<br>useful in daily life 把好处升华到日常生活。基调是『先承认挫败、再肯定其价值』，整体偏积<br>极、说理。<br>【术语】this（P2 两处指代）<br>Although this can be frustrating and disappointing 与 it turns out that this can actually be<br>good for you 里的两个 this，都回指上文『作品画不成原计划样子』这件事，即 our paintings<br>rarely turn out as originally planned；译时统一还原成『这种情况／这种结果』，别直译成空泛<br>的『这』。<br>the painting / creative solutions（绘画与创造性方案）<br>painting 全篇指『绘画（这件事／这幅画）』，统一译『绘画／这幅画』；creative solutions 与<br>creative problem-solving skills 同源，统一把 creative 译为『创造性的』，让 P2 的『创造性解<br>决方案』与 P3 的『创造性解决问题的能力』前后呼应、术语一致。<br><br>1. Although we try our best, sometimes our paintings rarely turn out as originally planned.<br>【意群】Although we try our best,（Although 引导的让步状语）→尽管我们竭尽全力，<br>难点：Although=让步『尽管』<br>Although we try our best 中 Although 是让步连词，对应汉语『尽管／虽然』，提示后半句会<br>出现与『尽力』相反的结果；看到它就预判后文有转折。<br>sometimes our paintings rarely turn out as originally planned.（主干主谓 + as 引导的方式状语）<br>★采分→有时我们的画很少按最初计划的那样呈现出来。<br>难点：turn out=结果呈现为；rarely=很少（含蓄否定）<br>turn out as originally p",
+    "tips": "先通读全文锁死核心术语译名，长难句按连词/介词/非谓语切分意群，定语从句短前长后。",
+    "kp": "2022英译汉真题精译与采分点"
+  },
+  {
+    "id": "E2022_47",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 47,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2022英二 小作文 Part A 第47题 (10分)",
+    "stem": "<strong>Section IV Part A (10 points) — Directions:</strong><div class='formula-card'>Suppose you are planning a campus food festival. Write an e-mail to the international students in your<br>university to<br>1) introduce the food festival, and<br>2) invite them to participate.<br>You should write about 100 words on the ANSWER SHEET.<br>Do not use your own name. Use “Li Ming\" instead. (10 points)</div>",
+    "options": null,
+    "answer": "见参考范文与段落句架",
+    "analysis": "【参考范文 · 100 词】<br>写作无唯一标准答案，以下为达标示范<br>Dear international students,<br>I am Li Ming, chairman of the Student Union. I am writing to warmly invite you to our campus food festival.<br>The festival will be held on the school playground from 9 a.m. to 5 p.m. next Saturday. During the event, you<br>can taste a wide variety of delicious dishes from different regions of China and enjoy exciting cooking shows.<br>We sincerely hope you can join us. It is a wonderful chance to experience Chinese food culture and make new<br>friends. Please come and share the joy with us! Looking forward to your participation.<br>Yours, Li Ming<br>【参考译文】<br>亲爱的留学生们：<br>我是学生会主席李明。我写这封邮件是想诚挚地邀请你们参加我们的校园美食节。美食节将于下周六上午<br>九点至下午五点在学校操场举办。活动期间，你们可以品尝来自中国各地的各种美味佳肴，还能观看精彩<br>的现场烹饪表演。<br>我们真诚地希望你们能来。这是体验中国饮食文化、结交新朋友的绝佳机会。快来和我们一起分享这份快<br>乐吧！期待你们的参与。<br>此致 李明<br><br>【第 1 段】群体称呼落地。\"Dear international students,\"直接套用了本段的\"群体称呼\"句架，点明收件<br>人是全体留学生，符合邮件顶格称呼加逗号的格式。<br>【第 2 段】目的加5W齐全。先用\"I am writing to warmly invite you to...\"亮明写信目的，再用\"will be<br>held on the school playground from 9 a.m. to 5 p.m. next Saturday\"补齐时间地点，\"taste...<br>dishes... and enjoy exciting cooking shows\"补齐内容特色，完成了介绍任务且信息自足。<br>【第 3 段】邀请理由收尾三连。\"We sincerely hope you can join us\"说出邀请，\"a wonderful chance<br>to experience Chinese food culture and make new friends\"给出参加理由，\"Looking forward to<br>your participation\"礼貌收尾，把第二个任务点真正写实。<br>【第 4 段】落款守规。\"Yours,\"加换行\"Li Ming\"，按题目要求署指定名字，未出现任何真实姓名，守住<br>了本题最致命的格式红线。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域 ，再定中心立意与要展开的要点 —— 这些<br>是本题特有的内容判断，不是通用套路。<br>核心任务<br>写邮件介绍并邀请参加美食节<br>要求给出两个并列任务动词：一是 introduce the food festival，二是 invite them to<br>participate；载体明确是 Write an e-mail to the international students in your university。所以<br>本题钉死为：写一封邮件，既把校园美食节介绍清楚，又明确发出邀请——两件事缺一不可。<br>读者 · 语域<br>写给留学生的友好半正式邮件<br>读者是 the international students in your university，即本校留学生；你以活动主办方（如学生<br>会）身份写。因为是邀请同学参加活动，语域取\"友好、热情、有号召力\"的半正式书面语，既<br>不能像作文那样端着，也不能过于随便；称呼用群体称呼、结尾用礼貌邀约语。<br>中心立意<br>办美食节并诚邀留学生参加<br>本信的交际目的：向留学生介绍即将举办的校园美食节，并热情邀请他们来参加，落实<br>introduce the food festival 与 invite them to participate。<br><br>要展开的要点<br>1. 美食节的时间与地点<br>用具体的时间和地点把活动说清楚（如下周六上午九点至下午五点、学校操场），回应<br>introduce the food festival 中\"介绍\"最基本的 When 和 Where。<br>2. 美食节的内容与特色<br>点出可看可尝的亮点，如品尝来自中国各地的特色美食、观看现场烹饪展示，让\"介绍\"落到实<br>处而不是空说\"很有意思\"。<br>3. 发出邀请并说明意义<br>明确说出\"诚邀你来\"，并给一个来的理由（体验中国饮食文化、结交新朋友），把 invite them<br>to participate 这个任务点真正写出来，而不是只停在介绍。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>称呼收件人<br>顶格写给全体留学生的称呼（Dear international students,），点明这封邮件是写给谁<br>的。<br>第 2 段<br>介绍美食节<br>先一句表明身份和写信目的，再交代美食节的时间、地点、内容特色，完成 introduce<br>the food festival。<br>第 3 段<br>发出邀请<br>明确邀请留学生参加、说明参加的意义，并加一句期待收尾，完成 invite them to<br>participate。<br>第 4 段<br>落款署名<br>写结束敬语并按要求署名 Li Ming。<br><br>第 1 段<br>写给全体留学生的称呼<br>收件对象是 the international students in your university，所以称呼写\"Dear<br>international students,\"。<br>群体称呼<br>· Dear + 收件群体 + 逗号（如 Dear international students,）<br>第 2 段<br>点明目的并交代时间地点内容<br>表明写信是为了 introduce the food festival：美食节于下周六上午九点至下午五点在学校操场<br>举办，可以品尝来自中国各地的美食、观看现场烹饪展示。<br>表明写信目的<br>· I am writing to + 目的动词（tell you about / invite you to ...）<br>交代时间地点<br>· The ... will be held on/at + 地点 + from ... to ... + 时间<br>列举活动内容<br>· During the event, you can + 动词（taste / enjoy / watch）+ 具体活动<br>第 3 段<br>热情邀请并说明参加的意义<br>落实 invite them to participate：诚邀留学生前来，指出这是体验中国饮食文化、结交新朋友<br>的好机会，结尾表达期待他们参加。<br>发出邀请<br>· We sincerely hope you can + join us / take part in ...<br>说明参加的意义<br>· It is a good chance to + 收益（experience ... / make new friends）<br>期待收尾<br>· Looking forward to your + participation / reply.<br><br>第 4 段<br>署名 Li Ming<br>遵守 Do not use your own name 的要求，落款写 Li Ming。<br>落款套式<br>· Yours,（换行）+ 规定署名<br>R E V I E W · 自检避坑<br>本题在四个评分维度怎样算达标、容易在哪丢分<br>按阅卷四维（内容切题 / 结构连贯 /",
+    "tips": "小作文严格三段式：第1段表明写信目的，第2段逐一落实题干两个要点，第3段期待回复并规范署名 Li Ming。",
+    "kp": "2022英语二小作文应用文实战"
+  },
+  {
+    "id": "E2022_48",
+    "subject": "eng2",
+    "year": 2022,
+    "qNum": 48,
+    "qType": "solve",
+    "chapter": "e_ch5",
+    "title": "2022英二 大作文 Part B 第48题 (15分)",
+    "stem": "<strong>Section IV Part B (15 points) — Directions:</strong><div class='formula-card'>Write an essay based on the following chart. In your writing, you should<br>1) interpret the chart, and<br>2) give your comments.<br>You should write about 150 words on the ANSWER SHEET. (15 points)</div>",
+    "options": null,
+    "answer": "见图表描述与参考范文",
+    "analysis": "【参考范文 · 161 词】<br>写作无唯一标准答案，以下为达标示范<br><br>As is clearly shown in the column chart, China's express delivery volume witnessed a remarkable upward trend<br>from 2018 to 2020. The overall volume climbed steadily from 51 billion pieces in 2018 to 64 billion in 2019,<br>and then soared to 83 billion in 2020. Meanwhile, the figure for rural areas also rose from a mere 12 billion to<br>30 billion over the same period.<br>Several factors account for this striking growth. On the one hand, the rapid spread of online shopping and the<br>maturing of logistics networks have made parcel delivery faster and more convenient than ever. On the other<br>hand, the improvement of rural infrastructure and government support for e-commerce have gradually<br>connected the countryside to the national market.<br>In my view, such a trend reflects the booming of China's digital economy and the narrowing gap between urban<br>and rural consumption. To sustain this momentum, more efforts should be devoted to green packaging and<br>further coverage in remote regions.<br>【参考译文】<br>如柱状图清晰所示，2018 至 2020 年间我国快递业务量呈现出显著的上升趋势。总体业务量从 2018 年<br>的约 510 亿件稳步攀升至 2019 年的 640 亿件，随后在 2020 年猛增到 830 亿件。与此同时，农村地区<br>的数据也在同一时期从区区 120 亿件升至 300 亿件。<br>造成这一惊人增长的原因有几点。一方面，网络购物的迅速普及与物流网络的日益成熟，使寄递比以往任<br>何时候都更快、更便捷。另一方面，农村基础设施的改善以及政府对电子商务的扶持，逐步把乡村接入了<br>全国大市场。<br>在我看来，这一趋势折射出我国数字经济的蓬勃发展，以及城乡消费差距的缩小。为使这一势头得以延<br>续，应在绿色包装和偏远地区的进一步覆盖上投入更多努力。<br>【第 1 段】起手句＋增减动词完成客观读图。本段用 As is clearly shown in the column chart 起手，<br>一句 witnessed a remarkable upward trend 概括总势，再用 climbed / soared / rose 等动词串起总<br>体与农村两组数据，挑 51、64、83 与 12、30 等代表性数字，做到概括而非流水账，落实 interpret<br>the chart 任务。<br>【第 2 段】两点式并列把原因写充实。本段以 Several factors account for this striking growth 总起，<br>用 On the one hand… On the other hand… 从消费端（网购与物流）和基建端（农村基础设施与电商<br>扶持）各挂一条原因，结构清晰、内容不重复，自然从『看到什么』过渡到『为什么』。<br>【第 3 段】表态＋升华＋展望三句收束评论。本段用 In my view 亮出评论，接 such a trend reflects 把<br>数字上升升华为数字经济繁荣与城乡缩差的意义，末句 To sustain this momentum 给出绿色包装与偏远<br>覆盖的建议收尾，落实 give your comments 且不空喊口号。<br>A N A L Y S I S · 审题与立意<br>这道题到底要写什么、立意是什么<br>动笔前先钉死本题的核心写作任务与读者语域、读懂配图 ，再定中心立意与要展开的要<br>点 —— 这些是本题特有的内容判断，不是通用套路。<br><br>核心任务<br>先客观读图，再给出个人评论<br>Directions 明确列了两个并列任务：interpret the chart 是先客观描述图表数据，give your<br>comments 是再谈自己的看法。二者用 1)、2) 并列，说明缺一即失分，篇幅要各占合理比重，<br>不能只描述不评论、也不能只评论不描述。<br>读者 · 语域<br>面向阅卷人的正式书面语<br>题目要求 Write an essay based on the following chart.，是一篇没有具体收信人的议论性短<br>文，读者就是阅卷老师，语域用正式书面语即可：不用称呼、不用落款，也不要出现 you<br>know、I think 太多的口语腔，多用完整句和数据描述的规范表达。<br>配图要读出<br>三年快递量总体与农村双双攀升<br>图的标题是 2018-2020年我国快递业务量变动情况（单位：十亿件），对象是快递业务量、跨<br>度三年；它 涉及总体与农村的数据 两组。核心趋势是双双上升且总体量远高于农村：总体从<br>白色柱子的高度达到大约51的位置 升到 白色柱子的高度达到大约83的位置；农村从 灰色柱子<br>（农村）的高度达到大约12的位置 升到 灰色柱子（农村）的高度达到大约30的位置，基数虽<br>小但翻了一倍多，是可写的对比亮点。<br>中心立意<br>快递量三年猛增，折射数字经济与城乡缩差<br>全文中心一句话：2018 至 2020 年我国快递业务量总体与农村同步快速增长，这一趋势既是网<br>购和物流发展的结果，也反映了数字经济繁荣与城乡消费差距的缩小。描述部分紧扣 interpret<br>the chart，评论部分落实 give your comments。<br><br>要展开的要点<br>1. 读图：总体与农村逐年攀升<br>第一要点是客观呈现两条趋势线：总体量从约 51 升到 64 再到 83，农村量从约 12 升到 15 再<br>到 30，用一升到底的动词概括，不逐格念数字。<br>2. 析因：网购普及＋农村基建改善<br>第二要点分析增长原因：一是网购普及、物流网络成熟让寄件更快更便利；二是农村基础设施<br>改善与电商扶持把乡村接入全国大市场，正好解释农村柱子涨幅明显。<br>3. 评意：数字经济繁荣与城乡缩差<br>第三要点谈意义并收束：这一趋势反映数字经济的蓬勃与城乡消费差距的缩小，并可提出绿色<br>包装、扩大偏远地区覆盖等展望，避免空喊口号。<br>S T R U C T U R E · 谋篇与逐段<br>怎么分段、每段写什么、能套哪些句架<br>按写作家族给出现成的段落框架（每段承担什么功能），并为每段配可直接套用的 功能<br>句架（留出填本题内容的空位）。段序与上方参考范文一一对应。<br>第 1 段<br>读图段：呈现对象、时间与核心趋势<br>用起手句点明这是柱状图，说明总体与农村快递量在 2018—2020 三年逐年上升，并挑<br>代表性数字佐证，落实 interpret the chart。<br>第 2 段<br>析因段：解释增长背后的原因<br>承接上段的趋势，从网购与物流、农村基建两方面分析为何快递量猛增，自然过渡到评<br>论。<br>第 3 段<br>评意段：给出个人看法并收束<br>点明这一趋势的意义（数字经济与城乡缩差），补一句展望收尾，落实 give your<br>comments。<br><br>第 1 段<br>总体 51→64→83、农村 12→15→30 双升<br>本段落到具体数字：总体快递量从约 51 十亿件升到 64 再到 83，农村从约 12 升到 15 再到<br>30；点出总体量远高于农村但两者都在稳步上升，其中 2020 年增幅最猛。<br>读图起手句<br>· As is clearly shown in the [图表类型], ",
+    "tips": "图表大作文三段式：第1段客观读图抓极值反差，第2段分析数据背后的两点原因，第3段总结展望与建议。",
+    "kp": "2022英语二大作文图表作文实战"
+  }
+];

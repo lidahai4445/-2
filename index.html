@@ -3,42 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>考研数二 · 英二 真题三刷系统 (2022-2026)</title>
-  <link rel="stylesheet" href="styles.css?v=20261105_v3" />
+  <title>2022-2026 考研数二 · 英二 全真题三刷系统</title>
+  <link rel="stylesheet" href="styles.css?v=20261105_v5" />
 </head>
 <body>
-  <!-- 极简单行顶部导航栏 -->
+  <!-- 顶部导航栏 -->
   <header class="top-header">
     <div class="header-inner">
       <div class="header-left">
         <div class="brand-area">
           <div class="brand-logo">研</div>
           <div class="brand-title">
-            <h1>考研数二 · 英二 真题三刷</h1>
+            <h1>2022–2026 考研数二 · 英二 全真题三刷</h1>
           </div>
         </div>
-        <!-- 科目胶囊切换 -->
+        <!-- 科目切换胶囊 -->
         <div class="subject-pills" id="subject-pills-container"></div>
       </div>
 
-      <!-- 核心功能切换 -->
+      <!-- 核心功能视图切换 -->
       <nav class="nav-tabs">
         <button class="nav-tab active" data-tab="practice" onclick="switchTab('practice')">
-          🎯 真题三刷
-        </button>
-        <button class="nav-tab" data-tab="calc-bench" onclick="switchTab('calc-bench')">
-          📝 草稿纸演算
+          🎯 真题刷卷 (350题)
         </button>
         <button class="nav-tab" data-tab="wrong-book" onclick="switchTab('wrong-book')">
           📕 错题本
           <span class="badge-pill badge-danger" id="wrong-count-badge">0</span>
         </button>
         <button class="nav-tab" data-tab="ai-hub" onclick="switchTab('ai-hub')">
-          🤖 速记 & AI导入
+          🤖 高频速记 & AI导入
         </button>
       </nav>
 
-      <!-- 三刷进度简报 -->
+      <!-- 三刷全局统计 -->
       <div class="global-stats">
         <div class="stat-chip pass1">一刷 <strong id="stat-pass1">0/0</strong></div>
         <div class="stat-chip pass2">二刷 <strong id="stat-pass2">0/0</strong></div>
@@ -47,16 +44,21 @@
     </div>
   </header>
 
-  <!-- 极简双栏布局：左侧专题导航 + 右侧宽敞做题区 -->
+  <!-- 双栏主体：左侧套卷与专题筛选 + 右侧真题原生刷题区 -->
   <main class="app-container">
     <aside class="left-sidebar" id="left-sidebar">
       <div class="sidebar-section">
-        <div class="sidebar-title">📑 专题模块</div>
+        <div class="sidebar-title">📅 真题年份套卷</div>
+        <div class="year-list" id="year-list"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">📑 考点 / 题型模块</div>
         <div class="chapter-list" id="chapter-list"></div>
       </div>
 
       <div class="sidebar-section">
-        <div class="sidebar-title">🔁 刷次状态</div>
+        <div class="sidebar-title">🔁 三刷进度筛选</div>
         <div class="filter-chips">
           <button class="filter-chip active" data-pass-filter="all" onclick="setPassFilter('all')">全部</button>
           <button class="filter-chip" data-pass-filter="unfinished" onclick="setPassFilter('unfinished')">未满三刷</button>
@@ -68,12 +70,15 @@
       </div>
     </aside>
 
-    <!-- 主工作区 -->
+    <!-- 主刷题区 -->
     <section class="main-stage">
-      <!-- 简洁题号快速切换条 -->
+      <!-- 顶部题号答题卡面板 -->
       <div class="question-strip-card" id="question-strip-card">
         <div class="strip-header">
-          <span class="strip-header-left" id="filtered-count-label">题库加载中...</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="strip-header-left" id="filtered-count-label">题库加载中...</span>
+            <button class="btn btn-outline btn-xs" id="toggle-dots-btn" onclick="toggleDotsCollapse()">收起题号卡 ▲</button>
+          </div>
           <div class="strip-legend">
             <span><i class="legend-dot" style="background:#cbd5e1;"></i>0刷</span>
             <span><i class="legend-dot" style="background:var(--pass1-color);"></i>1刷</span>
@@ -85,26 +90,13 @@
         <div class="question-dots-grid" id="question-dots-grid"></div>
       </div>
 
-      <!-- 动态内容区 -->
+      <!-- 动态真题内容区 -->
       <div id="main-view-content"></div>
     </section>
   </main>
 
-  <!-- 真题原卷高清预览弹窗 -->
-  <div class="modal-backdrop" id="pdf-modal" onclick="if(event.target===this) closePdfModal()">
-    <div class="modal-window">
-      <div class="modal-header">
-        <h3 id="pdf-modal-title" style="font-size:16px;">真题原卷预览</h3>
-        <button class="btn btn-outline btn-sm" onclick="closePdfModal()">✖ 关闭</button>
-      </div>
-      <div class="modal-body">
-        <img id="pdf-modal-img" src="" alt="真题扫描页" />
-      </div>
-    </div>
-  </div>
-
-  <script src="questions.js?v=20261105_v3"></script>
-  <script src="kaoyan_questions.js?v=20261105_v3"></script>
-  <script src="app.js?v=20261105_v3"></script>
+  <script src="questions.js?v=20261105_v5"></script>
+  <script src="kaoyan_questions.js?v=20261105_v5"></script>
+  <script src="app.js?v=20261105_v5"></script>
 </body>
 </html>
