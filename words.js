@@ -1,5 +1,5 @@
 // ============================================================================
-// 考研英语大纲词汇（5047词）· 极简纯净版「10词一组 · 三次判断」
+// 考研英语大纲词汇（5047词）· 极简纯净版「背单词卡片 + 单词表（已背/待复习）」
 // ============================================================================
 (function () {
   "use strict";
@@ -13,6 +13,7 @@
   const TOTAL = WORDS.length;
   const GROUP_SIZE = 10;
   const TARGET_HITS = 3;
+  const PAGE_SIZE = 40;
 
   const sid = String(localStorage.getItem(ACTIVE_SYNC_ID_KEY) || "").trim().toLowerCase();
   const LOCAL_KEY = `kaoyan_words_v2_${sid || "guest"}`;
@@ -24,7 +25,7 @@
   const chunkPromises = {};
 
   // m[word] = [status, star, updatedAt, hits, wrongCount]
-  // status: 0=未学, 1=学习中, 2=已掌握(满3次), 3=熟词
+  // status: 0=未背, 1=学习巩固中(待复习), 2=已掌握(满3次), 3=熟词
   let state = {
     updatedAt: 0,
     m: {},
@@ -35,9 +36,18 @@
     groups: {}
   };
 
-  let phase = "question"; // "question" | "detail" | "summary"
-  let lastJudge = null;   // "known" | "vague" | "unknown" | "familiar"
-  let activeExtTab = "rel"; // "rel" | "syno" | "phrase" | "rem"
+  // 视图与卡片状态
+  let activeView = "card";   // "card" | "list"
+  let phase = "question";    // "question" | "detail" | "summary"
+  let lastJudge = null;      // "known" | "vague" | "unknown" | "familiar"
+  let activeExtTab = "rel";  // "rel" | "syno" | "phrase" | "rem"
+
+  // 单词表视图状态
+  let wlTab = "review";      // "review" | "learned" | "star" | "group" | "familiar" | "unlearned" | "all"
+  let wlSearch = "";
+  let wlPage = 1;
+  let wlMaskMeaning = false;
+  let expandedIdx = -1;
 
   // ---------------- 详情分块按需加载 ----------------
   function getChunkId(idx) {
@@ -48,7 +58,7 @@
     const cid = getChunkId(idx);
     if (detailChunks[cid]) return Promise.resolve(detailChunks[cid]);
     if (chunkPromises[cid]) return chunkPromises[cid];
-    const file = `words_detail/${String(cid).padStart(2, "0")}.json?v=20261108_w3`;
+    const file = `words_detail/${String(cid).padStart(2, "0")}.json?v=20261108_w4`;
     chunkPromises[cid] = fetch(file)
       .then((r) => (r.ok ? r.json() : {}))
       .then((data) => {
@@ -73,7 +83,7 @@
       if (detailChunks[cid]) return;
       const alreadyPending = Boolean(chunkPromises[cid]);
       ensureDetailChunk(cid * CHUNK_SIZE).then(() => {
-        if (!alreadyPending) renderCard();
+        if (!alreadyPending && activeView === "card") renderCard();
       });
     });
   }
@@ -134,7 +144,29 @@
     scheduleCloudPush();
   }
 
-  // ---------------- 词库筛选与 10 词成组 ----------------
+  // ---------------- 词库分类判定（含「已背」与「待复习」） ----------------
+  // 待复习：正在背但未满3次(status===1)、曾答错/模糊(wrongCount>0 且未标熟词)、或生词本中尚未标熟词的词
+  function isNeedReview(r) {
+    const [status, star, , hits, wrongCount] = r;
+    if (status === 3) return false;
+    return status === 1 || (wrongCount || 0) > 0 || (star === 1 && status !== 2) || (status === 2 && ( hits < TARGET_HITS));
+  }
+
+  // 已背：已满3次过关(status===2)、已标熟词(status===3)、或已开始学习有记录(status===1)
+  function isLearnedWord(r) {
+    const [status] = r;
+    return status === 1 || status === 2 || status === 3;
+  }
+
+  function matchCardFilter(r, f) {
+    const [status, star] = r;
+    if (f === "todo") return status === 0 || status === 1;
+    if (f === "review") return isNeedReview(r);
+    if (f === "learned") return isLearnedWord(r);
+    if (f === "star") return star === 1;
+    return true;
+  }
+
   function seededShuffle(arr, seed) {
     let s = seed >>> 0 || 1;
     const rand = () => {
@@ -150,20 +182,10 @@
     return arr;
   }
 
-  function matchFilter(r, f) {
-    const [status, star, , , wrongCount] = r;
-    if (f === "todo") return status === 0 || status === 1;
-    if (f === "star") return star === 1;
-    if (f === "unknown") return (wrongCount || 0) > 0;
-    if (f === "learned") return status === 2;
-    if (f === "familiar") return status === 3;
-    return true;
-  }
-
   function getCandidatePool() {
     const pool = [];
     for (let i = 0; i < TOTAL; i++) {
-      if (matchFilter(rec(WORDS[i][0]), state.filter)) pool.push(i);
+      if (matchCardFilter(rec(WORDS[i][0]), state.filter)) pool.push(i);
     }
     if (state.order === "alpha") {
       pool.sort((a, b) => WORDS[a][0].toLowerCase().localeCompare(WORDS[b][0].toLowerCase()));
@@ -174,6 +196,14 @@
         const sa = rec(WORDS[a][0])[0] === 1 ? 0 : 1;
         const sb = rec(WORDS[b][0])[0] === 1 ? 0 : 1;
         return sa !== sb ? sa - sb : a - b;
+      });
+    } else if (state.filter === "review") {
+      // 待复习优先按错误次数与未满3次排序
+      pool.sort((a, b) => {
+        const ra = rec(WORDS[a][0]);
+        const rb = rec(WORDS[b][0]);
+        if ((rb[4] || 0) !== (ra[4] || 0)) return (rb[4] || 0) - (ra[4] || 0);
+        return (rb[2] || 0) - (ra[2] || 0);
       });
     }
     return pool;
@@ -219,7 +249,7 @@
     return grp.queue.length ? grp.queue[0] : -1;
   }
 
-  // ---------------- 判断与推进逻辑 ----------------
+  // ---------------- 背词判断与推进逻辑 ----------------
   function pickDefaultExtTab(detail) {
     if (!detail) return "rel";
     if (detail.r && detail.r.length) return "rel";
@@ -244,6 +274,8 @@
     if (type === "known") {
       nextHits = Math.min(TARGET_HITS, curHits + 1);
       nextStatus = nextHits >= TARGET_HITS ? 2 : 1;
+      // 若全部3次认识完成，清除待复习错误计数或保留历史但标记为已掌握
+      if (nextHits >= TARGET_HITS) nextWrong = 0;
     } else if (type === "vague") {
       nextHits = curHits >= 2 ? 1 : curHits;
       nextStatus = 1;
@@ -255,6 +287,7 @@
     } else if (type === "familiar") {
       nextHits = TARGET_HITS;
       nextStatus = 3;
+      nextWrong = 0;
     }
 
     grp.hits[idx] = nextHits;
@@ -313,24 +346,32 @@
   function markFamiliarByIndex(idx) {
     if (idx < 0 || idx >= TOTAL) return;
     const grp = getActiveGroup();
-    if (phase === "question" && grp.queue[0] === idx) {
+    if (activeView === "card" && phase === "question" && grp.queue[0] === idx) {
       handleJudge("familiar");
       return;
     }
     const word = WORDS[idx][0];
     const r = rec(word);
     if (r[0] === 3) {
-      grp.hits[idx] = 0;
+      if (grp.hits && grp.hits[idx] !== undefined) grp.hits[idx] = 0;
       saveRec(word, [1, r[1], Date.now(), 0, r[4]]);
     } else {
-      grp.hits[idx] = TARGET_HITS;
-      saveRec(word, [3, r[1], Date.now(), TARGET_HITS, r[4]]);
+      if (grp.hits && grp.hits[idx] !== undefined) grp.hits[idx] = TARGET_HITS;
+      saveRec(word, [3, r[1], Date.now(), TARGET_HITS, 0]);
       lastJudge = "familiar";
     }
     renderAll();
   }
 
-  // ---------------- 界面渲染 ----------------
+  function markNeedReviewByIndex(idx) {
+    if (idx < 0 || idx >= TOTAL) return;
+    const word = WORDS[idx][0];
+    const r = rec(word);
+    saveRec(word, [1, r[1], Date.now(), 0, Math.max(1, r[4] || 0)]);
+    renderAll();
+  }
+
+  // ---------------- 统计计数与渲染 ----------------
   function esc(s) {
     return String(s || "")
       .replace(/&/g, "&amp;")
@@ -348,29 +389,55 @@
     return safe.replace(reg, `<span class="hl">$1</span>`);
   }
 
-  function updateFilterCounts() {
-    let counts = { todo: 0, star: 0, unknown: 0, learned: 0, familiar: 0 };
+  function getCounts() {
+    const counts = {
+      todo: 0,
+      review: 0,
+      learned: 0,
+      star: 0,
+      familiar: 0,
+      unlearned: 0,
+      all: TOTAL
+    };
     for (let i = 0; i < TOTAL; i++) {
       const r = rec(WORDS[i][0]);
       if (r[0] === 0 || r[0] === 1) counts.todo++;
+      if (isNeedReview(r)) counts.review++;
+      if (isLearnedWord(r)) counts.learned++;
       if (r[1] === 1) counts.star++;
-      if ((r[4] || 0) > 0) counts.unknown++;
-      if (r[0] === 2) counts.learned++;
       if (r[0] === 3) counts.familiar++;
+      if (r[0] === 0) counts.unlearned++;
     }
+    return counts;
+  }
+
+  function updateFilterCounts() {
+    const counts = getCounts();
     const sel = document.getElementById("filter-select");
     const labels = {
-      todo: `待背 (${counts.todo})`,
-      star: `⭐ 生词本 (${counts.star})`,
-      unknown: `错词本 (${counts.unknown})`,
-      learned: `已掌握 (${counts.learned})`,
-      familiar: `熟词本 (${counts.familiar})`
+      todo: `新词待背 (${counts.todo})`,
+      review: `待复习 (${counts.review})`,
+      learned: `已背 (${counts.learned})`,
+      star: `⭐ 生词本 (${counts.star})`
     };
     Array.from(sel.options).forEach((opt) => {
       if (labels[opt.value]) opt.textContent = labels[opt.value];
     });
   }
 
+  // ---------------- 视图切换（背单词卡片 vs 单词表） ----------------
+  function switchView(view) {
+    activeView = view;
+    document.getElementById("tab-view-card").classList.toggle("active", view === "card");
+    document.getElementById("tab-view-list").classList.toggle("active", view === "list");
+    document.getElementById("card-top-controls").style.display = view === "card" ? "flex" : "none";
+    document.getElementById("card").style.display = view === "card" ? "flex" : "none";
+    document.getElementById("wordlist-view").style.display = view === "list" ? "flex" : "none";
+    document.getElementById("main-stage").classList.toggle("list-mode", view === "list");
+    renderAll();
+  }
+
+  // ---------------- 视图 1：背单词卡片渲染 ----------------
   function renderCard() {
     const card = document.getElementById("card");
     if (!TOTAL) return;
@@ -379,9 +446,19 @@
     if (!grp.items.length) {
       card.innerHTML = `
         <div class="question-body" style="color:var(--muted);">
-          当前范围内没有单词
+          <div style="font-size:15px;margin-bottom:14px;">当前分类下暂无单词</div>
+          <button class="ghost-btn" id="btn-empty-go-todo">切换到新词待背</button>
         </div>
       `;
+      const b = document.getElementById("btn-empty-go-todo");
+      if (b) {
+        b.onclick = () => {
+          state.filter = "todo";
+          document.getElementById("filter-select").value = "todo";
+          getActiveGroup(true);
+          renderAll();
+        };
+      }
       return;
     }
 
@@ -474,7 +551,6 @@
   }
 
   function buildCleanDetailHtml(word, phone, baseShort, detail) {
-    // 核心释义
     const transList =
       detail && Array.isArray(detail.t) && detail.t.length
         ? detail.t
@@ -497,7 +573,6 @@
       )
       .join("");
 
-    // 第一条双语例句
     const sent = detail && detail.s && detail.s[0] ? detail.s[0] : null;
     const sentHtml = sent
       ? `
@@ -508,7 +583,6 @@
       `
       : "";
 
-    // 扩展标签页（仅展示有数据的标签：派生 / 近义 / 短语 / 巧记）
     const rels = (detail && detail.r) || [];
     const synos = (detail && detail.sy) || [];
     const antos = (detail && detail.a) || [];
@@ -650,50 +724,253 @@
     };
   }
 
-  function renderAll() {
-    updateFilterCounts();
-    renderCard();
+  // ---------------- 视图 2：单词表界面（已背 / 待复习 / 生词本 / 本组 / 熟词 / 未背 / 全部） ----------------
+  function getWordListFilteredIndices() {
+    const grp = getActiveGroup();
+    const q = wlSearch.trim().toLowerCase();
+    let list = [];
+
+    if (wlTab === "group") {
+      list = grp.items.slice();
+    } else {
+      for (let i = 0; i < TOTAL; i++) {
+        const [w, , short] = WORDS[i];
+        const r = rec(w);
+        let ok = false;
+        if (wlTab === "review") ok = isNeedReview(r);
+        else if (wlTab === "learned") ok = isLearnedWord(r);
+        else if (wlTab === "star") ok = r[1] === 1;
+        else if (wlTab === "familiar") ok = r[0] === 3;
+        else if (wlTab === "unlearned") ok = r[0] === 0;
+        else ok = true; // "all"
+        if (!ok) continue;
+        if (q && !w.toLowerCase().includes(q) && !String(short || "").toLowerCase().includes(q)) {
+          continue;
+        }
+        list.push(i);
+      }
+    }
+
+    if (wlTab === "group" && q) {
+      list = list.filter((i) => {
+        const [w, , short] = WORDS[i];
+        return w.toLowerCase().includes(q) || String(short || "").toLowerCase().includes(q);
+      });
+    }
+
+    // 在「待复习」或「已背」下按学习时间或错误次数排序，让最近背过/最需复习的词排在最前
+    if (wlTab === "review") {
+      list.sort((a, b) => {
+        const ra = rec(WORDS[a][0]);
+        const rb = rec(WORDS[b][0]);
+        if ((rb[4] || 0) !== (ra[4] || 0)) return (rb[4] || 0) - (ra[4] || 0);
+        return (rb[2] || 0) - (ra[2] || 0);
+      });
+    } else if (wlTab === "learned") {
+      list.sort((a, b) => (rec(WORDS[b][0])[2] || 0) - (rec(WORDS[a][0])[2] || 0));
+    }
+
+    return list;
   }
 
-  // ---------------- 本组词表弹窗 ----------------
-  function openGroupModal() {
+  function renderWordListView() {
+    const counts = getCounts();
     const grp = getActiveGroup();
-    const modal = document.getElementById("group-modal");
-    const body = document.getElementById("modal-body");
 
-    body.innerHTML = grp.items
-      .map((idx) => {
-        const [w, , short] = WORDS[idx];
-        const r = rec(w);
-        const h = Math.min(TARGET_HITS, grp.hits[idx] || 0);
-        return `
-          <div class="sum-item">
-            <span class="sum-w" data-speak="${esc(w)}">${esc(w)} <small style="color:var(--muted);font-weight:400;">${h}/3</small></span>
-            <span class="sum-m">${esc(short)}</span>
-            <button class="action-tag ${r[1] ? "star-on" : ""}" data-m-star="${idx}">${r[1] ? "★" : "☆"}</button>
-            <button class="action-tag ${r[0] === 3 ? "fam-on" : ""}" data-m-fam="${idx}">熟词</button>
-          </div>
-        `;
-      })
+    const tabs = [
+      { id: "review", label: "待复习", cnt: counts.review },
+      { id: "learned", label: "已背", cnt: counts.learned },
+      { id: "star", label: "⭐ 生词本", cnt: counts.star },
+      { id: "group", label: "本组 10 词", cnt: grp.items.length },
+      { id: "familiar", label: "熟词本", cnt: counts.familiar },
+      { id: "unlearned", label: "未背", cnt: counts.unlearned },
+      { id: "all", label: "全部", cnt: counts.all }
+    ];
+
+    const tabsEl = document.getElementById("wl-tabs");
+    tabsEl.innerHTML = tabs
+      .map(
+        (t) => `
+        <button class="wl-tab ${wlTab === t.id ? "active" : ""}" data-wltab="${t.id}">
+          <span>${t.label}</span>
+          <span class="cnt">${t.cnt}</span>
+        </button>
+      `
+      )
       .join("");
 
-    body.querySelectorAll("[data-speak]").forEach((el) => {
-      el.onclick = () => speak(el.getAttribute("data-speak"));
-    });
-    body.querySelectorAll("[data-m-star]").forEach((el) => {
-      el.onclick = () => {
-        toggleStarByIndex(parseInt(el.getAttribute("data-m-star"), 10));
-        openGroupModal();
-      };
-    });
-    body.querySelectorAll("[data-m-fam]").forEach((el) => {
-      el.onclick = () => {
-        markFamiliarByIndex(parseInt(el.getAttribute("data-m-fam"), 10));
-        openGroupModal();
+    tabsEl.querySelectorAll("[data-wltab]").forEach((btn) => {
+      btn.onclick = () => {
+        wlTab = btn.getAttribute("data-wltab");
+        wlPage = 1;
+        expandedIdx = -1;
+        renderWordListView();
       };
     });
 
-    modal.classList.add("open");
+    const maskBtn = document.getElementById("btn-mask-toggle");
+    maskBtn.textContent = wlMaskMeaning ? "👀 显示释义" : "🙈 遮住释义自测";
+
+    const practiceBtn = document.getElementById("btn-practice-current-list");
+    if (wlTab === "review") practiceBtn.textContent = "抽 10 词复习待复习";
+    else if (wlTab === "learned") practiceBtn.textContent = "抽 10 词抽查已背";
+    else if (wlTab === "star") practiceBtn.textContent = "抽 10 词背生词本";
+    else practiceBtn.textContent = "抽 10 词开始背";
+
+    const list = getWordListFilteredIndices();
+    const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if (wlPage > totalPages) wlPage = totalPages;
+    if (wlPage < 1) wlPage = 1;
+
+    const pageItems = list.slice((wlPage - 1) * PAGE_SIZE, wlPage * PAGE_SIZE);
+    const rowsEl = document.getElementById("wl-rows");
+
+    if (!pageItems.length) {
+      const emptyTips = {
+        review: "暂无待复习单词（背词时点过「不认识/模糊」或未满 3 次的词会自动进入这里）",
+        learned: "暂无已背单词，去「背单词」完成第一组吧",
+        star: "生词本为空，背词时点击「☆ 生词本」即可收藏重点词",
+        familiar: "熟词本为空，背词时点击「熟词」可将已彻底掌握的词归入此处"
+      };
+      rowsEl.innerHTML = `
+        <div style="text-align:center;color:var(--muted);padding:48px 12px;font-size:14px;">
+          ${emptyTips[wlTab] || "没有匹配的单词"}
+        </div>
+      `;
+    } else {
+      rowsEl.innerHTML = pageItems
+        .map((idx) => {
+          const [w, ph, short] = WORDS[idx];
+          const r = rec(w);
+          const [status, star, , hits, wrongCount] = r;
+          const isExp = expandedIdx === idx;
+          const detail = isExp ? getDetailSync(idx) : null;
+
+          let statusBadge = "";
+          if (status === 3) {
+            statusBadge = `<span class="wl-badge fam">熟词</span>`;
+          } else if (status === 2) {
+            statusBadge = `<span class="wl-badge learned">已掌握 3/3</span>`;
+          } else if (status === 1) {
+            statusBadge = `<span class="wl-badge review">学习中 ${hits}/3</span>`;
+          }
+          if ((wrongCount || 0) > 0 && status !== 3) {
+            statusBadge += ` <span class="wl-badge wrong">错 ${wrongCount} 次</span>`;
+          }
+
+          let expandHtml = "";
+          if (isExp) {
+            if (!detail) {
+              expandHtml = `<div class="wl-expand">详情加载中...</div>`;
+            } else {
+              const rels = (detail.r || [])
+                .slice(0, 6)
+                .map(([pos, hwd, tran]) => `<span class="w-chip" data-speak="${esc(hwd)}">${pos ? `${esc(pos)}. ` : ""}${esc(hwd)} ${esc(tran)}</span>`)
+                .join("");
+              const synos = (detail.sy || [])
+                .flatMap(([, , ws]) => ws || [])
+                .slice(0, 6)
+                .map((sw) => `<span class="w-chip" data-speak="${esc(sw)}">${esc(sw)}</span>`)
+                .join("");
+              const sent = detail.s && detail.s[0] ? detail.s[0] : null;
+
+              expandHtml = `
+                <div class="wl-expand">
+                  ${ detail.m ? `<div class="wl-ext-group"><span class="wl-ext-label">巧记</span><span>${esc(detail.m)}</span></div>` : "" }
+                  ${ rels ? `<div class="wl-ext-group"><span class="wl-ext-label">派生词</span><div class="chip-list" style="margin:0;">${rels}</div></div>` : "" }
+                  ${ synos ? `<div class="wl-ext-group"><span class="wl-ext-label">近义词</span><div class="chip-list" style="margin:0;">${synos}</div></div>` : "" }
+                  ${ sent ? `<div class="wl-ext-group"><span class="wl-ext-label">例句</span><span>${esc(sent[0])} <span style="color:var(--muted);">${esc(sent[1])}</span></span></div>` : "" }
+                </div>
+              `;
+            }
+          }
+
+          return `
+            <div class="wl-item ${isExp ? "revealed" : ""}" data-row-idx="${idx}">
+              <div class="wl-row-main" data-toggle-idx="${idx}">
+                <div class="wl-left">
+                  <span class="wl-word">${esc(w)}</span>
+                  <span class="wl-phone">${ph ? `/${esc(ph)}/` : ""}</span>
+                </div>
+                <div class="wl-mid ${wlMaskMeaning ? "masked" : ""}">${esc(short)}</div>
+                <div class="wl-right" onclick="event.stopPropagation();">
+                  ${statusBadge}
+                  ${
+                    status === 2 || status === 3
+                      ? `<button class="action-tag" data-review-idx="${idx}" title="加入待复习">再复习</button>`
+                      : ""
+                  }
+                  <button class="action-tag ${star ? "star-on" : ""}" data-star-idx="${idx}" title="生词本">
+                    ${star ? "★" : "☆"}
+                  </button>
+                  <button class="action-tag ${status === 3 ? "fam-on" : ""}" data-fam-idx="${idx}">
+                    熟词
+                  </button>
+                </div>
+              </div>
+              ${expandHtml}
+            </div>
+          `;
+        })
+        .join("");
+
+      rowsEl.querySelectorAll("[data-toggle-idx]").forEach((row) => {
+        row.onclick = () => {
+          const idx = parseInt(row.getAttribute("data-toggle-idx"), 10);
+          speak(WORDS[idx][0]);
+          if (expandedIdx === idx) {
+            expandedIdx = -1;
+            renderWordListView();
+          } else {
+            expandedIdx = idx;
+            if ( getDetailSync(idx) ) {
+              renderWordListView();
+            } else {
+              renderWordListView();
+              ensureDetailChunk(idx).then(() => renderWordListView());
+            }
+          }
+        };
+      });
+
+      rowsEl.querySelectorAll("[data-star-idx]").forEach((btn) => {
+        btn.onclick = () => toggleStarByIndex(parseInt(btn.getAttribute("data-star-idx"), 10));
+      });
+      rowsEl.querySelectorAll("[data-fam-idx]").forEach((btn) => {
+        btn.onclick = () => markFamiliarByIndex(parseInt(btn.getAttribute("data-fam-idx"), 10));
+      });
+      rowsEl.querySelectorAll("[data-review-idx]").forEach((btn) => {
+        btn.onclick = () => markNeedReviewByIndex(parseInt(btn.getAttribute("data-review-idx"), 10));
+      });
+      rowsEl.querySelectorAll("[data-speak]").forEach((el) => {
+        el.onclick = (e) => {
+          e.stopPropagation();
+          speak(el.getAttribute("data-speak"));
+        };
+      });
+    }
+
+    const pagerEl = document.getElementById("wl-pager");
+    pagerEl.innerHTML = `
+      <span>共 ${list.length} 词 · 第 ${wlPage} / ${totalPages} 页（点击任意行可发音并展开派生/近义词）</span>
+      <div class="wl-pager-btns">
+        <button class="ghost-btn" id="wl-prev" ${wlPage <= 1 ? "disabled" : ""}>上一页</button>
+        <button class="ghost-btn" id="wl-next" ${wlPage >= totalPages ? "disabled" : ""}>下一页</button>
+      </div>
+    `;
+    const prevBtn = document.getElementById("wl-prev");
+    const nextBtn = document.getElementById("wl-next");
+    if (prevBtn) prevBtn.onclick = () => { if (wlPage > 1) { wlPage--; renderWordListView(); } };
+    if (nextBtn) nextBtn.onclick = () => { if (wlPage < totalPages) { wlPage++; renderWordListView(); } };
+  }
+
+  function renderAll() {
+    updateFilterCounts();
+    if (activeView === "card") {
+      renderCard();
+    } else {
+      renderWordListView();
+    }
   }
 
   // ---------------- 语音与云同步 ----------------
@@ -712,11 +989,6 @@
     if (!state.autoSpeak) return;
     const idx = currentWordIndex();
     if (idx >= 0) speak(WORDS[idx][0]);
-  }
-
-  function setSyncStatus(text) {
-    const el = document.getElementById("sync-status");
-    if (el) el.textContent = text;
   }
 
   function buildPayload() {
@@ -792,7 +1064,6 @@
       const obj = await res.json();
       const { changed, needPush } = mergeCloud(obj && obj.data);
       if (changed) renderAll();
-      setSyncStatus(`口令 ${sid} 已同步`);
       if (needPush) scheduleCloudPush(500);
     } catch (e) {}
   }
@@ -822,7 +1093,6 @@
         body: JSON.stringify({ name: `kaoyan_words_${sid}`, data: buildPayload() }),
         keepalive: true
       });
-      setSyncStatus(`口令 ${sid} 已同步`);
     } catch (e) {
     } finally {
       pushing = false;
@@ -838,14 +1108,15 @@
     loadLocal();
     const fSel = document.getElementById("filter-select");
     const oSel = document.getElementById("order-select");
-    const auto = document.getElementById("auto-speak");
 
-    if (!["todo", "star", "unknown", "learned", "familiar"].includes(state.filter)) {
+    if (!["todo", "review", "learned", "star"].includes(state.filter)) {
       state.filter = "todo";
     }
     fSel.value = state.filter;
     oSel.value = state.order;
-    auto.checked = !!state.autoSpeak;
+
+    document.getElementById("tab-view-card").onclick = () => switchView("card");
+    document.getElementById("tab-view-list").onclick = () => switchView("list");
 
     fSel.onchange = () => {
       state.filter = fSel.value;
@@ -853,7 +1124,6 @@
       saveLocal();
       getActiveGroup(false);
       renderAll();
-      autoSpeakCurrent();
     };
     oSel.onchange = () => {
       state.order = oSel.value;
@@ -862,33 +1132,40 @@
       saveLocal();
       getActiveGroup(true);
       renderAll();
-      autoSpeakCurrent();
     };
-    auto.onchange = () => {
-      state.autoSpeak = auto.checked;
-      saveLocal();
-    };
-
-    document.getElementById("btn-group-list").onclick = openGroupModal;
-    document.getElementById("btn-close-modal").onclick = () => {
-      document.getElementById("group-modal").classList.remove("open");
-    };
-    document.getElementById("group-modal").onclick = (e) => {
-      if (e.target.id === "group-modal") e.target.classList.remove("open");
-    };
-    document.getElementById("btn-rebuild-group").onclick = () => {
+    document.getElementById("btn-ChangeGroup").onclick = () => {
       if (state.order === "shuffle") state.seed = Math.floor(Math.random() * 1e9);
       getActiveGroup(true);
-      document.getElementById("group-modal").classList.remove("open");
       renderAll();
+    };
+
+    const searchInput = document.getElementById("wl-search-input");
+    searchInput.oninput = () => {
+      wlSearch = searchInput.value;
+      wlPage = 1;
+      renderWordListView();
+    };
+
+    document.getElementById("btn-mask-toggle").onclick = () => {
+      wlMaskMeaning = !wlMaskMeaning;
+      renderWordListView();
+    };
+
+    document.getElementById("btn-practice-current-list").onclick = () => {
+      const targetFilter =
+        wlTab === "review" ? "review" :
+        wlTab === "learned" ? "learned" :
+        wlTab === "star" ? "star" : "todo";
+      state.filter = targetFilter;
+      fSel.value = targetFilter;
+      getActiveGroup(true);
+      switchView("card");
     };
 
     document.addEventListener("keydown", (e) => {
       if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")) return;
-      if (document.getElementById("group-modal").classList.contains("open")) {
-        if (e.key === "Escape") document.getElementById("group-modal").classList.remove("open");
-        return;
-      }
+      if (activeView !== "card") return;
+
       const k = e.key;
       const idx = currentWordIndex();
       if (phase === "question") {
@@ -924,9 +1201,18 @@
       }
     });
 
-    setSyncStatus(sid ? `口令 ${sid}` : "本机模式");
     getActiveGroup(false);
-    if (location.search.includes("preview=detail")) {
+    if (location.search.includes("preview=list")) {
+      // 预置几条演示状态用于预览单词表效果（不写回 localStorage）
+      state.m["act"] = [1, 1, Date.now() - 1000, 1, 2];
+      state.m["action"] = [1, 0, Date.now() - 2000, 2, 1];
+      state.m["active"] = [2, 0, Date.now() - 3000, 3, 0];
+      state.m["actual"] = [2, 1, Date.now() - 4000, 3, 0];
+      wlTab = location.search.includes("tab=learned") ? "learned" : "review";
+      expandedIdx = 0;
+      ensureDetailChunk(0).then(() => renderWordListView());
+      switchView("list");
+    } else if (location.search.includes("preview=detail")) {
       handleJudge("known");
     } else {
       renderAll();
