@@ -33,6 +33,9 @@ const filesToCopy = [
   "xiao1000_questions.js",
   "xiao1000_part1.json",
   "app.js",
+  "words.html",
+  "words.js",
+  "words_data.js",
   "_headers",
   "c9e1b65a8ac42036810d5541984fd2e0.txt"
 ];

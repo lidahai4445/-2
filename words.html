@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>背单词 · 考研英语大纲词汇</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #2563eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --star: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      display: flex;
+      flex-direction: column;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button, select, input { font-family: inherit; }
+
+    /* 顶部栏 */
+    .topbar {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border);
+    }
+    .topbar a.back {
+      text-decoration: none; color: var(--muted); font-size: 14px; padding: 6px 10px;
+      border: 1px solid var(--border); border-radius: 8px; white-space: nowrap;
+    }
+    .topbar .title { font-weight: 700; font-size: 15px; margin-right: auto; }
+    .topbar select {
+      font-size: 13px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text);
+    }
+    .sync { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+    /* 进度条 */
+    .progress-wrap { padding: 10px 16px 0; max-width: 720px; width: 100%; margin: 0 auto; }
+    .progress-text { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; gap: 8px; flex-wrap: wrap; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-bar > div { height: 100%; background: var(--success); width: 0; transition: width .3s; }
+
+    /* 卡片 */
+    .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .card {
+      width: 100%; max-width: 720px; min-height: 380px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,.04);
+      padding: 28px 24px; display: flex; flex-direction: column; position: relative;
+    }
+    .card-top { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--muted); }
+    .tag { padding: 2px 8px; border-radius: 99px; font-size: 12px; border: 1px solid var(--border); }
+    .tag.known { color: var(--success); border-color: #bbf7d0; background: #f0fdf4; }
+    .tag.unknown { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+    .star-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #d1d5db; padding: 0 4px; }
+    .star-btn.on { color: var(--star); }
+    .word-area { text-align: center; margin: 34px 0 18px; }
+    .word { font-size: 44px; font-weight: 700; letter-spacing: .5px; word-break: break-word; }
+    .speak-btn {
+      margin-top: 10px; border: 1px solid var(--border); background: #fff; border-radius: 99px;
+      padding: 5px 14px; font-size: 13px; color: var(--primary); cursor: pointer;
+    }
+    .reveal {
+      flex: 1; border: 1.5px dashed var(--border); border-radius: 12px; padding: 18px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      color: var(--muted); font-size: 14px; user-select: none; min-height: 120px;
+    }
+    .reveal.shown { border-style: solid; background: #fafbfc; cursor: default; display: block; color: var(--text); }
+    .meaning { font-size: 17px; line-height: 1.75; }
+    .meaning div { margin-bottom: 4px; }
+    .phrases { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 13.5px; color: var(--muted); line-height: 1.8; }
+
+    /* 操作区 */
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .actions button {
+      padding: 14px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; border: 1.5px solid;
+    }
+    .btn-unknown { background: #fff; color: var(--danger); border-color: #fecaca !important; }
+    .btn-known { background: var(--success); color: #fff; border-color: var(--success) !important; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
+    .nav-row button {
+      background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px;
+      font-size: 13px; color: var(--text); cursor: pointer;
+    }
+    .nav-row input {
+      width: 76px; text-align: center; padding: 6px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
+    }
+    .hint { text-align: center; font-size: 12px; color: #9ca3af; margin-top: 10px; }
+    .empty { text-align: center; color: var(--muted); padding: 60px 10px; font-size: 15px; }
+    .footer { text-align: center; font-size: 11px; color: #9ca3af; padding: 8px 0 14px; }
+
+    @media (max-width: 560px) {
+      .word { font-size: 34px; }
+      .card { padding: 20px 16px; min-height: 340px; }
+      .word-area { margin: 22px 0 14px; }
+      .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html">← 返回刷题</a>
+    <span class="title">🔤 背单词</span>
+    <select id="filter-select" title="学习范围">
+      <option value="all">全部单词</option>
+      <option value="new">未学过</option>
+      <option value="unknown">不认识</option>
+      <option value="star">⭐ 生词本</option>
+      <option value="known">已认识</option>
+    </select>
+    <select id="order-select" title="学习顺序">
+      <option value="list">词表顺序</option>
+      <option value="alpha">字母顺序</option>
+      <option value="shuffle">乱序</option>
+    </select>
+    <label class="sync" style="cursor:pointer;"><input type="checkbox" id="auto-speak" style="vertical-align:middle;" /> 自动发音</label>
+    <span class="sync" id="sync-status">本机模式</span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-text">
+      <span id="progress-left"></span>
+      <span id="progress-right"></span>
+    </div>
+    <div class="progress-bar"><div id="progress-fill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="card" id="card"><div class="empty">单词加载中...</div></div>
+  </main>
+
+  <div class="footer">词表：考研英语大纲词汇（数据来源 KyleBing/english-vocabulary，BSD-3-Clause）</div>
+
+  <script src="words_data.js?v=20261108_w1"></script>
+  <script src="words.js?v=20261108_w1"></script>
+</body>
+</html>
