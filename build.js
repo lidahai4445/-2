@@ -61,4 +61,9 @@ if (fs.existsSync(docsSrc)) {
   copyRecursive(docsSrc, path.join(outDir, "docs"));
 }
 
+const wordsDetailSrc = path.join(__dirname, "words_detail");
+if (fs.existsSync(wordsDetailSrc)) {
+  copyRecursive(wordsDetailSrc, path.join(outDir, "words_detail"));
+}
+
 console.log("✅ Cloudflare 静态站点构建完成：已移除光电子器件内容，根目录 (.) 与 dist/ 目录均已就绪。");
