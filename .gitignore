@@ -2,3 +2,7 @@ node_modules/
 .wrangler/
 dist/
 .DS_Store
+双击一键上传更新.bat
+双击一键上传更新.exe
+*.bat
+*.exe
